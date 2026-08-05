@@ -1,0 +1,988 @@
+# Weekkeep Technical Requirements Document
+
+| 항목 | 값 |
+|---|---|
+| 버전 | 0.5-approved |
+| 기준일 | 2026-08-05 |
+| 상태 | Approved |
+| 대상 | Weekkeep V1 |
+| 기준 제품 문서 | [PRD](01-PRD.md) |
+| 기준 흐름 문서 | [Use Cases](02-USE-CASES.md), [IA](03-IA.md) |
+
+## 1. 기술 목표
+
+Weekkeep V1의 기술 목표는 ‘가장 많은 기능’이 아니라 다음 다섯 가지입니다.
+
+1. Photos 권한과 iCloud 상태가 달라도 데이터 손상 없이 동작할 것
+2. 100장 이하의 주간 사진을 기기에서 현실적인 시간 안에 분석할 것
+3. 같은 주의 기록을 절대 중복 생성하지 않을 것
+4. 사진 관련 데이터가 외부 SDK와 네트워크 경계를 넘지 않을 것
+5. 완료된 주만 대상으로 하며 반복 주의 활성 검토를 60초 안에 끝낼 수 있을 것
+
+## 2. 실행 가능성 결론
+
+**V1은 현재 Apple 공개 프레임워크로 구현 가능합니다.** Photos는 권한별 자산 접근을, Vision은 미학 점수와 이미지 특징 분석을, SwiftData는 로컬 모델 저장을, UserNotifications는 로컬 리마인더를 제공합니다. RevenueCat은 Shipaton에 필요한 실제 구매와 복원을 처리합니다.
+
+가장 큰 기술적 불확실성은 ‘분석할 수 있는가’가 아니라 **자동 선택 7장이 부모의 의미와 얼마나 자주 일치하는가**입니다. 따라서 큐레이션 엔진은 교체 가능한 초안을 만드는 보조 도구로 정의하며, 신원 식별이나 완벽한 추억 판단을 약속하지 않습니다.
+
+### 의도적으로 하지 않는 것
+
+- iOS가 보장하지 않는 시점에 background에서 사진 분석을 완료했다고 가정하지 않습니다.
+- 알림 문구로 ‘앨범이 이미 준비됐다’고 거짓 약속하지 않습니다.
+- PHAsset 또는 Vision observation을 UI와 actor 경계 전체로 전달하지 않습니다.
+- 기존 Peeka Xcode 프로젝트를 복제하지 않습니다.
+
+## 3. 플랫폼과 도구
+
+| 항목 | 기술 계약 | Decision |
+|---|---|---|
+| 언어 | Swift 6, strict concurrency | `D-016` |
+| UI | SwiftUI + Observation | `D-016` |
+| 최소 OS | iOS 18.0 | `D-003` |
+| 기기 | iPhone only in V1 | `D-003` |
+| persistence | SwiftData, local-only configuration | `D-007` |
+| photos | PhotoKit / PhotosUI | — |
+| analysis | Vision + Core Image 보조 heuristic | `D-017` |
+| purchases | RevenueCat Purchases SDK | Shipaton `BR-002` |
+| notifications | UserNotifications local notification | `D-009` |
+| analytics | PostHog EU Cloud, anonymous explicit allowlist only | `D-018`, `D-019` |
+| dependency manager | Swift Package Manager | — |
+| project generation | XcodeGen 2.46.0, `project.yml` SSOT | `D-020` |
+| CI | GitHub Actions macOS runner + `xcodebuild` | — |
+
+Xcode와 앱 SDK의 정확한 patch version은 구현 시작 시 고정합니다. XcodeGen은 `2.46.0`으로 먼저 고정합니다. 배포 대상 iOS 18.0은 Vision 미학 점수 API 사용과 범위 축소를 위한 제품 결정입니다.
+
+## 4. Architecture Decision Records
+
+ADR은 승인 상태를 소유하지 않습니다. 결정값과 현재 상태는 [Decision Registry](00-INDEX.md#5-decision-registry--결정값과-상태의-ssot)에서만 관리하고, 여기에는 기술적 결과만 기록합니다.
+
+| ID | Decision | 기술적 결과 |
+|---|---|---|
+| `ADR-001` | `D-002`, `D-011` | Peeka의 기능 단위 아이디어만 계약·fixture를 거쳐 참고 |
+| `ADR-002` | `D-003` | 최신 Vision 사용, 구형 OS fallback 제외 |
+| `ADR-003` | `D-016` | 작은 feature model, Observation, Swift 6 strict concurrency |
+| `ADR-004` | `D-007`, `D-022` | backend/CloudKit 제거, 현재 설치 안의 migration만 책임 |
+| `ADR-005` | `D-017` | background 완료 약속 제거, 취소 가능한 foreground task |
+| `ADR-006` | `D-004`, `D-005` | 분석 속도와 교체 UX에 7+7 상한 적용 |
+| `ADR-007` | `D-018` | RevenueCat/PostHog/notification 교체와 test 가능 |
+| `ADR-008` | `D-009`, `D-025` | 서버·NSE·App Group 없이 반복 루프 구현 |
+| `ADR-009` | `D-019` | EU host·anonymous-only·deny-by-default adapter를 사용하고 SDK 자동 수집 surface 전체 비활성 |
+| `ADR-010` | `D-020` | XcodeGen 2.46.0과 `project.yml`을 고정하고 generated `.xcodeproj`를 git에서 제외; local·CI가 동일 명령으로 생성 |
+| `ADR-011` | `D-021`, `D-022` | 저장 용량과 사진 중복을 줄이는 대신 Photos 삭제·앱 삭제·기기 변경에 영향 받음 |
+| `ADR-012` | `D-024`, `D-026`–`D-029` | App Screens V2를 Light-only SwiftUI token/component로 구현하고 review gesture를 명시적 state로 모델링 |
+
+## 5. 시스템 컨텍스트
+
+```mermaid
+flowchart LR
+    U["Parent"] --> APP["Weekkeep iOS App"]
+    APP --> PH["iOS Photos / iCloud Photos"]
+    APP --> VI["Vision on device"]
+    APP --> DB["SwiftData local store"]
+    APP --> UN["Local Notifications"]
+    APP --> RC["RevenueCat / App Store"]
+    APP --> AN["Anonymous Analytics"]
+    PH -. "asset metadata + image pixels in process" .-> APP
+    APP -. "purchase metadata only" .-> RC
+    APP -. "allowlisted product events only" .-> AN
+```
+
+### 신뢰 경계
+
+| 경계 | 통과 가능 | 통과 금지 |
+|---|---|---|
+| Photos → app process | 허용된 자산 metadata, 분석용 downsampled pixels | 권한 밖 자산 |
+| app → SwiftData | localIdentifier, 주차, 순서, 로컬 score snapshot | 원본 이미지 binary |
+| app → RevenueCat | anonymous customer ID, product, transaction/entitlement | 사진 정보, weekKey |
+| app → Analytics | allowlisted event, bucketed count/duration | 사진 ID/파일/픽셀/위치/촬영시각/weekKey |
+| app → notification center | 일반 reminder copy, app deep link | 가족 이름, 사진 preview, 민감한 내용 |
+
+## 6. 코드 구조
+
+```text
+weekkeep/
+├── project.yml
+├── Config/
+│   ├── Base.xcconfig
+│   ├── Debug.xcconfig
+│   └── Release.xcconfig
+├── Weekkeep/
+│   ├── App/
+│   │   ├── WeekkeepApp.swift
+│   │   ├── AppEnvironment.swift
+│   │   ├── AppTab.swift
+│   │   └── AppRouter.swift
+│   ├── Features/
+│   │   ├── Onboarding/
+│   │   ├── WeeklyCuration/
+│   │   ├── Archive/
+│   │   ├── Settings/
+│   │   └── Paywall/
+│   ├── Domain/
+│   │   ├── Models/
+│   │   ├── Policies/
+│   │   └── Errors/
+│   ├── Data/
+│   │   ├── Persistence/
+│   │   ├── Photos/
+│   │   └── Curation/
+│   ├── Integrations/
+│   │   ├── Purchases/
+│   │   ├── Analytics/
+│   │   └── Notifications/
+│   ├── DesignSystem/
+│   │   ├── Theme/
+│   │   │   ├── WeekkeepColors.swift
+│   │   │   └── WeekkeepTypography.swift
+│   │   └── Components/
+│   │       ├── SevenStitchRail.swift
+│   │       └── WeeklyPhotoGrid.swift
+│   └── Resources/
+├── WeekkeepTests/
+├── WeekkeepUITests/
+└── docs/
+```
+
+### 구조 규칙
+
+- View는 렌더링과 user intent 전달만 담당합니다.
+- 화면별 `@MainActor @Observable` model을 사용하고 app 전체 giant ViewModel을 만들지 않습니다.
+- 상태 없는 정책과 scoring은 Foundation-only target으로 분리해 빠르게 test합니다.
+- 외부 SDK import는 `Integrations` 하위 adapter에서만 허용합니다.
+- feature가 다른 feature의 concrete model을 직접 참조하지 않고 domain contract를 사용합니다.
+- reusable view는 실제 두 곳 이상에서 사용되거나 design token을 강제할 때만 DesignSystem으로 올립니다.
+
+### V2 디자인 구현 계약
+
+- app target의 appearance를 Light로 고정하고 semantic color resolver에 Dark variant를 만들지 않습니다.
+- `LINESeedKR-Rg.ttf`와 `LINESeedKR-Bd.ttf`를 bundle resource 및 `UIAppFonts`에 등록하고 PostScript name smoke test를 둡니다.
+- `SevenStitchRail`은 public input과 무관하게 `stitchCount == 7`을 유지하며 progress는 `0...7`로 clamp합니다.
+- 7-photo grid는 semantic photo order와 visual placement를 분리해 hero+2+4를 렌더링하고, 44pt target·지원 폭 조건을 만족하지 못하면 2-column layout을 선택합니다.
+- review의 `selectedIndex: Int?`와 modal destination은 서로 독립된 명시적 state입니다. 첫 photo intent는 선택, 같은 선택 photo의 다음 intent는 viewer, replace intent는 그 index의 sheet로 reducer가 결정합니다.
+- VoiceOver의 `크게 보기`·`사진 교체` custom action은 tap count에 의존하지 않고 index를 destination에 직접 전달합니다.
+- replacement는 draft의 selected set에서 한 element만 교체하고 review presentation index를 유지합니다. persistence upsert 직전에 최종 set을 촬영 시간순으로 정규화하고 cover metadata를 별도로 저장합니다.
+- replacement는 crossfade + light selection haptic, save는 grid-to-album matched geometry를 사용합니다. Reduce Motion에서는 둘 다 0.2초 opacity transition으로 대체합니다.
+
+## 7. 런타임 구성
+
+```mermaid
+flowchart TD
+    APP["WeekkeepApp"] --> ENV["AppEnvironment"]
+    APP --> SHELL["AppShellView"]
+    SHELL --> WEEK["WeeklyFlowModel @MainActor"]
+    SHELL --> ARC["ArchiveModel @MainActor"]
+    SHELL --> SET["SettingsModel @MainActor"]
+    ENV --> PH["PhotoLibraryClient actor"]
+    ENV --> PIPE["PhotoAnalysisPipeline actor"]
+    ENV --> CUR["CurationEngine value type"]
+    ENV --> STORE["AlbumStore actor / ModelActor"]
+    ENV --> PUR["PurchaseClient adapter"]
+    ENV --> NOTI["NotificationClient adapter"]
+    ENV --> ANA["AnalyticsClient adapter"]
+```
+
+### AppEnvironment
+
+`AppEnvironment`는 production dependency를 한 번 조립해 SwiftUI environment로 주입합니다. Preview/test는 각 protocol의 in-memory fake를 주입합니다. vendor SDK가 singleton을 요구해도 feature 코드는 singleton을 직접 호출하지 않습니다.
+
+### Navigation
+
+- `AppTab` enum: `.week`, `.archive`, `.settings`
+- 탭별 route enum과 `NavigationPath` 사용
+- modal state는 enum item으로 표현해 sheet boolean 충돌을 피함
+- deep link는 `AppRouter`가 parse하고 권한/온보딩 gate 후 route 실행
+
+## 8. Domain Model
+
+### SwiftData schema v1
+
+#### `WeeklyAlbum`
+
+| 필드 | 타입 | 규칙 |
+|---|---|---|
+| `id` | UUID | local stable ID |
+| `weekKey` | String | unique, regular는 `YYYY-Www`, Welcome은 별도 namespace |
+| `kindRaw` | String | `welcome` / `regular` |
+| `weekStart` | Date | 절대 시각 저장 |
+| `weekEnd` | Date | nominal range end |
+| `analysisCutoff` | Date | 실제 사진 수집 종료 시각 |
+| `createdAt` | Date | 최초 저장 |
+| `updatedAt` | Date | 마지막 upsert |
+| `coverPhotoID` | UUID? | AlbumPhoto local ID, 없으면 first available |
+| `photos` | [AlbumPhoto] | cascade relationship |
+
+#### `AlbumPhoto`
+
+| 필드 | 타입 | 규칙 |
+|---|---|---|
+| `id` | UUID | local stable ID |
+| `assetLocalIdentifier` | String | local-only, analytics/log 금지 |
+| `capturedAt` | Date? | display/order용 local metadata |
+| `position` | Int | 0-based, album 안에서 unique 검증 |
+| `sourceRaw` | String | `initial` / `replacement` |
+| `scoreSnapshot` | Double? | 디버그/quality 실험용 local only, release 저장 여부 gate |
+| `album` | WeeklyAlbum? | inverse relationship |
+
+### 저장 제약
+
+- DB unique constraint: `WeeklyAlbum.weekKey`
+- domain validation: 한 album당 photo 1–7개, 중복 `assetLocalIdentifier` 없음, position 연속
+- `createdAt`은 update에서 유지
+- 관계 교체와 album update를 한 `ModelContext` save로 수행
+- 저장 실패 시 context rollback 후 draft 유지
+- 무료 사용 수는 별도 counter가 아니라 저장된 album count에서 파생
+
+### UserDefaults 설정
+
+| key | 값 |
+|---|---|
+| `onboardingCompleted` | Bool |
+| `regularCycleStartsAt` | Date? |
+| `notificationPrimerShown` | Bool |
+| `preferredReminderWeekday` | V1은 Monday 고정, 향후 대비 값 선택적 |
+| `preferredReminderHour/minute` | V1은 20:30 고정, 향후 대비 값 선택적 |
+| `lastSeenAppVersion` | String |
+
+Plus entitlement를 UserDefaults boolean으로 신뢰하지 않습니다. RevenueCat `CustomerInfo`와 캐시된 entitlement contract를 사용합니다.
+
+### CurationDraft
+
+저장 전 draft는 `Sendable` value type으로 메모리에 둡니다.
+
+```swift
+struct CurationDraft: Sendable, Equatable {
+    let id: UUID
+    let kind: AlbumKind
+    let week: WeekRange
+    let analysisCutoff: Date
+    var selected: [PhotoReference]
+    var alternatives: [PhotoReference]
+    var replacementCount: Int
+    var skippedAssetCount: Int
+}
+```
+
+앱이 강제 종료되면 draft 복원을 약속하지 않고 같은 범위로 재분석합니다. 저장 실패로 화면에 머무는 동안에는 draft를 유지합니다.
+
+Review presentation state는 저장 domain model에 넣지 않고 feature state로 유지합니다.
+
+```swift
+enum ReviewDestination: Equatable {
+    case viewer(index: Int)
+    case replacement(index: Int)
+}
+
+struct ReviewPresentationState: Equatable {
+    var selectedIndex: Int?
+    var destination: ReviewDestination?
+}
+```
+
+## 9. Week 계산
+
+### `WeekRangeCalculator`
+
+입력:
+
+- `now: Date`
+- `calendar: Calendar` (`firstWeekday = 2`, locale-independent)
+- `timeZone: TimeZone`
+- onboarding/cycle state
+
+출력:
+
+```swift
+struct WeekRange: Sendable, Equatable {
+    let key: String
+    let start: Date
+    let end: Date
+    let cutoff: Date
+    let eligibleFrom: Date?
+    let eligibleUntil: Date?
+    let kind: AlbumKind
+}
+```
+
+Regular Week의 내부 날짜 범위는 `[start, end)` 반개구간으로 표현합니다. `start`는 월요일 00:00, `end`는 다음 월요일 00:00이며 UI에서는 마지막 포함일을 일요일로 표시합니다. `eligibleUntil`도 exclusive입니다. Welcome Week는 이 regular gate를 거치지 않으므로 두 eligibility 값이 `nil`입니다.
+
+### `WeekRootStateReducer`
+
+[IA의 우선순위 계약](03-IA.md#weekrootstatereducer-계약)을 순수 함수로 구현합니다. feature view나 비동기 callback이 여러 boolean을 조합해 root 상태를 직접 만들 수 없습니다.
+
+```swift
+struct WeekRootSnapshot: Sendable, Equatable {
+    let permission: LoadState<PhotoPermissionState>
+    let localState: LoadState<LocalWeekState>
+    let eligiblePhotoCount: LoadState<Int>?
+    let creationAccess: LoadState<CreationAccess>?
+}
+
+enum WeekRootState: Sendable, Equatable {
+    case loading(WeekRootResolutionStage)
+    case permissionBlocked(PhotoPermissionIssue)
+    case recoverableError(WeekRootResolutionError)
+    case welcomePending(PhotoAccessScope)
+    case preRegularWaiting
+    case saved(UUID)
+    case noEligiblePhotos(PhotoAccessScope)
+    case entitlementLocked
+    case ready(PhotoAccessScope, photoCount: Int)
+}
+```
+
+- reducer는 IA에 적힌 위→아래 순서대로 평가하고 정확히 한 case만 반환합니다.
+- 각 dependency는 permission → localState → photos → entitlement 순서로 필요한 시점에만 해석합니다. 뒤 단계가 loading이어도 앞 단계에서 확정 가능한 blocker/waiting/saved 상태를 지연시키지 않습니다.
+- target과 saved lookup을 먼저 고정한 뒤 photo count와 entitlement를 평가합니다.
+- `eligiblePhotoCount == 0`은 `entitlementLocked`보다 우선합니다.
+- `creationAccess == unresolved`이면 `inactive`로 변환하지 않고 `loading` 또는 `recoverableError`를 유지합니다.
+- state transition의 side effect는 `WeeklyFlowModel`이 명시적 user action에서만 실행합니다.
+
+### 규칙
+
+1. 내부 연산은 injected Calendar/TimeZone을 사용하고 `Calendar.current`를 여러 곳에서 직접 읽지 않습니다.
+2. regular `weekKey` 생성은 week-based year와 week-of-year를 함께 사용합니다.
+3. Welcome 저장 시 다음 월요일 00:00을 `regularCycleStartsAt`으로 고정합니다. Regular target 후보는 반드시 `start >= regularCycleStartsAt`이어야 하며, 그 전 주를 Welcome 직후 다시 만들지 않습니다.
+4. Regular target은 현재 시각보다 먼저 완전히 끝난 가장 최근 월요일–월요일 반개구간 하나입니다. 진행 중인 주는 대상이 아닙니다.
+5. `eligibleFrom`은 대상 주의 `end`, `eligibleUntil`은 calendar로 7일을 더한 다음 월요일 00:00입니다. `eligibleFrom <= now < eligibleUntil`이면 언제든 시작할 수 있습니다.
+6. 월요일 20:30 알림은 진입점일 뿐 eligibility를 열거나 닫지 않습니다.
+7. Regular Week의 `cutoff`는 완료된 주의 `end`로 고정합니다. Welcome Week만 분석 시작 시각을 cutoff로 사용합니다.
+8. 완료 창을 놓쳐 다음 주가 끝나면 이전 미저장 범위를 queue에 쌓지 않고 최신 완료 주로 대체합니다.
+9. eligibility 안에서 `CurationDraft`를 만들면 그 `weekKey`를 flow lifetime 동안 pin합니다. 자정이나 significant time change가 와도 저장·취소 전에는 target을 교체하지 않습니다.
+10. DST로 하루가 23/25시간이어도 calendar date interval을 사용하고 초 단위 `7*24h` 계산을 하지 않습니다.
+11. 저장된 key 충돌 시 새 insert가 아니라 기존 범위를 유지한 update입니다.
+
+필수 fixture:
+
+- 연말/연초 ISO week
+- 윤년 2월
+- DST 시작/종료 지역
+- 서울 ↔ 미국 시간대 변경
+- 일요일 23:59, 월요일 00:00/20:30, 다음 일요일 23:59, 다음 월요일 00:00
+- 일요일 23:59 시작 → 월요일 00:00 이후 저장하는 in-flight pinned draft
+- Welcome 저장 요일별 다음 월요일 source start와 첫 non-overlapping Regular eligibility
+
+## 10. Photo Library 접근
+
+### `PhotoLibraryClient` contract
+
+```swift
+protocol PhotoLibraryClient: Sendable {
+    func authorizationStatus() async -> PhotoAuthorization
+    func requestAuthorization() async -> PhotoAuthorization
+    func fetchDescriptors(in range: DateInterval, limit: Int) async throws -> [PhotoDescriptor]
+    func analysisImage(for id: PhotoID, targetSize: CGSize) async throws -> AnalysisImage
+    func displayImage(for id: PhotoID, targetSize: CGSize) async throws -> DisplayImageResult
+    func assetAvailability(for ids: [PhotoID]) async -> Set<PhotoID>
+}
+```
+
+실제 구현 세부 타입은 Photos framework 안에 격리합니다. Domain/UI에는 `PHAsset`을 노출하지 않습니다.
+
+### Fetch 규칙
+
+- mediaType image
+- creationDate가 고정 range 안에 있는 자산
+- hidden 제외
+- screenshot subtype 제외
+- creationDate 오름차순 fetch 후 sampling 단계 전달
+- limited 권한에서는 접근 가능한 결과만 사용
+- 접근 자산 수를 analytics에 보낼 때는 bucket(`0`, `1-6`, `7-14`, `15-30`, `31-50`, `51-100`, `100+`)만 사용
+
+### 100장 상한 sampling
+
+1. 날짜별 자산 그룹을 만듭니다.
+2. 각 날짜에 최소 quota 1장을 우선 배정합니다.
+3. 남은 quota를 날짜별 자산 비율에 따라 배분합니다.
+4. 각 날짜 안에서는 favorites와 해상도 조건을 약한 prior로 사용하되 시간 구간을 분산합니다.
+5. seed를 `weekKey`에서 파생해 같은 자산 집합의 결과를 재현 가능하게 합니다.
+
+### iCloud Photos
+
+- analysis용 이미지는 512–768px target으로 `networkAccessAllowed`를 켜 요청합니다.
+- degraded preview는 화면용으로 사용할 수 있지만 최종 분석에는 final image 결과를 우선합니다.
+- 요청 ID를 추적해 task cancel 시 Photos request도 취소합니다.
+- download progress를 aggregate하여 UI에 전달하되 asset ID는 log하지 않습니다.
+- Wi-Fi만 강제하지 않습니다. 사용자가 취소할 수 있어야 합니다.
+
+## 11. On-device Analysis Pipeline
+
+```mermaid
+flowchart LR
+    F["Fetch eligible descriptors"] --> S["Sample to max 100"]
+    S --> T["Request downsampled images"]
+    T --> Q["Quality & utility features"]
+    Q --> D["Near-duplicate grouping"]
+    D --> R["Base ranking"]
+    R --> M["Diversity selection"]
+    M --> O["7 selected + up to 7 alternatives"]
+```
+
+### 단계별 책임
+
+#### A. Utility filtering
+
+- PhotoKit screenshot subtype hard exclude
+- Vision aesthetics observation의 utility 판단이 제공되면 보조 exclude
+- 지나치게 작은 이미지, decode 불가 이미지 제외
+- 문서/OCR 감지는 V1 필수가 아니며 false positive가 높으면 추가하지 않음
+
+#### B. Quality feature extraction
+
+- Vision image aesthetics overall score
+- face detection/capture quality는 **사진 품질 보조**로만 사용
+- 노출/blur/해상도 heuristic
+- favorite는 매우 작은 positive prior
+- 위치, 연락처, 사람 이름은 사용하지 않음
+
+#### C. Near-duplicate grouping
+
+- Vision image feature print 거리로 시각 유사도 계산
+- 촬영 시간 인접성을 함께 사용해 burst/연속 촬영을 묶음
+- threshold는 fixture dataset으로 보정하고 remote에서 임의 변경하지 않음
+- 각 그룹에서 quality 상위 1장을 대표로 두고 나머지는 alternative 후보가 될 수 있음
+
+#### D. Diversity-aware selection
+
+초기 base score 가설:
+
+```text
+baseQuality =
+  0.50 * aesthetics
+  + 0.20 * faceCompositionQuality(if face exists; neutral otherwise)
+  + 0.15 * technicalUsability
+  + 0.10 * resolutionFitness
+  + 0.05 * favoritePrior
+```
+
+7장 선택은 base 순위만 자르지 않고 greedy objective를 사용합니다.
+
+```text
+selectionValue(candidate) =
+  baseQuality
+  + dayCoverageBonus
+  + timeOfDayCoverageBonus
+  + visualNoveltyBonus
+  - nearDuplicatePenalty
+  - sameMomentConcentrationPenalty
+```
+
+가중치는 V1 코드 상수와 test fixture로 관리하고, 베타 데이터에서는 사진 ID가 아니라 교체 index/count만 측정합니다.
+
+### 중요한 금지사항
+
+- 얼굴 embedding으로 특정 아이를 enrollment/식별하지 않음
+- 얼굴이 없는 사진을 자동으로 낮은 가치로 단정하지 않음
+- 피부색, 성별, 연령, 감정, 가족 관계 추론 금지
+- `best photos` 같은 절대적 표현 금지
+
+### 결과 계약
+
+- selected: `min(validCount, 7)`
+- alternatives: `min(max(validCount - selectedCount, 0), 7)`
+- selected 내부 중복 asset ID 없음
+- selected와 alternatives 교집합 없음
+- 모든 결과가 요청 range 안에 있음
+- UI 표시 순서는 capturedAt 오름차순
+- cover는 selected 중 별도 quality top이지만 album photo order를 바꾸지 않음
+
+## 12. Concurrency와 메모리
+
+### 격리 전략
+
+- `WeeklyFlowModel`: `@MainActor`
+- `PhotoLibraryService`: actor 또는 serial isolation
+- `PhotoAnalysisPipeline`: actor
+- `AlbumStore`: `@ModelActor` 또는 전용 actor
+- 순수 `CurationEngine`: immutable `Sendable` input/output
+- RevenueCat/PostHog callback은 adapter에서 async API로 변환 후 MainActor UI 갱신
+
+### 규칙
+
+- `PHAsset`과 non-Sendable image 객체를 actor 밖으로 장기 전달하지 않습니다.
+- actor 경계에는 `PhotoID`, metadata value type, 필요한 경우 안전한 pixel buffer wrapper만 전달합니다.
+- `withTaskGroup` 분석 동시성은 기기 thermal/memory 측정 후 기본 2–3으로 제한합니다.
+- 한 번에 모든 full-resolution 이미지를 메모리에 올리지 않습니다.
+- 각 자산 분석 뒤 autorelease scope와 cache eviction을 고려합니다.
+- 취소는 fetch → image request → Vision task → ranking까지 cooperative하게 전파합니다.
+
+### 성능 instrumentation
+
+`os_signpost` 구간:
+
+- `photo_fetch`
+- `icloud_fetch`
+- `vision_analysis`
+- `deduplication`
+- `diversity_selection`
+- `album_save`
+
+로그는 count bucket, duration, error kind만 포함합니다.
+
+## 13. Persistence와 데이터 무결성
+
+### `AlbumStore` contract
+
+```swift
+protocol AlbumStore: Sendable {
+    func album(for weekKey: String) async throws -> WeeklyAlbumSnapshot?
+    func listAlbums() async throws -> [WeeklyAlbumSummary]
+    func upsert(_ draft: CurationDraft) async throws -> WeeklyAlbumSnapshot
+    func savedAlbumCount() async throws -> Int
+}
+```
+
+### Upsert algorithm
+
+1. draft invariant validate
+2. `weekKey` fetch
+3. insert 또는 existing 관계 replacement
+4. cover photo validate
+5. single context save
+6. 다시 fetch하여 unique/invariant 확인
+7. snapshot 반환
+
+save가 실패하면 analytics 성공 이벤트와 notification primer를 실행하지 않습니다.
+
+### Migration
+
+- `SchemaV1`을 명시적으로 선언합니다.
+- schema 변경은 lightweight여도 versioned schema와 migration plan 검토를 거칩니다.
+- migration fixture store를 tests에 보관합니다.
+- V1 local-only이므로 CloudKit-compatible optional relationship 제약에 맞추기 위해 모델을 왜곡하지 않습니다.
+
+### 보존과 복원 경계
+
+- `D-007`, `D-021`, `D-022`에 따라 V1은 CloudKit, 서버 backup, export/import, 앱 관리형 restore를 구현하지 않습니다.
+- schema migration은 **같은 앱 설치 안에서 업그레이드된 store**만 지원합니다. 앱 삭제 뒤 복원이나 새 기기 이전 계약이 아닙니다.
+- iOS의 기기 backup 또는 전송이 앱 데이터를 옮기는 경우가 있더라도 Weekkeep 제품 기능으로 성공을 보장하지 않습니다. 복원된 `localIdentifier`는 모두 다시 availability 검증합니다.
+- 원본 사진이 Photos에 남아 있어도 저장했던 선택과 순서를 자동 추론·재생성하지 않습니다.
+- `PurchaseClient.restore()`는 entitlement만 갱신하며 `AlbumStore`를 호출하지 않습니다.
+- Settings·paywall 개인정보 링크의 보존 안내는 `FR-022`의 한국어·영어 카피를 사용합니다.
+
+### 원본 누락
+
+- list/detail 표시 때 localIdentifier availability를 batch 조회합니다.
+- missing row를 DB에서 자동 삭제하지 않습니다.
+- cover missing이면 첫 available 사진을 runtime fallback으로 사용하되 DB cover를 조용히 덮어쓰지 않습니다.
+- 모두 missing이어도 album metadata는 남깁니다.
+
+## 14. Purchase Integration
+
+### `PurchaseClient` contract
+
+```swift
+protocol PurchaseClient: Sendable {
+    func entitlementState() async -> EntitlementState
+    func currentOffering() async throws -> PlusOffering
+    func purchasePlus() async throws -> PurchaseOutcome
+    func restore() async throws -> RestoreOutcome
+}
+```
+
+### RevenueCat 설정
+
+- SPM `RevenueCat` product 사용; RevenueCatUI는 custom paywall을 택하면 제외 가능
+- app 시작 시 public Apple SDK key로 한 번만 configure
+- 계정이 없으므로 RevenueCat anonymous app user ID 사용
+- entitlement: `plus`
+- offering: `default`
+- App Store product: `weekkeep_plus_lifetime`
+- package type: lifetime/custom non-consumable
+- localized display price는 StoreProduct에서 가져옴
+- Settings와 paywall에 restore 진입점
+
+### V1 상품 구성 계약
+
+- 제품값은 `D-008`, `D-023`에서 파생합니다. 저장된 album count가 0 또는 1이면 생성 가능하고, 2 이상이면 active Plus가 필요합니다.
+- Plus는 App Store 비소모성 평생 이용권 1개이며 RevenueCat `plus` entitlement에 연결합니다.
+- App Store Connect의 US 기준 가격은 $19.99로 설정하고 다른 storefront는 Apple의 자동 등가 가격을 사용합니다.
+- production 앱은 숫자 가격을 상수나 localization 문자열로 보관하지 않고 `StoreProduct.localizedPriceString` 계열의 Store 제공 값만 렌더링합니다.
+- KR 약 ₩29,000은 초기 storefront 예상과 StoreKit UI fixture일 뿐 entitlement 판정이나 production 표시값이 아닙니다.
+- App Store product 생성, Paid Applications Agreement, RevenueCat offering/product mapping, sandbox 조회 결과는 `M4 Monetized Beta`의 외부 구성 증거로 남깁니다.
+
+### Entitlement gate
+
+```text
+canCreateAlbum = savedAlbumCount < 2 OR entitlement.plus == active
+showPaywall = targetIsUnsaved AND eligiblePhotoCount > 0 AND savedAlbumCount >= 2 AND entitlement.plus == inactive
+canReadSavedAlbum = true
+```
+
+- network failure에서 Plus를 무조건 false로 덮어쓰지 않습니다.
+- RevenueCat이 제공하는 cached CustomerInfo를 우선 사용하고 상태를 `active/inactive/unknown`으로 구분합니다.
+- `unknown`이면 과거에 확인한 active 사용자를 즉시 잠그지 않는 정책을 보수적으로 검토합니다.
+- purchase 성공은 transaction callback만이 아니라 active entitlement 확인으로 판정합니다.
+
+### 테스트
+
+- RevenueCat Test Store로 개발 초기 smoke test
+- StoreKit Configuration으로 가격/상태 UI test
+- App Store sandbox에서 실제 purchase/cancel/pending/restore
+- TestFlight production configuration smoke test
+- restore 성공 전후 `AlbumStore` mutation 0 검증
+- 빈 새 설치에서 Plus 복원 후에도 과거 `WeeklyAlbum`을 생성하지 않으며 보존 한계 안내가 보이는지 검증
+
+## 15. Notification Integration
+
+### Baseline
+
+UserNotifications의 local notification만 사용합니다.
+
+- 첫 album 저장 후 contextual primer
+- primer copy: `매주 월요일 저녁에 알려드릴까요?`
+- 사용자 승인 뒤 향후 12주 월요일 20:30을 `weeklyReminder.{targetWeekKey}` 식별자의 one-off calendar trigger로 예약
+- 민감정보 없고 background 완료를 주장하지 않는 copy: `지난주를 1분 만에 남겨볼까요?`
+- deep link: `weekkeep://weekly/current`
+- foreground에서 authorization/status 재조회
+- foreground, 저장 성공, significant time change에서 12주 rolling schedule을 다시 계산
+- 알림의 `targetWeekKey`는 직전 완료된 월–일 주이며, 알림 전 이미 저장됐다면 해당 pending request를 제거하고 다음 주 알림은 유지
+- `targetWeekStart < regularCycleStartsAt`인 알림은 예약하지 않아 Welcome Week 직후 중복 기록을 유도하지 않음
+- 알림을 놓쳐도 대상은 다음 일요일 23:59까지 eligible이며 별도 재촉 알림은 보내지 않음
+
+### 왜 background album을 만들지 않는가
+
+iOS background task 실행 시각은 보장되지 않으며 Photos/iCloud 작업은 네트워크와 권한 상태에 좌우됩니다. V1 알림은 ‘완성된 앨범 도착’이 아니라 앱을 열어 초안을 만들고, 준비된 결과를 1분 안의 활성 조작으로 검토하라는 **리마인더**입니다. foreground 분석 대기 시간은 60초 활성 검토 목표에 포함하지 않습니다.
+
+### OneSignal gate
+
+OneSignal은 Shipaton 별도 카테고리 또는 원격 lifecycle messaging이 필요할 때만 추가합니다. 공식 iOS 설정은 Push capability, Background Mode, Notification Service Extension, App Group 등 운영 면적을 늘립니다. 다음 조건을 모두 만족하기 전에는 baseline에 넣지 않습니다.
+
+- P0 core flow 완료
+- local notification W1 데이터 확보
+- 원격 메시지가 해결할 구체적 retention 문제가 있음
+- 개인정보/consent와 App Store disclosure 검토 완료
+
+## 16. Analytics Integration
+
+### Adapter
+
+```swift
+protocol AnalyticsClient: Sendable {
+    func capture(_ event: AnalyticsEvent) async
+    func flush() async
+}
+```
+
+`AnalyticsEvent`는 enum과 typed property로 정의합니다. 임의 `[String: Any]` 호출은 integration layer 밖에서 금지합니다.
+
+### PostHog 승인 설정 (`D-019`)
+
+- EU Cloud host를 사용하고 SDK anonymous distinct ID만 유지합니다.
+- `personProfiles = .never`; `identify`, `alias`, `group`, user property API를 호출하지 않습니다.
+- `enableSwizzling = false`, `captureApplicationLifecycleEvents = false`, `captureScreenViews = false`, `captureElementInteractions = false`, `rageClickConfig.enabled = false`.
+- `sessionReplay = false`, `surveys = false`, `preloadFeatureFlags = false`, `sendFeatureFlagEvent = false`, `tracingHeaders = []`.
+- `setDefaultPersonProperties = false`; 이메일, 이름, 가족 정보, 광고 ID, 위치 property를 추가하지 않습니다.
+- typed `AnalyticsEvent` adapter만 `capture`를 호출할 수 있습니다. feature View와 vendor SDK 직접 호출은 build review에서 실패 처리합니다.
+- `setBeforeSend`는 event-name allowlist 밖의 event를 drop하고 property allowlist 밖의 key를 제거하는 두 번째 방어선입니다.
+- development/test에서는 no-op 또는 console sink
+
+### Privacy payload audit 계획
+
+1. `AnalyticsEvent`와 허용 property schema를 snapshot test하고 알 수 없는 event/key는 test failure로 처리합니다.
+2. fake PostHog sink에서 모든 P0 흐름을 재생해 사진·자산·날짜·위치 관련 금지 key/value가 0인지 검사합니다.
+3. Release-like build를 network proxy로 Welcome→분석→교체→저장→paywall까지 실행해 PostHog 요청의 event·property payload를 보관합니다.
+4. PostHog live event inspector에서 명시 event 외 `$screen`, lifecycle, autocapture, rage click, replay event가 0인지 확인합니다.
+5. `TST-019`와 `TST-022` 증거가 없거나 한 항목이라도 실패하면 Release에서 provider를 no-op으로 끕니다. 개인정보 제약을 완화해 통과시키지 않습니다.
+
+### 활성 검토 시간 측정
+
+- `WeeklyFlowModel`은 `SCR-WK-03`이 실제로 보이는 순간부터 저장 탭까지의 foreground 활성 시간만 누적합니다.
+- scene이 inactive/background가 되면 timer를 멈추고 돌아오면 재개합니다.
+- 분석 진행, 저장 처리, 알림에서 앱을 열기 전 시간은 제외합니다.
+- 원시 초 단위 값은 외부로 보내지 않고 `under_30s`, `30_60s`, `60_120s`, `over_120s` bucket을 `EVT-album_saved.active_review_duration_bucket`으로 보냅니다.
+- `EVT-album_saved.regular_sequence_bucket`은 target `weekStart`와 `regularCycleStartsAt`의 캘린더 주 차이로 `w1`, `w2`, `w3_plus`를 계산합니다. 저장 횟수나 앱 재실행 횟수로 계산하지 않으며 Welcome은 `not_applicable`입니다.
+
+### Event privacy compile-time rule
+
+허용 property 타입:
+
+- enum raw value
+- Bool
+- bucketed Int/String
+- coarse duration bucket
+- app version, locale, OS major
+
+금지 property 이름/값:
+
+- `asset`, `photo`, `filename`, `path`, `localIdentifier`
+- exact `weekKey`, exact capture date/time
+- location, face count per photo, Vision score per photo
+- free-form error description
+
+CI lint 또는 unit snapshot으로 event schema를 검증합니다.
+
+## 17. Error Model
+
+```swift
+enum WeekkeepError: Error, Sendable {
+    case permission(PhotoPermissionIssue)
+    case noEligiblePhotos
+    case photoFetch(PhotoFetchIssue)
+    case analysis(AnalysisIssue)
+    case persistence(PersistenceIssue)
+    case purchase(PurchaseIssue)
+    case notification(NotificationIssue)
+}
+```
+
+### Error presentation mapping
+
+| Domain error | 사용자 분류 | retry | 로그 수준 |
+|---|---|---|---|
+| denied/restricted | blocking external state | Settings/policy | info |
+| individual asset unavailable | partial | continue | debug/info |
+| iCloud network | recoverable | retry/partial | notice |
+| Vision asset failure | partial internal | automatic skip | debug aggregate |
+| all analysis failed | recoverable | retry | error, sanitized |
+| validation failed | internal invariant | preserve draft/support | fault |
+| store save failed | recoverable/internal | retry | error |
+| purchase cancelled | neutral outcome | none | info |
+| purchase pending | external pending | refresh | info |
+
+vendor error 원문은 release UI에 직접 표시하지 않습니다. 진단 로그에서도 privacy interpolation을 사용합니다.
+
+## 18. Privacy와 Security Requirements
+
+### Data inventory
+
+| 데이터 | 저장 위치 | 외부 전송 | 보존 |
+|---|---|---|---|
+| 사진 원본/thumbnail | Photos / memory cache | 금지 | 앱이 영속 복제하지 않음 |
+| Photos local identifier | SwiftData app sandbox | 금지 | album 유지 기간 |
+| 촬영 시각 | SwiftData local | 금지 | album 유지 기간 |
+| Vision score/feature print | memory; score snapshot 선택적 local | 금지 | feature print는 분석 종료 시 폐기 |
+| 주차 메타데이터 | SwiftData local | exact 값 전송 금지 | album 유지 기간 |
+| 익명 분석 ID | analytics SDK local/remote | 허용 | provider policy |
+| 구매/entitlement | RevenueCat/App Store | 허용 | provider policy |
+
+### 구현 통제
+
+- `OSLog` 사진 ID는 `.private`로도 남기지 않는 것을 원칙으로 함
+- analytics event allowlist
+- URL/deep link에 사진 ID 금지
+- session replay/screenshot 기능 금지
+- third-party SDK privacy manifest와 required reason API 검토
+- App Store Privacy Nutrition Label을 실제 event schema와 맞춤
+- `NSPhotoLibraryUsageDescription` 한국어/영어 문구 검수
+- SwiftData store에 iOS Data Protection 적용 여부를 release QA에서 확인
+- debug export가 있다면 release build에서 compile-out; V1에는 사용자 사진 진단 export 없음
+
+### 권한 목적 문자열 초안
+
+한국어:
+
+> Weekkeep이 지난 일주일의 사진을 기기에서 골라 주간 기록을 만들 수 있도록 사진 접근을 허용해 주세요.
+
+영어:
+
+> Allow Weekkeep to choose photos from your last week on this device and create a weekly memory.
+
+## 19. Accessibility Engineering
+
+- `LINESeedSansKR-Regular/Bold`를 bundle에 등록하고 `Font.custom(_:size:relativeTo:)`로 semantic Dynamic Type scaling; unscaled fixed font size 금지
+- launch/UI smoke test에서 PostScript name 등록과 system fallback 미발생을 확인
+- image-only controls에 label/hint/custom action 제공
+- review photo마다 `크게 보기`와 `사진 교체` custom action을 제공하며 선택→재탭 sequence 없이 직접 route
+- 사진 grid 순서와 visual hero 위치가 달라도 accessibility sort priority로 시간순 제공
+- progress announcement throttling
+- Reduce Motion 환경에서는 scale/slide를 fade로 대체
+- Differentiate Without Color와 Increase Contrast에서 상태 검증
+- largest accessibility size에서 CTA가 화면 밖으로 밀리면 scroll container 사용
+- 44×44pt interactive hit region
+- XCTest accessibility identifier는 화면 ID/component ID 규칙 사용
+
+## 20. Test Strategy
+
+### Unit tests
+
+| 영역 | 필수 사례 |
+|---|---|
+| WeekRangeCalculator | 연말, DST, 시간대 변경, Monday eligibility window, latest-only, Welcome → regular |
+| WeekRootStateReducer | pending/permission/error/welcome/waiting/saved/0-photo/locked/ready 조합의 단일 상태와 우선순위 |
+| WeeklyReview interaction reducer | nil→선택, 다른 index→선택 이동, 같은 index 재탭→viewer, direct replace/view action, save와 선택 독립 |
+| CandidateSampler | 0/1/6/7/14/100/500장, 날짜 균형, deterministic seed |
+| CurationEngine | under-7, duplicate group, no-face photos, order, disjoint alternatives |
+| AlbumValidator | duplicate asset, invalid position, empty selection, >7 |
+| AlbumStore | insert/update, double tap race, rollback, count derivation |
+| EntitlementPolicy | free 0/1/2, active/inactive/unknown |
+| Analytics schema | 금지 key/value type, event snapshot |
+| DeepLink parser | valid/invalid/missing album, no photo ID route |
+
+### Integration tests
+
+- in-memory SwiftData container + AlbumStore
+- fixture image set + Vision pipeline golden result tolerance
+- fake Photos library states full/limited/denied/restricted
+- iCloud partial failure와 cancellation
+- RevenueCat adapter contract fake
+- local notification scheduling calendar verification
+
+### UI tests
+
+- first launch → full access fake → review → save
+- limited access 4장
+- denied → Settings return simulation
+- review 첫 tap은 선택/reveal만, 같은 photo 두 번째 tap은 viewer, 다른 photo tap은 선택 이동
+- viewer swipe 뒤 dismiss 시 마지막 current index가 review selectedIndex로 반영
+- VoiceOver direct view/replace action은 선택 sequence 없이 정확한 index로 이동
+- replacement one slot only
+- grid-to-album matched geometry와 Reduce Motion fade
+- double save tap
+- archive missing asset placeholder
+- third album paywall → success resume
+- purchase cancel/pending/failure
+- restore success/no purchase
+- 새 설치 Plus restore 전후 WeeklyAlbum mutation 0 + local durability copy
+- largest Dynamic Type + Korean/English
+
+### Manual/device tests
+
+- 실제 iCloud Photos on/off
+- 저전력 모드, cellular, offline
+- 2GB/4GB급 구형 iOS 18 지원 기기와 최신 기기
+- Photos 권한을 Settings에서 실행 중 변경
+- Proxyman/Charles 등으로 사진 payload 외부 전송 0 확인
+- VoiceOver, Reduce Motion, Increase Contrast
+- App Store sandbox purchase와 restore
+
+## 21. Performance Budget
+
+| 구간 | 초기 목표 | 실패 대응 |
+|---|---|---|
+| cold launch to shell | p50 <1.5s | SDK lazy init 검토 |
+| Photos descriptor fetch ≤100 | p50 <1s local | fetch predicate/index 점검 |
+| 30장 end-to-end analysis | p50 ≤60s | target size/concurrency 조정 |
+| 50장 end-to-end analysis | p50 ≤90s | sampling/feature 단계 profiling |
+| 100장 end-to-end analysis | p95 ≤180s | hard cap, thermal/memory backoff |
+| album save | p95 <500ms | relationship batch/update 검토 |
+| archive initial render | p95 <1s for 100 albums | pagination/thumbnail caching |
+
+성능 budget은 실기기 fixture로 다시 기준선을 잡습니다. iCloud 다운로드 시간은 별도 측정하고 Vision compute SLA와 섞지 않습니다.
+
+## 22. Build, Configuration, CI
+
+### Build configurations
+
+- `Debug`: fake/store config 선택 가능, verbose sanitized log
+- `Beta`: production-like SDK, beta analytics project, Store sandbox/TestFlight
+- `Release`: production keys, debug menu 제거, strict privacy flags
+
+### Configuration 원칙
+
+- API key와 host는 `.xcconfig` 또는 generated configuration으로 주입
+- 저장소에는 값 없는 `Secrets.example.xcconfig`만 커밋
+- RevenueCat public SDK key/PostHog project token은 보안 비밀로 오인하지 않되 환경 혼선을 막기 위해 분리
+- secret server key는 앱 bundle에 절대 포함하지 않음
+
+### CI gates
+
+Owner: Engineering — Kim Sol + Codex. Local bootstrap과 GitHub Actions가 같은 pinned XcodeGen command를 사용합니다.
+
+1. XcodeGen `2.46.0` version check → `project.yml` generation → `xcodebuild -list` 성공
+2. build with warnings as errors for Weekkeep source
+3. SwiftFormat/SwiftLint는 초기 설정이 팀 속도를 방해하지 않는 최소 규칙
+4. unit + integration tests
+5. selected UI smoke tests
+6. localization key consistency
+7. analytics schema privacy test
+8. archive build on release branch
+
+## 23. Feature Flags
+
+| Flag | 기본 | 목적 |
+|---|---|---|
+| `curation_v1` | on | deterministic base pipeline |
+| `posthog_analytics` | environment | provider on/off |
+| `one_signal_remote_notifications` | off | 별도 category 실험 |
+| `lifetime_paywall` | on | V1 offering |
+| `debug_fixture_library` | Debug only | Photos 없이 UI/test |
+
+사진 scoring weight를 서버 feature flag로 원격 변경하지 않습니다. 결과 재현성과 privacy 검토를 위해 app release/config version과 함께 관리합니다.
+
+## 24. 기존 Peeka 자산 활용 규칙
+
+기존 `/Users/solkim/Dev/baby_album`에는 Vision 분석과 사진 큐레이션 경험이 있지만 프로젝트 전체를 가져오지 않습니다.
+
+### 참고 가능한 것
+
+- Vision aesthetics/face/feature print 사용 방식
+- PhotoKit 이미지 요청과 cancellation 경험
+- 앨범 grid/viewer의 interaction lesson
+- 실제 사진 fixture와 score threshold 실험 결과
+
+### 가져오지 않는 것
+
+- Core Data/CloudKit schema
+- cleanup, milestone, widget, duplicate feature
+- 직접 StoreKit 결제 layer
+- 사용되지 않는 scan service와 onboarding 연결 구조
+- Swift 6 data race가 있는 ViewModel 패턴
+- 같은 주를 insert-only로 저장하는 로직
+
+### 포팅 절차
+
+1. 원본 코드의 동작과 testable contract를 문서화
+2. Weekkeep domain type으로 순수 구현
+3. fixture test로 결과 비교
+4. concurrency/privacy review
+5. feature module에 연결
+
+## 25. 기술 작업 순서
+
+| 단계 | 산출물 | 통과 조건 |
+|---|---|---|
+| T0 | 문서 승인, Decision dependencies 승인 | 구현 Gate `Open` 0, 공개 conflict 0 |
+| T1 | project shell, design tokens, navigation | clean build/test |
+| T2 | permissions, WeekRangeCalculator, fake library | 상태 matrix test |
+| T3 | PhotoKit + Vision pipeline | fixture/성능 baseline |
+| T4 | review/replace/save | P0 core UI tests |
+| T5 | archive/missing asset recovery | persistence tests |
+| T6 | RevenueCat/paywall/restore | sandbox end-to-end |
+| T7 | notification/analytics/privacy | network/privacy audit |
+| T8 | accessibility/localization/polish | release checklist |
+| T9 | TestFlight/App Store/Shipaton assets | public URL + demo |
+
+## 26. Go/No-Go 기술 기준
+
+### Go
+
+- 50장 fixture에서 실기기 중앙값 90초 이내
+- 선택/교체/저장 P0 경로 안정
+- 동일 weekKey 중복 저장 재현 0
+- limited/denied/iCloud partial 흐름 완결
+- RevenueCat purchase/restore 실기기 통과
+- 외부 요청에서 사진 관련 데이터 0
+
+### Scope reduction trigger
+
+- Vision pipeline이 100장 p95 180초를 지속 초과하면 입력 상한을 60장으로 낮춤
+- face quality가 bias/불안정성을 만들면 aesthetics+dedupe+time diversity만 유지
+- custom mosaic가 Dynamic Type/VoiceOver를 지연시키면 단순 adaptive grid로 출시
+- PostHog privacy audit가 실패하거나 늦으면 provider를 no-op으로 출시하고 event 계약은 유지
+- OneSignal은 core schedule에 영향을 주는 즉시 제외
+
+### No-Go
+
+- 저장 중복 또는 기록 손상 P0 존재
+- 권한 거부 상태에서 crash/무한 spinner
+- 사진 데이터가 analytics/vendor payload로 나감
+- RevenueCat entitlement와 UI 잠금이 불일치
+- App Review에 필요한 개인정보 설명/복원 기능 부재
+
+## 27. 공식 기술 근거
+
+- [Apple — CalculateImageAestheticsScoresRequest](https://developer.apple.com/documentation/vision/calculateimageaestheticsscoresrequest)
+- [Apple — PHPhotoLibrary](https://developer.apple.com/documentation/photos/phphotolibrary)
+- [Apple — SwiftData ModelContainer](https://developer.apple.com/documentation/swiftdata/modelcontainer)
+- [Apple — Preserving model data with SwiftData](https://developer.apple.com/documentation/swiftdata/preserving-your-apps-model-data-across-launches)
+- [Apple — Asking permission to use notifications](https://developer.apple.com/documentation/usernotifications/asking-permission-to-use-notifications)
+- [Apple — Privacy HIG](https://developer.apple.com/design/human-interface-guidelines/privacy/)
+- [RevenueCat — SDK Quickstart](https://www.revenuecat.com/docs/getting-started/quickstart)
+- [RevenueCat — iOS Product Setup](https://www.revenuecat.com/docs/getting-started/entitlements/ios-products)
+- [RevenueCat — Entitlements](https://www.revenuecat.com/docs/getting-started/entitlements)
+- [Apple — Set a price for an in-app purchase](https://developer.apple.com/help/app-store-connect/manage-in-app-purchases/set-a-price-for-an-in-app-purchase/)
+- [PostHog — iOS SDK](https://posthog.com/docs/libraries/ios)
+- [PostHog — iOS configuration](https://posthog.com/docs/libraries/ios/configuration)
+- [XcodeGen — Repository and project spec](https://github.com/yonaskolb/XcodeGen)
+- [XcodeGen — Releases](https://github.com/yonaskolb/XcodeGen/releases)
+- [OneSignal — iOS SDK Setup](https://documentation.onesignal.com/docs/en/ios-sdk-setup)

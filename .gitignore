@@ -1,0 +1,25 @@
+# XcodeGen owns the project definition.
+Weekkeep.xcodeproj/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcuserstate
+
+# Build products and local tooling.
+DerivedData/
+.build/
+build/
+*.ipa
+*.dSYM.zip
+
+# Secrets and machine-local configuration.
+.env
+.env.*
+!.env.example
+Config/Secrets.xcconfig
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# macOS.
+.DS_Store

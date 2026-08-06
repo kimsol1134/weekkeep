@@ -3,13 +3,13 @@
 | 항목 | 값 |
 |---|---|
 | 기준일 | 2026-08-07 |
-| 대상 버전 | iOS 1.0.0 — local release candidate build 6; remote review build 3 remains attached and build 4 is valid but unattached |
+| 대상 버전 | iOS 1.0.0 — ASC build 6 is the current attached review build; build 3 remains historical evidence and build 4 is valid but unattached |
 | Primary locale | English (U.S.) |
 | 추가 locale | Korean |
 | Bundle ID | `com.solkim.weekkeep` |
 | SKU | `WEEKKEEP-IOS-2026` |
 | 가격 | 앱 무료, Plus 비소모성 평생 이용권 US $19.99 |
-| 상태 | Remote build 3 is uploaded, `VALID`, attached, and in replacement submission `88c157ee-ce87-41c3-8a4a-71e614993a58` (`WAITING_FOR_REVIEW`, exactly two READY items); remote build 4 is `VALID` but unattached; local build 6 is configured and not uploaded; IAP `weekkeep_plus_lifetime` remains `WAITING_FOR_REVIEW`; approval and public release remain pending |
+| 상태 | ASC build 6 (`0ffa7586-619f-4df9-abc5-ae7ebbd068b1`) is uploaded, `VALID`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; current submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is `WAITING_FOR_REVIEW` with exactly two `READY_FOR_REVIEW` items; build 3 submission `88c157ee-ce87-41c3-8a4a-71e614993a58` is historical canceled/replaced; build 4 is `VALID` but unattached; IAP `weekkeep_plus_lifetime` remains `WAITING_FOR_REVIEW`; approval and public release remain pending |
 
 이 문서는 App Store Connect에 입력하는 이름, 설명, 키워드, 카테고리, URL, 심사 메모, IAP metadata의 단일 원본입니다. 제품 범위와 가격은 [Decision Registry](00-INDEX.md#5-decision-registry--결정값과-상태의-ssot), 개인정보 답변은 [App Privacy Label](09-APP-PRIVACY-LABEL.md)이 소유합니다.
 
@@ -17,9 +17,11 @@
 
 | 상태 | 값 | 의미 |
 |---|---|---|
-| Remote submitted review build | `1.0.0 (3)` — `VALID`, attached, `WAITING_FOR_REVIEW` | Existing external App Store Connect submission; not changed by this local pass |
-| Remote unattached valid build | `1.0.0 (4)` — `VALID`, unattached | Known external truth; its build identifier is not recorded locally |
-| Local release candidate | `1.0.0 (6)` — `NOT_UPLOADED` | `project.yml` SSOT and local candidate evidence only; no upload or submission is claimed |
+| Current submitted review build | `1.0.0 (6)` — ASC ID `0ffa7586-619f-4df9-abc5-ae7ebbd068b1`, `VALID`, attached, uploaded `2026-08-06T15:31:16-07:00` | Current App Store Connect build for version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; manual release; current submission is `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` |
+| TestFlight internal QA | `Weekkeep Internal QA` (`576fd29a-7a64-4521-9164-9697ec1c256f`) contains exactly build 6, `READY_FOR_BETA_TESTING`, and one invited verified account-holder tester (tester ID `bef018ab-9514-4388-804d-bcd363f601d4`, state `INVITED`) | Ready/invited distribution only; not installed, purchase-tested, or restore-tested |
+| Historical build 3 | `1.0.0 (3)` — `VALID`, historical/non-target | Former submission `88c157ee-ce87-41c3-8a4a-71e614993a58` was canceled/replaced; its local evidence remains historical |
+| Remote unattached valid build | `1.0.0 (4)` — ASC ID `6e92c470-c044-4512-9276-71491fe97685`, `VALID`, unattached | Historical/non-target external truth |
+| Historical builds 1–2 and 5 | Historical/non-target | Preserved evidence; none is the current review target |
 
 ## 1. 앱 레코드와 분류
 
@@ -224,15 +226,18 @@ and is not relabeled as build 6. The active local build-6 candidate's new
 Settings notification surface is recorded separately at
 `release/local/visual-qa/20260807-build6-notification-settings-rerun1/final/`.
 It contains two opaque PNG states per locale (zero saved albums and saved-user
-action), direct XCTest attachment manifests, and no ASC replacement evidence.
-Build 6 is not uploaded or attached. Build 3 was regenerated locally at
+action), direct XCTest attachment manifests, and no App Store screenshot
+replacement evidence. Build 6 is uploaded, processed `VALID`, and attached to
+the current app version. Build 3 was regenerated locally at
 `release/local/visual-qa/20260806-app-store-build3-onboarding-rerun1/final/`
 with the corrected onboarding 1+3+3 collage and mirrored into the canonical
-local tree; that build-3 record remains historical evidence for the existing
-remote review submission. The prior build-2 submission was canceled and remains
-historical.
+local tree; that build-3 record remains historical evidence for the former
+review submission, which was canceled/replaced by build 6. The prior build-2
+submission was canceled and remains historical.
 The attachment extractor requires `startswith($prefix + "_0_")` and exactly one
-match, so `03-review` cannot alias `03-review-bottom`.
+match, so `03-review` cannot alias `03-review-bottom`. ASC build 6 is the
+current uploaded/attached review binary; its Settings visual-QA captures do not
+replace the historical six-screen App Store screenshot set.
 
 ## 6. In-App Purchase metadata
 
@@ -304,17 +309,17 @@ No special hardware, login, or reviewer account is required. Please use a device
 - [ ] keyword가 locale별 UTF-8 100 bytes 이하이고 경쟁사·상표명 없음
 - [ ] IAP display name 30 characters 이하, description 45 characters 이하
 - [ ] 앱 icon 1024×1024 opaque, 미리 둥근 모서리 없음, exact-seven rainbow (`D-030`)
-- [x] Remote build-3 App Store en-US/ko screenshot sets: exactly six each, opaque JPEG, `1320×2868`, `APP_IPHONE_67`, remote state `COMPLETE`
+- [x] Historical build-3 App Store en-US/ko screenshot sets: exactly six each, opaque JPEG, `1320×2868`, `APP_IPHONE_67`, remote state `COMPLETE`; retained as historical evidence after build-6 replacement
 - [x] Historical local build-5 App Store candidate screenshots: exactly six each, opaque JPEG, current raw-source provenance/checksums, and local validator pass; not uploaded or relabeled
-- [x] Local build-6 Settings notification visual QA: four bilingual opaque `1320×2868` PNGs, direct XCTest manifests, matching checksums, and local validator pass; not uploaded
-- [x] Remote review build: build 3 archive/export, IPA inspection, ASC upload, `VALID` processing, version attachment, and replacement submission `WAITING_FOR_REVIEW`
-- [ ] Local build-6 archive/upload/attachment/review submission — not uploaded by design in this pass
+- [x] Current build-6 Settings notification visual QA: four bilingual opaque `1320×2868` PNGs, direct XCTest manifests, matching checksums, and local validator pass; separate from App Store screenshot evidence
+- [x] Current review build: build 6 upload, IPA inspection, ASC `VALID` processing, version attachment, and submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` `WAITING_FOR_REVIEW`
+- [x] Current review submission has exactly two `READY_FOR_REVIEW` items: app version `ac4f183e-1019-4ffc-827f-f5514f0d349b` and IAP version `cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f`
 - [x] 모든 screenshot alpha 없음; Shipaton proof는 `1179×2556`와 no-device-frame 확인
 - [x] Support/Privacy URL responds publicly; ASC en-US/ko app-info localizations use `/support` and `/privacy` consistently
 - [ ] US storefront에서 앱과 IAP 다운로드/구매 가능 — public release remains pending
 - [ ] Review Notes의 버튼명과 Release localization이 글자 단위로 일치
 - [x] App Review contact and IAP review screenshot re-read in ASC
-- [x] App Privacy data-usage answers published in ASC; the remote build-3 app-version submission remains `WAITING_FOR_REVIEW`
+- [x] App Privacy data-usage answers published in ASC for the current `1.0.0` app version; build 6 `PrivacyInfo` presence is local binary evidence, not a separate build-6 publication event
 
 ## 10. 공식 기준
 

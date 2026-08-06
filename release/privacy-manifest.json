@@ -3,28 +3,60 @@
   "source_document": "docs/09-APP-PRIVACY-LABEL.md",
   "bundle_id": "com.solkim.weekkeep",
   "target": {
+    "app_id": "6798449478",
+    "version": "1.0.0",
+    "build": "6",
+    "asc_build_id": "0ffa7586-619f-4df9-abc5-ae7ebbd068b1",
+    "app_store_version_id": "ac4f183e-1019-4ffc-827f-f5514f0d349b",
+    "review_submission_id": "a9b0a18f-6cf6-4af4-8e6f-c77009831e00",
+    "review_submission_state": "WAITING_FOR_REVIEW",
+    "review_submission_submitted_at": "2026-08-06T22:44:38.573Z",
+    "review_submission_item_count": 2,
+    "review_submission_item_state": "READY_FOR_REVIEW",
+    "iap_id": "6798491084",
+    "iap_product_id": "weekkeep_plus_lifetime",
+    "iap_version_id": "cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f",
+    "iap_version_state": "WAITING_FOR_REVIEW",
+    "ipa_evidence": null,
+    "ipa_evidence_status": "verified_local_without_tracked_evidence_file",
+    "ipa_local_verification": {
+      "size_bytes": 23338085,
+      "sha256": "feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a",
+      "bundle_id": "com.solkim.weekkeep",
+      "version": "1.0.0",
+      "build": "6",
+      "purchases": true,
+      "analytics": false,
+      "privacy_info_present": true,
+      "signing_identity": "Apple Distribution sol kim",
+      "team_id": "D48DDX5D5W"
+    },
+    "app_privacy_publish_state": "PUBLISHED_CURRENT_APP_VERSION",
+    "app_privacy_scope": "current_app_version_1.0.0",
+    "app_privacy_published_on": "2026-08-06"
+  },
+  "historical_build_3": {
     "version": "1.0.0",
     "build": "3",
+    "asc_build_id": "81697c0b-a68e-482a-be6f-50806e56fbff",
     "ipa_evidence": "release/local/asc-release-build3-20260806-onboarding-rerun1/exported/Weekkeep.ipa",
-    "app_privacy_publish_state": "PUBLISHED",
-    "app_privacy_published_on": "2026-08-06"
+    "app_privacy_publish_state": "PUBLISHED_HISTORICAL_EVIDENCE",
+    "review_submission_id": "88c157ee-ce87-41c3-8a4a-71e614993a58",
+    "review_submission_state": "CANCELED_REPLACED",
+    "status": "HISTORICAL_VALID_NON_TARGET"
   },
   "remote_unattached_valid_build": {
     "version": "1.0.0",
     "build": "4",
+    "asc_build_id": "6e92c470-c044-4512-9276-71491fe97685",
     "processing_state": "VALID",
     "app_store_version_attachment": "UNATTACHED",
-    "evidence_status": "known_external_truth; build identifier not recorded locally"
-  },
-  "local_candidate": {
-    "version": "1.0.0",
-    "build": "6",
-    "upload_state": "not_uploaded",
-    "app_privacy_evidence_state": "not_submitted_for_build6"
+    "evidence_status": "known_external_truth; historical_non_target"
   },
   "historical_local_candidate_build_5": {
     "version": "1.0.0",
     "build": "5",
+    "status": "HISTORICAL_LOCAL_NOT_UPLOADED",
     "upload_state": "not_uploaded",
     "app_privacy_evidence_state": "not_submitted_for_build5"
   },

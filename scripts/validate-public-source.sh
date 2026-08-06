@@ -12,7 +12,7 @@ warnings=0
 canonical_repository_url="https://github.com/kimsol1134/weekkeep"
 canonical_raw_license_url="https://raw.githubusercontent.com/kimsol1134/weekkeep/main/LICENSE"
 canonical_checked_at="2026-08-07T07:03:22+09:00"
-canonical_main_commit="af1faab05739e95c5ffb2645d4e0ad396c8d97b3"
+canonical_main_commit="282ae29a0efddaca439177b447676ec2cbe90f0e"
 validated_public_source_evidence="validated_public_source_repository;repository_url=${canonical_repository_url};owner=kimsol1134;name=weekkeep;visibility=PUBLIC;isPrivate=false;source_availability=Validated;source_url=${canonical_repository_url};source_http_status=200;logged_out_verification=Validated;checked_at=${canonical_checked_at};logged_out_repository_url=${canonical_repository_url};logged_out_repository_http_status=200;raw_license_url=${canonical_raw_license_url};raw_license_http_status=200;github_license_evidence=GitHub recognizes root LICENSE as MIT;default_branch=main;git_ls_remote_main_commit=${canonical_main_commit}"
 
 fail() {
@@ -275,6 +275,7 @@ scan_pattern "credential-token" '(?i)(sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|g
 scan_pattern "judge-code" '(?i)(?:judge|promo|offer)[_-]?(?:code|codes)[[:space:]]*[:=][[:space:]]*["'"'"'][A-Za-z0-9][A-Za-z0-9_-]{7,}["'"'"']'
 scan_pattern "private-reviewer-contact" '(?i)(?:reviewer[[:space:]_-]*(?:email|phone|contact)|review[[:space:]_-]+contact|private[[:space:]_-]+contact)[^\n]{0,160}(?:\+[0-9][0-9 ()-]{8,}[0-9]|[0-9]{2,4}[- ][0-9]{3,4}[- ][0-9]{4}|[[:alnum:]._%+-]+@[[:alnum:].-]+\.[A-Za-z]{2,})'
 scan_pattern "reviewer-phone" '(?i)(?:reviewer[[:space:]_-]*phone|review[[:space:]_-]+contact|private[[:space:]_-]+contact)[^\n]{0,160}(?:\+[0-9][0-9 ()-]{8,}[0-9]|[0-9]{2,4}[- ][0-9]{3,4}[- ][0-9]{4})'
+scan_pattern "internal-tester-domain-email" '(?i)[[:alnum:]._%+-]+@naver\.com'
 
 if (( failures > 0 )); then
   echo "Public-source validation failed with $failures failure(s) and $warnings warning(s)." >&2

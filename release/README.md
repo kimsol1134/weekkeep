@@ -27,10 +27,17 @@ The output is local evidence. It is not an App Store submission until the
 actual device dimensions, localization, alpha, and reviewer-approved assets
 have been manually checked.
 
-The local Shipaton demo render is tracked separately in
+The approved Shipaton demo render is tracked separately in
 `videos/weekkeep-remotion/out/weekkeep-shipaton-72.mp4`; its 72-second MP4 and
-current-source QA are locally validated. Public video upload, logged-out
-playback, and target-device evidence remain external release gates.
+current-source QA are validated and unchanged. A GitHub Release backup is
+available at `https://github.com/kimsol1134/weekkeep/releases/tag/shipaton-demo-v1`
+with direct asset
+`https://github.com/kimsol1134/weekkeep/releases/download/shipaton-demo-v1/weekkeep-shipaton-72.mp4`
+(both HTTP 200). This backup is not the official YouTube/Vimeo gate; logged-out
+official playback and target-device evidence remain external release gates.
+The backup asset digest is
+`9d4afb5332d3bbaeb0fc40e5d1d71c6a66b7cf2d72b79ed8a7ab3c2864e5a01a`, matching the
+protected approved MP4.
 
 When a managed XcodeBuildMCP run already produced an `.xcresult`, set
 `WK_FIXTURE_RESULT_BUNDLE` to export the same four attachments without asking
@@ -58,8 +65,9 @@ Run the focused gate from the project root:
 
 Release checklist:
 
-- local candidate build and screenshots are labeled with the actual build;
-- historical build-5 six-screen App Store evidence remains separate from the build-6 Settings visual-QA evidence;
+- current ASC build 6 and signed IPA verification are labeled with the actual build;
+- TestFlight internal QA distribution records build 6 as `READY_FOR_BETA_TESTING` with one invited verified account-holder tester; installation, purchase, and restore testing remain unverified;
+- historical build-3/build-5 App Store evidence remains separate from the build-6 Settings visual-QA evidence;
 - root LICENSE is present and locally validated as MIT for Sol Kim;
 - public repository URL, source availability, and logged-out verification are
   recorded as validated for `https://github.com/kimsol1134/weekkeep`;

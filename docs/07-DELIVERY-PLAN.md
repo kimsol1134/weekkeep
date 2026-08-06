@@ -325,10 +325,11 @@ Retention Readout은 달력상 Public Release 이후 닫히므로 M6 Release Can
 
 ### 11.0 Current release-candidate boundary — 2026-08-07
 
-- Remote App Store Connect build 3 (`1.0.0 (3)`) remains the attached `VALID` build in `WAITING_FOR_REVIEW`; remote build 4 is known as `VALID` but unattached.
-- The local candidate is build 6 from `project.yml`. It is not uploaded, attached, submitted, reviewed, approved, or released. New bilingual Settings evidence is recorded separately from historical build-5 and remote build-3 evidence.
-- Historical local build 5 remains a not-uploaded visual candidate and is not relabeled as build 6.
-- This hardening pass does not perform App Store Connect, RevenueCat, site, public upload, or Git mutations. The canonical public source repository and logged-out verification were externally validated on 2026-08-07; App Store, purchase, video, judge, target-device, and Devpost gates remain external.
+- Current App Store Connect build 6 (`1.0.0 (6)`, ID `0ffa7586-619f-4df9-abc5-ae7ebbd068b1`) was uploaded at `2026-08-06T15:31:16-07:00`, processed `VALID`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b` under manual release. The current review submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is `WAITING_FOR_REVIEW` with exactly two `READY_FOR_REVIEW` items.
+- Historical build 3 remains `VALID` evidence only; its former submission `88c157ee-ce87-41c3-8a4a-71e614993a58` was canceled/replaced. Build 4 (`6e92c470-c044-4512-9276-71491fe97685`) is `VALID` but unattached, and builds 1–5 are historical/non-target.
+- The signed build-6 IPA was locally verified without creating a tracked evidence file: 23,338,085 bytes, SHA256 `feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a`, bundle `com.solkim.weekkeep`, version `1.0.0`, build `6`, purchases `YES`, analytics `NO`, PrivacyInfo present, Apple Distribution `sol kim`, team `D48DDX5D5W`. New bilingual Settings evidence remains separate from historical build-5 and build-3 screenshot evidence.
+- TestFlight internal group `Weekkeep Internal QA` (ID `576fd29a-7a64-4521-9164-9697ec1c256f`) contains exactly build 6 in `READY_FOR_BETA_TESTING` and one verified account-holder tester invited (tester ID `bef018ab-9514-4388-804d-bcd363f601d4`, state `INVITED`); this is ready/invited distribution only, not an installed, purchase-tested, or restore-tested result.
+- An earlier hardening pass did not perform App Store Connect, RevenueCat, site, public upload, or Git mutations. The current SSOT records authenticated App Store Connect upload, attachment, and review-submission actions already completed for build 6; this status sync performs no new external mutation. The canonical public source repository and logged-out verification were externally validated on 2026-08-07; App Store, purchase, video, judge, target-device, and Devpost gates remain external.
 
 ### Product QA
 
@@ -377,7 +378,7 @@ Retention Readout은 달력상 Public Release 이후 닫히므로 M6 Release Can
 
 정확히 72초인 canonical composition과 timing/evidence는 [Shipaton Submission SSOT](11-SHIPATON-SUBMISSION.md#7-72-second-demo-master) 및 `videos/weekkeep-remotion/`이 소유합니다. `videos/weekkeep-shipaton/`은 source media와 license/provenance origin만 담당하며, 그 `scripts/validate-provenance.sh`는 계속 release gate에서 실행합니다. 이 Delivery Plan에는 별도 timing table을 두지 않습니다.
 
-Composition의 로컬 exit criteria인 user-approved final MP4 render, 72초/코덱 검증, current-source cut/caption QA는 완료되었습니다. 필요한 실기기 footage 교체·검증, public YouTube/Vimeo upload 후 로그아웃 재생과 duration 확인은 여전히 pending입니다.
+Composition의 로컬 exit criteria인 user-approved final MP4 render, 72초/코덱 검증, current-source cut/caption QA는 완료되었습니다. 승인된 MP4는 변경하지 않았고, GitHub Release backup([release](https://github.com/kimsol1134/weekkeep/releases/tag/shipaton-demo-v1), [asset](https://github.com/kimsol1134/weekkeep/releases/download/shipaton-demo-v1/weekkeep-shipaton-72.mp4))은 HTTP 200으로 확인되었습니다. 이는 공식 YouTube/Vimeo gate를 충족하지 않으므로 필요한 실기기 footage 교체·검증, public YouTube/Vimeo upload 후 로그아웃 재생과 duration 확인은 여전히 pending입니다.
 
 ### Submission QA
 

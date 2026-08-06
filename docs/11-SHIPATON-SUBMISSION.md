@@ -11,42 +11,43 @@
 | Sponsor/Admin/Judges 무료 접근 기한 | 2026-10-13 12:00 PDT 종료 시점까지, 그 이후로 Offer Code 만료 설정 |
 | 내부 제출 마감 | 2026-09-28 15:45 KST |
 | 공식 제출 마감 | 2026-10-01 15:45 KST |
-| 상태 | Remote build 3 is the attached and processed-`VALID` review build; remote build 4 is `VALID` but unattached; local build 6 is configured and not uploaded; historical local build 5 evidence remains separately labeled; App Privacy was published on 2026-08-06 with exactly the three verified data-usage entries; replacement submission `88c157ee-ce87-41c3-8a4a-71e614993a58` has exactly 2 `READY` items and is `WAITING_FOR_REVIEW`; IAP remains `WAITING_FOR_REVIEW`; the canonical public source repository and logged-out verification are `Validated`; app approval, public release, production judge code, and later external gates remain pending; the approved 72-second video remains unchanged |
-| 현재 App Store 후보 | Local `1.0.0 (build 6)` is `NOT_UPLOADED`; remote build 3 remains the attached `WAITING_FOR_REVIEW` build, remote build 4 is valid but unattached, and builds 1–2 plus local build 5 remain historical evidence |
+| 상태 | ASC build 6 (`0ffa7586-619f-4df9-abc5-ae7ebbd068b1`) is the attached and processed-`VALID` review build for version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; build 4 (`6e92c470-c044-4512-9276-71491fe97685`) is `VALID` but unattached; build 3 submission `88c157ee-ce87-41c3-8a4a-71e614993a58` is historical canceled/replaced; current submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` has exactly 2 `READY_FOR_REVIEW` items and is `WAITING_FOR_REVIEW`; IAP remains `WAITING_FOR_REVIEW`; the canonical public source repository and logged-out verification are `Validated`; app approval, public release, production judge code, and later external gates remain pending; the approved 72-second video remains unchanged |
+| 현재 App Store 후보 | ASC `1.0.0 (build 6)` is `VALID`, uploaded and attached under manual release; builds 1–5 are historical/non-target, with build 4 still valid but unattached |
 
 이 문서는 Devpost 제출 문구, 수상 카테고리 전략, 데모 영상, Build in Public, 제출 증거를 소유합니다. App Store 필드는 [App Store Metadata](10-APP-STORE-METADATA.md), 제품 결정은 [Decision Registry](00-INDEX.md#5-decision-registry--결정값과-상태의-ssot)를 따릅니다.
 
-## 0. Authenticated App Store release evidence — 2026-08-06
+## 0. Current App Store release evidence — 2026-08-07
 
 | 항목 | 현재 검증 상태 |
 |---|---|
-| App/version/build | Remote `6798449478` / `1.0.0` / build `3`; ASC build `81697c0b-a68e-482a-be6f-50806e56fbff` is `VALID` and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b` |
-| Remote build 4 | `1.0.0 (4)` is known externally as `VALID` and unattached; its build identifier is not recorded locally |
+| App/version/build | ASC app `6798449478` / bundle `com.solkim.weekkeep` / `1.0.0` / build `6`; ASC build `0ffa7586-619f-4df9-abc5-ae7ebbd068b1` was uploaded at `2026-08-06T15:31:16-07:00`, processed `VALID`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b` |
+| Release method | Manual release |
+| TestFlight internal QA | Group `Weekkeep Internal QA` (`576fd29a-7a64-4521-9164-9697ec1c256f`) contains exactly build 6 in `READY_FOR_BETA_TESTING` and exactly one invited verified account-holder tester (tester ID `bef018ab-9514-4388-804d-bcd363f601d4`, state `INVITED`) | Internal distribution ready/invited only; not installed, purchase-tested, or restore-tested |
+| Remote build 4 | `1.0.0 (4)`, ASC ID `6e92c470-c044-4512-9276-71491fe97685`, is `VALID` and unattached; it remains historical/non-target |
 | Historical local candidate build 5 | `project.yml` previously defined `1.0.0 (5)`; its local evidence remains historical only, not uploaded or attached |
-| Local candidate build 6 | `project.yml` defines `1.0.0 (6)`; local evidence only, not uploaded or attached |
-| Release binary | `release/local/asc-release-build3-20260806-onboarding-rerun1/exported/Weekkeep.ipa`; distribution signature, `get-task-allow=false`, no fixture markers, analytics off, purchases on |
-| App Store screenshots | Corrected build-3 final set in `release/local/visual-qa/20260806-app-store-build3-onboarding-rerun1/final/`, mirrored to `release/screenshots/app-store-6.9/`; exactly six opaque `APP_IPHONE_67` JPEGs per en-US/ko, each `1320×2868`, re-read remotely as `COMPLETE` with canonical checksums |
-| App/IAP commerce | App free price + USA/KOR availability; IAP `weekkeep_plus_lifetime` non-consumable, US base `$19.99`, USA/KOR availability, product and version `WAITING_FOR_REVIEW`; review screenshot remains `COMPLETE` |
+| Signed build-6 IPA local verification | No tracked evidence file was created; 23,338,085 bytes, SHA256 `feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a`, bundle `com.solkim.weekkeep`, version `1.0.0`, build `6`, purchases `YES`, analytics `NO`, PrivacyInfo present, Apple Distribution `sol kim`, team `D48DDX5D5W` |
+| App Store screenshots | Historical build-3 final set in `release/local/visual-qa/20260806-app-store-build3-onboarding-rerun1/final/`, mirrored to `release/screenshots/app-store-6.9/`; exactly six opaque `APP_IPHONE_67` JPEGs per en-US/ko, each `1320×2868`; no new build-6 screenshot evidence is claimed |
+| App/IAP commerce | App free price + USA/KOR availability; IAP `6798491084` / `weekkeep_plus_lifetime` non-consumable, US base `$19.99`, USA/KOR availability, version `cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f` and product/version state `WAITING_FOR_REVIEW` |
 | Compliance metadata | Photo & Video / Lifestyle, no third-party content, all-none age questionnaire, public `/support` and `/privacy` URLs, copyright `© 2026 Sol Kim`; iPhone VoiceOver-only declaration remains saved as draft because Apple gates its publication until the app is live |
-| App Privacy | Published 2026-08-06 with exactly: Customer Support = App Functionality, linked to user, no tracking; User ID = App Functionality, not linked, no tracking; Purchase History = App Functionality, not linked, no tracking |
-| Review and validation | Review detail `d332515f-2755-4d53-a67f-cff6554e7237` remains configured; no demo account. Pre-submit validation had zero errors, and the replacement submission is independently `WAITING_FOR_REVIEW` with App Privacy publication preserved. |
-| Physical target-device QA | `release/local/target-device-qa/20260806T2102KST-build3/`: corrected build `1.0.0 (3)` fixture-safe Debug arm64 app installed in place on the paired iPhone 16 Pro; `-ui-fixtures -ui-fixtures-skip-notification` argument launch returned success while unlocked; the official XCTest capture rerun later stopped at Xcode's locked-device preflight; QuickTime's iPhone source preview/recording was gray and is not evidence | Partial — build 3 install/launch-command proof is local; user unlock handoff remains required for physical UI attachments, target-device footage, and physical icon QA; Photos/notification permissions and private pixels were not touched |
+| App Privacy | Published 2026-08-06 for the current `1.0.0` app version with exactly: Customer Support = App Functionality, linked to user, no tracking; User ID = App Functionality, not linked, no tracking; Purchase History = App Functionality, not linked, no tracking. Build 6 contains `PrivacyInfo`; no separate build-6 publication event is claimed |
+| Review and validation | Review detail remains configured; no demo account. Current submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00`, submitted `2026-08-06T22:44:38.573Z`, has exactly two `READY_FOR_REVIEW` items: app version `ac4f183e-1019-4ffc-827f-f5514f0d349b` and IAP version `cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f`; state `WAITING_FOR_REVIEW`. |
+| Physical target-device QA | After the lock wait, the build-6 fixture-only UI runner started but initialization failed with LocalAuthentication Code `-4` (authentication canceled); the process was safely terminated. The result bundle is invalid/incomplete because `Info.plist` is missing and is not evidence | Physical UI attachments, purchase/restore verification, target-device footage, actual-library performance, and icon QA remain pending; no credentials were requested or handled and Photos/notification permissions and private pixels were not changed |
 | Shipaton judge-access Offer Code | ASC app `6798449478` / IAP `6798491084`; `Shipaton Judge Access 2026` offer ID `bb4f7fd6-2b08-4aa7-9f55-e140a3e94e28`, free prices `USA:FREE` and `KOR:FREE`, eligibilities `NON_SPENDER`, `ACTIVE_SPENDER`, `CHURNED_SPENDER`; SANDBOX batch ID `7791e39d-f462-4647-be72-e00c75a50eff` | Configured and generated remotely; batch has 10 codes expiring `2026-10-31`; redemption is not tested; production judge code is blocked until app `Ready for Distribution` and IAP `Approved` |
 
-Build 1 (`f372c63f-63f0-483b-8266-f4d1c2fa78fc`) and build 2 (`45143852-bfb5-4f0c-8ca7-d509fa0a673f`) remain historical evidence and are not the ship target. The prior review submission `260abf1a-886b-4014-8262-541d261e60e2` is preserved as completed historical state after the authorized replacement; the current submission is `88c157ee-ce87-41c3-8a4a-71e614993a58` and is `WAITING_FOR_REVIEW`. No public release, production Offer Code, sandbox redemption test, public video, or Devpost submission was performed. The remote judge-access offer is configured and its SANDBOX batch is generated, but the batch has not been redeemed.
+Builds 1–5 remain historical/non-target evidence. Build 3 (`81697c0b-a68e-482a-be6f-50806e56fbff`) remains `VALID` historical evidence, but its former review submission `88c157ee-ce87-41c3-8a4a-71e614993a58` was canceled/replaced. The current submission is `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` and is `WAITING_FOR_REVIEW`. No public release, production Offer Code, sandbox redemption test, public video, or Devpost submission was performed. The remote judge-access offer is configured free in USA/KOR and its SANDBOX batch is generated, but the batch has not been redeemed.
 
-The prior iOS review submission `260abf1a-886b-4014-8262-541d261e60e2` is historical: it was submitted at `2026-08-06T10:27:11.249Z`, then canceled and is now `COMPLETE`; its build-2 attachment and review items are no longer current. The replacement submission `88c157ee-ce87-41c3-8a4a-71e614993a58` contains exactly 2 `READY` items: `appStoreVersion` `ac4f183e-1019-4ffc-827f-f5514f0d349b` and IAP version `cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f`. It was submitted at `2026-08-06T11:47:54.203Z` and is `WAITING_FOR_REVIEW`; App version `1.0.0` build `3` remains manual release. This record claims neither approval nor public release.
+The prior iOS review submission `260abf1a-886b-4014-8262-541d261e60e2` is historical: it was submitted at `2026-08-06T10:27:11.249Z`, then canceled and is now `COMPLETE`; its build-2 attachment and review items are no longer current. The former build-3 submission `88c157ee-ce87-41c3-8a4a-71e614993a58` was canceled/replaced and is historical. The current submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` contains exactly 2 `READY_FOR_REVIEW` items: `appStoreVersion` `ac4f183e-1019-4ffc-827f-f5514f0d349b` and IAP version `cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f`. It was submitted at `2026-08-06T22:44:38.573Z` and is `WAITING_FOR_REVIEW`; App version `1.0.0` build `6` remains manual release. This record claims neither approval nor public release.
 
-## 0.1 Remote build 3 review evidence — 2026-08-06
+## 0.1 Historical remote build 3 review evidence — 2026-08-06
 
 | 항목 | 현재 검증 상태 |
 |---|---|
-| App/version/build | `6798449478` / `1.0.0` / build `3`; ASC build `81697c0b-a68e-482a-be6f-50806e56fbff` is `VALID` |
+| App/version/build | `6798449478` / `1.0.0` / historical build `3`; ASC build `81697c0b-a68e-482a-be6f-50806e56fbff` remains `VALID` evidence only |
 | Release binary | `release/local/asc-release-build3-20260806-onboarding-rerun1/exported/Weekkeep.ipa`; Apple Distribution signature, `get-task-allow=false`, analytics off, purchases on, no fixture launch markers |
 | Local App Store screenshots | `release/local/visual-qa/20260806-app-store-build3-onboarding-rerun1/final/`; en-US/ko exactly six opaque `1320×2868` JPEGs; canonical local tree mirrors this set; remote replacement is verified |
 | Local visual QA | `release/local/visual-qa/20260806-build3-photo-story-rerun1/attachments/`; onboarding 1+3+3 and Ready/Plus compact hero+2+4 inspected without clipping/overlap |
-| Version attachment boundary | Build 3 `appStoreVersion` relationship points to `ac4f183e-1019-4ffc-827f-f5514f0d349b`; build 2 relationship is empty; release method remains manual |
-| Review replacement boundary | Replacement submission `88c157ee-ce87-41c3-8a4a-71e614993a58` is `WAITING_FOR_REVIEW` with exactly 2 READY items; prior submission `260abf1a-886b-4014-8262-541d261e60e2` is preserved as historical `COMPLETE` state |
+| Version attachment boundary | Build 3 evidence is historical; current build 6 `appStoreVersion` relationship points to `ac4f183e-1019-4ffc-827f-f5514f0d349b`; release method remains manual |
+| Review replacement boundary | Former submission `88c157ee-ce87-41c3-8a4a-71e614993a58` was canceled/replaced; current submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is `WAITING_FOR_REVIEW` with exactly 2 `READY_FOR_REVIEW` items |
 | Evidence | `release/local/asc-release-build3-20260806-onboarding-rerun1/RELEASE-EVIDENCE.md` |
 
 ## 0.2 Historical local build 5 candidate — 2026-08-07
@@ -56,16 +57,16 @@ The prior iOS review submission `260abf1a-886b-4014-8262-541d261e60e2` is histor
 | Project version | `project.yml` / `1.0.0 (5)`; generated Xcode project is derived from this SSOT |
 | App Store screenshots | `release/local/visual-qa/20260807-build5-app-store-candidate-rerun8/final/`; six opaque `1320×2868` JPEGs per `en-US`/`ko`, composed only from `release/local/visual-qa/20260807-spacing-refinement-rerun7/raw/` |
 | Provenance/checksums | Candidate `PROVENANCE.md`, `manifest.json`, and standard checksum-only `SHA256SUMS.txt` record the raw source paths and composed output hashes; older build-3 and build-5 rerun1 evidence is untouched |
-| External state | `NOT_UPLOADED`; no ASC build ID, archive upload, attachment, submission, review, approval, or release is claimed |
+| External state | Historical local candidate only; no ASC upload, attachment, submission, review, approval, or release is claimed for build 5 |
 
-## 0.3 Local build 6 candidate — 2026-08-07
+## 0.3 Current ASC build 6 — 2026-08-07
 
 | 항목 | 현재 검증 상태 |
 |---|---|
-| Project version | `project.yml` / `1.0.0 (6)`; generated Xcode project is derived from this SSOT |
+| Project/version | `project.yml` / `1.0.0 (6)`; ASC build `0ffa7586-619f-4df9-abc5-ae7ebbd068b1` is the current uploaded build |
 | FR-015 implementation surface | Settings notification authorization is disabled and informational until at least one album is saved; saved-user states retain request/open-settings behavior; post-save primer avoids a second system request |
-| Settings visual QA | New evidence directory `release/local/visual-qa/20260807-build6-notification-settings-rerun1/final/`; four bilingual opaque `1320×2868` PNGs cover zero-saved informational and saved-user action states; local-only and not an ASC replacement |
-| External state | `NOT_UPLOADED`; no ASC build ID, archive upload, attachment, submission, review, approval, or release is claimed |
+| Settings visual QA | Evidence directory `release/local/visual-qa/20260807-build6-notification-settings-rerun1/final/`; four bilingual opaque `1320×2868` PNGs cover zero-saved informational and saved-user action states; it remains separate from App Store screenshot evidence |
+| ASC state | Uploaded `2026-08-06T15:31:16-07:00`, processing `VALID`, attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; current review submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is `WAITING_FOR_REVIEW` |
 
 ## 1. 승리 전략
 
@@ -134,7 +135,7 @@ Peace Prize는 “가족을 구한다” 같은 과장으로 쓰지 않습니다
 | 영어 text/material | Devpost와 video narration 영어 | copy·자막·72초 local master source 완료 |
 | 공개 demo video <2분 | 정확히 72초 `WeekkeepShipaton72` composition, YouTube/Vimeo public visibility | source·voice·BGM·23 caption groups·10 scenes·local final MP4/cut QA 완료; 공개 업로드·로그아웃 재생·target-device footage 대기 |
 | YouTube 또는 Vimeo 공개 URL | unlisted가 아니라 publicly visible로 확인 | 업로드 대기 |
-| 앱이 target device에서 동작하는 footage | Release/TestFlight iPhone screen recording에서 프로젝트가 실제로 동작하는 장면 | build 3 fixture-safe install과 argument launch command proof 완료; physical XCTest UI capture는 기기 재잠금 preflight에서 중단되었고 QuickTime preview/recording은 gray라서 target-device footage로 인정하지 않음 (`release/local/target-device-qa/20260806T2102KST-build3/`) |
+| 앱이 target device에서 동작하는 footage | Release/TestFlight iPhone screen recording에서 프로젝트가 실제로 동작하는 장면 | build 3 fixture-safe install과 argument launch command proof 완료; build-6 fixture-only UI runner는 lock wait 뒤 시작했지만 LocalAuthentication Code `-4` authentication canceled로 initialization failed, process terminated; result bundle is invalid/incomplete (`Info.plist` missing) and is not evidence. QuickTime preview/recording은 gray라서 target-device footage로 인정하지 않음 (`release/local/target-device-qa/20260806T2102KST-build3/`) |
 | 1024×1024 app icon | 사용자 원안 기반 exact-seven rainbow opaque master | 자동 검증·@3x 축소 QA 통과; 실제 iPhone 확인 대기 |
 | screenshot 최소 1장 | `1179×2556`, alpha 없음, device frame 없음 | 한국어·영어 bundled-fixture UI 각 4장 로컬 규격·시각 QA 완료; 최종 선정·업로드 대기 |
 | Sponsor/Admin/Judges 무료·무제한 접근 | `weekkeep_plus_lifetime`용 Apple free IAP Offer Code를 US에서 everyone eligible로 발행; Devpost field에서는 promo code라고 부를 수 있음 | `Shipaton Judge Access 2026` offer 구성과 USA/KOR free price, 세 eligibility 확인; 10개 SANDBOX batch 생성(만료 `2026-10-31`)했지만 redemption은 미테스트이며 production judge code는 app `Ready for Distribution` 및 IAP `Approved` 전까지 차단 |
@@ -151,10 +152,10 @@ Peace Prize는 “가족을 구한다” 같은 과장으로 쓰지 않습니다
 | Bundle/package identifier + RevenueCat SDK | RevenueCat SDK integration을 확인할 수 있는 유효한 bundle ID 또는 package name | `com.solkim.weekkeep`와 published store record를 연결하고 RevenueCat integration 검증 증거를 남김 | 외부 검증 대기 |
 | Required fields + category answers | 모든 required Devpost fields와 선택한 Focus/검증된 Conditional category questions의 답변 | 이 문서의 영어 입력과 검증된 category blocks만 제출; bracketed placeholder가 남아 있으면 제출하지 않음 | 외부 제출 대기 |
 | Published store page URL | 공개된 App Store/Google Play 또는 허용된 store page URL | US App Store 공개 URL, 로그아웃 상태에서 열기·설치 확인 | 외부 공개 대기 |
-| Public demo video | 공개 YouTube 또는 Vimeo의 앱 demo URL | `videos/weekkeep-remotion/`의 `WeekkeepShipaton72` local final render와 QA를 완료하고 public URL로 확인; 첫 2분에 elevator pitch·app in use·targeted categories를 명확히 포함 | 실기기 footage·공개 업로드·로그아웃 재생 대기 |
+| Public demo video | 공개 YouTube 또는 Vimeo의 앱 demo URL | `videos/weekkeep-remotion/`의 `WeekkeepShipaton72` approved 72-second final render와 QA를 완료했고 GitHub Release backup URL/asset은 HTTP 200; 첫 2분에 elevator pitch·app in use·targeted categories를 명확히 포함 | GitHub backup은 공식 gate가 아님; 실기기 footage·YouTube/Vimeo 공개 업로드·로그아웃 재생 대기 |
 | 1024×1024 app icon | 1024×1024 icon | opaque exact-seven master와 외부 전달/실기기 QA | 로컬 master 준비, 외부 QA 대기 |
 | 1179×2556 screenshot | 최소 1장의 1179×2556 screenshot, device frame 없음 | 로컬 bundled-fixture UI가 규격을 통과하고 최종 선정·업로드 | 로컬 bundled-fixture UI 완료, 외부 선정·업로드 대기 |
-| Public source repository + OSI license | 공개 source repository URL, source availability, visible OSI-approved license, and logged-out verification | `https://github.com/kimsol1134/weekkeep` is public and logged-out verified; repository and raw `LICENSE` URLs returned HTTP 200; GitHub recognizes root `LICENSE` as MIT | `Validated` — checked at `2026-08-07T07:03:22+09:00`; default branch `main`, unauthenticated `git ls-remote main` commit `af1faab05739e95c5ffb2645d4e0ad396c8d97b3` |
+| Public source repository + OSI license | 공개 source repository URL, source availability, visible OSI-approved license, and logged-out verification | `https://github.com/kimsol1134/weekkeep` is public and logged-out verified; repository and raw `LICENSE` URLs returned HTTP 200; GitHub recognizes root `LICENSE` as MIT | `Validated` — checked at `2026-08-07T07:03:22+09:00`; default branch `main`, unauthenticated `git ls-remote main` commit `282ae29a0efddaca439177b447676ec2cbe90f0e` |
 | Judge unlock | Sponsor/Admin/Judges가 심사 종료까지 모든 premium feature를 무료·무제한으로 확인할 수 있는 경로 | Apple Offer Code를 US·everyone eligible·non-consumable `weekkeep_plus_lifetime`로 구성했고, Devpost가 요구하면 production code를 promo code field로 외부 전달; sandbox batch redemption은 미테스트이고 code/credential은 git에 넣지 않음 | Offer configured / sandbox redemption pending / production code blocked until app `Ready for Distribution` and IAP `Approved` |
 
 Prescreeners는 submission을 읽고 video의 첫 2분을 봅니다. 따라서 이 canonical 72초 Remotion composition을 최종 render한 video는 첫 2분 안에 elevator pitch, app in use, targeted categories를 모두 이해하게 해야 합니다. 이 기준은 [How we judge Shipaton](https://www.shipaton.com/blog/how-we-judge-shipaton)을 따릅니다.
@@ -173,7 +174,7 @@ Apple의 현재 용어는 In-App Purchase용 **Offer Code**입니다. Devpost가
 Provide a free Apple IAP Offer Code for the non-consumable product `weekkeep_plus_lifetime`. The offer is eligible to everyone in the United States and unlocks the complete Weekkeep Plus experience for Sponsor, Admin, and Judge review. Configure the offer to remain valid through the end of judging, 2026-10-13 12:00 PDT, with expiry after that deadline. The real code will be generated in the authenticated App Store workflow, shared only through the private Devpost judge-access field if requested, and never committed to Git.
 ```
 
-Remote status on 2026-08-06: the offer is configured on ASC app `6798449478` / IAP `6798491084`, and the SANDBOX batch was generated with 10 codes expiring `2026-10-31`; redemption has not been tested. The production judge code is blocked until the app is `Ready for Distribution` and the IAP is `Approved`. The judge-access gate remains `pending_external` until redemption, production delivery, and the remaining private-access evidence are verified together. A configured offer and local plan are not evidence that the final external access path is ready.
+Remote status on 2026-08-07: the offer remains configured free in USA/KOR on ASC app `6798449478` / IAP `6798491084`, and the SANDBOX batch was generated with 10 codes expiring `2026-10-31`; redemption has not been tested. An attempted production custom code `WEEKKEEPJUDGES` was rejected because the parent IAP is not approved, and no production code was created. Production judge access remains blocked until the app is `Ready for Distribution` and the IAP is `Approved`. The judge-access gate remains `pending_external` until redemption, production delivery, and the remaining private-access evidence are verified together. A configured offer and local plan are not evidence that the final external access path is ready.
 
 ## 3. Devpost 기본 입력 — English
 
@@ -332,7 +333,7 @@ Observed impact (required before submission): [number] parents completed a first
 | 0:57.5–1:07.5 | Plus paywall, 현지화 price, restore, RevenueCat | `Two albums are free. Then a one-time lifetime purchase, powered by RevenueCat, unlocks future weeks—no subscription.` |
 | 1:07.5–1:12 | approved wordmark + exact-seven rainbow stitches | `Weekkeep. A week worth keeping.` |
 
-Canonical final composition/project는 `videos/weekkeep-remotion/`의 `WeekkeepShipaton72`입니다. 계약은 1920×1080, 30fps, 2160 frames, 정확히 72.00초, 10 scenes와 scene boundary마다 restrained 12-frame fade, 승인된 `audio_meta.json`에서 파생된 23 semantic caption groups입니다. `npm run check`와 `npx remotion compositions src/index.ts`가 이 로컬 composition 계약을 검증하며, current-source cut/caption QA와 final MP4 full decode도 완료되었습니다. `videos/weekkeep-shipaton/`은 source media와 license/provenance origin만 보유하며 `scripts/validate-provenance.sh`의 실행 대상입니다. 공개 YouTube/Vimeo upload, 로그아웃 재생 확인, 실기기 functioning footage 교체는 pending입니다. 엔드카드에는 음성·자막을 바꾸지 않고 `RevenueCat Design Award · HAMM Award`라는 단일 restrained category cue만 표시합니다.
+Canonical final composition/project는 `videos/weekkeep-remotion/`의 `WeekkeepShipaton72`입니다. 계약은 1920×1080, 30fps, 2160 frames, 정확히 72.00초, 10 scenes와 scene boundary마다 restrained 12-frame fade, 승인된 `audio_meta.json`에서 파생된 23 semantic caption groups입니다. `npm run check`와 `npx remotion compositions src/index.ts`가 이 로컬 composition 계약을 검증하며, approved final MP4 full decode와 current-source cut/caption QA가 완료되었습니다. 승인된 72-second MP4는 변경하지 않았고, GitHub Release [backup](https://github.com/kimsol1134/weekkeep/releases/tag/shipaton-demo-v1) 및 [direct asset](https://github.com/kimsol1134/weekkeep/releases/download/shipaton-demo-v1/weekkeep-shipaton-72.mp4)은 각각 HTTP 200으로 확인되었으며 asset SHA256 `9d4afb5332d3bbaeb0fc40e5d1d71c6a66b7cf2d72b79ed8a7ab3c2864e5a01a`가 보호된 승인 MP4와 일치하지만 공식 YouTube/Vimeo gate를 충족하지 않습니다. `videos/weekkeep-shipaton/`은 source media와 license/provenance origin만 보유하며 `scripts/validate-provenance.sh`의 실행 대상입니다. 공개 YouTube/Vimeo upload, 로그아웃 재생 확인, 실기기 functioning footage 교체는 pending입니다. 엔드카드에는 음성·자막을 바꾸지 않고 `RevenueCat Design Award · HAMM Award`라는 단일 restrained category cue만 표시합니다.
 
 ## 8. Build in Public — 부모 문제 중심 plan
 
@@ -484,7 +485,7 @@ submission/
 - [ ] 앱의 첫 공개 버전이 기간 안에 출시됨
 - [ ] US App Store URL을 로그아웃 상태에서 열고 설치 가능
 - [ ] production build의 실제 purchase/restore smoke 통과
-- [ ] US everyone-eligible free IAP Offer Code for `weekkeep_plus_lifetime`가 모든 premium feature를 열고, 2026-10-13 12:00 PDT 이후까지 유효함; offer configuration과 SANDBOX 10-code batch 생성은 완료했지만 redemption은 미테스트이고 production judge code는 app `Ready for Distribution` 및 IAP `Approved` 전까지 차단; Devpost가 요구하면 private judge field에만 전달
+- [ ] US everyone-eligible free IAP Offer Code for `weekkeep_plus_lifetime`가 모든 premium feature를 열고, 2026-10-13 12:00 PDT 이후까지 유효함; offer configuration과 SANDBOX 10-code batch 생성은 완료했지만 redemption은 미테스트이고, production custom code `WEEKKEEPJUDGES` 시도는 parent IAP 미승인으로 거절되어 production code는 생성되지 않았으며 app `Ready for Distribution` 및 IAP `Approved` 전까지 차단; Devpost가 요구하면 private judge field에만 전달
 - [ ] icon `1024×1024`, opaque, exact-seven muted rainbow
 - [ ] screenshot `1179×2556`, alpha 없음, device frame 없음
 - [x] 공개 source repository URL, source availability, visible OSI-approved MIT `LICENSE`, and logged-out verification are externally verified; the manifest records the canonical URL, HTTP 200 checks, GitHub MIT recognition, and the checked timestamp

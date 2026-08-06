@@ -11,7 +11,7 @@
 | Sponsor/Admin/Judges 무료 접근 기한 | 2026-10-13 12:00 PDT 종료 시점까지, 그 이후로 Offer Code 만료 설정 |
 | 내부 제출 마감 | 2026-09-28 15:45 KST |
 | 공식 제출 마감 | 2026-10-01 15:45 KST |
-| 상태 | Remote build 3 is the attached and processed-`VALID` review build; remote build 4 is `VALID` but unattached; local build 6 is configured and not uploaded; historical local build 5 evidence remains separately labeled; App Privacy was published on 2026-08-06 with exactly the three verified data-usage entries; replacement submission `88c157ee-ce87-41c3-8a4a-71e614993a58` has exactly 2 `READY` items and is `WAITING_FOR_REVIEW`; IAP remains `WAITING_FOR_REVIEW`; app approval, public release, production judge code, public source repository, and later external gates remain pending; the approved 72-second video remains unchanged |
+| 상태 | Remote build 3 is the attached and processed-`VALID` review build; remote build 4 is `VALID` but unattached; local build 6 is configured and not uploaded; historical local build 5 evidence remains separately labeled; App Privacy was published on 2026-08-06 with exactly the three verified data-usage entries; replacement submission `88c157ee-ce87-41c3-8a4a-71e614993a58` has exactly 2 `READY` items and is `WAITING_FOR_REVIEW`; IAP remains `WAITING_FOR_REVIEW`; the canonical public source repository and logged-out verification are `Validated`; app approval, public release, production judge code, and later external gates remain pending; the approved 72-second video remains unchanged |
 | 현재 App Store 후보 | Local `1.0.0 (build 6)` is `NOT_UPLOADED`; remote build 3 remains the attached `WAITING_FOR_REVIEW` build, remote build 4 is valid but unattached, and builds 1–2 plus local build 5 remain historical evidence |
 
 이 문서는 Devpost 제출 문구, 수상 카테고리 전략, 데모 영상, Build in Public, 제출 증거를 소유합니다. App Store 필드는 [App Store Metadata](10-APP-STORE-METADATA.md), 제품 결정은 [Decision Registry](00-INDEX.md#5-decision-registry--결정값과-상태의-ssot)를 따릅니다.
@@ -154,14 +154,14 @@ Peace Prize는 “가족을 구한다” 같은 과장으로 쓰지 않습니다
 | Public demo video | 공개 YouTube 또는 Vimeo의 앱 demo URL | `videos/weekkeep-remotion/`의 `WeekkeepShipaton72` local final render와 QA를 완료하고 public URL로 확인; 첫 2분에 elevator pitch·app in use·targeted categories를 명확히 포함 | 실기기 footage·공개 업로드·로그아웃 재생 대기 |
 | 1024×1024 app icon | 1024×1024 icon | opaque exact-seven master와 외부 전달/실기기 QA | 로컬 master 준비, 외부 QA 대기 |
 | 1179×2556 screenshot | 최소 1장의 1179×2556 screenshot, device frame 없음 | 로컬 bundled-fixture UI가 규격을 통과하고 최종 선정·업로드 | 로컬 bundled-fixture UI 완료, 외부 선정·업로드 대기 |
-| Public source repository + OSI license | 공개 source repository URL, source availability, visible OSI-approved license, and logged-out verification | Root `LICENSE` is locally validated as MIT for Sol Kim; public repository URL remains null until authorized publication and logged-out verification | Local license pass; external publication and logged-out verification pending |
+| Public source repository + OSI license | 공개 source repository URL, source availability, visible OSI-approved license, and logged-out verification | `https://github.com/kimsol1134/weekkeep` is public and logged-out verified; repository and raw `LICENSE` URLs returned HTTP 200; GitHub recognizes root `LICENSE` as MIT | `Validated` — checked at `2026-08-07T07:03:22+09:00`; default branch `main`, unauthenticated `git ls-remote main` commit `af1faab05739e95c5ffb2645d4e0ad396c8d97b3` |
 | Judge unlock | Sponsor/Admin/Judges가 심사 종료까지 모든 premium feature를 무료·무제한으로 확인할 수 있는 경로 | Apple Offer Code를 US·everyone eligible·non-consumable `weekkeep_plus_lifetime`로 구성했고, Devpost가 요구하면 production code를 promo code field로 외부 전달; sandbox batch redemption은 미테스트이고 code/credential은 git에 넣지 않음 | Offer configured / sandbox redemption pending / production code blocked until app `Ready for Distribution` and IAP `Approved` |
 
 Prescreeners는 submission을 읽고 video의 첫 2분을 봅니다. 따라서 이 canonical 72초 Remotion composition을 최종 render한 video는 첫 2분 안에 elevator pitch, app in use, targeted categories를 모두 이해하게 해야 합니다. 이 기준은 [How we judge Shipaton](https://www.shipaton.com/blog/how-we-judge-shipaton)을 따릅니다.
 
 ### Public source and license gate
 
-The local source package includes the root `LICENSE`, validated as the OSI-approved MIT license with copyright holder `Sol Kim` and year 2026. `scripts/validate-public-source.sh` checks the license, ignored secret/evidence paths, forbidden candidate paths, and output-redacted token, judge-code, private-key, and reviewer-contact patterns. The public GitHub repository URL is intentionally not invented here: source publication, public visibility, source availability, and logged-out verification remain `pending_external` until an authorized publication occurs.
+The local source package includes the root `LICENSE`, validated as the OSI-approved MIT license with copyright holder `Sol Kim` and year 2026. `scripts/validate-public-source.sh` checks the license, ignored secret/evidence paths, forbidden candidate paths, and output-redacted token, judge-code, private-key, and reviewer-contact patterns. The canonical public GitHub repository is `https://github.com/kimsol1134/weekkeep`; source availability and logged-out verification are recorded as `Validated` in the manifest from supplied external evidence. This gate closure does not claim App Review approval, public App Store release, purchase/restore validation, judge redemption, target-device footage, public video upload, or Devpost completion.
 
 ### Judge access plan — English
 
@@ -487,7 +487,7 @@ submission/
 - [ ] US everyone-eligible free IAP Offer Code for `weekkeep_plus_lifetime`가 모든 premium feature를 열고, 2026-10-13 12:00 PDT 이후까지 유효함; offer configuration과 SANDBOX 10-code batch 생성은 완료했지만 redemption은 미테스트이고 production judge code는 app `Ready for Distribution` 및 IAP `Approved` 전까지 차단; Devpost가 요구하면 private judge field에만 전달
 - [ ] icon `1024×1024`, opaque, exact-seven muted rainbow
 - [ ] screenshot `1179×2556`, alpha 없음, device frame 없음
-- [ ] 공개 source repository URL, source availability, visible OSI-approved MIT `LICENSE`, and logged-out verification are all externally verified; until then keep the intake gate pending
+- [x] 공개 source repository URL, source availability, visible OSI-approved MIT `LICENSE`, and logged-out verification are externally verified; the manifest records the canonical URL, HTTP 200 checks, GitHub MIT recognition, and the checked timestamp
 - [ ] `scripts/validate-public-source.sh` and `scripts/validate-release.sh` pass without adding secrets, private reviewer contact values, judge codes, or local evidence
 - [ ] video 정확히 1:12, 필요한 실기기 evidence beat, 영어 voice-over/영문 자막, 공개 URL
 - [ ] 설명의 모든 기능이 공개 build에서 재현됨

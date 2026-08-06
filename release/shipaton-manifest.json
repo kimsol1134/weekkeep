@@ -497,18 +497,18 @@
       },
       "public_source_repository": {
         "required": true,
-        "status": "pending_external",
-        "repository_url": null,
-        "repository_visibility_status": "pending_publication",
+        "status": "Validated",
+        "repository_url": "https://github.com/kimsol1134/weekkeep",
+        "repository_visibility_status": "public",
         "source_availability": {
           "required": true,
-          "status": "pending_external",
+          "status": "Validated",
           "evidence_ref": "external_evidence.public_source_repository"
         },
         "logged_out_verification": {
           "required": true,
-          "status": "pending_external",
-          "checked_at": null,
+          "status": "Validated",
+          "checked_at": "2026-08-07T07:03:22+09:00",
           "evidence_ref": "external_evidence.public_source_repository"
         },
         "license": {
@@ -614,7 +614,7 @@
     "app_store_review_submission": "validated_replacement_ios_submission=88c157ee-ce87-41c3-8a4a-71e614993a58;exactly_two_ready_items;build3_waiting_for_review;historical_submission=260abf1a-886b-4014-8262-541d261e60e2_complete",
     "target_device_footage": "pending_physical_device_recording;validated_build3_install_and_fixture_argument_launch=release/local/target-device-qa/20260806T2102KST-build3/QA-SUMMARY.md;official_ui_capture_blocked_by_locked_state=true;quicktime_preview_unusable;no_permissions_changed",
     "public_demo_video": "pending_public_upload_and_logged_out_playback",
-    "public_source_repository": "pending_public_source_repository_publication_and_logged_out_verification",
+    "public_source_repository": "validated_public_source_repository;repository_url=https://github.com/kimsol1134/weekkeep;owner=kimsol1134;name=weekkeep;visibility=PUBLIC;isPrivate=false;source_availability=Validated;source_url=https://github.com/kimsol1134/weekkeep;source_http_status=200;logged_out_verification=Validated;checked_at=2026-08-07T07:03:22+09:00;logged_out_repository_url=https://github.com/kimsol1134/weekkeep;logged_out_repository_http_status=200;raw_license_url=https://raw.githubusercontent.com/kimsol1134/weekkeep/main/LICENSE;raw_license_http_status=200;github_license_evidence=GitHub recognizes root LICENSE as MIT;default_branch=main;git_ls_remote_main_commit=af1faab05739e95c5ffb2645d4e0ad396c8d97b3",
     "final_video_approval_and_render": "validated_local_final_render",
     "judge_unlock": "pending_external;offer_configured=bb4f7fd6-2b08-4aa7-9f55-e140a3e94e28;sandbox_batch_generated=7791e39d-f462-4647-be72-e00c75a50eff;redemption_not_tested;production_judge_code_blocked_until_app_ready_for_distribution_and_iap_approved",
     "devpost_receipt": "pending_submission"

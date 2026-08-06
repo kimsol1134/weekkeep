@@ -48,9 +48,9 @@ submission remain human-controlled steps.
 
 The local public-source gate is also part of release validation. It checks the
 root MIT license, ignored secret/evidence paths, and redacted candidate-source
-scans. A public repository URL and logged-out source verification remain
-pending until an authorized public GitHub publication occurs; no URL is
-invented in the local manifests.
+scans. The canonical public repository URL and logged-out source verification
+are validated in the manifest from the supplied external evidence; App Store,
+purchase, video, judge, and submission gates remain separate.
 
 Run the focused gate from the project root:
 
@@ -62,6 +62,6 @@ Release checklist:
 - historical build-5 six-screen App Store evidence remains separate from the build-6 Settings visual-QA evidence;
 - root LICENSE is present and locally validated as MIT for Sol Kim;
 - public repository URL, source availability, and logged-out verification are
-  recorded as pending until public publication;
+  recorded as validated for `https://github.com/kimsol1134/weekkeep`;
 - no secrets, private reviewer contact values, judge codes, or local evidence
   enter the public-source candidate.

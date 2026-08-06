@@ -9,6 +9,11 @@ trap 'rm -rf "$scratch_dir"' EXIT
 
 failures=0
 warnings=0
+canonical_repository_url="https://github.com/kimsol1134/weekkeep"
+canonical_raw_license_url="https://raw.githubusercontent.com/kimsol1134/weekkeep/main/LICENSE"
+canonical_checked_at="2026-08-07T07:03:22+09:00"
+canonical_main_commit="af1faab05739e95c5ffb2645d4e0ad396c8d97b3"
+validated_public_source_evidence="validated_public_source_repository;repository_url=${canonical_repository_url};owner=kimsol1134;name=weekkeep;visibility=PUBLIC;isPrivate=false;source_availability=Validated;source_url=${canonical_repository_url};source_http_status=200;logged_out_verification=Validated;checked_at=${canonical_checked_at};logged_out_repository_url=${canonical_repository_url};logged_out_repository_http_status=200;raw_license_url=${canonical_raw_license_url};raw_license_http_status=200;github_license_evidence=GitHub recognizes root LICENSE as MIT;default_branch=main;git_ls_remote_main_commit=${canonical_main_commit}"
 
 fail() {
   echo "FAIL: $1" >&2
@@ -76,14 +81,27 @@ else
     fail "public-source/license gate schema is missing or malformed"
   fi
 
-  if jq -e '
+  if jq -e --arg canonical_repository_url "$canonical_repository_url" \
+    --arg canonical_raw_license_url "$canonical_raw_license_url" \
+    --arg canonical_checked_at "$canonical_checked_at" \
+    --arg canonical_main_commit "$canonical_main_commit" \
+    --arg expected_evidence "$validated_public_source_evidence" '
     .intake_filter.gates.public_source_repository.status == "Validated"
-    and (.intake_filter.gates.public_source_repository.repository_url | type) == "string"
+    and .intake_filter.gates.public_source_repository.repository_url == $canonical_repository_url
     and .intake_filter.gates.public_source_repository.repository_visibility_status == "public"
     and .intake_filter.gates.public_source_repository.source_availability.status == "Validated"
+    and .intake_filter.gates.public_source_repository.source_availability.evidence_ref == "external_evidence.public_source_repository"
     and .intake_filter.gates.public_source_repository.logged_out_verification.status == "Validated"
-    and (.intake_filter.gates.public_source_repository.logged_out_verification.checked_at | type) == "string"
-    and (.external_evidence.public_source_repository | startswith("validated_"))
+    and .intake_filter.gates.public_source_repository.logged_out_verification.checked_at == $canonical_checked_at
+    and .intake_filter.gates.public_source_repository.logged_out_verification.evidence_ref == "external_evidence.public_source_repository"
+    and .intake_filter.gates.public_source_repository.license.path == "LICENSE"
+    and .intake_filter.gates.public_source_repository.license.spdx_id == "MIT"
+    and .intake_filter.gates.public_source_repository.license.osi_approved == true
+    and .intake_filter.gates.public_source_repository.license.holder == "Sol Kim"
+    and .intake_filter.gates.public_source_repository.license.local_status == "validated_local"
+    and ($expected_evidence | contains("raw_license_url=" + $canonical_raw_license_url + ";raw_license_http_status=200"))
+    and ($expected_evidence | contains("default_branch=main;git_ls_remote_main_commit=" + $canonical_main_commit))
+    and .external_evidence.public_source_repository == $expected_evidence
   ' "$manifest" >/dev/null; then
     pass "public-source gate records completed public verification."
   elif jq -e '

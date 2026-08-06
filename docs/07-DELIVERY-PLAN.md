@@ -328,7 +328,7 @@ Retention Readout은 달력상 Public Release 이후 닫히므로 M6 Release Can
 - Remote App Store Connect build 3 (`1.0.0 (3)`) remains the attached `VALID` build in `WAITING_FOR_REVIEW`; remote build 4 is known as `VALID` but unattached.
 - The local candidate is build 6 from `project.yml`. It is not uploaded, attached, submitted, reviewed, approved, or released. New bilingual Settings evidence is recorded separately from historical build-5 and remote build-3 evidence.
 - Historical local build 5 remains a not-uploaded visual candidate and is not relabeled as build 6.
-- This hardening pass does not perform App Store Connect, RevenueCat, site, public upload, or Git mutations. Public source repository publication and logged-out verification remain external intake gates.
+- This hardening pass does not perform App Store Connect, RevenueCat, site, public upload, or Git mutations. The canonical public source repository and logged-out verification were externally validated on 2026-08-07; App Store, purchase, video, judge, target-device, and Devpost gates remain external.
 
 ### Product QA
 

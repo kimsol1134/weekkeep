@@ -12,6 +12,11 @@ strict=0
 run_build=0
 failures=0
 warnings=0
+canonical_repository_url="https://github.com/kimsol1134/weekkeep"
+canonical_raw_license_url="https://raw.githubusercontent.com/kimsol1134/weekkeep/main/LICENSE"
+canonical_checked_at="2026-08-07T07:03:22+09:00"
+canonical_main_commit="af1faab05739e95c5ffb2645d4e0ad396c8d97b3"
+validated_public_source_evidence="validated_public_source_repository;repository_url=${canonical_repository_url};owner=kimsol1134;name=weekkeep;visibility=PUBLIC;isPrivate=false;source_availability=Validated;source_url=${canonical_repository_url};source_http_status=200;logged_out_verification=Validated;checked_at=${canonical_checked_at};logged_out_repository_url=${canonical_repository_url};logged_out_repository_http_status=200;raw_license_url=${canonical_raw_license_url};raw_license_http_status=200;github_license_evidence=GitHub recognizes root LICENSE as MIT;default_branch=main;git_ls_remote_main_commit=${canonical_main_commit}"
 
 for argument in "$@"; do
   case "$argument" in
@@ -244,7 +249,7 @@ assert_jq() {
 assert_shipaton_jq() {
   local expression="$1"
   local message="$2"
-  if jq -e --arg candidate_build "$candidate_build" --arg candidate_screenshot_directory "$candidate_screenshot_directory" --arg candidate_visual_qa_directory "$candidate_visual_qa_directory" "$expression" "$shipaton" >/dev/null; then
+  if jq -e --arg candidate_build "$candidate_build" --arg candidate_screenshot_directory "$candidate_screenshot_directory" --arg candidate_visual_qa_directory "$candidate_visual_qa_directory" --arg canonical_repository_url "$canonical_repository_url" --arg canonical_raw_license_url "$canonical_raw_license_url" --arg canonical_checked_at "$canonical_checked_at" --arg canonical_main_commit "$canonical_main_commit" --arg expected_evidence "$validated_public_source_evidence" "$expression" "$shipaton" >/dev/null; then
     pass "$message"
   else
     fail "$message"
@@ -295,21 +300,36 @@ assert_shipaton_jq '(.schema_version == 2) and (.intake_filter.schema_version ==
 assert_shipaton_jq '.local_release_candidate.build == $candidate_build and .local_release_candidate.upload_state == "not_uploaded" and .local_release_candidate.asc_build_id == null and .local_release_candidate.app_store_screenshot_evidence == $candidate_screenshot_directory and .local_release_candidate.app_store_screenshot_evidence_scope == "historical_local_build5_candidate_not_uploaded" and .local_release_candidate.visual_qa_evidence == $candidate_visual_qa_directory and .local_release_candidate.visual_qa_evidence_scope == "local_build6_notification_settings_visual_qa_not_uploaded" and .remote_review_build_3.build == "3" and .remote_review_build_3.app_store_version_attachment == "ATTACHED" and .remote_review_build_3.app_store_version_state == "WAITING_FOR_REVIEW" and .remote_unattached_valid_build_4.build == "4" and .remote_unattached_valid_build_4.asc_processing_state == "VALID" and .remote_unattached_valid_build_4.app_store_version_attachment == "UNATTACHED"' "Shipaton manifest distinguishes the local candidate from remote build 3 and unattached build 4."
 assert_shipaton_jq '
   .intake_filter.gates.public_source_repository.required == true
-  and .intake_filter.gates.public_source_repository.status == "pending_external"
-  and .intake_filter.gates.public_source_repository.repository_url == null
-  and .intake_filter.gates.public_source_repository.repository_visibility_status == "pending_publication"
+  and .intake_filter.gates.public_source_repository.status == "Validated"
+  and .intake_filter.gates.public_source_repository.repository_url == $canonical_repository_url
+  and .intake_filter.gates.public_source_repository.repository_visibility_status == "public"
   and .intake_filter.gates.public_source_repository.source_availability.required == true
-  and .intake_filter.gates.public_source_repository.source_availability.status == "pending_external"
+  and .intake_filter.gates.public_source_repository.source_availability.status == "Validated"
+  and .intake_filter.gates.public_source_repository.source_availability.evidence_ref == "external_evidence.public_source_repository"
   and .intake_filter.gates.public_source_repository.logged_out_verification.required == true
-  and .intake_filter.gates.public_source_repository.logged_out_verification.status == "pending_external"
-  and .intake_filter.gates.public_source_repository.logged_out_verification.checked_at == null
+  and .intake_filter.gates.public_source_repository.logged_out_verification.status == "Validated"
+  and .intake_filter.gates.public_source_repository.logged_out_verification.checked_at == $canonical_checked_at
+  and .intake_filter.gates.public_source_repository.logged_out_verification.evidence_ref == "external_evidence.public_source_repository"
   and .intake_filter.gates.public_source_repository.license.path == "LICENSE"
   and .intake_filter.gates.public_source_repository.license.spdx_id == "MIT"
   and .intake_filter.gates.public_source_repository.license.osi_approved == true
   and .intake_filter.gates.public_source_repository.license.holder == "Sol Kim"
   and .intake_filter.gates.public_source_repository.license.local_status == "validated_local"
-  and (.external_evidence.public_source_repository | startswith("pending_"))
-' "Public-source repository, source availability, logged-out verification, and MIT license gates remain truthful and pending."
+  and .external_evidence.public_source_repository == $expected_evidence
+  and ($expected_evidence | contains("raw_license_url=" + $canonical_raw_license_url + ";raw_license_http_status=200"))
+  and ($expected_evidence | contains("default_branch=main;git_ls_remote_main_commit=" + $canonical_main_commit))
+' "Public-source repository, source availability, logged-out verification, and MIT license gates record the validated public repository evidence."
+assert_shipaton_jq '
+  .status == "internal_package_ready_external_evidence_pending"
+  and .overall == null
+  and ([(.intake_filter.gates | to_entries[] | select(.key != "public_source_repository") | .value.status)] | all(. == "pending_external"))
+  and .intake_filter.gates.bundle_package_identifier.revenuecat_sdk_verification_status == "pending_external"
+  and .intake_filter.gates.judge_unlock.offer.external_offer_status == "pending_external"
+  and .release_eligibility.first_public_release.status == "pending_external"
+  and .release_eligibility.published_eligible_store.status == "pending_external"
+  and .release_eligibility.downloadable_in_us.status == "pending_external"
+  and .release_eligibility.revenuecat_qualifying_path.status == "pending_external"
+' "Root, overall, and all non-public-source intake/release gates remain pending."
 assert_shipaton_jq '
   def allowed_status: . == "pending_external" or . == "Validated";
   def pending_evidence: type == "string" and startswith("pending_");

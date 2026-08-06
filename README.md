@@ -5,7 +5,7 @@
 
 Weekkeep은 바쁜 부모가 매주 사진첩을 다시 뒤지지 않아도, 기기가 먼저 제안한 지난 일주일의 가족 사진 최대 7장을 1분 안에 확인하고 하나의 주간 기록으로 남기게 돕는 iPhone 앱입니다.
 
-현재 단계는 **Implementation / local pre-release**입니다. 최근 로컬 후보는 build 6 (`1.0.0 (6)`)이며 업로드하지 않았습니다. 원격 App Store Connect build 3은 `WAITING_FOR_REVIEW`, build 4는 `VALID`이지만 미첨부 상태입니다. build 6의 `WeekkeepTests`는 122/122, 일반 `WeekkeepUITests`는 12/12 통과했고 opt-in 캡처 테스트는 설계대로 제외/skip되었습니다. 알림 집중 테스트는 21/21, build-6 bilingual notification-settings capture는 2/2 통과했습니다. 공개 GitHub URL·source availability·logged-out verification, App Review/public release, RevenueCat sandbox purchase/restore와 judge redemption, target-device footage, 공개 demo 업로드·로그아웃 재생은 아직 외부 게이트로 남아 있으며 업로드나 출시를 주장하지 않습니다. 세부 evidence와 blocker 상태는 [traceability](docs/06-TRACEABILITY.md#12-release-blockers--완료-전-implemented로-닫지-않음)에서 추적합니다.
+현재 단계는 **Implementation / local pre-release**입니다. 최근 로컬 후보는 build 6 (`1.0.0 (6)`)이며 업로드하지 않았습니다. 원격 App Store Connect build 3은 `WAITING_FOR_REVIEW`, build 4는 `VALID`이지만 미첨부 상태입니다. build 6의 `WeekkeepTests`는 122/122, 일반 `WeekkeepUITests`는 12/12 통과했고 opt-in 캡처 테스트는 설계대로 제외/skip되었습니다. 알림 집중 테스트는 21/21, build-6 bilingual notification-settings capture는 2/2 통과했습니다. 공개 GitHub 저장소 [kimsol1134/weekkeep](https://github.com/kimsol1134/weekkeep)의 source availability와 logged-out verification은 2026-08-07에 검증되었고, App Review/public release, RevenueCat sandbox purchase/restore와 judge redemption, target-device footage, 공개 demo 업로드·로그아웃 재생은 아직 외부 게이트로 남아 있습니다. 이 상태는 업로드나 출시 승인을 주장하지 않습니다. 세부 evidence와 blocker 상태는 [traceability](docs/06-TRACEABILITY.md#12-release-blockers--완료-전-implemented로-닫지-않음)에서 추적합니다.
 
 ## 문서
 
@@ -33,9 +33,9 @@ Weekkeep은 바쁜 부모가 매주 사진첩을 다시 뒤지지 않아도, 기
 
 ## 오픈 소스와 라이선스
 
-Weekkeep의 공개 소스 배포 기준은 저장소 루트의 [MIT License](LICENSE)이며, 저작권 표기는 `© 2026 Sol Kim`입니다. 공개 GitHub 저장소 URL은 아직 생성·검증하지 않았으므로 이 저장소에는 URL을 추측해 기록하지 않습니다. 실제 공개 저장소가 생성된 뒤 로그아웃 상태에서 소스 접근과 라이선스 표시를 확인하는 것이 Shipaton 외부 intake 게이트입니다.
+Weekkeep의 공개 소스 배포 기준은 저장소 루트의 [MIT License](LICENSE)이며, 저작권 표기는 `© 2026 Sol Kim`입니다. 공개 저장소는 [https://github.com/kimsol1134/weekkeep](https://github.com/kimsol1134/weekkeep)으로 확인되었고, 로그아웃 상태에서 repository와 raw `LICENSE`가 HTTP 200으로 접근되며 GitHub가 root `LICENSE`를 MIT로 인식하는 것을 확인했습니다. 공개 소스 gate는 `Validated`이고, App Review·스토어 공개·구매·Shipaton 제출 상태와는 별개입니다.
 
-공개 전 검사는 다음 명령으로 실행합니다.
+공개 소스 검사는 다음 명령으로 실행합니다.
 
 ```sh
 scripts/validate-public-source.sh
@@ -52,7 +52,7 @@ Prerequisites:
 Clone the repository, then generate the ignored Xcode project from the SSOT:
 
 ```sh
-git clone <repository-url> weekkeep
+git clone https://github.com/kimsol1134/weekkeep weekkeep
 cd weekkeep
 xcodegen --version
 xcodegen generate --spec project.yml
@@ -98,7 +98,7 @@ scripts/validate-release.sh
 git diff --check
 ```
 
-`scripts/validate-release.sh --build` additionally performs the generic iOS Simulator Release build. `--strict` is for a later authenticated release state and is expected to report external blockers while the public repository and store gates are pending. Generated `Weekkeep.xcodeproj` and all local credentials/evidence remain uncommitted.
+`scripts/validate-release.sh --build` additionally performs the generic iOS Simulator Release build. `--strict` is for a later authenticated release state and is expected to report the remaining store and other external blockers. Generated `Weekkeep.xcodeproj` and all local credentials/evidence remain uncommitted.
 
 - 대상: 0–6세 아이를 둔, 사진은 많이 찍지만 기록은 꾸준히 못 하는 iPhone 사용자
 - 핵심 루프: 주간 사진 수집 → 기기 내 분석 → 최대 7장 검토/교체 → 주간 기록 저장 → branded Story/Post 공유 (`D-004`, `D-005`, `D-034`)
@@ -134,4 +134,4 @@ Codex와 Claude Code는 각각 [AGENTS.md](AGENTS.md)와 [CLAUDE.md](CLAUDE.md)�
 - 기준일: `2026-08-05`
 - 제품 공동 책임: Kim Sol + Codex
 - 최근 로컬 검증: build 6, `WeekkeepTests` 122/122, 일반 `WeekkeepUITests` 12/12, focused notification tests 21/21, bilingual notification-settings capture 2/2; localization, release-assets, public-source, `scripts/validate-release.sh --build`, `git diff --check` 통과
-- 외부 상태: ASC remote build 3은 `WAITING_FOR_REVIEW`, build 4는 `VALID`/미첨부, local build 6은 미업로드. 공개 GitHub URL·source availability·logged-out verification과 App Review/public release는 pending이며, demo/judge/target-device 등 Shipaton external gates도 pending
+- 외부 상태: ASC remote build 3은 `WAITING_FOR_REVIEW`, build 4는 `VALID`/미첨부, local build 6은 미업로드. 공개 GitHub source availability·logged-out verification은 `Validated`이며, App Review/public release와 RevenueCat purchase/restore, demo/judge/target-device 등 Shipaton external gates는 pending

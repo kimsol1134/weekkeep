@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
+  <g id="semantic-calendar">
+    <rect x="3" y="4.5" width="22" height="15.5" rx="3" fill="#5B415E"/>
+    <path d="M3 9H25" stroke="#FBF7F2" stroke-width="1.2"/>
+    <path d="M8 2.8V6.5M20 2.8V6.5" stroke="#5B415E" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M6.5 11.2H9V13.7H6.5V11.2ZM12 11.2H14.5V13.7H12V11.2ZM17.5 11.2H20V13.7H17.5V11.2Z" fill="#FBF7F2"/>
+  </g>
+</svg>

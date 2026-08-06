@@ -1,0 +1,6 @@
+// Safe defaults. Optional local overrides live in Config/Secrets.xcconfig.
+WK_PURCHASES_ENABLED = NO
+WK_ANALYTICS_ENABLED = NO
+WK_REVENUECAT_API_KEY =
+WK_POSTHOG_PROJECT_TOKEN =
+WK_POSTHOG_HOST = https:/$()/eu.i.posthog.com

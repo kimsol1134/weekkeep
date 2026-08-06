@@ -8,18 +8,52 @@ Weekkeep.xcodeproj/
 DerivedData/
 .build/
 build/
+dist/
+out/
+node_modules/
+*.xcresult
+*.xcarchive
 *.ipa
 *.dSYM.zip
+
+# Generated video/editor caches, captures, render products, and QA snapshots.
+**/.cache/
+**/.hyperframes/
+**/.media/
+**/.next/
+**/.thumbnails/
+**/.turbo/
+**/.waveform-cache/
+videos/*/capture/
+videos/*/out/
+videos/*/qa/
+videos/*/snapshots/
 
 # Secrets and machine-local configuration.
 .env
 .env.*
 !.env.example
 Config/Secrets.xcconfig
+*.p8
+*.pem
+*.key
+*.mobileprovision
+*.cer
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/
 fastlane/test_output/
+
+# Local release evidence; only reviewed manifests and instructions are tracked.
+.asc/
+release/local/
+release/evidence/
+submission/local/
+submission/evidence/
+submission/promo-code.txt
+**/judge-codes/
+**/judge-code*
+**/promo-code*
 
 # macOS.
 .DS_Store

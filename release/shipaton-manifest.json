@@ -1,0 +1,629 @@
+{
+  "schema_version": 2,
+  "source_document": "docs/11-SHIPATON-SUBMISSION.md",
+  "project": "Weekkeep",
+  "status": "internal_package_ready_external_evidence_pending",
+  "local_release_candidate": {
+    "version": "1.0.0",
+    "build": "6",
+    "release_method": "manual",
+    "upload_state": "not_uploaded",
+    "asc_build_id": null,
+    "asc_processing_state": "NOT_UPLOADED",
+    "version_state": "LOCAL_ONLY",
+    "app_store_screenshot_evidence": "release/local/visual-qa/20260807-build5-app-store-candidate-rerun8/final",
+    "app_store_screenshot_evidence_scope": "historical_local_build5_candidate_not_uploaded",
+    "visual_qa_evidence": "release/local/visual-qa/20260807-build6-notification-settings-rerun1/final",
+    "visual_qa_evidence_scope": "local_build6_notification_settings_visual_qa_not_uploaded",
+    "app_store_screenshot_sets_replaced": false,
+    "historical_asc_screenshot_sets_replaced": true,
+    "target_device_qa_evidence": null,
+    "target_device_qa_scope": "not_run_for_local_candidate_build6",
+    "review_contact_fields": "remote_build3_only",
+    "remote_review_build": "3",
+    "remote_review_build_state": "WAITING_FOR_REVIEW_ATTACHED",
+    "remote_unattached_valid_build": "4",
+    "remote_unattached_valid_build_state": "VALID_UNATTACHED",
+    "asc_version_id": null,
+    "asc_review_detail_id": null,
+    "asc_iap_version_id": null,
+    "asc_iap_version_state": "REMOTE_BUILD3_WAITING_FOR_REVIEW",
+    "asc_review_submission_id": null,
+    "asc_review_submission_state": "EXISTING_REMOTE_BUILD3_WAITING_FOR_REVIEW",
+    "asc_review_submission_item_count": null,
+    "asc_review_submission_items": "existing_remote_build3_submission_only",
+    "historical_review_submission_id": "260abf1a-886b-4014-8262-541d261e60e2",
+    "historical_review_submission_state": "COMPLETE",
+    "historical_review_submission_submitted_at": "2026-08-06T10:27:11.249Z",
+    "historical_review_submission_build": "2",
+    "app_privacy": {
+      "status": "PUBLISHED_REMOTE_BUILD3_ONLY",
+      "scope": "remote_review_build_3",
+      "published_on": "2026-08-06",
+      "entries": [
+        {
+          "data_type": "Customer Support",
+          "purpose": "App Functionality",
+          "linked_to_user": true,
+          "used_for_tracking": false
+        },
+        {
+          "data_type": "User ID",
+          "purpose": "App Functionality",
+          "linked_to_user": false,
+          "used_for_tracking": false
+        },
+        {
+          "data_type": "Purchase History",
+          "purpose": "App Functionality",
+          "linked_to_user": false,
+          "used_for_tracking": false
+        }
+      ]
+    }
+  },
+  "historical_local_build_5": {
+    "version": "1.0.0",
+    "build": "5",
+    "release_method": "manual",
+    "upload_state": "not_uploaded",
+    "asc_build_id": null,
+    "asc_processing_state": "NOT_UPLOADED",
+    "app_store_version_attachment": "NOT_ATTACHED",
+    "app_store_screenshot_evidence": "release/local/visual-qa/20260807-build5-app-store-candidate-rerun8/final",
+    "app_store_screenshot_evidence_scope": "local_build5_candidate_not_uploaded",
+    "status": "HISTORICAL_LOCAL_CANDIDATE"
+  },
+  "remote_review_build_3": {
+    "version": "1.0.0",
+    "build": "3",
+    "asc_build_id": "81697c0b-a68e-482a-be6f-50806e56fbff",
+    "asc_processing_state": "VALID",
+    "app_store_version_attachment": "ATTACHED",
+    "app_store_version_state": "WAITING_FOR_REVIEW",
+    "review_submission_id": "88c157ee-ce87-41c3-8a4a-71e614993a58",
+    "review_submission_state": "WAITING_FOR_REVIEW",
+    "iap_state": "WAITING_FOR_REVIEW"
+  },
+  "remote_unattached_valid_build_4": {
+    "version": "1.0.0",
+    "build": "4",
+    "asc_build_id": null,
+    "asc_processing_state": "VALID",
+    "app_store_version_attachment": "UNATTACHED",
+    "evidence_status": "known_external_truth; build identifier not recorded locally"
+  },
+  "build_3_candidate": {
+    "version": "1.0.0",
+    "build": "3",
+    "release_method": "manual",
+    "asc_build_id": "81697c0b-a68e-482a-be6f-50806e56fbff",
+    "asc_processing_state": "VALID",
+    "app_store_version_attachment": "ATTACHED",
+    "app_store_version_state": "WAITING_FOR_REVIEW",
+    "review_submission_id": "88c157ee-ce87-41c3-8a4a-71e614993a58",
+    "review_submission_state": "WAITING_FOR_REVIEW",
+    "review_submission_unchanged": false,
+    "review_submission_replaced": true,
+    "historical_review_submission_id": "260abf1a-886b-4014-8262-541d261e60e2",
+    "historical_review_submission_state": "COMPLETE",
+    "app_store_screenshot_evidence": "release/local/visual-qa/20260806-app-store-build3-onboarding-rerun1/final",
+    "app_store_screenshot_evidence_scope": "local_build3_regenerated_remote_set_replaced_and_verified",
+    "app_store_screenshot_remote_mutated": true,
+    "archive_directory": "release/local/asc-release-build3-20260806-onboarding-rerun1",
+    "ipa_path": "release/local/asc-release-build3-20260806-onboarding-rerun1/exported/Weekkeep.ipa",
+    "ipa_sha256": "887cbb02b8e879f9990944256eeed5d7efe780fa396895fc8c317af0b11b1b75",
+    "evidence_path": "release/local/asc-release-build3-20260806-onboarding-rerun1/RELEASE-EVIDENCE.md"
+  },
+  "historical_build_2": {
+    "version": "1.0.0",
+    "build": "2",
+    "asc_build_id": "45143852-bfb5-4f0c-8ca7-d509fa0a673f",
+    "asc_processing_state": "VALID",
+    "previous_attachment": "DETACHED_AFTER_REVIEW_REPLACEMENT",
+    "previous_review_submission_id": "260abf1a-886b-4014-8262-541d261e60e2",
+    "previous_review_submission_state": "COMPLETE",
+    "previous_review_submission_submitted_at": "2026-08-06T10:27:11.249Z",
+    "app_store_screenshot_evidence": "release/local/visual-qa/20260806-app-store-build2-photo-first-rerun8/final",
+    "target_device_qa_evidence": "release/local/target-device-qa/20260806T094947Z",
+    "target_device_qa_status": "fixture_safe_install_verified;_launch_blocked_by_ios_locked_state"
+  },
+  "status_contract": {
+    "current_state": "pending_external",
+    "allowed_gate_states": [
+      "pending_external",
+      "Validated"
+    ],
+    "pending_state_does_not_claim_external_completion": true,
+    "transition": {
+      "pending_external_to_Validated": "allowed only after every linked external evidence item is independently verified",
+      "Validated_to_pending_external": "not an automatic transition; reopen only when new contradictory evidence is recorded"
+    },
+    "validated_state_requirements": [
+      "gate.status is Validated",
+      "every linked evidence value begins with validated_",
+      "required URLs, timestamps, and access settings are concrete and non-null"
+    ]
+  },
+  "official_rules": {
+    "snapshot_date": "2026-08-06",
+    "source": "https://revenuecat-shipaton-2026.devpost.com/rules",
+    "judging_guidance_source": "https://www.shipaton.com/blog/how-we-judge-shipaton",
+    "submission_window": {
+      "starts_at": "2026-07-31T08:00:00-07:00",
+      "ends_at": "2026-09-30T23:45:00-07:00",
+      "timezone": "America/Los_Angeles"
+    },
+    "judging_ends_at": "2026-10-13T12:00:00-07:00",
+    "winners_announced_on": "2026-10-21",
+    "non_next_gen_eligibility": {
+      "track": "non_next_gen",
+      "first_public_release_must_be_within_submission_window": true,
+      "fully_published_in_eligible_store_required": true,
+      "downloadable_in_us_required": true,
+      "revenuecat_qualifying_path_required": true,
+      "acceptable_revenuecat_paths": [
+        "IAP",
+        "web_purchase",
+        "ads"
+      ]
+    },
+    "demo_requirements": {
+      "maximum_seconds_exclusive": 120,
+      "public_platforms": [
+        "YouTube",
+        "Vimeo"
+      ],
+      "target_device_functioning_footage_required": true,
+      "unlicensed_third_party_material_allowed": false
+    },
+    "testing_access": {
+      "audience": [
+        "Sponsor",
+        "Admin",
+        "Judges"
+      ],
+      "free_and_unrestricted_required": true,
+      "must_unlock_all_premium_features": true,
+      "valid_through": "2026-10-13T12:00:00-07:00",
+      "offer_expiry_must_be_after": "2026-10-13T12:00:00-07:00"
+    }
+  },
+  "category_decisions": [
+    {
+      "category": "Grand Prize",
+      "decision": "Conditional",
+      "role": "stretch",
+      "reason": "Submit only after verified public launch and release/growth metrics."
+    },
+    {
+      "category": "#BuildInPublic",
+      "decision": "Focus",
+      "role": "supporting",
+      "reason": "Requires public links and a short evidence-backed description of how public building improved the app."
+    },
+    {
+      "category": "Best Game",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "Weekkeep is not a game and will not add game scope."
+    },
+    {
+      "category": "RevenueCat Peace Prize",
+      "decision": "Conditional",
+      "role": null,
+      "reason": "Submit only with direct parent evidence about reduced memory-keeping burden or privacy understanding."
+    },
+    {
+      "category": "RevenueCat Design Award",
+      "decision": "Focus",
+      "role": "primary",
+      "reason": "The exact-seven visual system, review interaction, restraint, and local-first trust are the strongest fit."
+    },
+    {
+      "category": "Catvertising",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "This category is about creative/effective use of RevenueCat Ads, not cat-themed advertising. Weekkeep does not use RevenueCat Ads and will not add interruptive ads merely to chase the category because that conflicts with the calm product experience."
+    },
+    {
+      "category": "Next Gen",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "Weekkeep is being submitted on the non-Next-Gen app track."
+    },
+    {
+      "category": "HAMM Award (Help Apps Make Money)",
+      "decision": "Focus",
+      "role": "secondary",
+      "reason": "Submit with verified pricing, paywall, conversion, and revenue evidence."
+    },
+    {
+      "category": "Conflict of Interest",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "No qualifying conflict-of-interest case is part of the Weekkeep submission."
+    },
+    {
+      "category": "Productivity / Christopher Lawley",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "Weekkeep is a parent memory product, not a general productivity tool."
+    },
+    {
+      "category": "Nutrition & Healthy Eating / Abbey’s Kitchen",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "The product is not about nutrition or healthy eating."
+    },
+    {
+      "category": "Yoga & Fitness / Simone Sharice",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "The product is not about yoga or fitness."
+    },
+    {
+      "category": "Career Coaching / Leadership Heather",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "The product is not career coaching."
+    },
+    {
+      "category": "Gaming / Mr Lewis Blogs Gaming",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "Weekkeep is not a game and will not add gaming scope."
+    },
+    {
+      "category": "Ship Kotlin Everywhere / JetBrains",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "Weekkeep is a Swift/iOS app; Kotlin or JetBrains scope will not be added."
+    },
+    {
+      "category": "Most Viral App / Noise",
+      "decision": "Conditional",
+      "role": null,
+      "reason": "Submit only if a live Noise campaign/account was actually used and measured."
+    },
+    {
+      "category": "Best App for Galaxy / Samsung",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "Weekkeep targets iPhone, not Galaxy devices or the Samsung store."
+    },
+    {
+      "category": "Idea to Income / Replit",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "There is no verified Replit build evidence and no Replit scope will be added."
+    },
+    {
+      "category": "Keep Them Coming Back / OneSignal",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "V1 uses local notifications and explicitly excludes OneSignal and remote push."
+    },
+    {
+      "category": "Growth Loop / Layers",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "There is no Layers integration or separate growth-loop scope, and no SDK will be added."
+    },
+    {
+      "category": "Funnel Vision / Stripe",
+      "decision": "Exclude",
+      "role": null,
+      "reason": "The category requires a live web-to-app funnel using RevenueCat Funnels with Stripe; Weekkeep has no such live funnel. V1 uses a native App Store non-consumable purchase through RevenueCat, and we will not add a web funnel only to chase the category."
+    }
+  ],
+  "provenance": {
+    "source_media_project": "videos/weekkeep-shipaton",
+    "validation_script": "videos/weekkeep-shipaton/scripts/validate-provenance.sh",
+    "role": "source-media-and-license-provenance-origin-only"
+  },
+  "release_eligibility": {
+    "track": "non_next_gen",
+    "first_public_release": {
+      "required": true,
+      "status": "pending_external",
+      "must_be_within": "official_rules.submission_window",
+      "released_at": null,
+      "evidence_ref": "external_evidence.first_public_release"
+    },
+    "published_eligible_store": {
+      "required": true,
+      "status": "pending_external",
+      "store": "Apple App Store",
+      "url": null,
+      "evidence_ref": "external_evidence.app_store_record"
+    },
+    "downloadable_in_us": {
+      "required": true,
+      "status": "pending_external",
+      "territory": "US",
+      "evidence_ref": "external_evidence.us_storefront_download"
+    },
+    "revenuecat_qualifying_path": {
+      "required": true,
+      "status": "pending_external",
+      "acceptable_paths": [
+        "IAP",
+        "web_purchase",
+        "ads"
+      ],
+      "selected_path": "IAP",
+      "product_id": "weekkeep_plus_lifetime",
+      "evidence_ref": "external_evidence.revenuecat_product_and_sandbox_purchase"
+    }
+  },
+  "intake_filter": {
+    "schema_version": 2,
+    "gates": {
+      "published_store_page_url": {
+        "required": true,
+        "status": "pending_external",
+        "url": null,
+        "evidence_ref": "external_evidence.app_store_record"
+      },
+      "bundle_package_identifier": {
+        "required": true,
+        "status": "pending_external",
+        "bundle_id": "com.solkim.weekkeep",
+        "package_name": null,
+        "revenuecat_sdk_verification_status": "pending_external",
+        "evidence_ref": "external_evidence.bundle_and_revenuecat_sdk_validation"
+      },
+      "required_fields_and_category_answers": {
+        "required": true,
+        "status": "pending_external",
+        "required_fields_source": "docs/11-SHIPATON-SUBMISSION.md",
+        "category_answers_source": "docs/11-SHIPATON-SUBMISSION.md",
+        "evidence_ref": "external_evidence.devpost_required_fields_and_category_answers"
+      },
+      "public_demo_video": {
+        "required": true,
+        "status": "pending_external",
+        "accepted_platforms": [
+          "YouTube",
+          "Vimeo"
+        ],
+        "public_url": null,
+        "duration_seconds": 72,
+        "maximum_seconds": 120,
+        "duration_must_be_less_than_maximum": true,
+        "public_visibility_required": true,
+        "unlicensed_third_party_material_allowed": false,
+        "source_project": "videos/weekkeep-remotion",
+        "prescreening_ref": "prescreening.first_two_minutes.required_messages",
+        "local_artifact_status": "remotion_composition_and_local_final_mp4_validated_public_upload_pending",
+        "evidence_ref": "external_evidence.public_demo_video"
+      },
+      "target_device_footage": {
+        "required": true,
+        "status": "pending_external",
+        "target_device": "iPhone",
+        "must_show_functioning_project": true,
+        "local_physical_qa_evidence": "release/local/target-device-qa/20260806T2102KST-build3/QA-SUMMARY.md",
+        "local_physical_qa_status": "validated_build3_install_and_fixture_argument_launch;official_ui_capture_blocked_by_locked_state;target_device_recording_pending",
+        "evidence_ref": "external_evidence.target_device_footage"
+      },
+      "app_icon": {
+        "required": true,
+        "status": "pending_external",
+        "width": 1024,
+        "height": 1024,
+        "alpha": false,
+        "exact_seven_stitches": 7,
+        "local_artifact_status": "opaque_1024_master_present_device_qa_pending",
+        "evidence_ref": "external_evidence.real_device_icon_qa"
+      },
+      "screenshot": {
+        "required": true,
+        "minimum_count": 1,
+        "status": "pending_external",
+        "width": 1179,
+        "height": 2556,
+        "alpha": false,
+        "device_frame": false,
+        "local_artifact_status": "local_1179x2556_no_frame_fixture_complete",
+        "evidence_ref": "external_evidence.shipaton_fixture_screenshot"
+      },
+      "judge_unlock": {
+        "required": true,
+        "status": "pending_external",
+        "access_methods": [
+          "Apple IAP Offer Code (Devpost may call it a promo code)"
+        ],
+        "audience": [
+          "Sponsor",
+          "Admin",
+          "Judges"
+        ],
+        "free_and_unrestricted": true,
+        "unlocks_all_premium_features": true,
+        "valid_through": "2026-10-13T12:00:00-07:00",
+        "offer": {
+          "platform": "Apple App Store",
+          "mechanism": "Offer Code",
+          "devpost_label": "promo code",
+          "product_id": "weekkeep_plus_lifetime",
+          "product_type": "non-consumable",
+          "price": "free",
+          "eligibility": "everyone",
+          "territories": [
+            "US"
+          ],
+          "expiry_policy": "after_official_rules.testing_access.offer_expiry_must_be_after",
+          "external_offer_status": "pending_external",
+          "remote_configuration": {
+            "status": "configured",
+            "app_id": "6798449478",
+            "iap_id": "6798491084",
+            "offer_id": "bb4f7fd6-2b08-4aa7-9f55-e140a3e94e28",
+            "name": "Shipaton Judge Access 2026",
+            "customer_eligibilities": [
+              "NON_SPENDER",
+              "ACTIVE_SPENDER",
+              "CHURNED_SPENDER"
+            ],
+            "free_prices": [
+              "USA:FREE",
+              "KOR:FREE"
+            ]
+          },
+          "sandbox_batch": {
+            "status": "generated_redemption_not_tested",
+            "batch_id": "7791e39d-f462-4647-be72-e00c75a50eff",
+            "quantity": 10,
+            "expiration_date": "2026-10-31",
+            "environment": "SANDBOX"
+          },
+          "production_judge_code": {
+            "status": "blocked_until_app_ready_for_distribution_and_iap_approved",
+            "generated": false,
+            "unblock_requirements": [
+              "app_ready_for_distribution",
+              "iap_approved"
+            ],
+            "current_app_version_state": "WAITING_FOR_REVIEW",
+            "current_iap_product_state": "WAITING_FOR_REVIEW",
+            "current_iap_version_state": "WAITING_FOR_REVIEW"
+          },
+          "real_code_stored_in_manifest": false,
+          "code_storage": "external_uncommitted"
+        },
+        "evidence_ref": "external_evidence.judge_unlock"
+      },
+      "public_source_repository": {
+        "required": true,
+        "status": "pending_external",
+        "repository_url": null,
+        "repository_visibility_status": "pending_publication",
+        "source_availability": {
+          "required": true,
+          "status": "pending_external",
+          "evidence_ref": "external_evidence.public_source_repository"
+        },
+        "logged_out_verification": {
+          "required": true,
+          "status": "pending_external",
+          "checked_at": null,
+          "evidence_ref": "external_evidence.public_source_repository"
+        },
+        "license": {
+          "path": "LICENSE",
+          "spdx_id": "MIT",
+          "osi_approved": true,
+          "holder": "Sol Kim",
+          "local_status": "validated_local"
+        },
+        "evidence_ref": "external_evidence.public_source_repository"
+      }
+    },
+    "prescreening": {
+      "submission_is_read": true,
+      "first_two_minutes": {
+        "required": true,
+        "required_messages": [
+          "elevator_pitch",
+          "app_in_use",
+          "targeted_categories"
+        ]
+      },
+      "source": "https://www.shipaton.com/blog/how-we-judge-shipaton"
+    }
+  },
+  "demo": {
+    "maximum_seconds": 120,
+    "target_seconds": 72,
+    "script_source": "docs/11-SHIPATON-SUBMISSION.md",
+    "source_project": "videos/weekkeep-remotion",
+    "preview_approval_status": "Validated",
+    "render_status": "rendered_after_user_preview_approval",
+    "validation": {
+      "check": "passed",
+      "composition_listing": "passed",
+      "composition_id": "WeekkeepShipaton72",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30,
+      "duration_in_frames": 2160,
+      "duration_seconds": 72.0,
+      "scene_count": 10,
+      "transition_count": 9,
+      "transition_style": "restrained_fade",
+      "transition_duration_frames": 12,
+      "caption_group_count": 23,
+      "caption_source": "videos/weekkeep-remotion/src/data/audio_meta.json",
+      "caption_groups_source": "videos/weekkeep-remotion/src/data/caption_groups.json",
+      "caption_derivation": "derived_from_approved_audio_meta",
+      "final_mp4": "present_after_user_preview_approval"
+    }
+  },
+  "fixture_capture": {
+    "launch_argument": "-ui-fixtures",
+    "test_environment": "WK_CAPTURE_SCREENSHOTS=1",
+    "milestones": [
+      "01-welcome",
+      "02-review",
+      "03-review-selected",
+      "04-save-confirmation"
+    ],
+    "capture_script": "scripts/capture-fixture-screenshots.sh"
+  },
+  "archive": {
+    "script": "scripts/archive-release.sh",
+    "mode": "local_archive_only",
+    "upload_or_publish": false,
+    "requires_revenuecat_public_key": true
+  },
+  "public_policy_site_evidence": {
+    "project_id": "appgprj_6a72c9365eec81918b26c45fa645d052",
+    "source_commit_sha": "935e647562020d32dc9d2f6079a32c5042067af0",
+    "version_number": 4,
+    "deployment_id": "appgdep_6a74555f5b488191bd12c8f047ba655b",
+    "deployment_status": "succeeded",
+    "deployment_timestamp": "2026-08-06T09:35:40.860943+00:00",
+    "access_mode": "public",
+    "url": "https://weekkeep-app.kimsol1134.chatgpt.site",
+    "routes": [
+      "/",
+      "/privacy",
+      "/support",
+      "/terms"
+    ],
+    "logged_out_http_status": 200,
+    "app_store_metadata_url_match": true,
+    "contact_email": "kimsol1134@gmail.com",
+    "stale_naver_contact_matches": 0,
+    "http_verification_timestamp": "2026-08-06T09:37:49+00:00"
+  },
+  "external_evidence": {
+    "first_public_release": "pending_release_window_store_record",
+    "app_store_record": "pending_authenticated_account",
+    "us_storefront_download": "pending_us_storefront_smoke",
+    "bundle_and_revenuecat_sdk_validation": "pending_authenticated_account",
+    "devpost_required_fields_and_category_answers": "pending_submission",
+    "revenuecat_product_and_sandbox_purchase": "pending_authenticated_account",
+    "public_policy_site": "validated_public_policy_site_url=https://weekkeep-app.kimsol1134.chatgpt.site;deployment_timestamp=2026-08-06T09:35:40.860943+00:00;access=public;logged_out_routes_http_200=4;contact=kimsol1134@gmail.com;naver_matches=0",
+    "real_device_icon_qa": "pending_physical_device",
+    "shipaton_fixture_screenshot": "pending_final_selection_and_authenticated_upload",
+    "app_store_screenshots": "validated_asc_en_us_ko_six_complete_build3_onboarding_rerun1",
+    "app_privacy": "validated_published_2026-08-06_exactly_three_entries_no_tracking",
+    "app_store_review_submission": "validated_replacement_ios_submission=88c157ee-ce87-41c3-8a4a-71e614993a58;exactly_two_ready_items;build3_waiting_for_review;historical_submission=260abf1a-886b-4014-8262-541d261e60e2_complete",
+    "target_device_footage": "pending_physical_device_recording;validated_build3_install_and_fixture_argument_launch=release/local/target-device-qa/20260806T2102KST-build3/QA-SUMMARY.md;official_ui_capture_blocked_by_locked_state=true;quicktime_preview_unusable;no_permissions_changed",
+    "public_demo_video": "pending_public_upload_and_logged_out_playback",
+    "public_source_repository": "pending_public_source_repository_publication_and_logged_out_verification",
+    "final_video_approval_and_render": "validated_local_final_render",
+    "judge_unlock": "pending_external;offer_configured=bb4f7fd6-2b08-4aa7-9f55-e140a3e94e28;sandbox_batch_generated=7791e39d-f462-4647-be72-e00c75a50eff;redemption_not_tested;production_judge_code_blocked_until_app_ready_for_distribution_and_iap_approved",
+    "devpost_receipt": "pending_submission"
+  },
+  "never_commit": [
+    "App Store Connect API keys",
+    "RevenueCat secret keys",
+    "Apple Offer Codes (Devpost promo-code field values)",
+    "private beta participant data",
+    "unapproved family photos"
+  ]
+}

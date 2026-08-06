@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
+  <g id="semantic-sliders">
+    <path d="M4 5.5H24M4 12H24M4 18.5H24" stroke="#5B415E" stroke-width="2.2" stroke-linecap="round"/>
+    <rect x="8" y="3.7" width="3.2" height="3.6" rx="1.6" fill="#5B415E"/>
+    <rect x="17" y="10.2" width="3.2" height="3.6" rx="1.6" fill="#5B415E"/>
+    <rect x="12" y="16.7" width="3.2" height="3.6" rx="1.6" fill="#5B415E"/>
+  </g>
+</svg>

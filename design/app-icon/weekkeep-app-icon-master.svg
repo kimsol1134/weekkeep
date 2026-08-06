@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Weekkeep app icon master</title>
+  <desc id="desc">A plum photo keepsake frame beneath seven equal muted rainbow stitches.</desc>
+
+  <!-- Full-bleed, opaque icon canvas. Apple applies the platform mask. -->
+  <rect width="1024" height="1024" fill="#FBF7F2"/>
+
+  <!-- Exact-seven decorative stitches: equal 70×30 geometry and 28px gaps. -->
+  <g id="seven-stitches">
+    <rect x="183" y="170" width="70" height="30" rx="15" fill="#E97A68"/>
+    <rect x="281" y="170" width="70" height="30" rx="15" fill="#E39455"/>
+    <rect x="379" y="170" width="70" height="30" rx="15" fill="#E5A84B"/>
+    <rect x="477" y="170" width="70" height="30" rx="15" fill="#66836E"/>
+    <rect x="575" y="170" width="70" height="30" rx="15" fill="#5F879B"/>
+    <rect x="673" y="170" width="70" height="30" rx="15" fill="#686286"/>
+    <rect x="771" y="170" width="70" height="30" rx="15" fill="#8A6386"/>
+  </g>
+
+  <!-- Simplified from the user's camera concept for 29pt legibility. -->
+  <g id="photo-keepsake" fill="#5B415E">
+    <rect x="133" y="317" width="758" height="558" rx="117"/>
+    <path d="M338 344 C380 344 399 333 420 310 L456 265 C475 242 498 228 524 228 H548 C574 228 597 242 616 265 L652 310 C673 333 692 344 734 344 V390 H338 Z"/>
+  </g>
+  <g id="photo-keepsake-negative-space" fill="#FBF7F2">
+    <rect x="187" y="371" width="650" height="450" rx="63"/>
+    <path d="M377 371 C412 371 435 358 458 332 L484 301 C495 288 509 282 524 282 H548 C563 282 577 288 588 301 L614 332 C637 358 660 371 695 371 Z"/>
+  </g>
+  <circle cx="512" cy="590" r="153" fill="#5B415E"/>
+  <circle cx="512" cy="590" r="99" fill="#FBF7F2"/>
+</svg>

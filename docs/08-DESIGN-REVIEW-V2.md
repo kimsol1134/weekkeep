@@ -34,7 +34,7 @@ V1은 보기 좋고 신뢰감도 있습니다. 그러나 지금 그대로라면 
    `아이와 보낸 일주일`보다 `사진은 많은데, 정리할 시간은 없으니까.`가 부모의 현재 상태를 더 정확히 짚습니다.
 
 2. **초안이라는 사실을 명확히 한다.**  
-   앱이 완벽하게 판단한다고 말하지 않고 `42장 중 7장의 초안을 만들었어요`라고 설명합니다.
+   앱이 완벽하게 판단한다고 말하거나 shortlist 수를 원본 수처럼 보이지 않고 `이번 주의 순간 7장을 골랐어요`라고 설명합니다.
 
 3. **내가 할 일이 작아 보여야 한다.**  
    `사진 고르기`보다 `7장 확인하기`, `이번 주 남기기`보다 `이 7장 남기기`가 task 크기를 분명히 합니다.
@@ -77,10 +77,10 @@ V1은 보기 좋고 신뢰감도 있습니다. 그러나 지금 그대로라면 
 
 반복 개수는 image generation에 맡기지 않습니다. [`design/system`](../design/system/SEVEN-STITCH.md)의 코드 기반 벡터 geometry를 SwiftUI와 최종 screenshot export에서 직접 렌더링하며, `stitchCount == 7`을 snapshot test로 고정합니다.
 
-- Welcome: 7개 Coral stitch가 차례로 나타남
-- Curation: 분석이 진행될수록 stitch가 Coral로 채워짐
+- Welcome: 7개 muted-rainbow stitch가 차례로 나타남
+- Curation: 분석이 진행될수록 index별 muted-rainbow stitch가 opacity와 progress geometry로 채워짐
 - Review: 현재 선택한 사진의 stitch만 길어지고 해당 사진과 연결됨
-- Save: 7개 stitch가 Sage로 바뀌며 앨범의 binding처럼 모임
+- Save: 7개 index별 muted-rainbow stitch가 낮은/완료 opacity로 앨범의 binding처럼 모임
 - Archive: tab icon에는 같은 exact-7 geometry를 쓰고, Week card는 장식을 반복하지 않고 `사진 n장`을 명시
 
 ### Week-to-album transition
@@ -105,10 +105,10 @@ V1은 보기 좋고 신뢰감도 있습니다. 그러나 지금 그대로라면 
 - solid Plum CTA; gradient 금지
 - flat Paper surface + 1px Linen border; glow/shadow 최소화
 - 대형 제목이 화면의 절반을 차지하지 않음
-- tab icon에서 AI sparkle 금지; custom seven-stitch symbol 사용
+- tab icon에서 AI sparkle 및 decorative seven-stitch 금지; 기능별 고유 Plum semantic glyph 사용
 - 가족사진은 lifestyle campaign이 아니라 ordinary iPhone snapshot처럼 보여야 함
 - 같은 장면·옷·미소를 반복하지 않음
-- Coral은 stitch와 선택 상태, Sage는 privacy/success에만 사용
+- stitch는 D-030의 index별 muted rainbow를 사용하고 선택/progress/muted 의미는 opacity와 geometry로 표현; Sage는 privacy/success surface에만 사용
 - 화면당 primary action 하나
 
 ## 6. Shipaton 승리 전략과 연결
@@ -119,7 +119,8 @@ Shipaton 2026 Design Award는 혁신적 아이디어와 아름다운 디자인·
 2. Photos 허용 후 7-stitch가 채워지는 로컬 분석
 3. 실제 같은 7장 초안 + 사진 한 장 교체
 4. grid가 Week card로 변하는 저장 transition
-5. 지난 주들이 쌓인 archive
+5. 저장 직후 Story/Post local share preview와 `Made with Weekkeep` attribution
+6. 지난 주들이 쌓인 archive
 
 ## 7. 제품 계약 대조에서 추가로 고친 것
 
@@ -130,14 +131,14 @@ V2의 미감뿐 아니라 실제 foreground 처리와 V1 범위까지 맞췄습�
 | 분석 전 `7장의 초안이 준비됐어요` | 앱이 background에서 이미 분석한 것처럼 보임 | `지난주를 남겨볼까요?` → `7장 초안 만들기` → Progress |
 | Sunday reminder | `D-013`, `FR-015`와 충돌 | Primer와 Settings 모두 Monday 20:30 |
 | archive 3개에 year filter | 기록이 적은데 탐색 UI가 과함 | 12개 전에는 year/month filter 없음 |
-| detail share button/overflow | V1 비목표를 암시 | 읽기 전용 + photo tap viewer만 유지 |
+| detail share button/overflow | local share와 social surface의 경계가 필요 | 읽기 전용 detail에 restrained local share action만 추가; social feed/likes/comments/cloud upload는 제외 |
 | `이번 주` 검토/완료 | 진행 중인 주가 섞인 듯함 | Regular flow는 `지난주`로 통일 |
 | 평생 이용권의 영구 보존 오해 | Plus 복원과 album 복원을 혼동 | paywall에 `이 iPhone에서`, Settings/Privacy에 별도 백업 없음 명시 |
 | stitch 6/8개 혼재 | 핵심 `7장` 제약 자체가 흔들림 | 생성 결과가 아닌 code-rendered exact-7 component |
 
 ## 8. 현재 수상 가능성 판정
 
-V2는 V1보다 분명히 Design Award 경쟁력이 높습니다. 부모의 문제, privacy 경계, selective replacement, grid-to-album transition, Seven-stitch가 하나의 이야기로 연결되기 때문입니다. 다만 정적 mockup만으로 1등을 보장할 수는 없습니다.
+V2는 V1보다 분명히 Design Award 경쟁력이 높습니다. 부모의 문제, privacy 경계, selective replacement, 저장 후 7장 순차 reveal, Seven-stitch가 하나의 이야기로 연결되기 때문입니다. 다만 정적 mockup만으로 1등을 보장할 수는 없습니다.
 
 | 평가 축 | V1 | V2 목표 | 아직 필요한 증거 |
 |---|---:|---:|---|
@@ -146,7 +147,7 @@ V2는 V1보다 분명히 Design Award 경쟁력이 높습니다. 부모의 문�
 | 신뢰·프라이버시 | 9 | 9 | network payload audit |
 | 사용자 통제 | 6 | 9 | 교체 action 10초 발견율 |
 | 시각적 고유성 | 4 | 8 | 실제 LINE Seed/CMP-12 SwiftUI capture |
-| Design Award 적합 | 5 | 8 | matched geometry, haptic, Reduce Motion 실기기 영상 |
+| Design Award 적합 | 5 | 8 | 순차 reveal, haptic, Reduce Motion 실기기 영상 |
 
 현실적인 1순위는 **RevenueCat Design Award**입니다. Grand Prize 경쟁력은 공개 출시 뒤 실제 traction과 growth momentum 증거가 추가되어야 생깁니다. 정적 화면보다 실제 45초 흐름과 부모 usability 결과가 최종 차이를 만듭니다.
 

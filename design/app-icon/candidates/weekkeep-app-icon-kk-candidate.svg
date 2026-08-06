@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Weekkeep app icon candidate — mirrored kk monogram</title>
+  <desc id="desc">Two mirrored lowercase k forms facing each other beneath seven equal muted rainbow stitches, with a single golden diamond held between them.</desc>
+
+  <!-- Full-bleed, opaque icon canvas. Apple applies the platform mask. -->
+  <rect width="1024" height="1024" fill="#FBF7F2"/>
+
+  <!-- Unchanged from the approved master: equal 70x30 geometry and 28px gaps. -->
+  <g id="seven-stitches">
+    <rect x="183" y="170" width="70" height="30" rx="15" fill="#E97A68"/>
+    <rect x="281" y="170" width="70" height="30" rx="15" fill="#E39455"/>
+    <rect x="379" y="170" width="70" height="30" rx="15" fill="#E5A84B"/>
+    <rect x="477" y="170" width="70" height="30" rx="15" fill="#66836E"/>
+    <rect x="575" y="170" width="70" height="30" rx="15" fill="#5F879B"/>
+    <rect x="673" y="170" width="70" height="30" rx="15" fill="#686286"/>
+    <rect x="771" y="170" width="70" height="30" rx="15" fill="#8A6386"/>
+  </g>
+
+  <!--
+    weekkeep splits 4+4 into week|keep between its two k. The second k is mirrored so
+    the two stems stand outside and the arms face each other across the centre axis.
+    Geometry is explicit, never derived from font metrics:
+      stroke 88, round caps; stems x=236 / x=788 (mirror of 1024); knees at y=600;
+      arm and leg tips at x=452 / x=572, y=424 and y=776.
+    Visual bounds 192-832 x 350-850, centred on x=512.
+  -->
+  <g id="kk-monogram" fill="none" stroke="#5B415E" stroke-width="88" stroke-linecap="round">
+    <line x1="236" y1="394" x2="236" y2="806"/>
+    <line x1="236" y1="600" x2="452" y2="424"/>
+    <line x1="236" y1="600" x2="452" y2="776"/>
+    <line x1="788" y1="394" x2="788" y2="806"/>
+    <line x1="788" y1="600" x2="572" y2="424"/>
+    <line x1="788" y1="600" x2="572" y2="776"/>
+  </g>
+
+  <!-- The one photo the week is kept for, held on the mirror axis. -->
+  <g id="kept-frame">
+    <rect x="454" y="542" width="116" height="116" rx="14" fill="#E5A84B" transform="rotate(45 512 600)"/>
+  </g>
+</svg>

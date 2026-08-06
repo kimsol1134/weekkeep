@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-08-05T10:29:38Z",
+  "enabled": true,
+  "provider": "procedural_ffmpeg_original",
+  "mode": "procedural_ffmpeg_original",
+  "path": "assets/bgm/track.wav",
+  "generation_script": "scripts/generate-original-bgm.sh",
+  "provenance": {
+    "identifier": "procedural_ffmpeg_original",
+    "generator": "ffmpeg",
+    "filters": [
+      "aevalsrc",
+      "alimiter"
+    ],
+    "external_samples": false,
+    "ml_model": null
+  },
+  "target_duration_s": 72,
+  "duration_s": 72,
+  "sample_rate_hz": 48000,
+  "channels": 2,
+  "codec": "pcm_s16le",
+  "integrated_lufs": -20.9,
+  "true_peak_dbfs": -13.6,
+  "sha256": "10d9340c16c3234826451c4a71808aa9125a91b67af04288df66bc9996f63ce0",
+  "log": null,
+  "pid": null,
+  "seed_duration_s": null,
+  "loop_count": null,
+  "timeout_ms": null,
+  "status": "ready",
+  "ready": true,
+  "waited_ms": null,
+  "size_bytes": 13824044,
+  "message": "BGM ready at assets/bgm/track.wav; generated locally from deterministic FFmpeg synthesis with no external samples or ML model."
+}

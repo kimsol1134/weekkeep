@@ -1,0 +1,398 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Rg.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Bd.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 700;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "JetBrains Mono";
+      src: url("assets/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      color: #25212B;
+      font-family: "LINE Seed Sans KR", sans-serif;
+      font-synthesis: none;
+    }
+
+    .frame-02-meet-weekkeep-bg,
+    .frame-02-meet-weekkeep-structure,
+    .frame-02-meet-weekkeep-chrome,
+    .frame-02-meet-weekkeep-brand,
+    .frame-02-meet-weekkeep-phone,
+    .frame-02-meet-weekkeep-focus,
+    .frame-02-meet-weekkeep-seven,
+    .frame-02-meet-weekkeep-outcome {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .frame-02-meet-weekkeep-chrome {
+      z-index: 10;
+    }
+
+    .frame-02-meet-weekkeep-bg {
+      background: #FBF7F2;
+    }
+
+    .frame-02-meet-weekkeep-structure-rule {
+      position: absolute;
+      left: 5cqw;
+      top: 15.8cqh;
+      width: 90cqw;
+      height: 2px;
+      background: #5B415E;
+    }
+
+    .frame-02-meet-weekkeep-structure-axis {
+      position: absolute;
+      left: 59.5cqw;
+      top: 15.8cqh;
+      width: 2px;
+      height: 63.5cqh;
+      background: #5B415E;
+    }
+
+    .frame-02-meet-weekkeep-topbar {
+      position: absolute;
+      left: 5cqw;
+      top: 5.1cqh;
+      right: 5cqw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #5B415E;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1.35cqw;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .frame-02-meet-weekkeep-topbar-counter {
+      color: #537763;
+    }
+
+    .frame-02-meet-weekkeep-brand-icon {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 13.5cqw;
+      height: 13.5cqw;
+      border-radius: 8px;
+      object-fit: contain;
+      transform-origin: 50% 50%;
+    }
+
+    .frame-02-meet-weekkeep-wordmark {
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #5B415E;
+      font-size: 5cqw;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 0.96;
+      white-space: nowrap;
+      transform-origin: 50% 50%;
+    }
+
+    .frame-02-meet-weekkeep-phone-shell {
+      position: absolute;
+      left: 69.8cqw;
+      top: 5.4cqh;
+      width: 19.8cqw;
+      height: 76.3cqh;
+      overflow: hidden;
+      border: 2px solid #5B415E;
+      border-radius: 8px;
+      background: #FBF7F2;
+      transform-origin: 50% 50%;
+    }
+
+    .frame-02-meet-weekkeep-phone-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .frame-02-meet-weekkeep-focus-label {
+      position: absolute;
+      left: 8cqw;
+      top: 47.1cqh;
+      color: #5B415E;
+      font-size: 2.2cqw;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .frame-02-meet-weekkeep-focus-line {
+      position: absolute;
+      left: 0;
+      bottom: -1.2cqh;
+      width: 100%;
+      height: 2px;
+      background: #E97A68;
+      transform-origin: 0 50%;
+    }
+
+    .frame-02-meet-weekkeep-seven-copy {
+      position: absolute;
+      left: 8cqw;
+      top: 54.8cqh;
+      display: flex;
+      align-items: baseline;
+      gap: 0.9cqw;
+      color: #5B415E;
+      white-space: nowrap;
+    }
+
+    .frame-02-meet-weekkeep-seven-up-to {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 2.05cqw;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: lowercase;
+    }
+
+    .frame-02-meet-weekkeep-seven-number {
+      font-size: 7.3cqw;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 0.9;
+    }
+
+    .frame-02-meet-weekkeep-rail-wrap {
+      position: absolute;
+      left: 8cqw;
+      top: 69.7cqh;
+      width: 37.5cqw;
+      height: 8cqh;
+    }
+
+    .frame-02-meet-weekkeep-rail-stitch {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 1.8cqw;
+      height: 1.45cqh;
+      border-radius: 3px;
+      background: #E97A68;
+      opacity: 0.72;
+      transform-origin: 50% 50%;
+    }
+
+    .frame-02-meet-weekkeep-outcome-line {
+      position: absolute;
+      left: 8cqw;
+      top: 77.6cqh;
+      display: flex;
+      align-items: baseline;
+      gap: 0.72cqw;
+      color: #5B415E;
+      font-size: 2.25cqw;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .frame-02-meet-weekkeep-outcome-word {
+      display: inline-block;
+      transform-origin: 50% 100%;
+    }
+  </style>
+
+  <div data-hf-id="hf-n2vc" id="root" data-composition-id="02-meet-weekkeep" data-start="0" data-duration="6.5" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-n7uv" id="02-meet-weekkeep-bg" class="clip frame-02-meet-weekkeep-bg" data-start="0" data-duration="6.5" data-track-index="0"></div>
+
+    <div data-hf-id="hf-96i0" id="02-meet-weekkeep-structure" class="clip frame-02-meet-weekkeep-structure" data-start="0" data-duration="6.5" data-track-index="1">
+      <div data-hf-id="hf-cipj" class="frame-02-meet-weekkeep-structure-rule"></div>
+      <div data-hf-id="hf-3dxu" class="frame-02-meet-weekkeep-structure-axis"></div>
+    </div>
+
+    <div data-hf-id="hf-o78z" id="02-meet-weekkeep-chrome" class="clip frame-02-meet-weekkeep-chrome" data-start="0" data-duration="6.5" data-track-index="2">
+      <div data-hf-id="hf-gch1" class="frame-02-meet-weekkeep-topbar">
+        <span data-hf-id="hf-hsni">02 / MEET WEEKKEEP</span>
+        <span data-hf-id="hf-w13n" class="frame-02-meet-weekkeep-topbar-counter">02</span>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-gm6m" id="02-meet-weekkeep-brand" class="clip frame-02-meet-weekkeep-brand" data-start="0" data-duration="6.5" data-track-index="3">
+      <img data-hf-id="hf-txah" id="02-meet-weekkeep-brand-icon" class="frame-02-meet-weekkeep-brand-icon" src="assets/weekkeep-app-icon.png" alt="">
+      <div data-hf-id="hf-ua6b" id="02-meet-weekkeep-wordmark" class="frame-02-meet-weekkeep-wordmark">Weekkeep</div>
+    </div>
+
+    <div data-hf-id="hf-7stt" id="02-meet-weekkeep-phone" class="clip frame-02-meet-weekkeep-phone" data-start="1.3" data-duration="5.2" data-track-index="4">
+      <div data-hf-id="hf-modm" id="02-meet-weekkeep-phone-shell" class="frame-02-meet-weekkeep-phone-shell">
+        <img data-hf-id="hf-c1od" class="frame-02-meet-weekkeep-phone-image" src="assets/01-welcome.jpg" alt="">
+      </div>
+    </div>
+
+    <div data-hf-id="hf-ij27" id="02-meet-weekkeep-focus" class="clip frame-02-meet-weekkeep-focus" data-start="1.3" data-duration="2.2" data-track-index="5">
+      <div data-hf-id="hf-fon8" id="02-meet-weekkeep-focus-label" class="frame-02-meet-weekkeep-focus-label">
+        crowded camera roll
+        <span data-hf-id="hf-6c5v" id="02-meet-weekkeep-focus-line" class="frame-02-meet-weekkeep-focus-line"></span>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-iwl5" id="02-meet-weekkeep-seven" class="clip frame-02-meet-weekkeep-seven" data-start="3.5" data-duration="3" data-track-index="6">
+      <div data-hf-id="hf-dcw2" id="02-meet-weekkeep-seven-copy" class="frame-02-meet-weekkeep-seven-copy">
+        <span data-hf-id="hf-zm6x" class="frame-02-meet-weekkeep-seven-up-to">up to</span>
+        <span data-hf-id="hf-sw5m" class="frame-02-meet-weekkeep-seven-number">seven</span>
+      </div>
+      <div data-hf-id="hf-3u5y" class="frame-02-meet-weekkeep-rail-wrap">
+        <span data-hf-id="hf-rm2x" class="frame-02-meet-weekkeep-rail-stitch" data-target-x="-300" data-target-y="0"></span>
+        <span data-hf-id="hf-532o" class="frame-02-meet-weekkeep-rail-stitch" data-target-x="-200" data-target-y="0"></span>
+        <span data-hf-id="hf-ouaf" class="frame-02-meet-weekkeep-rail-stitch" data-target-x="-100" data-target-y="0"></span>
+        <span data-hf-id="hf-dw5h" class="frame-02-meet-weekkeep-rail-stitch" data-target-x="0" data-target-y="0"></span>
+        <span data-hf-id="hf-k98s" class="frame-02-meet-weekkeep-rail-stitch" data-target-x="100" data-target-y="0"></span>
+        <span data-hf-id="hf-spw3" class="frame-02-meet-weekkeep-rail-stitch" data-target-x="200" data-target-y="0"></span>
+        <span data-hf-id="hf-0zoy" class="frame-02-meet-weekkeep-rail-stitch" data-target-x="300" data-target-y="0"></span>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-aruy" id="02-meet-weekkeep-outcome" class="clip frame-02-meet-weekkeep-outcome" data-start="5.1" data-duration="1.4" data-track-index="7">
+      <div data-hf-id="hf-jpgq" id="02-meet-weekkeep-outcome-line" class="frame-02-meet-weekkeep-outcome-line">
+        <span data-hf-id="hf-l12j" class="frame-02-meet-weekkeep-outcome-word">family</span>
+        <span data-hf-id="hf-02lk" class="frame-02-meet-weekkeep-outcome-word">moments</span>
+        <span data-hf-id="hf-r30d" class="frame-02-meet-weekkeep-outcome-word">worth</span>
+        <span data-hf-id="hf-nism" class="frame-02-meet-weekkeep-outcome-word">keeping</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+    const icon = document.getElementById("02-meet-weekkeep-brand-icon");
+    const wordmark = document.getElementById("02-meet-weekkeep-wordmark");
+    const phone = document.getElementById("02-meet-weekkeep-phone-shell");
+    const focusLabel = document.getElementById("02-meet-weekkeep-focus-label");
+    const focusLine = document.getElementById("02-meet-weekkeep-focus-line");
+    const sevenCopy = document.getElementById("02-meet-weekkeep-seven-copy");
+
+    // Scene 1 — smooth, non-overshooting product arrival and name reveal.
+    tl.fromTo(
+      icon,
+      { x: 285, y: 305, scale: 0, opacity: 0 },
+      { x: 285, y: 305, scale: 1, opacity: 1, duration: 0.56, ease: "power3.out" },
+      0.05,
+    );
+    tl.fromTo(
+      wordmark,
+      { x: 595, y: 382, opacity: 0 },
+      { x: 595, y: 382, opacity: 1, duration: 0.5, ease: "power3.out" },
+      0.22,
+    );
+
+    // Scene 2 — the real onboarding surface arrives while the brand becomes an anchor.
+    tl.fromTo(
+      phone,
+      { x: 250, y: 12, opacity: 0 },
+      { x: 0, y: 0, opacity: 1, duration: 0.72, ease: "power3.out" },
+      1.3,
+    );
+    tl.to(
+      icon,
+      { x: 92, y: 126, scale: 0.34, duration: 0.72, ease: "power3.inOut" },
+      1.3,
+    );
+    tl.to(
+      wordmark,
+      { x: 208, y: 143, scale: 0.52, duration: 0.72, ease: "power3.inOut" },
+      1.3,
+    );
+    tl.fromTo(
+      focusLabel,
+      { y: 18, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.42, ease: "power3.out" },
+      2.05,
+    );
+    tl.fromTo(
+      focusLine,
+      { scaleX: 0, opacity: 0 },
+      { scaleX: 1, opacity: 1, duration: 0.34, ease: "power3.out" },
+      2.2,
+    );
+
+    // Scene 3 — the rail expands from one center point as the phrase reaches "up to seven".
+    tl.fromTo(
+      sevenCopy,
+      { y: 22, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.48, ease: "power3.out" },
+      3.5,
+    );
+    gsap.utils.toArray(".frame-02-meet-weekkeep-rail-stitch").forEach((stitch, index) => {
+      const targetX = Number(stitch.dataset.targetX);
+      const targetY = Number(stitch.dataset.targetY);
+      tl.fromTo(
+        stitch,
+        { xPercent: -50, yPercent: -50, x: 0, y: 0, scale: 0.6, opacity: 0 },
+        {
+          x: targetX,
+          y: targetY,
+          scale: 1,
+          opacity: 0.72,
+          duration: 0.72,
+          ease: "power2.out",
+        },
+        3.52 + index * 0.055,
+      );
+    });
+
+    // Scene 4 — content-aware word pacing keeps the closing outcome line compact.
+    const outcomeWords = Array.from(
+      document.querySelectorAll(".frame-02-meet-weekkeep-outcome-word"),
+    );
+    const baseDuration = 0.04;
+    const secondsPerCharacter = 0.012;
+    const hold = 0.07;
+    const overlap = 0.68;
+    let sequenceOffset = 0;
+
+    outcomeWords.forEach((word) => {
+      const contentLength = word.textContent.trim().length;
+      const duration = baseDuration + contentLength * secondsPerCharacter + hold;
+      tl.fromTo(
+        word,
+        { y: 18, opacity: 0 },
+        { y: 0, opacity: 1, duration, ease: "power3.out" },
+        5.1 + sequenceOffset,
+      );
+      sequenceOffset += duration * overlap;
+    });
+
+      window.__timelines["02-meet-weekkeep"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "source_document": "docs/09-APP-PRIVACY-LABEL.md",
+  "bundle_id": "com.solkim.weekkeep",
+  "target": {
+    "version": "1.0.0",
+    "build": "3",
+    "ipa_evidence": "release/local/asc-release-build3-20260806-onboarding-rerun1/exported/Weekkeep.ipa",
+    "app_privacy_publish_state": "PUBLISHED",
+    "app_privacy_published_on": "2026-08-06"
+  },
+  "remote_unattached_valid_build": {
+    "version": "1.0.0",
+    "build": "4",
+    "processing_state": "VALID",
+    "app_store_version_attachment": "UNATTACHED",
+    "evidence_status": "known_external_truth; build identifier not recorded locally"
+  },
+  "local_candidate": {
+    "version": "1.0.0",
+    "build": "6",
+    "upload_state": "not_uploaded",
+    "app_privacy_evidence_state": "not_submitted_for_build6"
+  },
+  "historical_local_candidate_build_5": {
+    "version": "1.0.0",
+    "build": "5",
+    "upload_state": "not_uploaded",
+    "app_privacy_evidence_state": "not_submitted_for_build5"
+  },
+  "release_configuration": {
+    "analytics_enabled": false,
+    "purchases_enabled": true,
+    "revenuecat_api_key_required": true,
+    "posthog_project_token_must_be_empty": true,
+    "tracking": false
+  },
+  "app_store_connect": {
+    "collects_data": true,
+    "data_types": [
+      {
+        "category": "Identifiers",
+        "type": "User ID",
+        "purpose": "App Functionality",
+        "linked_to_identity": false,
+        "tracking": false,
+        "source": "RevenueCat anonymous App User ID"
+      },
+      {
+        "category": "Purchases",
+        "type": "Purchase History",
+        "purpose": "App Functionality",
+        "linked_to_identity": false,
+        "tracking": false,
+        "source": "RevenueCat purchase and restore"
+      },
+      {
+        "category": "User Content",
+        "type": "Customer Support",
+        "purpose": "App Functionality",
+        "linked_to_identity": true,
+        "tracking": false,
+        "source": "User-initiated mailto support request"
+      }
+    ],
+    "not_collected": [
+      "Photos or Videos",
+      "Precise Location",
+      "Coarse Location",
+      "Product Interaction",
+      "Crash Data",
+      "Performance Data",
+      "Device ID",
+      "Advertising Data"
+    ]
+  },
+  "network_boundary": {
+    "photo_pixels": false,
+    "thumbnails": false,
+    "photos_identifiers": false,
+    "filenames": false,
+    "capture_times": false,
+    "locations": false,
+    "week_keys": false,
+    "analytics_payloads": "typed explicit events only when the provider is intentionally enabled"
+  }
+}

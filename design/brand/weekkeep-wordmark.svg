@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 360" role="img" aria-labelledby="title">
+  <title id="title">Weekkeep primary wordmark</title>
+  <style>
+    .wordmark {
+      font-family: "LINESeedSansKR-Bold", "LINE Seed Sans KR", system-ui, sans-serif;
+      font-size: 250px;
+      font-weight: 700;
+      letter-spacing: -10px;
+    }
+  </style>
+  <text class="wordmark" x="700" y="270" fill="#5B415E" text-anchor="middle">weekkeep</text>
+</svg>

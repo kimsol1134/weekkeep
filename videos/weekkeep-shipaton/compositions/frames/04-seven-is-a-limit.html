@@ -1,0 +1,496 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Rg.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Bd.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 700;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "JetBrains Mono";
+      src: url("assets/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    #root {
+      --wk04-cream: #fbf7f2;
+      --wk04-cream-2: #e8e1db;
+      --wk04-ink: #25212b;
+      --wk04-plum: #5b415e;
+      --wk04-coral: #e97a68;
+      --wk04-sage: #537763;
+      container-type: size;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      color: var(--wk04-ink);
+      isolation: isolate;
+    }
+
+    #root,
+    #root * {
+      box-sizing: border-box;
+    }
+
+    .wk04-background {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: var(--wk04-cream);
+    }
+
+    .wk04-topbar {
+      position: absolute;
+      top: 5cqh;
+      left: 5cqw;
+      right: 5cqw;
+      z-index: 12;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--wk04-plum);
+      font-family: "JetBrains Mono";
+      font-size: 1.35cqw;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .wk04-topbar-count {
+      color: var(--wk04-coral);
+    }
+
+    .wk04-surface-back {
+      position: absolute;
+      top: 12cqh;
+      left: 7cqw;
+      z-index: 1;
+      width: 31.5cqw;
+      height: 70cqh;
+      border: 2px solid var(--wk04-plum);
+      border-radius: 8px;
+      background: var(--wk04-plum);
+      transform-origin: 50% 50%;
+    }
+
+    .wk04-surface-mid {
+      position: absolute;
+      top: 7cqh;
+      left: 10.5cqw;
+      z-index: 2;
+      width: 26cqw;
+      height: 75cqh;
+      border: 2px solid var(--wk04-ink);
+      border-radius: 8px;
+      background: var(--wk04-cream);
+      transform-origin: 50% 50%;
+    }
+
+    .wk04-phone-surface {
+      position: absolute;
+      top: 2cqh;
+      left: 14.5cqw;
+      z-index: 5;
+      width: 21cqw;
+      height: 80cqh;
+      margin: 0;
+      overflow: hidden;
+      border: 2px solid var(--wk04-plum);
+      border-radius: 8px;
+      background: var(--wk04-cream);
+      transform-origin: 50% 50%;
+    }
+
+    .wk04-review-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      object-fit: cover;
+      object-position: 50% 0%;
+    }
+
+    .wk04-grid-focus {
+      position: absolute;
+      top: 34.8cqh;
+      left: 0.25cqw;
+      z-index: 7;
+      width: 20.5cqw;
+      height: 37cqh;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .wk04-grid-focus path {
+      fill: none;
+      stroke: var(--wk04-plum);
+      stroke-width: 2.5px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .wk04-rail {
+      position: absolute;
+      top: 30.5cqh;
+      left: 40.5cqw;
+      z-index: 6;
+      width: 4cqw;
+      height: 42cqh;
+      pointer-events: none;
+    }
+
+    .wk04-rail-spine {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px;
+      height: 100%;
+      background: var(--wk04-cream-2);
+      transform: translateX(-1px);
+    }
+
+    .wk04-stitch {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0.62cqw;
+      height: 2.8cqh;
+      border: 2px solid var(--wk04-sage);
+      border-radius: 3px;
+      background: var(--wk04-cream);
+      transform-origin: 50% 50%;
+      will-change: transform, opacity;
+    }
+
+    .wk04-copy-column {
+      position: absolute;
+      top: 22.5cqh;
+      left: 51.5cqw;
+      z-index: 8;
+      width: 41cqw;
+      height: 59cqh;
+    }
+
+    .wk04-draft-label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding-top: 1.05cqw;
+      border-top: 2px solid var(--wk04-coral);
+      color: var(--wk04-plum);
+      font-family: "JetBrains Mono";
+      font-size: 1.35cqw;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      line-height: 1.1;
+      text-transform: uppercase;
+      transform-origin: 0 50%;
+    }
+
+    .wk04-limit {
+      position: absolute;
+      top: 14.2cqh;
+      left: -0.2cqw;
+      width: 100%;
+      min-height: 14cqh;
+      color: var(--wk04-plum);
+      font-family: "LINE Seed Sans KR";
+      font-size: 7.3cqw;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 0.92;
+      transform-origin: 0 50%;
+      white-space: nowrap;
+    }
+
+    .wk04-limit-circle {
+      position: absolute;
+      top: 14.3cqh;
+      left: -1.1cqw;
+      z-index: 9;
+      width: 23cqw;
+      height: 13cqh;
+      overflow: visible;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .wk04-limit-circle path {
+      fill: none;
+      stroke: var(--wk04-coral);
+      stroke-width: 2.5px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .wk04-rule-copy {
+      position: absolute;
+      top: 39.2cqh;
+      left: 0;
+      width: 38cqw;
+      color: var(--wk04-ink);
+      font-family: "LINE Seed Sans KR";
+      font-size: 1.56cqw;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.18;
+      transform-origin: 0 50%;
+    }
+
+    .wk04-rule-copy span {
+      display: block;
+    }
+
+    .wk04-check {
+      position: absolute;
+      top: 54.2cqh;
+      left: -0.1cqw;
+      width: 3.2cqw;
+      height: 3.2cqw;
+      overflow: visible;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .wk04-check path {
+      fill: none;
+      stroke: var(--wk04-sage);
+      stroke-width: 5px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+
+  <div data-hf-id="hf-n3m2" id="root" data-composition-id="04-seven-is-a-limit" data-width="1920" data-height="1080" data-duration="9.5">
+    <div data-hf-id="hf-c3dq" class="clip wk04-background" data-start="0" data-duration="9.5" data-track-index="0" aria-hidden="true"></div>
+
+    <div data-hf-id="hf-edpn" id="wk04-topbar" class="clip wk04-topbar" data-start="0" data-duration="9.5" data-track-index="1">
+      <span data-hf-id="hf-z4or">Review / limit</span>
+      <span data-hf-id="hf-89qa" class="wk04-topbar-count">04</span>
+    </div>
+
+    <div data-hf-id="hf-y53r" id="wk04-surface-back" class="clip wk04-surface-back" data-start="0" data-duration="9.5" data-track-index="2" aria-hidden="true"></div>
+
+    <div data-hf-id="hf-56d2" id="wk04-surface-mid" class="clip wk04-surface-mid" data-start="0" data-duration="9.5" data-track-index="3" aria-hidden="true"></div>
+
+    <figure data-hf-id="hf-gpnh" id="wk04-phone-surface" class="clip wk04-phone-surface" data-start="0" data-duration="9.5" data-track-index="4">
+      <img data-hf-id="hf-d3su" class="wk04-review-image" src="assets/02-review.jpg" alt="Weekkeep review surface showing a seven-photo draft and the save action">
+    </figure>
+
+    <div data-hf-id="hf-uz5l" id="wk04-rail" class="clip wk04-rail" data-start="1.9" data-duration="7.6" data-track-index="5" aria-hidden="true">
+      <div data-hf-id="hf-om5x" class="wk04-rail-spine"></div>
+      <span data-hf-id="hf-6gcj" class="wk04-stitch" data-target-x="0" data-target-y="-200"></span>
+      <span data-hf-id="hf-u91u" class="wk04-stitch" data-target-x="0" data-target-y="-133"></span>
+      <span data-hf-id="hf-k1w3" class="wk04-stitch" data-target-x="0" data-target-y="-66"></span>
+      <span data-hf-id="hf-dmpy" class="wk04-stitch" data-target-x="0" data-target-y="0"></span>
+      <span data-hf-id="hf-76im" class="wk04-stitch" data-target-x="0" data-target-y="66"></span>
+      <span data-hf-id="hf-ag09" class="wk04-stitch" data-target-x="0" data-target-y="133"></span>
+      <span data-hf-id="hf-72fg" class="wk04-stitch" data-target-x="0" data-target-y="200"></span>
+    </div>
+
+    <svg data-hf-id="hf-8lcl" id="wk04-grid-focus" class="clip wk04-grid-focus" data-start="2" data-duration="7.5" data-track-index="6" viewBox="0 0 392 400" preserveAspectRatio="none" aria-hidden="true">
+      <path data-hf-id="hf-jwjr" id="wk04-grid-focus-path" d="M 18 4 H 374 Q 388 4 388 18 V 382 Q 388 396 374 396 H 18 Q 4 396 4 382 V 18 Q 4 4 18 4 Z" />
+    </svg>
+
+    <div data-hf-id="hf-z2rr" class="wk04-copy-column">
+      <div data-hf-id="hf-5ynm" id="wk04-draft-label" class="clip wk04-draft-label" data-start="0.45" data-duration="9.05" data-track-index="7">
+        Draft prepared
+      </div>
+
+      <div data-hf-id="hf-dgs4" id="wk04-limit" class="clip wk04-limit" data-start="4.15" data-duration="5.35" data-track-index="8">
+        7
+      </div>
+
+      <svg data-hf-id="hf-oc1c" id="wk04-limit-circle" class="clip wk04-limit-circle" data-start="5.35" data-duration="4.15" data-track-index="9" viewBox="0 0 536 140" preserveAspectRatio="none" aria-hidden="true">
+        <path data-hf-id="hf-o3jc" id="wk04-limit-circle-path" d="M 28 70 C 28 28 115 8 238 10 C 362 12 452 29 454 67 C 456 106 370 128 240 130 C 111 131 29 111 28 70 Z" />
+      </svg>
+
+      <div data-hf-id="hf-2n41" id="wk04-rule-copy" class="clip wk04-rule-copy" data-start="6.55" data-duration="2.95" data-track-index="10">
+        <span data-hf-id="hf-r4g9">Fewer usable photos →</span>
+        <span data-hf-id="hf-fkjv">fewer shown</span>
+      </div>
+
+      <svg data-hf-id="hf-yj01" id="wk04-check" class="clip wk04-check" data-start="7.55" data-duration="1.95" data-track-index="11" viewBox="0 0 80 80" aria-hidden="true">
+        <path data-hf-id="hf-huow" id="wk04-check-path" d="M 13 42 L 31 60 L 68 19" />
+      </svg>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (() => {
+      const frameId = "04-seven-is-a-limit";
+      const root = document.querySelector('[data-composition-id="04-seven-is-a-limit"]');
+      if (!root || !window.gsap) return;
+
+      const tl = window.gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines[frameId] = tl;
+
+      const gridFocusPath = root.querySelector("#wk04-grid-focus-path");
+      const limitCirclePath = root.querySelector("#wk04-limit-circle-path");
+      const checkPath = root.querySelector("#wk04-check-path");
+
+      [gridFocusPath, limitCirclePath, checkPath].forEach((path) => {
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = `${length}`;
+        path.style.strokeDashoffset = `${length}`;
+      });
+
+      tl.fromTo(
+        root.querySelector("#wk04-topbar"),
+        { y: -14, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.42, ease: "power3.out" },
+        0.04,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk04-surface-back"),
+        { y: 28, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.72, ease: "power3.out" },
+        0,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk04-surface-mid"),
+        { y: 22, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.72, ease: "power3.out" },
+        0.05,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk04-phone-surface"),
+        { y: 32, scale: 0.988, opacity: 0.08 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.76, ease: "power3.out" },
+        0.08,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk04-draft-label"),
+        { y: 14, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" },
+        0.52,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk04-rail"),
+        { opacity: 0 },
+        { opacity: 1, duration: 0.36, ease: "power1.out" },
+        2.05,
+      );
+
+      tl.to(
+        gridFocusPath,
+        { strokeDashoffset: 0, duration: 1.12, ease: "power2.out" },
+        2.12,
+      );
+
+      root.querySelectorAll(".wk04-stitch").forEach((stitch, index) => {
+        tl.fromTo(
+          stitch,
+          {
+            xPercent: -50,
+            yPercent: -50,
+            x: 0,
+            y: 0,
+            scale: 0.6,
+            opacity: 0,
+          },
+          {
+            x: Number(stitch.dataset.targetX),
+            y: Number(stitch.dataset.targetY),
+            scale: 1,
+            opacity: 1,
+            duration: 1.3,
+            ease: "power3.out",
+          },
+          2.35 + index * 0.16,
+        );
+      });
+
+      const limitText = root.querySelector("#wk04-limit");
+      const limitStates = [
+        { t: 4.15, text: "7" },
+        { t: 4.68, text: "UP" },
+        { t: 4.94, text: "UP TO" },
+        { t: 5.28, text: "UP TO 7" },
+      ];
+      const limitDriver = { t: 4.15 };
+      const setLimitState = (time) => {
+        for (let i = limitStates.length - 1; i >= 0; i -= 1) {
+          if (time >= limitStates[i].t) {
+            limitText.textContent = limitStates[i].text;
+            return;
+          }
+        }
+      };
+      setLimitState(4.15);
+
+      tl.fromTo(
+        limitText,
+        { y: 16, scale: 0.96, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.42, ease: "power3.out" },
+        4.15,
+      );
+
+      tl.to(
+        limitDriver,
+        {
+          t: 5.75,
+          duration: 1.6,
+          ease: "none",
+          onUpdate: () => setLimitState(limitDriver.t),
+        },
+        4.15,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk04-limit-circle"),
+        { opacity: 0 },
+        { opacity: 1, duration: 0.2, ease: "power1.out" },
+        5.34,
+      );
+
+      tl.to(
+        limitCirclePath,
+        { strokeDashoffset: 0, duration: 0.72, ease: "power2.out" },
+        5.44,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk04-rule-copy"),
+        { y: 18, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
+        6.62,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk04-check"),
+        { y: 10, scale: 0.84, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.42, ease: "power3.out" },
+        7.47,
+      );
+
+      tl.to(
+        checkPath,
+        { strokeDashoffset: 0, duration: 0.62, ease: "power2.out" },
+        7.62,
+      );
+    })();
+  </script>
+</template>

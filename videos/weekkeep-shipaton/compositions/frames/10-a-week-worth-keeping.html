@@ -1,0 +1,343 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Rg.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Bd.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 700;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "LINESeedSansKR-Bold";
+      src: url("assets/fonts/LINESeedKR-Bd.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 700;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "JetBrains Mono";
+      src: url("assets/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    #root {
+      --cream: #FBF7F2;
+      --cream-2: #E8E1DB;
+      --plum: #5B415E;
+      --gold: #E5A84B;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      isolation: isolate;
+      color: var(--plum);
+      font-family: "LINE Seed Sans KR", sans-serif;
+    }
+
+    .frame-10-a-week-worth-keeping-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: var(--cream);
+    }
+
+    .frame-10-a-week-worth-keeping-stage {
+      position: absolute;
+      top: 29.31cqh;
+      left: 50%;
+      width: 50cqw;
+      height: 16.6667cqw;
+      margin-left: -25cqw;
+      z-index: 2;
+      overflow: visible;
+    }
+
+    .frame-10-a-week-worth-keeping-burst {
+      position: absolute;
+      top: 69.8333%;
+      left: 0;
+      width: 100%;
+      height: 5cqw;
+      margin-top: -2.5cqw;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .frame-10-a-week-worth-keeping-pair {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 3.8cqw;
+      height: 5cqw;
+      transform-origin: 50% 50%;
+      pointer-events: none;
+    }
+
+    .frame-10-a-week-worth-keeping-stitch {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 3cqw;
+      height: 0.94445cqw;
+      margin-top: -0.472225cqw;
+      margin-left: -1.5cqw;
+      border-radius: 999px;
+    }
+
+    .frame-10-a-week-worth-keeping-tick {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 3.6cqw;
+      height: 2px;
+      margin-top: 1.35cqw;
+      margin-left: -1.8cqw;
+      background: var(--cream-2);
+      opacity: 0;
+      transform-origin: 50% 50%;
+    }
+
+    .frame-10-a-week-worth-keeping-coral {
+      background: #E97A68;
+    }
+
+    .frame-10-a-week-worth-keeping-orange {
+      background: #E39455;
+    }
+
+    .frame-10-a-week-worth-keeping-gold {
+      background: #E5A84B;
+    }
+
+    .frame-10-a-week-worth-keeping-sage {
+      background: #66836E;
+    }
+
+    .frame-10-a-week-worth-keeping-blue {
+      background: #5F879B;
+    }
+
+    .frame-10-a-week-worth-keeping-indigo {
+      background: #686286;
+    }
+
+    .frame-10-a-week-worth-keeping-violet {
+      background: #8A6386;
+    }
+
+    .frame-10-a-week-worth-keeping-lockup {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      display: block;
+      opacity: 0;
+      transform-origin: 50% 50%;
+      pointer-events: none;
+    }
+
+    .frame-10-a-week-worth-keeping-lockup img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .frame-10-a-week-worth-keeping-tagline {
+      position: absolute;
+      top: 65.5cqh;
+      left: 50%;
+      width: 70cqw;
+      height: 9cqh;
+      margin-left: -35cqw;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--plum);
+      font-family: "LINE Seed Sans KR", sans-serif;
+      font-size: 4.4cqw;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      white-space: nowrap;
+      opacity: 0;
+      clip-path: inset(0 100% 0 0);
+    }
+
+    .frame-10-a-week-worth-keeping-tagline-copy {
+      position: relative;
+      display: inline-flex;
+      align-items: baseline;
+    }
+
+    .frame-10-a-week-worth-keeping-tagline-keeping {
+      position: relative;
+      display: inline-block;
+    }
+
+    .frame-10-a-week-worth-keeping-underline {
+      position: absolute;
+      right: 0;
+      bottom: -0.17em;
+      left: 0;
+      height: 2px;
+      background: var(--gold);
+      opacity: 0;
+      transform-origin: 0 50%;
+    }
+  </style>
+
+  <div data-hf-id="hf-vwtv" id="root" data-composition-id="10-a-week-worth-keeping" data-width="1920" data-height="1080" data-duration="4.5">
+    <div data-hf-id="hf-8n4n" class="clip frame-10-a-week-worth-keeping-bg" data-start="0" data-duration="4.5" data-track-index="0" aria-hidden="true"></div>
+
+    <div data-hf-id="hf-wsvb" class="clip frame-10-a-week-worth-keeping-stage" data-start="0" data-duration="4.5" data-track-index="1" aria-hidden="true">
+      <div data-hf-id="hf-1q5e" class="frame-10-a-week-worth-keeping-burst">
+        <div data-hf-id="hf-2gol" class="frame-10-a-week-worth-keeping-pair" data-target-x="-224">
+          <span data-hf-id="hf-cgid" class="frame-10-a-week-worth-keeping-stitch frame-10-a-week-worth-keeping-coral"></span>
+          <span data-hf-id="hf-bxsi" class="frame-10-a-week-worth-keeping-tick"></span>
+        </div>
+        <div data-hf-id="hf-wlel" class="frame-10-a-week-worth-keeping-pair" data-target-x="-149.3333">
+          <span data-hf-id="hf-n2k4" class="frame-10-a-week-worth-keeping-stitch frame-10-a-week-worth-keeping-orange"></span>
+          <span data-hf-id="hf-8q3a" class="frame-10-a-week-worth-keeping-tick"></span>
+        </div>
+        <div data-hf-id="hf-dvt1" class="frame-10-a-week-worth-keeping-pair" data-target-x="-74.6667">
+          <span data-hf-id="hf-usco" class="frame-10-a-week-worth-keeping-stitch frame-10-a-week-worth-keeping-gold"></span>
+          <span data-hf-id="hf-94eb" class="frame-10-a-week-worth-keeping-tick"></span>
+        </div>
+        <div data-hf-id="hf-yp6m" class="frame-10-a-week-worth-keeping-pair" data-target-x="0">
+          <span data-hf-id="hf-nny6" class="frame-10-a-week-worth-keeping-stitch frame-10-a-week-worth-keeping-sage"></span>
+          <span data-hf-id="hf-9ipc" class="frame-10-a-week-worth-keeping-tick"></span>
+        </div>
+        <div data-hf-id="hf-jv1u" class="frame-10-a-week-worth-keeping-pair" data-target-x="74.6667">
+          <span data-hf-id="hf-hyqu" class="frame-10-a-week-worth-keeping-stitch frame-10-a-week-worth-keeping-blue"></span>
+          <span data-hf-id="hf-6qk5" class="frame-10-a-week-worth-keeping-tick"></span>
+        </div>
+        <div data-hf-id="hf-fooc" class="frame-10-a-week-worth-keeping-pair" data-target-x="149.3333">
+          <span data-hf-id="hf-r4j0" class="frame-10-a-week-worth-keeping-stitch frame-10-a-week-worth-keeping-indigo"></span>
+          <span data-hf-id="hf-74v6" class="frame-10-a-week-worth-keeping-tick"></span>
+        </div>
+        <div data-hf-id="hf-9n26" class="frame-10-a-week-worth-keeping-pair" data-target-x="224">
+          <span data-hf-id="hf-rx7r" class="frame-10-a-week-worth-keeping-stitch frame-10-a-week-worth-keeping-violet"></span>
+          <span data-hf-id="hf-7j67" class="frame-10-a-week-worth-keeping-tick"></span>
+        </div>
+      </div>
+
+      <div data-hf-id="hf-tpfi" class="frame-10-a-week-worth-keeping-lockup">
+        <img data-hf-id="hf-nllm" src="assets/weekkeep-lockup.svg" alt="Weekkeep brand lockup">
+      </div>
+    </div>
+
+    <div data-hf-id="hf-f248" id="frame-10-a-week-worth-keeping-tagline" class="clip frame-10-a-week-worth-keeping-tagline" data-start="2.85" data-duration="1.65" data-track-index="5">
+      <div data-hf-id="hf-5mho" class="frame-10-a-week-worth-keeping-tagline-copy">
+        <span data-hf-id="hf-drb0">A week worth&#160;</span>
+        <span data-hf-id="hf-kuws" class="frame-10-a-week-worth-keeping-tagline-keeping">
+          keeping.
+          <span data-hf-id="hf-w9qo" id="frame-10-a-week-worth-keeping-underline" class="frame-10-a-week-worth-keeping-underline" aria-hidden="true"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script>
+    window.__timelines = window.__timelines || {};
+    const frame10AWeekWorthKeepingTimeline = gsap.timeline({ paused: true });
+    window.__timelines["10-a-week-worth-keeping"] = frame10AWeekWorthKeepingTimeline;
+
+    const frame10AWeekWorthKeepingPairs = gsap.utils.toArray(
+      ".frame-10-a-week-worth-keeping-pair",
+    );
+
+    frame10AWeekWorthKeepingPairs.forEach((pair, index) => {
+      const landingAt = 0.08 + index * 0.11;
+      const targetX = Number(pair.dataset.targetX);
+      const tick = pair.querySelector(".frame-10-a-week-worth-keeping-tick");
+
+      frame10AWeekWorthKeepingTimeline.fromTo(
+        pair,
+        {
+          xPercent: -50,
+          yPercent: -50,
+          x: 0,
+          y: 0,
+          scale: 0.35,
+          opacity: 0,
+        },
+        {
+          x: targetX,
+          y: 0,
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power3.out",
+        },
+        landingAt,
+      );
+
+      frame10AWeekWorthKeepingTimeline.fromTo(
+        tick,
+        { scaleX: 0.2, opacity: 0 },
+        { scaleX: 1, opacity: 0.62, duration: 0.2, ease: "power2.out" },
+        landingAt + 0.37,
+      );
+    });
+
+    frame10AWeekWorthKeepingTimeline.to(
+      frame10AWeekWorthKeepingPairs,
+      {
+        x: 0,
+        scale: 0.55,
+        opacity: 0.12,
+        duration: 0.48,
+        ease: "power2.in",
+        stagger: 0.01,
+      },
+      1.4,
+    );
+
+    frame10AWeekWorthKeepingTimeline.to(
+      ".frame-10-a-week-worth-keeping-tick",
+      { opacity: 0, duration: 0.24, ease: "power2.in" },
+      1.4,
+    );
+
+    frame10AWeekWorthKeepingTimeline.fromTo(
+      ".frame-10-a-week-worth-keeping-lockup",
+      { scale: 0.72, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.68, ease: "power3.out" },
+      1.55,
+    );
+
+    frame10AWeekWorthKeepingTimeline.fromTo(
+      "#frame-10-a-week-worth-keeping-tagline",
+      { clipPath: "inset(0 100% 0 0)", opacity: 0 },
+      {
+        clipPath: "inset(0 0% 0 0)",
+        opacity: 1,
+        duration: 0.78,
+        ease: "power2.out",
+      },
+      2.9,
+    );
+
+    frame10AWeekWorthKeepingTimeline.fromTo(
+      "#frame-10-a-week-worth-keeping-underline",
+      { scaleX: 0, opacity: 0 },
+      { scaleX: 1, opacity: 1, duration: 0.36, ease: "power2.out" },
+      3.83,
+    );
+  </script>
+</template>

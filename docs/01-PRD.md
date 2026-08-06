@@ -56,6 +56,7 @@
 | `GOAL-03` | 자동 선택에 대한 신뢰와 통제감을 만든다 | 초기 7장 중 평균 5장 이상 유지 |
 | `GOAL-04` | 가족 사진 제품에 필요한 프라이버시 신뢰를 만든다 | 사진 데이터 외부 전송 0건, 관련 P0/P1 결함 0건 |
 | `GOAL-05` | 실제 결제가 가능한 공개 앱을 출시한다 | RevenueCat 구매/복원 포함 미국 App Store 공개 |
+| `GOAL-06` | 저장 결과를 공유하고 싶은 제품 보상으로 만든다 | Weekkeep attribution이 포함된 Story/Post 제공, 측정 가능한 첫 두 cohort에서 Save Confirmation의 저장→공유창 열기 25%를 초기 가설로 검증; 출시 전 gate나 실제 공유 완료율로 오해하지 않음 |
 
 ### V1 비목표
 
@@ -64,7 +65,8 @@
 - 자동 캡션, 일기 작성, 성장 마일스톤 추론
 - 가족 공동 편집 및 초대
 - CloudKit/서버 동기화, 계정 생성
-- 앱 삭제 후 복원, 새 기기 이전, 주간 기록 자동 백업·내보내기
+- 앱 삭제 후 복원, 새 기기 이전, 주간 기록 자동 백업
+- 계정·사회적 피드·댓글·좋아요·가족 초대·클라우드 업로드·서버 렌더링
 - Android, iPad 전용 레이아웃, 웹 앱
 - Dark Mode 전용 UI·색상 token·QA
 - 월간·연간 회고, 위젯, 포토북 주문
@@ -115,7 +117,8 @@
 4. 최대 14장 중 최대 7장을 초안으로 먼저 보여줍니다.
 5. 사용자는 초안을 그대로 승인하거나 마음에 들지 않는 사진만 보통 0–2장 교체합니다.
 6. 저장하면 `Weeks` 보관함에 주차별로 쌓입니다.
-7. 다음 월요일 20:30에 로컬 알림으로 다시 돌아오며, 다음 일요일까지 완료할 수 있습니다.
+7. 저장 직후 실제 사진으로 만든 Weekkeep Story/Post 이미지를 기기에서 준비하고, 사용자가 원할 때 native share sheet로 공유합니다.
+8. 다음 월요일 20:30에 로컬 알림으로 다시 돌아오며, 다음 일요일까지 완료할 수 있습니다.
 
 ### 첫 경험과 반복 경험
 
@@ -133,7 +136,8 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 | 사진 접근 | 전체/제한/거부 상태 지원 | 가족 공유 보관함 최적화 |
 | 분석 | 미학 품질, 얼굴 품질 보조, 중복, 시간 다양성 | 사용자별 선호 학습 |
 | 선택 | 초기 최대 7장 + 교체 후보 최대 7장 | 수동 전체 사진 탐색 |
-| 기록 | 현재 앱 설치의 로컬 저장, 주별 목록/상세, 보존 한계 안내 | 백업, 기기 이전, 캡션, 공유, 내보내기 |
+| 기록 | 현재 앱 설치의 로컬 저장, 주별 목록/상세, 보존 한계 안내 | 백업, 기기 이전, 캡션 |
+| 공유 보상 | 저장된 실제 사진의 on-device Story 9:16/Post 4:5 렌더링과 native share sheet | social feed, comments, likes, account, cloud upload |
 | 재방문 | 월요일 20:30 로컬 알림, 7일 완료 창 | OneSignal 기반 캠페인 |
 | 결제 | RevenueCat 평생 이용권/복원 | 구독 실험 |
 | 측정 | 익명 행동 이벤트 | 세분화된 리텐션 메시지 |
@@ -162,7 +166,8 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 
 - `.authorized`: 접근 가능한 전체 라이브러리 사용
 - `.limited`: 선택된 사진만으로 동작하고 제한 상태 배지와 관리 진입점 표시
-- `.denied`/`.restricted`: 설정 이동 방법과 재시도 제공
+- `.denied`: 설정 이동 방법과 재시도 제공
+- `.restricted`: 기기·보호자·조직 정책 설명만 제공하며 Settings/manage CTA를 제공하지 않음
 - `.notDetermined`: 사전 설명 후 시스템 요청
 
 수용 기준:
@@ -188,7 +193,8 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 - 이미지 자산만 포함합니다. 동영상, 스크린샷, 숨김 항목은 V1 후보에서 제외합니다.
 - Welcome Week는 과거 7일보다 오래된 사진으로 부족분을 채우지 않습니다.
 - Regular Week도 다른 주의 사진으로 부족분을 채우지 않습니다.
-- 접근 가능한 사진이 100장을 넘으면 일자별 샘플링으로 분석 상한을 100장으로 제한합니다.
+- 접근 가능한 descriptor는 최대 500개까지 metadata scan할 수 있습니다.
+- deterministic metadata prefilter가 local calendar day와 4시간 time bucket coverage를 먼저 확보한 뒤 최대 21개(7일×3개)만 Vision에 전달합니다. favorite와 resolution은 coverage 이후 tie-breaker입니다.
 
 ### 기기 내 분석과 제안
 
@@ -197,6 +203,8 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 - 분석은 Apple Photos/Vision 기반으로 기기에서 수행합니다.
 - 원본, 썸네일, 임베딩, Photos local identifier를 서버나 분석 SDK에 전송하지 않습니다.
 - iCloud 원본 다운로드가 필요한 경우 진행 상태와 네트워크 대기를 표시합니다.
+- analysis image는 약 416px의 fast PhotoKit representation을 사용하며 display/share image 품질 경로와 분리합니다.
+- per-asset 약 1.5초 timeout과 약 12초 global foreground budget을 적용합니다. 일부 사진을 처리하지 못해도 실제 성공 사진만으로 partial result를 만들고, fake photo나 백그라운드 완료 주장은 하지 않습니다.
 
 #### `FR-007` 최대 7장 초기 선택
 
@@ -230,6 +238,10 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 - 저장할 때 최종 사진 set을 촬영 시간순으로 정규화하며 cover의 visual hero 배치는 별도 metadata로 유지합니다.
 - 취소하면 원래 선택을 유지합니다.
 - 이미 선택된 사진을 중복으로 고를 수 없습니다.
+- replacement sheet의 첫 상태는 display timezone 기준으로 선택 사진과 같은 calendar day의 미사용 후보만 보여줍니다.
+- same-day 후보가 없으면 따뜻한 empty explanation과 '다른 날 사진 보기' opt-in을 제공합니다. same-day 후보가 있어도 다른 날 보기 disclosure는 명시적 secondary action으로만 제공합니다.
+- opt-in 뒤의 후보는 날짜별 heading/group으로 구분하고 다른 날짜를 조용히 섞지 않습니다.
+- 분석 결과가 허용하면 selected calendar day마다 미사용 강한 alternative를 bounded shortlist에 먼저 보존합니다.
 
 #### `FR-011` 초안 취소와 재시도
 
@@ -242,6 +254,15 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 - 같은 `weekKey`를 다시 저장하면 새 앨범을 삽입하지 않고 기존 기록을 갱신합니다.
 - 저장 성공 뒤에만 무료 사용 횟수를 증가시킵니다.
 - 저장 도중 앱이 종료되어도 중복·부분 기록을 남기지 않습니다.
+
+#### `FR-023` 저장 결과를 로컬 공유 이미지로 보상
+
+- 저장 성공 뒤 Save Confirmation의 primary action은 local share preparation입니다. 기존 archive detail에서도 같은 action을 다시 시작할 수 있습니다.
+- Story format은 정확히 1080×1920 (9:16), Post format은 정확히 1080×1350 (4:5)입니다.
+- renderer는 saved album의 실제 PhotoKit display images를 사용하고 warm paper background, canonical wordmark, exact seven muted stitch palette, date range, seven-photo hero+2+4 또는 실제 장수 adaptive layout, 'Made with Weekkeep' signature를 포함합니다.
+- child/family name, filename, location, photo identifier, score, analytics data, fake content와 hard-coded public install URL은 넣지 않습니다. V1 이미지에는 공개 설치 URL도 그리지 않으며, 실제 App Store URL을 share payload에 추가하는 일은 URL이 공개된 뒤 별도 승인·검증합니다.
+- renderer는 temporary local file을 만든 뒤 사용자가 명시적으로 누른 native share sheet에 전달합니다. 업로드, 계정, backend, CloudKit, server rendering, in-app social feed/comments/likes는 없습니다.
+- 준비 UI는 loading, retry/error, Story/Post format selection, preview, VoiceOver label, local-only privacy copy를 제공합니다. external destination/recipient는 analytics에 기록하지 않습니다.
 
 ### 보관함과 회복
 
@@ -333,12 +354,12 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 | ID | 요구사항 | 목표/수용 기준 |
 |---|---|---|
 | `NFR-001` | Privacy | 사진 관련 데이터 외부 전송 0, session replay off |
-| `NFR-002` | Performance | 30장 분석 p50 ≤60초, 50장 p50 ≤90초, 100장 p95 ≤180초 (초기 가설) |
+| `NFR-002` | Performance | design target: descriptor metadata scan ≤500개, Vision candidate ≤21개(7일×3개), analysis thumbnail 384–448px(현재 416px), per-asset timeout 약 1.5초, global foreground budget 약 12초. 실기기 측정 전이므로 verified metric/SLA가 아님 |
 | `NFR-003` | Accessibility | LINE Seed semantic scaling, Dynamic Type, VoiceOver direct custom action, Reduce Motion, 색만으로 상태 전달 금지, 44pt 최소 터치 영역 |
 | `NFR-004` | Offline core | 로컬 사진이 내려받아져 있다면 분석·검토·저장은 오프라인 가능 |
 | `NFR-005` | Reliability | 동일 주차 중복 0, 저장 원자성, crash-free sessions ≥99.5% 목표 |
 | `NFR-006` | Concurrency | Swift 6 strict concurrency 경고 0, UI 상태는 MainActor에서 변경 |
-| `NFR-007` | Battery/thermal | 분석 동시 작업 수 제한, 512–768px 분석 입력, 원본 전체 해상도 분석 금지 |
+| `NFR-007` | Battery/thermal | 분석 동시 작업 수 제한, 384–448px fast analysis 입력, display/share path와 분리, 원본 전체 해상도 분석 금지 |
 | `NFR-008` | Maintainability | 외부 SDK를 protocol adapter 뒤에 격리, 핵심 큐레이션은 순수 Swift 테스트 가능 |
 | `NFR-009` | App size | 불필요한 ML 모델·중복 SDK 없이 다운로드 크기 관리 |
 | `NFR-010` | Localization | 사용자 노출 문자열 하드코딩 금지, 한국어/영어 길이 검증 |
@@ -381,6 +402,7 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 | 분석 완료 | `EVT-curation_completed` | duration_bucket, selected_count |
 | 사진 교체 | `EVT-photo_replaced` | replacement_index, no photo ID |
 | 기록 저장 | `EVT-album_saved` | album_kind, regular_sequence_bucket(`w1`/`w2`/`w3_plus`), selected_count, replacement_count, active_review_duration_bucket |
+| 공유창 열기 | `EVT-share_sheet_opened` | format(story/post), entry_point(save_confirmation/archive_detail); destination/recipient/completion 없음 |
 | 알림 선택 | `EVT-notification_permission_resolved` | status |
 | paywall 표시 | `EVT-paywall_viewed` | free_album_count |
 | 구매 결과 | `EVT-purchase_resolved` | result, product_type, localized_price_bucket optional |
@@ -395,12 +417,15 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 | 첫 저장 time-to-value 중앙값 | ≤2분 |
 | 반복 주 활성 검토 시간 중앙값 | ≤60초 |
 | 초기 선택 유지 | selected_count=7인 기록의 평균 ≥5/7; 전체는 `kept/selected` 비율 별도 보고 |
+| 저장 → 공유 의도 | Save Confirmation의 `share_sheet_opened / album_saved` ≥25% 초기 가설; Story/Post format mix 함께 확인 |
 | W2 eligible-week completion | ≥30% 방향 확인; Retention Pilot·출시 cohort 지표이며 출시 전 Usability Beta gate 아님 |
 | W4 eligible-week completion | 방향성과 이탈 이유 측정 |
 | 월요일 알림 → 해당 주 저장 | cohort별 측정, 베타 후 목표 설정 |
 | paywall → purchase | 4–5% 가설 |
 
 작은 베타 표본에서는 숫자를 성공 선언보다 문제 탐지에 사용합니다.
+
+공유 지표는 native share sheet가 열린 **의도**만 뜻합니다. iOS 외부 앱에서 실제 게시됐는지, 누구에게 보냈는지, 어느 채널을 선택했는지는 수집하거나 성공으로 추정하지 않습니다. `entry_point=save_confirmation`만 저장 직후 전환 가설에 사용하고 Archive 재공유는 별도로 봅니다. V1 Release의 analytics가 no-op인 동안에는 이 수치를 주장하지 않으며, consent와 privacy audit를 통과해 측정을 켠 첫 cohort부터 baseline을 만듭니다.
 
 W1/W2는 설치 후 단순 1·2주차가 아니라 Welcome 이후 첫 번째/두 번째 Regular Week입니다. Retention Pilot에서는 Welcome을 정해진 기한까지 저장한 참여자 roster를 denominator로 고정하고, 해당 완료 창이 닫힐 때까지 저장하지 않은 참여자도 미완료에 포함합니다. 앱을 다시 연 사람만 denominator로 잡지 않습니다.
 
@@ -419,7 +444,7 @@ DAU는 V1 핵심 지표가 아닙니다. Weekkeep의 건강성은 매일 여는 
 | `BR-007` | 영어 제출 | 제품 설명·데모 자막·스토어 카피 영어 준비 |
 | `BR-008` | 제출 마감 | 2026-10-01 15:45 KST 이전 제출 완료, 내부 마감은 72시간 전 |
 
-전략 카테고리는 `Build in Public`을 1순위, `Design`을 2순위로 제안합니다. OneSignal 카테고리는 핵심 제품이 안정된 뒤 별도 판단합니다.
+Shipaton 카테고리 우선순위, demo/submission evidence, Build in Public 전략은 [Shipaton Submission SSOT](11-SHIPATON-SUBMISSION.md)가 단일 소유합니다. 이 PRD는 위 `BR-001`–`BR-008` 요구사항을 유지하고, 제출 선택은 해당 문서를 참조합니다.
 
 ## 12. 의존성과 리스크
 
@@ -438,8 +463,9 @@ DAU는 V1 핵심 지표가 아닙니다. Weekkeep의 건강성은 매일 여는 
 
 ## 13. 출시 승인 조건
 
-- [ ] `FR-001`–`FR-022`의 P0 경로 구현 및 수용 테스트 통과
-- [ ] 모든 권한 상태와 사진 0/1/6/7/14/100장 fixture 검증
+- [ ] `FR-001`–`FR-023`의 P0 경로 구현 및 수용 테스트 통과
+- [ ] 모든 권한 상태와 사진 0/1/6/7/14/21/35/100/500장 fixture 검증; 100 eligible input에서 Vision work ≤21을 증명
+- [ ] Story/Post local renderer의 dimension·metadata·privacy·partial-photo contract와 save/detail share-first UI 검증
 - [ ] 사진 데이터가 네트워크 요청 payload에 없음을 네트워크 검사로 확인
 - [ ] RevenueCat 구매, 취소, 실패, 대기, 복원 실기기 검증
 - [ ] VoiceOver, 가장 큰 접근성 텍스트, Reduce Motion 점검

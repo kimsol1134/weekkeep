@@ -40,6 +40,7 @@ Use `docs/07-DELIVERY-PLAN.md` for sequence and release gates. Follow the respon
 - Analysis runs in the foreground and must be cancellable. A notification is a reminder, not a claim that background analysis completed.
 - The current V1 visual baseline is App Screens V2: Light only, LINE Seed Sans KR, solid Plum CTA, hero+2+4 for seven photos, adaptive layouts for 1–6, and a code-rendered SevenStitchRail with exactly seven slots.
 - In Weekly Review, the first photo tap selects and reveals the replacement action; a second tap on the selected photo opens the viewer. VoiceOver must expose direct view and replace actions without requiring this sequence.
+- The final app icon and every in-app SevenStitchRail use exactly seven equal stitches ordered left-to-right red, orange, yellow, green, blue, indigo, violet in the `D-030` muted palette. Rail states preserve that order and communicate progress/selection through opacity and geometry. The current AppIcon asset is owner-supplied and must not be changed without explicit approval.
 
 ## Change control
 

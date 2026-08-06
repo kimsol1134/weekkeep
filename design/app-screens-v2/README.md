@@ -24,6 +24,7 @@ V2는 V1의 따뜻한 앨범 정서는 유지하면서, 부모의 실제 문제�
 - 마음에 들지 않는 사진만 선택해 교체합니다.
 - 사진은 광고 사진보다 실제 iPhone 카메라롤에 가까운 생활감을 가집니다.
 - 저장 순간 grid가 한 장의 Week album으로 정리되는 방향을 사용합니다.
+- 저장 직후 실제 사진으로 만든 로컬 Story/Post share artifact를 다음 보상으로 제공합니다.
 - 다크 모드는 V1 범위에 없습니다.
 
 ## 이 화면 세트의 권한
@@ -54,6 +55,7 @@ V2는 V1의 따뜻한 앨범 정서는 유지하면서, 부모의 실제 문제�
 | 04 | `SCR-WK-03` | `04-weekly-review.png` | 7장 초안 검토·선택 사진 교체 |
 | 05 | `SCR-WK-04` | `05-photo-viewer.png` | 1/7 확대·swipe·현재 사진 교체 |
 | 06 | `SCR-WK-05` | `06-save-confirmation.png` | 한 주가 앨범이 된 완료 보상 |
+| 06a | `SHEET-SHARE-01` | production share preparation sheet | Story/Post local share preview와 native share |
 | 07 | `SHEET-REP-01` | `07-replace-photo-sheet.png` | 현재 사진 맥락을 유지한 후보 선택 |
 | 08 | `SHEET-NOT-01` | `08-notification-primer.png` | 첫 저장 뒤 월요일 20:30 알림 제안 |
 | 09 | `SHEET-PAY-01` | `09-plus-paywall.png` | 두 주의 가치 회상·평생 이용권·현재 기기 열람 범위 |
@@ -84,7 +86,7 @@ V2는 V1의 따뜻한 앨범 정서는 유지하면서, 부모의 실제 문제�
 - `평생 이용권`은 Plus 기능의 상품 유형이며 기록의 영구 백업을 뜻하지 않습니다. paywall 개인정보 링크와 Settings에서 로컬 보존 한계를 확인할 수 있어야 합니다.
 - `사진 42장`은 ready fixture입니다. 실제 값은 접근 가능한 해당 기간 descriptor count를 사용하고 외부 analytics에는 bucket만 보냅니다.
 - archive는 기록이 12개 이상 쌓이기 전 year/month filter를 표시하지 않습니다.
-- week detail은 읽기 전용이며 V1에 공유·내보내기·편집·삭제가 없습니다.
+- week detail은 읽기 전용이며 local share만 제공합니다. social feed·댓글·좋아요·cloud upload·편집·삭제는 없습니다.
 - 실제 제출 사진은 사용 동의 또는 적절한 라이선스를 확인한 fixture로 교체합니다.
 - 권한·사진 0/1–6/누락·오류·Dynamic Type 상태는 이 happy-path 세트와 별도로 구현합니다.
 - Weekly Review의 첫 photo tap은 대상을 선택하고 `이 사진 바꾸기`를 노출합니다. 선택된 사진의 두 번째 tap은 viewer를 열며, VoiceOver custom action은 `크게 보기`와 `사진 교체`를 직접 제공합니다.

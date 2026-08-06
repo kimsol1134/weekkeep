@@ -14,7 +14,7 @@
 Weekkeep V1의 기술 목표는 ‘가장 많은 기능’이 아니라 다음 다섯 가지입니다.
 
 1. Photos 권한과 iCloud 상태가 달라도 데이터 손상 없이 동작할 것
-2. 100장 이하의 주간 사진을 기기에서 현실적인 시간 안에 분석할 것
+2. 최대 500개 descriptor를 저비용으로 훑고, deterministic prefilter 후 최대 21개(7일×3개)만 Vision에 보내 bounded foreground 분석을 할 것
 3. 같은 주의 기록을 절대 중복 생성하지 않을 것
 4. 사진 관련 데이터가 외부 SDK와 네트워크 경계를 넘지 않을 것
 5. 완료된 주만 대상으로 하며 반복 주의 활성 검토를 60초 안에 끝낼 수 있을 것
@@ -42,7 +42,7 @@ Weekkeep V1의 기술 목표는 ‘가장 많은 기능’이 아니라 다음 �
 | 기기 | iPhone only in V1 | `D-003` |
 | persistence | SwiftData, local-only configuration | `D-007` |
 | photos | PhotoKit / PhotosUI | — |
-| analysis | Vision + Core Image 보조 heuristic | `D-017` |
+| analysis | Vision aesthetics/feature print + bounded local fallback heuristic | `D-017` |
 | purchases | RevenueCat Purchases SDK | Shipaton `BR-002` |
 | notifications | UserNotifications local notification | `D-009` |
 | analytics | PostHog EU Cloud, anonymous explicit allowlist only | `D-018`, `D-019` |
@@ -70,6 +70,10 @@ ADR은 승인 상태를 소유하지 않습니다. 결정값과 현재 상태는
 | `ADR-010` | `D-020` | XcodeGen 2.46.0과 `project.yml`을 고정하고 generated `.xcodeproj`를 git에서 제외; local·CI가 동일 명령으로 생성 |
 | `ADR-011` | `D-021`, `D-022` | 저장 용량과 사진 중복을 줄이는 대신 Photos 삭제·앱 삭제·기기 변경에 영향 받음 |
 | `ADR-012` | `D-024`, `D-026`–`D-029` | App Screens V2를 Light-only SwiftUI token/component로 구현하고 review gesture를 명시적 state로 모델링 |
+| `ADR-013` | `D-032` | metadata scan과 Vision work를 분리하고 local-day/time-bucket coverage, 21 cap, fast thumbnail, per-asset/global budget을 pipeline contract로 고정 |
+| `ADR-014` | `D-033` | replacement 후보를 same-day first로 분리하고 명시적 other-day opt-in과 selected-day alternative retention을 domain/UI adapter에 반영 |
+| `ADR-015` | `D-034` | saved PhotoKit images를 on-device renderer로 Story/Post temporary artifact로 만들고 native share sheet에만 전달; social/cloud/server 경계는 추가하지 않음 |
+| `ADR-016` | `D-035` | approved fixture image resource를 소비하는 focused `FixturePhotoStory` SwiftUI component가 onboarding vertical binding과 Ready/Plus compact rail variant의 geometry를 공유한다. Plus routing은 기존 `WeeklySheet.paywall` item을 `fullScreenCover(item:)`로 표시하고 notification/replacement sheet state와 같은 enum을 필터링해 별도 boolean modal state를 만들지 않는다. web/OG는 같은 fixture source와 flat geometry를 deterministic tooling으로 소비한다 |
 
 ## 5. 시스템 컨텍스트
 
@@ -136,6 +140,7 @@ weekkeep/
 │   │   │   └── WeekkeepTypography.swift
 │   │   └── Components/
 │   │       ├── SevenStitchRail.swift
+│   │       ├── WeekkeepTabIcon.swift
 │   │       └── WeeklyPhotoGrid.swift
 │   └── Resources/
 ├── WeekkeepTests/
@@ -156,12 +161,17 @@ weekkeep/
 
 - app target의 appearance를 Light로 고정하고 semantic color resolver에 Dark variant를 만들지 않습니다.
 - `LINESeedKR-Rg.ttf`와 `LINESeedKR-Bd.ttf`를 bundle resource 및 `UIAppFonts`에 등록하고 PostScript name smoke test를 둡니다.
-- `SevenStitchRail`은 public input과 무관하게 `stitchCount == 7`을 유지하며 progress는 `0...7`로 clamp합니다.
-- 7-photo grid는 semantic photo order와 visual placement를 분리해 hero+2+4를 렌더링하고, 44pt target·지원 폭 조건을 만족하지 못하면 2-column layout을 선택합니다.
+- `design/brand/weekkeep-wordmark.png`는 `Assets.xcassets` image set으로 byte-preserving bundle하고 `WeekkeepWordmark`가 exact image resource를 렌더링합니다. Text approximation, tint, AppIcon substitution은 허용하지 않습니다.
+- `SevenStitchRail`은 public input과 무관하게 `stitchCount == 7`을 유지하며 progress는 `0...7`로 clamp합니다. 모든 slot은 index별 D-030 muted rainbow를 유지하고 filled/unfilled, selected, progress, muted state는 opacity와 기존 geometry로 구분합니다. TabView는 `ThisWeekTabIcon`, `WeeksTabIcon`, `SettingsTabIcon`의 세 original-rendering vector asset을 사용하고, 각 asset은 고유한 Plum semantic silhouette만 가지며 bottom tab bar에는 decorative rainbow stitch를 렌더링하지 않습니다.
+- onboarding/Ready/Plus explanatory preview는 `design/fixtures/app-store-family-moments/01...07` PNG를 seven named image sets로 bundle하고, 하나의 `FixturePhotoStory` component 안에서 onboarding vertical binding 또는 compact exact-seven rail과 hero+2+4 geometry를 공유합니다. faux-content bar, overlapping card-stack fallback, gradient/SF Symbol fake-photo art는 포함하지 않습니다. 이 이미지는 정적 product preview일 뿐 Photos user content나 analytics/vendor payload가 아닙니다.
+- Weekly Review는 기존 header/date rows를 하나의 compact semantic header cluster로 구성하고, 7-photo grid는 semantic photo order와 visual placement를 분리해 full-width 16:10 hero+2+4를 8pt token gap으로 렌더링합니다. 44pt target·지원 폭 조건을 만족하지 못하면 하단 adaptive layout을 2-column으로 선택합니다.
+- Onboarding, This Week, Weekly Review, Archive, Plus, share, and custom Settings roots use the shared `WeekkeepScreenLayout` contract: 20pt horizontal content edges above 375pt and 16pt at or below 375pt. Weekly Review keeps its local hierarchy explicit through `WeeklyReviewSpacing` (32pt header→editorial, 12pt title/body, 32pt editorial/body→media, 8pt photo gutter, 16pt helper/privacy, 24pt primary action); share preparation keeps picker/control internals native and uses a 24pt picker→content boundary through `WeeklyAlbumShareSpacing`.
+- review의 save action은 safe-area inset이나 overlay dock이 아니라 complete grid와 helper/replacement action, PrivacyBadge 뒤의 normal scroll content에 배치합니다. PrivacyBadge는 tinted container 없이 factual local-only inline note이며, SevenStitchRail은 일곱 개의 독립 stitch와 추가 선 없는 geometry로 렌더링합니다.
+- iOS 26의 hosted tab route가 ScrollView content를 status region 아래로 underlap할 수 있으므로 RootView는 pure `WeekkeepSystemSafeAreaResolver`를 runtime-first로 호출하고, runtime 값이 모두 0일 때만 active scene/RootView portrait geometry fallback을 사용해 `WeekkeepSystemSafeArea` environment boundary를 주입합니다. `WeeklyReviewView`는 이 boundary와 local proxy safe-area만 소비해 동일한 Cream surface를 unsafe 영역까지 offset한 non-interactive occluder로 사용합니다. visible inset bar/divider/dock은 추가하지 않으며, 72pt real scroll runway가 lower-action state를 editorial whole-or-occluded boundary와 함께 안정시키도록 합니다.
 - review의 `selectedIndex: Int?`와 modal destination은 서로 독립된 명시적 state입니다. 첫 photo intent는 선택, 같은 선택 photo의 다음 intent는 viewer, replace intent는 그 index의 sheet로 reducer가 결정합니다.
 - VoiceOver의 `크게 보기`·`사진 교체` custom action은 tap count에 의존하지 않고 index를 destination에 직접 전달합니다.
 - replacement는 draft의 selected set에서 한 element만 교체하고 review presentation index를 유지합니다. persistence upsert 직전에 최종 set을 촬영 시간순으로 정규화하고 cover metadata를 별도로 저장합니다.
-- replacement는 crossfade + light selection haptic, save는 grid-to-album matched geometry를 사용합니다. Reduce Motion에서는 둘 다 0.2초 opacity transition으로 대체합니다.
+- replacement는 crossfade + light selection haptic을 사용합니다. save confirmation은 최종 사진을 60–80ms 간격으로 순차 reveal하며 약 1초 안에 끝납니다. Reduce Motion에서는 둘 다 짧은 opacity transition으로 대체합니다.
 
 ## 7. 런타임 구성
 
@@ -384,31 +394,34 @@ protocol PhotoLibraryClient: Sendable {
 - creationDate가 고정 range 안에 있는 자산
 - hidden 제외
 - screenshot subtype 제외
-- creationDate 오름차순 fetch 후 sampling 단계 전달
+- creationDate 오름차순 fetch 결과가 500개 이하면 모두 전달하고, 500개를 넘으면 첫 500개에 치우치지 않도록 전체 chronological index range에서 최대 500개를 균등 추출한 뒤 sampling 단계에 전달
 - limited 권한에서는 접근 가능한 결과만 사용
 - 접근 자산 수를 analytics에 보낼 때는 bucket(`0`, `1-6`, `7-14`, `15-30`, `31-50`, `51-100`, `100+`)만 사용
 
-### 100장 상한 sampling
+### Metadata prefilter와 21개 Vision cap
 
-1. 날짜별 자산 그룹을 만듭니다.
-2. 각 날짜에 최소 quota 1장을 우선 배정합니다.
-3. 남은 quota를 날짜별 자산 비율에 따라 배분합니다.
-4. 각 날짜 안에서는 favorites와 해상도 조건을 약한 prior로 사용하되 시간 구간을 분산합니다.
-5. seed를 `weekKey`에서 파생해 같은 자산 집합의 결과를 재현 가능하게 합니다.
+1. PhotoKit descriptor fetch는 요청된 날짜 범위와 permission scope 안에서 최대 500개까지 수행합니다.
+2. eligible descriptor를 사용자의 display timezone 기준 local calendar day로 묶고, 각 day 안을 4시간 time bucket으로 나눕니다.
+3. day와 time bucket coverage를 먼저 round-robin으로 확보합니다. 같은 bucket 안에서만 favorite와 pixel area를 약한 tie-breaker로 사용하고, 마지막은 capturedAt와 local ID의 stable order로 결정합니다.
+4. `weekKey` seed는 day queue 시작 offset에만 사용합니다. 같은 week/input은 같은 결과를 내며, input 순서가 달라도 stable chronological output을 냅니다.
+5. 이 prefilter 결과는 최대 21개입니다. 100 eligible descriptors를 넣어도 Vision request는 21개를 넘지 않습니다. 7일 각각에서 최대 3개씩 확보해 선택 7장, same-day 교체 후보, 품질 여유를 함께 유지합니다.
+
+`MetadataCandidatePrefilter.descriptorScanLimit == 500`과 `maximumVisionCandidates == 21`을 source/test contract로 고정합니다. 이 문서의 21 cap은 Vision work의 설계 상한이며 실기기 처리 시간을 측정했다는 뜻이 아닙니다.
 
 ### iCloud Photos
 
-- analysis용 이미지는 512–768px target으로 `networkAccessAllowed`를 켜 요청합니다.
-- degraded preview는 화면용으로 사용할 수 있지만 최종 분석에는 final image 결과를 우선합니다.
-- 요청 ID를 추적해 task cancel 시 Photos request도 취소합니다.
-- download progress를 aggregate하여 UI에 전달하되 asset ID는 log하지 않습니다.
+- analysis용 이미지는 384–448px 범위의 fast PhotoKit representation(현재 target 416px)으로 `networkAccessAllowed`를 켜 요청합니다.
+- display/share 요청은 별도의 opportunistic high-quality path를 유지하며 analysis thumbnail 최적화가 사용자-facing image quality를 바꾸지 않습니다.
+- 요청 ID를 추적해 task cancel 시 Photos request도 취소하고, analysis의 첫 fast representation을 채택한 뒤 남은 PhotoKit delivery도 즉시 취소해 불필요한 후속 작업을 남기지 않습니다.
+- `PhotoLibraryClient`는 PhotoKit callback을 노출하지 않는 좁은 adapter로 유지합니다. 분석 orchestration의 `PhotoRequestProgressAggregator`가 각 candidate의 `analysisImage` 요청이 성공·실패·timeout·utility skip 중 하나로 해소될 때 1개 request를 완료로 집계해 UI에 전달합니다. 따라서 이 값은 iCloud byte/download progress가 아니라 `resolved photo requests / total sampled requests`인 truthful aggregate progress이며, asset ID와 vendor payload는 포함하지 않습니다.
+- aggregator는 `[0, 1]` 안에서 단조 증가하고, 새 분석 시작 시 reset되며, 취소 시 0/0으로 정리됩니다. 남은 작업의 명시적 skip/timeout도 orchestration에서 완료로 해소한 뒤 partial draft를 만들므로 가짜 소수점 정밀도를 주장하지 않습니다.
 - Wi-Fi만 강제하지 않습니다. 사용자가 취소할 수 있어야 합니다.
 
 ## 11. On-device Analysis Pipeline
 
 ```mermaid
 flowchart LR
-    F["Fetch eligible descriptors"] --> S["Sample to max 100"]
+    F["Fetch descriptors max 500"] --> S["Metadata prefilter max 21"]
     S --> T["Request downsampled images"]
     T --> Q["Quality & utility features"]
     Q --> D["Near-duplicate grouping"]
@@ -416,6 +429,13 @@ flowchart LR
     R --> M["Diversity selection"]
     M --> O["7 selected + up to 7 alternatives"]
 ```
+
+### Bounded foreground analysis
+
+- pipeline은 foreground actor에서만 실행되고 caller cancellation이 fetch, PhotoKit request, Vision task, ranking까지 전파됩니다.
+- 각 candidate는 per-asset timeout(현재 1.5초 design target)을 가집니다. slow/iCloud asset 하나가 전체 주를 붙잡지 않습니다.
+- per-asset wait은 약 1.5초, global foreground budget은 약 12초 design target입니다. deadline에 도달하면 남은 sampled candidates를 skipped로 표시하고 실제 성공 candidates로 partial draft를 만들며, 모두 실패하면 기존 recoverable error를 사용합니다.
+- progress는 `overallCompleted/overallTotal`로 prefilter부터 skipped work까지 단조 증가합니다. 현재 구현의 aggregate 단위는 `resolved photo requests / total sampled requests`이며, Vision 완료 수·iCloud byte 수·다운로드 속도를 의미한다고 과장하지 않습니다.
 
 ### 단계별 책임
 
@@ -429,17 +449,18 @@ flowchart LR
 #### B. Quality feature extraction
 
 - Vision image aesthetics overall score
-- face detection/capture quality는 **사진 품질 보조**로만 사용
-- 노출/blur/해상도 heuristic
+- `CalculateImageAestheticsScoresRequest`의 iOS 18 overall score를 `[-1, 1] → [0, 1]`로 정규화하고, 일시적인 Vision model/context 오류에는 `VNCalculateImageAestheticsScoresRequest`와 bounded neutral prior를 순서대로 사용
+- face rectangle count에서 얻는 bounded composition prior는 **사진 품질 보조**로만 사용하며 사람을 식별하지 않음
+- 32×32 downsampled contrast heuristic; descriptor resolution fitness is applied in ranking
 - favorite는 매우 작은 positive prior
 - 위치, 연락처, 사람 이름은 사용하지 않음
 
 #### C. Near-duplicate grouping
 
 - Vision image feature print 거리로 시각 유사도 계산
-- 촬영 시간 인접성을 함께 사용해 burst/연속 촬영을 묶음
+- feature print 비교 상태는 현재 weekly shortlist 안에서만 유지하고 매 분석 세션 시작 시 초기화해 과거 주와 비교하거나 비용이 누적되지 않게 함
 - threshold는 fixture dataset으로 보정하고 remote에서 임의 변경하지 않음
-- 각 그룹에서 quality 상위 1장을 대표로 두고 나머지는 alternative 후보가 될 수 있음
+- 이미 선택된 유사 그룹에는 diversity penalty를 주며, 남은 후보는 같은 날짜 교체용 alternative가 될 수 있음
 
 #### D. Diversity-aware selection
 
@@ -485,6 +506,18 @@ selectionValue(candidate) =
 - UI 표시 순서는 capturedAt 오름차순
 - cover는 selected 중 별도 quality top이지만 album photo order를 바꾸지 않음
 
+- alternatives는 가능한 경우 selected local calendar day마다 미사용 candidate를 하나 이상 우선 보존하고, 나머지는 stable score order로 최대 7개까지 채움
+- `replacementCandidates`의 default query는 display timezone same-day only이며, other-day candidates는 explicit opt-in state 이후에만 반환
+
+## 11.5 Local weekly album share
+
+- `WeeklyAlbumShareRenderer`는 `WeeklyAlbumSnapshot`과 PhotoKit `displayImage` value data를 받아 `UIImage`/Core Graphics로만 렌더링합니다. `PHAsset`은 renderer 경계를 넘지 않습니다.
+- Story는 정확히 1080×1920, Post는 정확히 1080×1350 canvas입니다. 7장은 hero+2+4 frame table, 1–6장은 실제 image count에 맞춘 adaptive frame table을 사용합니다.
+- canvas는 semantic Weekkeep palette로 warm paper, canonical wordmark, local date range, exact seven muted stitches, `Made with Weekkeep`를 그립니다. filename, location, Photos identifier, score, analytics data, child/family identity와 fake image는 draw input이 아닙니다.
+- renderer output은 temporary `WeekkeepShare` directory의 atomic file 1개에만 쓰고, 새 준비 시 강제 종료 등으로 남은 이전 artifact를 먼저 정리합니다. explicit share button 뒤 `UIActivityViewController`에 `UIActivityItemSource`를 전달해 localized generic title과 이미 렌더링한 artifact thumbnail을 native preview로 제공하며, 실제 item은 local file URL입니다. metadata에는 public URL을 넣지 않고 destination/recipient는 수집하지 않습니다.
+- V1 artifact에는 public install URL을 그리지 않습니다. 실제 App Store URL을 native share payload에 추가하는 변경은 URL 공개 뒤 별도 configuration·QA를 거칩니다. local share는 backup/import/export of app state가 아니라 user-triggered presentation artifact입니다.
+- Photos availability가 줄면 renderer는 실제 available images만으로 adaptive layout을 만들고, 모두 없으면 share preparation을 실패 상태로 표시합니다.
+
 ## 12. Concurrency와 메모리
 
 ### 격리 전략
@@ -500,7 +533,7 @@ selectionValue(candidate) =
 
 - `PHAsset`과 non-Sendable image 객체를 actor 밖으로 장기 전달하지 않습니다.
 - actor 경계에는 `PhotoID`, metadata value type, 필요한 경우 안전한 pixel buffer wrapper만 전달합니다.
-- `withTaskGroup` 분석 동시성은 기기 thermal/memory 측정 후 기본 2–3으로 제한합니다.
+- V1 candidate 분석은 예측 가능한 thermal/memory와 진행률을 위해 순차 실행합니다. 향후 동시성을 도입하더라도 실기기 측정과 Decision 변경 후 2–3개 이하로 제한합니다.
 - 한 번에 모든 full-resolution 이미지를 메모리에 올리지 않습니다.
 - 각 자산 분석 뒤 autorelease scope와 cache eviction을 고려합니다.
 - 취소는 fetch → image request → Vision task → ranking까지 cooperative하게 전파합니다.
@@ -552,7 +585,7 @@ save가 실패하면 analytics 성공 이벤트와 notification primer를 실행
 
 ### 보존과 복원 경계
 
-- `D-007`, `D-021`, `D-022`에 따라 V1은 CloudKit, 서버 backup, export/import, 앱 관리형 restore를 구현하지 않습니다.
+- `D-007`, `D-021`, `D-022`에 따라 V1은 CloudKit, 서버 backup, 앱 상태 export/import, 앱 관리형 restore를 구현하지 않습니다. `D-034`의 user-triggered share artifact는 이 보존 경계와 별개입니다.
 - schema migration은 **같은 앱 설치 안에서 업그레이드된 store**만 지원합니다. 앱 삭제 뒤 복원이나 새 기기 이전 계약이 아닙니다.
 - iOS의 기기 backup 또는 전송이 앱 데이터를 옮기는 경우가 있더라도 Weekkeep 제품 기능으로 성공을 보장하지 않습니다. 복원된 `localIdentifier`는 모두 다시 availability 검증합니다.
 - 원본 사진이 Photos에 남아 있어도 저장했던 선택과 순서를 자동 추론·재생성하지 않습니다.
@@ -612,6 +645,7 @@ canReadSavedAlbum = true
 - RevenueCat이 제공하는 cached CustomerInfo를 우선 사용하고 상태를 `active/inactive/unknown`으로 구분합니다.
 - `unknown`이면 과거에 확인한 active 사용자를 즉시 잠그지 않는 정책을 보수적으로 검토합니다.
 - purchase 성공은 transaction callback만이 아니라 active entitlement 확인으로 판정합니다.
+- restore 성공은 paywall 안에서 먼저 acknowledged 상태로 유지하고, Continue action의 source-of-truth entitlement 재확인에서 `active`일 때만 dismiss/resume합니다. `inactive/unknown`이면 target을 unlock하지 않고 pending 상태를 유지합니다.
 
 ### 테스트
 
@@ -620,20 +654,24 @@ canReadSavedAlbum = true
 - App Store sandbox에서 실제 purchase/cancel/pending/restore
 - TestFlight production configuration smoke test
 - restore 성공 전후 `AlbumStore` mutation 0 검증
+- paywall restore acknowledged → active confirmation Continue와 inactive/unknown non-unlock 경로 검증
 - 빈 새 설치에서 Plus 복원 후에도 과거 `WeeklyAlbum`을 생성하지 않으며 보존 한계 안내가 보이는지 검증
 
 ## 15. Notification Integration
 
 ### Baseline
 
-UserNotifications의 local notification만 사용합니다.
+UserNotifications의 local notification만 사용합니다. Settings는 `SettingsNotificationPresentation`이라는 순수 policy로 notification status × saved album count를 결정하며, count가 0이거나 아직 count를 확인하지 못한 경우 `.none` action을 반환합니다.
 
-- 첫 album 저장 후 contextual primer
+- 첫 album 저장 후 contextual primer; 저장 성공 직후 authorization status를 다시 확인해 `notDetermined`일 때만 primer를 제안하며, 이미 결정되었거나 primer를 본 상태에서는 제안하지 않음
+- Settings에서 저장 기록이 0개이면 permission request와 system settings 이동을 모두 막고, 설명형 disabled/informational row만 렌더링
+- Settings에서 저장 기록이 1개 이상이면 `notDetermined`만 request, `authorized`/`provisional`/`denied`/`ephemeral`은 system settings 이동
+- model action은 policy가 `.none`이면 notification client의 request를 호출하지 않음; 저장 기록 count는 reminder scheduling의 전제
 - primer copy: `매주 월요일 저녁에 알려드릴까요?`
 - 사용자 승인 뒤 향후 12주 월요일 20:30을 `weeklyReminder.{targetWeekKey}` 식별자의 one-off calendar trigger로 예약
 - 민감정보 없고 background 완료를 주장하지 않는 copy: `지난주를 1분 만에 남겨볼까요?`
 - deep link: `weekkeep://weekly/current`
-- foreground에서 authorization/status 재조회
+- foreground에서 authorization/status 재조회; primer accept 시에도 status를 재확인해 이미 결정된 상태에서 두 번째 system request를 만들지 않음
 - foreground, 저장 성공, significant time change에서 12주 rolling schedule을 다시 계산
 - 알림의 `targetWeekKey`는 직전 완료된 월–일 주이며, 알림 전 이미 저장됐다면 해당 pending request를 제거하고 다음 주 알림은 유지
 - `targetWeekStart < regularCycleStartsAt`인 알림은 예약하지 않아 Welcome Week 직후 중복 기록을 유도하지 않음
@@ -691,6 +729,7 @@ protocol AnalyticsClient: Sendable {
 - 분석 진행, 저장 처리, 알림에서 앱을 열기 전 시간은 제외합니다.
 - 원시 초 단위 값은 외부로 보내지 않고 `under_30s`, `30_60s`, `60_120s`, `over_120s` bucket을 `EVT-album_saved.active_review_duration_bucket`으로 보냅니다.
 - `EVT-album_saved.regular_sequence_bucket`은 target `weekStart`와 `regularCycleStartsAt`의 캘린더 주 차이로 `w1`, `w2`, `w3_plus`를 계산합니다. 저장 횟수나 앱 재실행 횟수로 계산하지 않으며 Welcome은 `not_applicable`입니다.
+- `EVT-share_sheet_opened`는 local artifact가 준비된 뒤 native share sheet를 여는 명시적 탭에서 한 presentation당 한 번만 기록합니다. 허용 값은 `format=story|post`, `entry_point=save_confirmation|archive_detail`뿐이며 외부 destination, recipient, completion은 관찰하거나 추정하지 않습니다.
 
 ### Event privacy compile-time rule
 
@@ -729,7 +768,7 @@ enum WeekkeepError: Error, Sendable {
 
 | Domain error | 사용자 분류 | retry | 로그 수준 |
 |---|---|---|---|
-| denied/restricted | blocking external state | Settings/policy | info |
+| denied/restricted | blocking external state | denied: Settings / restricted: policy explanation only | info |
 | individual asset unavailable | partial | continue | debug/info |
 | iCloud network | recoverable | retry/partial | notice |
 | Vision asset failure | partial internal | automatic skip | debug aggregate |
@@ -765,7 +804,7 @@ vendor error 원문은 release UI에 직접 표시하지 않습니다. 진단 �
 - App Store Privacy Nutrition Label을 실제 event schema와 맞춤
 - `NSPhotoLibraryUsageDescription` 한국어/영어 문구 검수
 - SwiftData store에 iOS Data Protection 적용 여부를 release QA에서 확인
-- debug export가 있다면 release build에서 compile-out; V1에는 사용자 사진 진단 export 없음
+- 사용자 사진 진단 export는 release build에서 compile-out합니다. 사용자 명시적 local share artifact만 `D-034`에 따라 허용하며, debug payload나 private metadata를 추가하지 않습니다.
 
 ### 권한 목적 문자열 초안
 
@@ -800,7 +839,7 @@ vendor error 원문은 release UI에 직접 표시하지 않습니다. 진단 �
 | WeekRangeCalculator | 연말, DST, 시간대 변경, Monday eligibility window, latest-only, Welcome → regular |
 | WeekRootStateReducer | pending/permission/error/welcome/waiting/saved/0-photo/locked/ready 조합의 단일 상태와 우선순위 |
 | WeeklyReview interaction reducer | nil→선택, 다른 index→선택 이동, 같은 index 재탭→viewer, direct replace/view action, save와 선택 독립 |
-| CandidateSampler | 0/1/6/7/14/100/500장, 날짜 균형, deterministic seed |
+| CandidateSampler / MetadataCandidatePrefilter | 0/1/6/7/14/21/35/100/500장, local-day·time-bucket coverage, favorite/resolution tie-breaker, deterministic seed, maximum Vision 21 |
 | CurationEngine | under-7, duplicate group, no-face photos, order, disjoint alternatives |
 | AlbumValidator | duplicate asset, invalid position, empty selection, >7 |
 | AlbumStore | insert/update, double tap race, rollback, count derivation |
@@ -812,6 +851,9 @@ vendor error 원문은 release UI에 직접 표시하지 않습니다. 진단 �
 
 - in-memory SwiftData container + AlbumStore
 - fixture image set + Vision pipeline golden result tolerance
+- fake PhotoLibrary/SignalAnalyzer로 100 descriptor → ≤21 Vision call, 416px target, monotonic progress, per-asset timeout, global budget partial draft
+- CurationDraft replacement same-day default, explicit other-day opt-in, selected-day alternative retention
+- WeeklyAlbumShareRenderer synthetic image contract: Story/Post dimensions, adaptive frame count, nonempty output, no photo identifiers/private metadata, temporary file cleanup
 - fake Photos library states full/limited/denied/restricted
 - iCloud partial failure와 cancellation
 - RevenueCat adapter contract fake
@@ -826,7 +868,7 @@ vendor error 원문은 release UI에 직접 표시하지 않습니다. 진단 �
 - viewer swipe 뒤 dismiss 시 마지막 current index가 review selectedIndex로 반영
 - VoiceOver direct view/replace action은 선택 sequence 없이 정확한 index로 이동
 - replacement one slot only
-- grid-to-album matched geometry와 Reduce Motion fade
+- save confirmation 60–80ms 순차 reveal과 Reduce Motion 단일 fade
 - double save tap
 - archive missing asset placeholder
 - third album paywall → success resume
@@ -834,6 +876,8 @@ vendor error 원문은 release UI에 직접 표시하지 않습니다. 진단 �
 - restore success/no purchase
 - 새 설치 Plus restore 전후 WeeklyAlbum mutation 0 + local durability copy
 - largest Dynamic Type + Korean/English
+- save confirmation share-first reward, share loading/retry/format/preview/accessibility, archive detail share entry
+- replacement same-day-only disclosure and explicit other-day opt-in; external share sheet is not sent in UI tests
 
 ### Manual/device tests
 
@@ -850,14 +894,15 @@ vendor error 원문은 release UI에 직접 표시하지 않습니다. 진단 �
 | 구간 | 초기 목표 | 실패 대응 |
 |---|---|---|
 | cold launch to shell | p50 <1.5s | SDK lazy init 검토 |
-| Photos descriptor fetch ≤100 | p50 <1s local | fetch predicate/index 점검 |
-| 30장 end-to-end analysis | p50 ≤60s | target size/concurrency 조정 |
-| 50장 end-to-end analysis | p50 ≤90s | sampling/feature 단계 profiling |
-| 100장 end-to-end analysis | p95 ≤180s | hard cap, thermal/memory backoff |
+| Photos descriptor fetch ≤500 | design target: local metadata scan | fetch predicate/index 점검 |
+| Vision candidate work | hard cap ≤21 per week | prefilter contract/test failure blocks release |
+| analysis thumbnail | 384–448px, current 416px design target | PhotoKit delivery path 점검 |
+| per-asset analysis wait | current design target ≤1.5s | skip asset, show partial result |
+| global foreground analysis | current design target ≈12s | stop remaining work, show partial result |
 | album save | p95 <500ms | relationship batch/update 검토 |
 | archive initial render | p95 <1s for 100 albums | pagination/thumbnail caching |
 
-성능 budget은 실기기 fixture로 다시 기준선을 잡습니다. iCloud 다운로드 시간은 별도 측정하고 Vision compute SLA와 섞지 않습니다.
+위 값은 구현 design target이며 현재 verified device metric이 아닙니다. 실기기 fixture로 baseline을 다시 잡고 기록하기 전까지 SLA나 measured performance로 표현하지 않습니다. iCloud 다운로드 시간은 별도 측정하고 Vision compute budget과 섞지 않습니다.
 
 ## 22. Build, Configuration, CI
 
@@ -885,7 +930,8 @@ Owner: Engineering — Kim Sol + Codex. Local bootstrap과 GitHub Actions가 같
 5. selected UI smoke tests
 6. localization key consistency
 7. analytics schema privacy test
-8. archive build on release branch
+8. `scripts/validate-release.sh` metadata/privacy/icon/config gate
+9. archive build on release branch
 
 ## 23. Feature Flags
 
@@ -934,7 +980,7 @@ Owner: Engineering — Kim Sol + Codex. Local bootstrap과 GitHub Actions가 같
 | T0 | 문서 승인, Decision dependencies 승인 | 구현 Gate `Open` 0, 공개 conflict 0 |
 | T1 | project shell, design tokens, navigation | clean build/test |
 | T2 | permissions, WeekRangeCalculator, fake library | 상태 matrix test |
-| T3 | PhotoKit + Vision pipeline | fixture/성능 baseline |
+| T3 | PhotoKit + Vision pipeline | fixture contract, cancellation/partial behavior, and later device baseline |
 | T4 | review/replace/save | P0 core UI tests |
 | T5 | archive/missing asset recovery | persistence tests |
 | T6 | RevenueCat/paywall/restore | sandbox end-to-end |
@@ -946,7 +992,7 @@ Owner: Engineering — Kim Sol + Codex. Local bootstrap과 GitHub Actions가 같
 
 ### Go
 
-- 50장 fixture에서 실기기 중앙값 90초 이내
+- metadata scan ≤500, deterministic Vision candidate cap ≤21, fast analysis thumbnail and bounded partial behavior pass their contract tests; device timing remains an explicit verification gap until measured
 - 선택/교체/저장 P0 경로 안정
 - 동일 weekKey 중복 저장 재현 0
 - limited/denied/iCloud partial 흐름 완결
@@ -955,7 +1001,7 @@ Owner: Engineering — Kim Sol + Codex. Local bootstrap과 GitHub Actions가 같
 
 ### Scope reduction trigger
 
-- Vision pipeline이 100장 p95 180초를 지속 초과하면 입력 상한을 60장으로 낮춤
+- Do not raise the ≤21 Vision cap to address slow devices. Use the per-asset/global budget and partial-result path; record any measured device result before changing scope through the Decision Registry.
 - face quality가 bias/불안정성을 만들면 aesthetics+dedupe+time diversity만 유지
 - custom mosaic가 Dynamic Type/VoiceOver를 지연시키면 단순 adaptive grid로 출시
 - PostHog privacy audit가 실패하거나 늦으면 provider를 no-op으로 출시하고 event 계약은 유지

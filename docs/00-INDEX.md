@@ -21,6 +21,7 @@
 - AI가 결정을 빼앗지 않고 첫 선택을 대신 준비한다.
 - 사용자는 7장을 확인하고 마음에 들지 않는 사진만 교체한다.
 - 사진은 가능한 한 기기 안에서만 처리한다.
+- 저장 후 실제 사진으로 만든 로컬 공유 이미지를 명시적 사용자 행동으로 내보내 한 주의 결과를 보상한다.
 - 매주 작은 기록 하나가 쌓이는 경험에만 집중한다.
 
 ### 핵심 지표
@@ -42,6 +43,9 @@
 | [Design Guide](05-DESIGN-GUIDE.md) | 시각 token, component 표현, motion, 접근성·copy 표현 규칙 | 제품 범위, 내비게이션, 제스처의 상태 결과, 일정 |
 | [Traceability](06-TRACEABILITY.md) | ID 연결, 검증 항목, Gate의 파생 판정 | 새로운 결정값 |
 | [Delivery Plan](07-DELIVERY-PLAN.md) | 일정, 담당, 단계별 증거와 출시 운영 | 제품·기술 계약의 재정의 |
+| [App Privacy Label](09-APP-PRIVACY-LABEL.md) | App Store Connect privacy 답변, SDK manifest와 실제 collection의 release matrix | 제품 기능 범위와 SDK 기술 선택 |
+| [App Store Metadata](10-APP-STORE-METADATA.md) | App Store 이름·설명·키워드·URL·IAP metadata·review notes | 제품 범위, 가격, privacy 답변의 재정의 |
+| [Shipaton Submission](11-SHIPATON-SUBMISSION.md) | Devpost copy, category 전략, demo, Build in Public, 제출 evidence | App Store metadata와 제품 결정의 재정의 |
 
 디자인 자료의 단일 진입점은 [Design SSOT](../design/README.md)이며, 위 기준 문서의 책임을 시각 자료에 매핑합니다.
 
@@ -114,6 +118,12 @@
 | `D-027` | V1 제품 글꼴은 LINE Seed Sans KR Regular/Bold 한 family를 사용 | `Approved` | Product+Design | 2026-08-05 | Design Guide, font resources, `GATE-10` |
 | `D-028` | Weekkeep의 7장 시그니처는 정확히 7개 slot의 code-rendered SevenStitchRail이며 생성 이미지가 count를 결정하지 않음 | `Approved` | Product+Design | 2026-08-05 | `CMP-12`, `GATE-10` |
 | `D-029` | Weekly Review에서 첫 photo tap은 대상을 선택하고 교체 action을 노출하며, 선택된 photo의 두 번째 tap은 viewer를 연다; 접근성 custom action은 두 행동을 직접 제공 | `Approved` | Product+Design | 2026-08-05 | `FR-009`, `FR-010`, `GATE-10` |
+| `D-030` | 앱 아이콘과 인앱 SevenStitchRail은 왼쪽부터 `#E97A68`, `#E39455`, `#E5A84B`, `#66836E`, `#5F879B`, `#686286`, `#8A6386`의 정확한 7색 muted rainbow를 index별로 사용한다. rail의 filled/unfilled, selected, progress, muted 의미는 같은 index 색의 opacity와 geometry로 표현하며 어떤 상태도 단색 rail로 접히지 않는다. 모든 visible stitch는 opacity floor `0.58`을 지킨다. TabView label은 `ThisWeekTabIcon`, `WeeksTabIcon`, `SettingsTabIcon` 세 original-rendering vector asset을 사용하며, 각 tab은 calendar/week·stacked album/pages·adjustment sliders의 고유한 Plum semantic silhouette만 렌더링한다. bottom tab bar에는 decorative seven-stitch signature를 렌더링하지 않는다. 이번 visual revision은 AppIcon source/master를 변경하지 않는다 | `Approved` | Product+Design | 2026-08-06 | Design Guide, IA, TRD, `TST-034`, `TST-043`, `BR-005`, `GATE-10` |
+| `D-031` | primary wordmark는 사용자가 제공한 canonical lowercase `weekkeep` wordmark asset의 Plum flat fill을 사용한다. `design/brand/weekkeep-wordmark.png`를 iOS image resource로 byte-preserving bundle하며 onboarding upper-left와 compact in-app header에서 wordmark-only로 사용한다. Onboarding keepsake preview는 wordmark 아래 하나의 warm paper/cream album card, vertical exact-seven binding, 일곱 fixture 사진을 사용하고 faux-content capsule bar나 overlapping card stack을 포함하지 않는다. exact-seven muted rainbow lockup은 외부 브랜드 surface에만 허용하고 AppIcon은 별도 asset contract를 따른다 | `Approved` | Product+Design | 2026-08-06 | Design Guide, Brand Assets, `TST-038`, `TST-043`, `GATE-10` |
+| `D-032` | metadata scan은 적격 descriptor를 최대 500개까지 읽되, Vision에 보내는 후보는 deterministic local-day/time-bucket prefilter로 최대 21개(7일×3개)로 제한한다. favorite·resolution은 coverage 이후의 tie-breaker이며 analysis thumbnail target은 384–448px 범위(현재 416px), per-asset/전체 foreground budget은 약 1.5초/12초다 | `Approved` | Product+Engineering | 2026-08-06 | `FR-005`, `NFR-002`, `ADR-013`, `GATE-12` |
+| `D-033` | Weekly Review replacement의 initial candidate set은 사용자의 display timezone에서 선택 사진과 같은 calendar day만 보여준다. same-day 후보가 없거나 사용자가 명시적으로 선택한 경우에만 다른 날짜를 명확히 그룹화해 보여주며, 분석 결과가 허용하면 selected day마다 미사용 강한 후보를 shortlist에 우선 보존한다 | `Approved` | Product+Design+Engineering | 2026-08-05 | `FR-010`, `ADR-014`, `GATE-13` |
+| `D-034` | 저장된 앨범은 실제 PhotoKit 이미지로 기기에서만 렌더링하는 두 local share format을 제공한다: Story `1080×1920` (9:16), Post `1080×1350` (4:5). native share sheet는 명시적 사용자 행동으로만 열며, V1에는 social feed·comments·likes·account·cloud upload·server rendering이 없다 | `Approved` | Product+Design+Engineering | 2026-08-05 | `FR-023`, `ADR-015`, `GATE-14` |
+| `D-035` | 설명용 photo-story surface는 승인된 일곱 개의 fictional fixture PNG만 공유하는 하나의 flat hero+2+4 mosaic vocabulary를 사용한다. onboarding은 vertical exact-seven binding, Ready와 Plus는 compact exact-seven rail을 사용하며, gradient/SF Symbol fake-photo art·겹친 카드·faux device chrome·abstract keepsake-cover는 production surface에서 금지한다. Plus는 item-driven full-screen surface로 표시해 sheet chrome을 만들지 않는다. website hero와 `og.png`도 같은 flat photo-story 방향을 따르며 canonical lowercase wordmark를 사용한다 | `Approved` | Product+Design+Engineering | 2026-08-06 | Design SSOT, `ADR-016`, `TST-045`, `GATE-10` |
 
 Registry 운영 규칙:
 
@@ -148,19 +158,20 @@ Registry 운영 규칙:
 | 교체 후보 / Alternatives | 초기 선택에 포함되지 않은 최대 7장 |
 | 큐레이션 초안 / Draft | 저장 전이며 앱 재실행 시 재생성 가능한 임시 선택 |
 | 저장 기록 / Saved Album | `weekKey` 기준으로 현재 앱 설치의 SwiftData에 저장된 주간 결과; 앱 관리형 백업·기기 간 복원을 뜻하지 않음 |
+| 로컬 공유 이미지 / Local Share Artifact | 저장된 실제 사진과 Weekkeep brand treatment를 기기에서 합성한 일회성 Story/Post 이미지; Photos 원본을 복제하거나 서버에 업로드하는 백업이 아님 |
 | 제한된 접근 / Limited Access | 사용자가 Photos에서 일부 사진만 허용한 상태 |
 | Plus | 무료 한도 이후 기록 생성을 해제하는 유료 entitlement |
 | W1/W2 eligible completion | Welcome 이후 첫 번째/두 번째 Regular Week의 완료 창 안에 해당 기록을 저장한 것; 설치 후 단순 1·2주차가 아님 |
 
-## 8. 지금 답하지 않아도 되는 질문
+## 8. V1 범위 밖에 남겨 둔 질문
 
 - V2에서 iCloud 동기화를 추가할 것인가?
-- 주간 기록을 이미지나 PDF로 내보낼 것인가?
 - 공동 부모/가족 공유를 지원할 것인가?
+- 로컬 share artifact를 넘어 공동 부모/가족 공유를 지원할 것인가?
 - 월간/연간 회고를 별도 상품 가치로 만들 것인가?
 - 장기적으로 구독 모델이 필요한가?
 
-위 질문은 V1 코드 구조의 확장성을 훼손하지 않는 선에서 보류하며, 현재 범위를 늘리는 근거로 사용하지 않습니다.
+V1의 로컬 이미지 export는 `D-034`로 확정된 핵심 loop입니다. 위 질문은 social network, recipient management, cloud sync 같은 범위 확장에 해당하므로 보류하며 현재 범위를 늘리는 근거로 사용하지 않습니다.
 
 ## 9. 승인 게이트
 

@@ -1,0 +1,420 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Rg.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Bd.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 700;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "JetBrains Mono";
+      src: url("assets/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    #root {
+      --wk03-cream: #fbf7f2;
+      --wk03-cream-2: #e8e1db;
+      --wk03-ink: #25212b;
+      --wk03-plum: #5b415e;
+      --wk03-sage: #537763;
+      container-type: size;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      perspective: 1700px;
+      color: var(--wk03-ink);
+      isolation: isolate;
+    }
+
+    #root,
+    #root * {
+      box-sizing: border-box;
+    }
+
+    .wk03-background {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: var(--wk03-cream);
+    }
+
+    .wk03-topbar {
+      position: absolute;
+      top: 5cqh;
+      left: 5cqw;
+      right: 5cqw;
+      z-index: 6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--wk03-plum);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1.35cqw;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .wk03-topbar-count {
+      color: var(--wk03-sage);
+    }
+
+    .wk03-title {
+      position: absolute;
+      top: 13.2cqh;
+      left: 5cqw;
+      right: 5cqw;
+      z-index: 4;
+      margin: 0;
+      color: var(--wk03-ink);
+      font-family: "LINE Seed Sans KR", sans-serif;
+      font-size: 5cqw;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 0.96;
+      text-align: center;
+      transform-origin: 50% 0%;
+    }
+
+    .wk03-title-rule {
+      position: absolute;
+      top: 25.9cqh;
+      left: 50%;
+      z-index: 4;
+      width: 6.25cqw;
+      height: 2px;
+      margin-left: -3.125cqw;
+      background: var(--wk03-sage);
+      transform-origin: 50% 50%;
+    }
+
+    .wk03-card-stage {
+      position: absolute;
+      top: 28.2cqh;
+      left: 24cqw;
+      z-index: 2;
+      display: flex;
+      width: 52cqw;
+      height: 50cqh;
+      gap: 8.3333cqw;
+      transform-style: preserve-3d;
+    }
+
+    .wk03-card {
+      position: relative;
+      flex: 0 0 21.8333cqw;
+      width: 21.8333cqw;
+      height: 46cqh;
+      margin: 0;
+      overflow: visible;
+      border: 2px solid var(--wk03-ink);
+      border-radius: 8px;
+      background: var(--wk03-cream);
+      transform-style: preserve-3d;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    .wk03-card::before,
+    .wk03-card::after {
+      position: absolute;
+      z-index: -1;
+      display: block;
+      border: 2px solid var(--wk03-ink);
+      border-radius: 8px;
+      content: "";
+      pointer-events: none;
+    }
+
+    .wk03-card::before {
+      inset: 0.75cqw -0.75cqw -0.75cqw 0.75cqw;
+      background: var(--wk03-cream-2);
+      transform: translateZ(-16px);
+    }
+
+    .wk03-card::after {
+      inset: 1.45cqw -1.45cqw -1.45cqw 1.45cqw;
+      background: var(--wk03-sage);
+      transform: translateZ(-30px);
+    }
+
+    .wk03-card-right::after {
+      background: var(--wk03-plum);
+    }
+
+    .wk03-card-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+
+    .wk03-card-left .wk03-card-image {
+      object-position: 50% 62%;
+    }
+
+    .wk03-card-right .wk03-card-image {
+      object-position: 50% 42%;
+    }
+
+    .wk03-sequence-label {
+      position: absolute;
+      top: 8cqh;
+      left: 50%;
+      z-index: 5;
+      box-sizing: border-box;
+      width: 14cqw;
+      min-height: 0;
+      margin-left: -7cqw;
+      padding: 0.5cqw 0.75cqw;
+      border: 2px solid var(--wk03-plum);
+      border-radius: 8px;
+      background: var(--wk03-cream);
+      color: var(--wk03-plum);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1cqw;
+      font-weight: 400;
+      letter-spacing: 0.09em;
+      line-height: 1.1;
+      text-align: center;
+      text-transform: uppercase;
+      transform-origin: 50% 50%;
+      white-space: nowrap;
+    }
+
+    .wk03-boundary {
+      position: absolute;
+      top: 30cqh;
+      left: 50%;
+      z-index: 3;
+      width: 2px;
+      height: 39cqh;
+      margin-left: -1px;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .wk03-boundary path {
+      fill: none;
+      stroke: var(--wk03-sage);
+      stroke-linecap: round;
+      stroke-width: 2;
+    }
+
+    .wk03-badge {
+      position: absolute;
+      z-index: 7;
+      min-height: 3.4cqw;
+      padding: 0.95cqw 1.25cqw 0.85cqw;
+      border: 2px solid var(--wk03-ink);
+      border-radius: 999px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1.15cqw;
+      font-weight: 400;
+      letter-spacing: 0.11em;
+      line-height: 1;
+      text-align: center;
+      text-transform: uppercase;
+      transform-origin: 50% 50%;
+      white-space: nowrap;
+    }
+
+    .wk03-badge-left {
+      top: 59.2cqh;
+      left: 43.8cqw;
+      width: 9.4cqw;
+      background: var(--wk03-sage);
+      color: var(--wk03-cream);
+    }
+
+    .wk03-badge-right {
+      top: 64.1cqh;
+      left: 52.2cqw;
+      width: 14.4cqw;
+      background: var(--wk03-plum);
+      color: var(--wk03-cream);
+    }
+
+    .wk03-bottom-line {
+      position: absolute;
+      top: 78.7cqh;
+      left: 50%;
+      z-index: 6;
+      width: 60cqw;
+      margin-left: -30cqw;
+      color: var(--wk03-ink);
+      font-family: "LINE Seed Sans KR", sans-serif;
+      font-size: 1.67cqw;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      text-align: center;
+      transform-origin: 50% 50%;
+    }
+  </style>
+
+  <div data-hf-id="hf-w6k5" id="root" data-composition-id="03-trust-before-access" data-width="1920" data-height="1080" data-duration="12">
+    <div data-hf-id="hf-jvwm" class="clip wk03-background" data-start="0" data-duration="12" data-track-index="0" aria-hidden="true"></div>
+
+    <div data-hf-id="hf-iyfn" class="clip wk03-topbar" data-start="0" data-duration="12" data-track-index="1" aria-hidden="true">
+      <span data-hf-id="hf-cs6e">Trust / access</span>
+      <span data-hf-id="hf-92re" class="wk03-topbar-count">03</span>
+    </div>
+
+    <h1 data-hf-id="hf-r2u6" id="wk03-title" class="clip wk03-title" data-start="0" data-duration="12" data-track-index="2">
+      Trust before access
+    </h1>
+
+    <div data-hf-id="hf-8b4j" id="wk03-title-rule" class="clip wk03-title-rule" data-start="0" data-duration="12" data-track-index="12" aria-hidden="true"></div>
+
+    <div data-hf-id="hf-xdn4" class="clip wk03-card-stage" data-start="0" data-duration="12" data-track-index="3" aria-hidden="true">
+      <figure data-hf-id="hf-hhve" id="wk03-card-left" class="clip wk03-card wk03-card-left" data-start="2.1" data-duration="9.9" data-track-index="4">
+        <img data-hf-id="hf-5uin" class="wk03-card-image" src="assets/10-privacy-primer.jpg" alt="Privacy explanation screen">
+      </figure>
+
+      <figure data-hf-id="hf-5dvk" id="wk03-card-right" class="clip wk03-card wk03-card-right" data-start="2.35" data-duration="9.65" data-track-index="5">
+        <img data-hf-id="hf-x1t9" class="wk03-card-image" src="assets/01-welcome.jpg" alt="Weekkeep welcome screen">
+      </figure>
+    </div>
+
+    <svg data-hf-id="hf-3u4q" id="wk03-boundary" class="clip wk03-boundary" data-start="5.3" data-duration="6.7" data-track-index="6" viewBox="0 0 2 420" preserveAspectRatio="none" aria-hidden="true">
+      <path data-hf-id="hf-2nho" id="wk03-boundary-path" d="M 1 8 L 1 412" />
+    </svg>
+
+    <div data-hf-id="hf-n15d" id="wk03-sequence-label" class="clip wk03-sequence-label" data-start="3.55" data-duration="8.45" data-track-index="7">
+      explain → request
+    </div>
+
+    <div data-hf-id="hf-0bmz" id="wk03-badge-left" class="clip wk03-badge wk03-badge-left" data-start="5.3" data-duration="6.7" data-track-index="8">
+      On device
+    </div>
+
+    <div data-hf-id="hf-5riu" id="wk03-badge-right" class="clip wk03-badge wk03-badge-right" data-start="5.65" data-duration="6.35" data-track-index="9">
+      No photo upload
+    </div>
+
+    <div data-hf-id="hf-ft53" id="wk03-bottom-line" class="clip wk03-bottom-line" data-start="8.5" data-duration="3.5" data-track-index="10">
+      Photo content + identifiers stay on this iPhone.
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (() => {
+      const frameId = "03-trust-before-access";
+      const root = document.querySelector('[data-composition-id="03-trust-before-access"]');
+      if (!root || !window.gsap) return;
+
+      const tl = window.gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines[frameId] = tl;
+
+      const boundaryPath = root.querySelector("#wk03-boundary-path");
+      const boundaryLength = boundaryPath.getTotalLength();
+      boundaryPath.style.strokeDasharray = `${boundaryLength}`;
+      boundaryPath.style.strokeDashoffset = `${boundaryLength}`;
+
+      tl.fromTo(
+        root.querySelector("#wk03-title"),
+        { y: -58, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.58, ease: "power3.out" },
+        0.05,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk03-title-rule"),
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.42, ease: "power2.out" },
+        0.55,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk03-card-left"),
+        { x: -360, rotateY: 20, scale: 0.88, opacity: 0 },
+        { x: 0, rotateY: 14, scale: 1, opacity: 1, duration: 0.96, ease: "power3.out" },
+        2.1,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk03-card-right"),
+        { x: 360, rotateY: -20, scale: 0.88, opacity: 0 },
+        { x: 0, rotateY: -14, scale: 1, opacity: 1, duration: 0.96, ease: "power3.out" },
+        2.35,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk03-sequence-label"),
+        { y: 10, scale: 0.94, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" },
+        3.55,
+      );
+
+      tl.to(
+        root.querySelector("#wk03-card-left"),
+        { y: -5, duration: 1.1, ease: "sine.inOut" },
+        5.35,
+      );
+
+      tl.to(
+        root.querySelector("#wk03-card-right"),
+        { y: 5, duration: 1.1, ease: "sine.inOut" },
+        5.35,
+      );
+
+      tl.to(
+        root.querySelector("#wk03-card-left"),
+        { y: 0, duration: 1.1, ease: "sine.inOut" },
+        6.45,
+      );
+
+      tl.to(
+        root.querySelector("#wk03-card-right"),
+        { y: 0, duration: 1.1, ease: "sine.inOut" },
+        6.45,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk03-badge-left"),
+        { y: 12, scale: 0, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.55, ease: "power3.out" },
+        5.3,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk03-badge-right"),
+        { y: 12, scale: 0, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 0.55, ease: "power3.out" },
+        5.65,
+      );
+
+      tl.to(
+        boundaryPath,
+        { strokeDashoffset: 0, duration: 0.78, ease: "power2.out" },
+        6.15,
+      );
+
+      tl.fromTo(
+        root.querySelector("#wk03-bottom-line"),
+        { y: 12, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.58, ease: "power2.out" },
+        8.92,
+      );
+    })();
+  </script>
+</template>

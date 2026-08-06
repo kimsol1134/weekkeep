@@ -1,0 +1,325 @@
+# Weekkeep — Shipaton 2026 Submission SSOT
+
+| 항목 | 값 |
+|---|---|
+| 기준일 | 2026-08-05 |
+| 프로젝트 | Weekkeep |
+| 공개 릴리스 자격 창 | 2026-07-31 08:00 PDT–2026-09-30 23:45 PDT |
+| 내부 제출 마감 | 2026-09-28 15:45 KST |
+| 공식 제출 마감 | 2026-10-01 15:45 KST |
+| 상태 | Draft ready / launch evidence pending |
+
+이 문서는 Devpost 제출 문구, 수상 카테고리 전략, 데모 영상, Build in Public, 제출 증거를 소유합니다. App Store 필드는 [App Store Metadata](10-APP-STORE-METADATA.md), 제품 결정은 [Decision Registry](00-INDEX.md#5-decision-registry--결정값과-상태의-ssot)를 따릅니다.
+
+## 1. 승리 전략
+
+### 카테고리 우선순위
+
+| 우선순위 | 카테고리 | 적합도 | 승리 논리 | 제출 조건 |
+|---:|---|---:|---|---|
+| 1 | RevenueCat Design Award | 높음 | 매일 붙잡지 않는 주간 ritual, exact-seven visual language, photo-first restraint, select→replace interaction, local-first trust copy가 하나의 경험으로 연결됨 | motion이 보이는 demo와 특정 화면·interaction 설명 |
+| 2 | HAMM Award | 중상 | 첫 두 기록 뒤에만 나타나는 $19.99 lifetime paywall, 반복 서버비가 없는 local-first 구조, 구독 피로가 큰 부모에게 맞춘 단순한 packaging | 실제 RevenueCat 구매, 가격·paywall·conversion·revenue 증거 |
+| 3 | RevenueCat Peace Prize | 조건부 | 가족 기록의 mental load와 사진 프라이버시를 줄이는 작은 사회적 효용 | beta에서 실제 부모의 이해·부담 감소 근거가 있을 때만 제출 |
+| 보조 | #BuildInPublic | 높음 | commit 수가 아니라 부모의 문제, 선택의 이유, 받은 피드백, 그 피드백으로 바꾼 제품을 공개 | 공개 post 링크와 feedback→change evidence |
+
+Peace Prize는 “가족을 구한다” 같은 과장으로 쓰지 않습니다. 5명 prototype/20명 beta에서 부모가 기록 부담이나 프라이버시 안도감을 실제로 언급했을 때만 체크합니다.
+
+### 심사위원이 20초 안에 이해해야 할 문장
+
+> Weekkeep is a calm, private weekly ritual that turns a crowded camera roll into up to seven family moments worth keeping—in about one quiet minute.
+
+### 우리가 이기려는 방식
+
+1. 문제를 개발자의 생산성이 아니라 부모의 미완성 camera roll로 시작합니다.
+2. 핵심 flow 하나를 완성도 높게 보여줍니다: 제안 → 한 장 교체 → 저장 → 다시 보기.
+3. “사진은 기기 밖으로 나가지 않는다”를 설명이 아니라 처리 구조와 화면 copy로 증명합니다.
+4. Seven-stitch, 7장 구성, 1분 interaction, 두 번 무료라는 숫자를 하나의 기억법으로 만듭니다.
+5. 매출은 과장하지 않고 설치→무료 기록→paywall→구매를 cohort와 기간까지 명시해 보고합니다.
+
+## 2. 공식 자격 요건 체크
+
+| 요구사항 | Weekkeep 대응 | 상태/증거 |
+|---|---|---|
+| iOS/iPadOS/macOS/Android 중 하나 | iPhone iOS 18+ | 구현 완료 |
+| RevenueCat SDK로 실제 구매 1개 이상 | non-consumable `weekkeep_plus_lifetime` → `plus` | 계정·상품 연결 대기 |
+| 첫 store 공개가 submission period 안 | 기존 공개 이력 없는 신규 bundle | 공개 전 App Store 상태 캡처 필요 |
+| 공식 마감 전에 fully published | US App Store에서 설치 가능해야 함 | 최소 마감 1주 전 심사 제출 |
+| 미국에서 접근 가능 | US territory + US IAP availability | storefront smoke 대기 |
+| 영어 text/material | Devpost와 video narration 영어 | 초안 완료 |
+| 공개 demo video <2분 | 116초 master 목표 | 촬영 대기 |
+| YouTube 또는 Vimeo 공개 URL | unlisted가 아니라 publicly visible로 확인 | 업로드 대기 |
+| 앱이 실제 기기에서 동작하는 footage | Release/TestFlight 실기기 screen recording | 촬영 대기 |
+| 1024×1024 app icon | 사용자 원안 기반 exact-seven rainbow opaque master | 자동 검증·@3x 축소 QA 통과; 실제 iPhone 확인 대기 |
+| screenshot 최소 1장 | `1179×2556`, alpha 없음, device frame 없음 | 한국어·영어 fixture 각 4장 로컬 규격·시각 QA 완료; 최종 선정·업로드 대기 |
+| 유료 기능 무료 심사 경로 | IAP promo code를 비공개 judge field에 제공 | 공개 후 code 생성 대기 |
+| third-party 권리 | SDK license, LINE Seed OFL, 허가된 fixture photo | license bundle 완료; 사진 consent 대기 |
+
+대회 규칙상 일반 카테고리 앱은 “심사 중”이 아니라 실제 스토어 공개 상태여야 합니다. 내부 일정은 App Store 공개를 공식 마감보다 7일 이상 앞당깁니다.
+
+## 3. Devpost 기본 입력 — English
+
+### Project name
+
+```text
+Weekkeep
+```
+
+### Tagline
+
+```text
+A week worth keeping—in seven private moments.
+```
+
+### Short description
+
+```text
+Weekkeep is a calm, privacy-first iPhone app for busy parents. It prepares a draft of up to seven photos from the past week on device, lets the parent replace only what feels wrong, and saves the result as a small weekly album.
+```
+
+### Full description
+
+```text
+Parents do not have a shortage of photos. They have a shortage of time to decide which moments matter.
+
+Weekkeep turns that unfinished camera roll into one small weekly ritual. On the first visit, a parent can start with the most recent seven days. After that, each completed week becomes available on Monday. Weekkeep examines eligible photos on the iPhone, prepares a draft of up to seven moments, and asks for one gentle decision: keep the draft, or replace only the photos that do not feel right.
+
+The product is deliberately not a daily habit tracker. There are no streaks, backlogs, countdowns, or guilt. If a family took only five usable photos, Weekkeep shows five. The parent remains the editor, and every saved week can be revisited in a quiet local archive.
+
+Privacy is part of the interaction, not a footer. Photo analysis runs in the foreground on device. Photo pixels, thumbnails, Photos identifiers, filenames, capture times, and locations are not sent to Weekkeep, RevenueCat, or analytics services. The first App Store release has no Weekkeep account, no photo upload, no CloudKit album sync, and no session replay.
+
+Weekkeep uses RevenueCat for a simple business model that fits the product. The first two weekly albums are free, so parents can feel the value before seeing a paywall. A one-time $19.99 Weekkeep Plus purchase unlocks future album creation. There is no subscription. RevenueCat provides the localized store product, purchase state, lifetime entitlement, and restoration flow while the photo experience stays local.
+
+The visual language is built around seven rounded stitches: one for each possible moment in a week. The same constraint shapes the progress rail, adaptive photo composition, app icon, and save transition. It makes the limit understandable without turning the week into a score.
+
+Weekkeep is for parents who want to remember ordinary family life without turning memory keeping into another job.
+```
+
+### Inspiration
+
+```text
+The idea came from a familiar parenting contradiction: the camera roll keeps growing, but the albums never get made. The problem was not taking or storing photos. It was the repeated emotional and practical cost of sorting them. We wanted to reduce that decision to one quiet minute a week without uploading a family's photo library or asking parents to build another daily habit.
+```
+
+### What it does
+
+```text
+Weekkeep requests Photos access only after explaining why, finds eligible photos for the week, analyzes them on device, suggests up to seven diverse moments, lets the user view and replace individual choices, saves one idempotent local weekly album, and brings the parent back with an optional local Monday reminder. Two albums are free; RevenueCat powers the lifetime Plus purchase and restoration flow.
+```
+
+### How we built it
+
+```text
+Weekkeep is a native SwiftUI app for iOS 18+ using Swift 6 strict concurrency. PhotoKit supplies authorized assets, Vision produces on-device quality and similarity signals, and a deterministic curation engine enforces the seven-photo and no-duplicate contracts. SwiftData stores album metadata locally. RevenueCat purchases-ios maps the App Store non-consumable to the `plus` entitlement through the `default` offering. The UI uses a bundled LINE Seed Sans KR family and a code-rendered exact-seven stitch system with VoiceOver, Dynamic Type, Reduce Motion, Full/Limited Photos access, and Korean/English localization.
+```
+
+### Challenges
+
+```text
+The hardest part was not ranking photos; it was deciding what the app should refuse to do. Weekkeep does not identify a child, upload a library, fabricate empty slots, create a backlog, or claim that an algorithm knows the family's “best” memory. The implementation had to keep PhotoKit, Vision, local persistence, week boundaries, purchase state, and cancellation behavior consistent while preserving that restraint in every screen.
+```
+
+### Accomplishments
+
+```text
+We built the complete first-value loop with real Photos permission states, foreground on-device curation, an adaptive one-to-seven-photo review, one-photo replacement, atomic local save, a Weeks archive, local reminders, bilingual accessibility, and a RevenueCat purchase boundary. The same seven-moment rule is expressed consistently across the product, interaction, visual system, and monetization story.
+```
+
+### What we learned
+
+```text
+[Replace with observed evidence before submission.] The most important lesson was that parents responded to less work, not more automation. Public feedback changed [specific screen/copy/flow], because [specific participant confusion or request]. We also learned [measured result from activation, photo acceptance, or purchase].
+```
+
+### What’s next
+
+```text
+After launch we will follow the first real cohorts through two eligible weekly cycles. We will measure completion, initial-photo acceptance, reminder return, and purchase conversion without collecting photo identifiers or content. Those results will decide whether to improve curation, timing, or pricing before adding export, family sharing, or cloud backup.
+```
+
+### Built with
+
+```text
+Swift, SwiftUI, SwiftData, PhotoKit, Vision, RevenueCat, StoreKit, UserNotifications, XcodeGen, XCTest
+```
+
+## 4. Design Award answer — English
+
+```text
+Weekkeep is designed as a quiet weekly ritual, not an engagement machine.
+
+Please look for five connected design decisions:
+
+1. The exact-seven stitch system communicates the maximum album size without behaving like a streak or score. Its state colors remain semantic inside the app, while the icon uses seven equal muted rainbow stitches.
+2. The photo composition adapts honestly from one to seven real images. Seven uses a hero + 2 + 4 editorial layout when touch targets allow; smaller sets never receive fake placeholders.
+3. Review uses a deliberate select-then-replace interaction. The first tap selects a photo and reveals the replacement action; a second tap opens the viewer. VoiceOver exposes direct “View larger” and “Replace photo” actions so sequential tapping is not required.
+4. The save moment moves the reviewed grid into a calm album state. Reduce Motion receives a short fade rather than losing feedback.
+5. Privacy and emotional tone are part of the visual hierarchy. Photos dominate; controls are restrained; permission, local processing, missing-photo, and local-storage limits are stated honestly. There are no streaks, countdowns, celebratory confetti, or claims that AI knows a family's best moment.
+
+The demo shows the Weekkeep rail, adaptive seven-photo review, one-photo replacement, save transition, archive, and paywall in motion.
+```
+
+## 5. HAMM Award answer — English
+
+```text
+Weekkeep's monetization is intentionally small and aligned with its cost structure.
+
+The first two saved weekly albums are free. This lets a parent experience the complete value twice before the third album-creation attempt opens the paywall. Existing albums always remain readable. Weekkeep Plus is a single non-consumable lifetime purchase at a US base price of $19.99, with Apple's localized equivalent shown in every storefront. There is no subscription and no artificial urgency.
+
+That packaging fits both the audience and the product. Parents already face subscription fatigue, while Weekkeep has no recurring photo-storage or server-analysis expense: photo curation and album storage stay on the iPhone. A one-time purchase can therefore feel honest to the parent and remain economically sustainable as the user base grows.
+
+RevenueCat is the source of truth for the `plus` entitlement. The App Store product `weekkeep_plus_lifetime` is attached to the `default` offering. The app requests the localized product and price, handles purchase cancellation/pending/failure, and restores lifetime access on another device without falsely claiming to restore locally stored albums.
+
+Launch results (replace with verified RevenueCat/App Store data):
+• Measurement window: [UTC dates]
+• App installs: [n]
+• First album completed: [n / %]
+• Users who naturally reached the third-album paywall: [n]
+• Purchases: [n]
+• Paywall-to-purchase conversion: [n / %; include denominator definition]
+• Gross revenue: [$]
+• Refunds: [n]
+
+We will not combine fixture paywall tests with real purchase conversion, and we will report zero or small numbers honestly.
+```
+
+## 6. Peace Prize answer — conditional English draft
+
+이 섹션은 parent beta에서 직접 근거를 얻은 경우에만 제출합니다.
+
+```text
+Weekkeep addresses a small but widespread source of family mental load: parents accumulate thousands of meaningful photos while the work of sorting them remains unfinished. The app reduces that task to one calm decision a week and avoids the guilt mechanics commonly used to increase engagement.
+
+The privacy model matters because family photos can reveal children, homes, routines, and locations. Weekkeep analyzes photos on device and does not upload photo content or identifiers. Parents can use the core experience without creating an account.
+
+Observed impact (required before submission): [number] parents completed a first weekly album; [number/percentage] could accurately explain where their photos were processed; and [specific, consented, anonymized finding] showed how the one-minute format reduced the burden of memory keeping.
+```
+
+## 7. 116-second demo script
+
+영상은 영어 voice-over, 실제 Release/TestFlight app의 iPhone footage, 허가된 fixture photos로 만듭니다. 저작권 음악과 타사 상표가 들어간 화면은 쓰지 않습니다.
+
+| Time | Footage | Voice-over |
+|---:|---|---|
+| 0:00–0:08 | 저장된 7장 앨범과 exact-seven rail로 시작 | `Parents don't need another app to open every day. They need one quiet minute to keep the week.` |
+| 0:08–0:20 | Welcome → `Keep the last 7 days` | `Weekkeep turns a crowded camera roll into up to seven family moments worth keeping.` |
+| 0:20–0:34 | 권한 primer와 system Photos 선택, 분석 progress | `Photos access is requested only after this explanation. Analysis runs here, on the iPhone; photo content and identifiers are not uploaded.` |
+| 0:34–0:53 | hero+2+4 review, rail, 사진 1회 선택 | `A draft is already prepared. Seven is a limit, not a target—if the week has fewer usable photos, Weekkeep shows fewer.` |
+| 0:53–1:07 | `Replace this photo` → 후보 1장 교체 → viewer | `The parent stays the editor. Keep the draft, or change only the moment that doesn't feel right.` |
+| 1:07–1:20 | Save → album transition | `One tap saves a small weekly album locally.` |
+| 1:20–1:31 | Weeks list/detail | `Each week stays easy to revisit, with no streak, backlog, or account.` |
+| 1:31–1:43 | Privacy와 local reminder Settings | `An optional Monday reminder is scheduled on device, and the privacy boundary stays visible.` |
+| 1:43–1:55 | Plus paywall, 현지화 price, restore | `Two albums are free. Then a one-time lifetime purchase, powered by RevenueCat, unlocks future weeks—no subscription.` |
+| 1:55–1:56 | wordmark + rainbow seven stitches | `Weekkeep. A week worth keeping.` |
+
+최종 편집에서 1:56을 넘으면 설명을 줄이지, 2분 제한에 딱 맞춰 risk를 만들지 않습니다. 자막은 voice-over 전체를 포함하고 공개 YouTube/Vimeo 업로드 뒤 로그아웃 재생을 확인합니다.
+
+## 8. Build in Public — 부모 문제 중심 plan
+
+### 원칙
+
+- `193 commits`, 사용한 모델 수, 생성한 코드 줄 수를 headline으로 쓰지 않습니다.
+- 부모가 답할 수 있는 질문, 실제 screen, 받은 반응, 그 반응으로 바꾼 결정을 한 post 안에서 연결합니다.
+- audience size보다 feedback→product change의 선명도를 목표로 합니다.
+- 한국어 post는 Devpost에 영어 요약을 함께 제공합니다.
+- 모든 관련 post에 `#Shipaton`을 넣고 필요할 때 `#BuildInPublic`을 추가합니다.
+
+### 공개 evidence sequence
+
+| 순서 | 공개할 이야기 | 질문/CTA | 제품에 반영할 evidence |
+|---:|---|---|---|
+| 1 | `사진은 많은데 정리할 시간은 없으니까` 문제와 7장 prototype | 부모라면 5/7/10장 중 무엇이 부담 없나? | 선택과 이유, `H-002` |
+| 2 | “매일 쓰지 않아도 되는 앱”과 weekly completion window | 어느 요일·시간에 1분을 낼 수 있나? | 월요일 20:30 copy/timing |
+| 3 | select→replace screen recording | 교체 방법을 설명 없이 찾는가? | 실제 interaction/copy 변경 |
+| 4 | 사진 on-device 처리와 로컬 보존 한계 | 신뢰에 필요한 설명은 무엇인가? | privacy copy 이해도 |
+| 5 | 두 번 무료 뒤 $19.99 lifetime | 구독과 평생 이용권 중 무엇이 맞는가, 왜인가? | pricing objection·packaging |
+| 6 | App Store 공개와 실제 첫 cohort | 무엇을 출시했고 무엇을 아직 약속하지 않는가? | installs, activation, feedback |
+| 7 | Shipaton retrospective | 공개 피드백으로 바뀐 세 가지 | post link→commit/screen evidence |
+
+각 post는 게시 URL, UTC timestamp, 핵심 반응 수, 채택한 feedback, 바뀐 화면/문구 링크를 `evidence/build-in-public.csv`에 기록합니다. 디렉터리와 CSV는 첫 게시 시 생성합니다.
+
+### 피해야 할 headline
+
+```text
+I Made 193 Commits in Seven Days—and Still Didn't Ship
+```
+
+### 사용할 수 있는 headline 방향
+
+```text
+Parents don't need another photo-organizing project. They need one quiet minute.
+```
+
+```text
+What if a family photo app was designed to be opened once a week?
+```
+
+```text
+Seven photos, no streaks: the constraint parents chose for Weekkeep.
+```
+
+실제 인터뷰나 poll 결과가 없는 상태에서 `parents chose`라고 단정하지 않습니다. 검증 전에는 질문형 또는 `the constraint we're testing`으로 씁니다.
+
+## 9. Launch evidence dashboard
+
+| Metric | 정의 | Source | 제출값 |
+|---|---|---|---|
+| First public date | US App Store에서 처음 `Ready for Distribution`이 된 UTC 시각 | App Store Connect | `[pending]` |
+| Installs | 측정 창의 App Units/first-time downloads | App Store Connect | `[pending]` |
+| First album completed | privacy-safe activation event 또는 beta roster | consented analytics/manual beta | `[pending]` |
+| Third-album paywall reached | Welcome+W1 저장 후 자연 발생한 세 번째 target | consented analytics/manual cohort | `[pending]` |
+| Paying customers | active `plus` unique purchasers | RevenueCat | `[pending]` |
+| Gross revenue | RevenueCat measured revenue, currency/UTC window 명시 | RevenueCat | `[pending]` |
+| Refunds | 같은 측정 창의 refund count | RevenueCat/App Store Connect | `[pending]` |
+| Photo acceptance | selected_count=7 기록의 kept/7 | consented analytics/beta | `[pending]` |
+
+PostHog를 동의 없이 켜서 숫자를 만들지 않습니다. V1 Release가 analytics off라면 App Store Connect, RevenueCat, 동의한 beta roster만 사용하고 unavailable metric은 `not collected`로 적습니다.
+
+## 10. 제출 직전 package
+
+저장소 안의 출시 입력값은 [release/app-store-metadata.json](../release/app-store-metadata.json), [release/privacy-manifest.json](../release/privacy-manifest.json), [release/shipaton-manifest.json](../release/shipaton-manifest.json)에 기계 판독 가능한 형태로 고정하고 `scripts/validate-release.sh`로 검사합니다. 이 파일들은 외부 계정의 증거를 가장하지 않으며, promo code·API key·비공개 사진은 계속 git 밖에 둡니다. 허가된 fixture 캡처는 `scripts/capture-fixture-screenshots.sh`와 `-ui-fixtures` 경로를 사용합니다.
+
+```text
+submission/
+├── app-store-url.txt
+├── devpost-copy.md
+├── design-award.md
+├── hamm-award.md
+├── peace-prize.md              # evidence가 있을 때만
+├── demo-script.md
+├── demo-public-url.txt
+├── icon-1024.png
+├── screenshot-1179x2556.png
+├── judge-promo-code.txt        # git 금지, 비공개 전달
+├── revenuecat-evidence/
+├── app-store-evidence/
+└── build-in-public-links.md
+```
+
+`judge-promo-code.txt`, API key, App Store private key, sandbox 계정 정보는 git에 넣지 않습니다.
+
+## 11. 최종 제출 체크리스트
+
+- [ ] Devpost 등록과 participant form 완료
+- [ ] RevenueCat project 생성, first test purchase, Store API call, first real purchase 증거
+- [ ] 앱의 첫 공개 버전이 기간 안에 출시됨
+- [ ] US App Store URL을 로그아웃 상태에서 열고 설치 가능
+- [ ] production build의 실제 purchase/restore smoke 통과
+- [ ] judge용 IAP promo code가 유효하고 아직 사용되지 않음
+- [ ] icon `1024×1024`, opaque, exact-seven muted rainbow
+- [ ] screenshot `1179×2556`, alpha 없음, device frame 없음
+- [ ] video 1:56 이하, 실제 device footage, 영어/영문 자막, 공개 URL
+- [ ] 설명의 모든 기능이 공개 build에서 재현됨
+- [ ] Design/HAMM 추가 답변이 실제 evidence와 일치
+- [ ] Build in Public post URL과 feedback→change 설명 포함
+- [ ] 실제 수치를 측정 창·denominator와 함께 입력; placeholder 0개
+- [ ] 사진·음악·폰트·SDK license와 인물 동의 확인
+- [ ] 제출 preview를 다른 사람과 영어로 최종 검수
+- [ ] 2026-09-28 15:45 KST 이전 내부 제출·receipt 저장
+
+## 12. 공식 근거
+
+- [Shipaton 2026 Official Rules](https://revenuecat-shipaton-2026.devpost.com/rules)
+- [Shipaton FAQ](https://www.shipaton.com/faq)
+- [RevenueCat Design Award](https://www.shipaton.com/categories/revenuecat-design-award)
+- [HAMM Award](https://www.shipaton.com/categories/hamm-award)
+- [Build in Public partners](https://www.shipaton.com/build-in-public)

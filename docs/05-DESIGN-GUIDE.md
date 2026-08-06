@@ -43,6 +43,7 @@
 - 얼굴 인식 성능을 과시하는 surveillance product
 - streak를 잃었다며 죄책감을 주는 habit tracker
 - 모든 사진을 자동으로 ‘완벽하게’ 판단한다는 AI 마케팅
+- generic device/album mockup, abstract keepsake cover, gradient/SF Symbol fake-photo art
 
 ## 2. 디자인 원칙
 
@@ -83,6 +84,7 @@
 - coral과 gold는 기억의 온기로 제한 사용
 - 사진은 saturation filter 없이 원본을 존중
 - 그림자보다 surface와 여백으로 hierarchy 형성
+- 설명용 photo-story는 승인된 fictional fixture photo와 flat paper surface만 사용하며, 기기 bezel·중첩 카드·3D album chrome을 만들지 않음
 
 ## 4. Color System
 
@@ -205,10 +207,49 @@ Info.plist의 `UIAppFonts`에 `LINESeedKR-Rg.ttf`, `LINESeedKR-Bd.ttf`를 등록
 | `space.1` | 4 | icon 내부/미세 간격 |
 | `space.2` | 8 | 밀접 요소 |
 | `space.3` | 12 | card 내부 작은 그룹 |
-| `space.4` | 16 | 기본 horizontal padding |
+| `space.4` | 16 | control/card 내부 또는 소형 화면 horizontal padding; 일반 custom root edge는 `WeekkeepScreenLayout` 사용 |
 | `space.6` | 24 | section 내부 |
 | `space.8` | 32 | section 사이 |
 | `space.12` | 48 | hero/큰 분리 |
+| `space.16` | 64 | extended scroll breathing; feature stack 압축 금지 |
+
+### Weekly Review semantic spacing hierarchy
+
+`SCR-WK-03` keeps the same production layout in normal use and deterministic
+App Store fixture capture. The screenshot test may scroll to a second framing;
+it must never use a launch argument or debug branch to compress the surface.
+
+| 역할 | 기준 토큰 | 값 | 적용 위치 |
+|---|---|---:|---|
+| Screen edges | `WeekkeepScreenLayout` | 20pt / 16pt | regular width / compact width(≤375pt)의 horizontal content edge |
+| Header cluster | `space.2` | 8pt | back/date/rail cluster internals |
+| Header → editorial | `space.8` | 32pt | header cluster 아래 editorial group까지의 major boundary |
+| Title/body editorial group | `space.3` | 12pt | title to explanatory body |
+| Partial-result notice | `space.6` | 24pt | editorial group to partial-result notice |
+| Editorial/body → media | `space.8` | 32pt | editorial group 또는 notice 아래 photo media까지의 major boundary |
+| Media grid | `space.2` | 8pt | every photo gutter, including row gaps |
+| Helper/replace state | `space.4` | 16pt | complete grid to helper or replacement action |
+| Privacy note | `space.4` | 16pt | helper/replacement to inline local-only note |
+| Primary action | `space.6` | 24pt | privacy note to save CTA |
+| Scroll boundary | `space.4` / `space.6` | 16/24pt | top and bottom breathing room |
+| Scroll runway | `space.16 + space.2` | 72pt | real bottom content runway so lower framing can settle without clipping editorial copy |
+
+The implementation names these roles through `WeeklyReviewSpacing`; custom
+screen roots share `WeekkeepScreenLayout` so the regular 6.1/6.9-inch target
+uses a 20pt edge while the 375pt-and-smaller fallback remains 16pt. A 0–2pt
+value may remain inside an icon or the independent stitch geometry, but is not
+valid for a feature stack, photo grid, or screenshot-only layout override.
+The root `ScrollView` keeps the platform safe-area positioning once; do not add
+the same `GeometryProxy.safeAreaInsets` again as feature padding. Because the
+hosted tab route can still underlap the status region at a lower scroll
+position, `WeeklyReviewView` uses the runtime system boundary and the same
+Cream surface as an invisible top occluder. `screenTop` remains the 16pt
+content breathing room after the system boundary, and `scrollRunway` is real
+content space rather than a visible bar or screenshot-only branch.
+
+The local share preparation surface keeps native picker/control internals intact;
+the format picker to generated preview/error content boundary uses
+`WeeklyAlbumShareSpacing.rootSection` (`space.6`, 24pt).
 
 ### Radius
 
@@ -232,13 +273,20 @@ Info.plist의 `UIAppFonts`에 `LINESeedKR-Rg.ttf`, `LINESeedKR-Bd.ttf`를 등록
 
 - safe area 준수
 - 기본 horizontal padding 20pt(소형 화면 16pt 허용)
-- scroll content bottom inset은 sticky CTA와 겹치지 않게 계산
+- safe-area를 이미 준수하는 root scroll surface에 `GeometryProxy.safeAreaInsets`를 다시 padding으로 더하지 않음
+- 저장 CTA와 privacy note는 normal scroll content 순서에 포함하며, overlay dock이나 별도 safe-area inset을 만들지 않음
 - iPhone portrait가 기준이며 landscape에서 깨지지 않는 정도만 보장
 - iPad에서 실행 가능하게 둘 경우 centered max width 560pt; V1 별도 iPad UX는 아님
 
 ### Weekly photo composition
 
-#### 7장 승인 기본안
+The compact 7-photo composition is the shared production vocabulary for
+Weekly Review, Ready/Plus explanatory previews, and local share artifacts.
+It remains a wide hero followed by a 2-photo row and a 4-photo row. Onboarding
+is intentionally a different album-page composition so the seven fixtures stay
+legible in the narrower explanatory card.
+
+#### Compact 7장 승인 기본안 — hero+2+4
 
 ```text
 ┌───────────────────────┐
@@ -258,6 +306,36 @@ Info.plist의 `UIAppFonts`에 `LINESeedKR-Rg.ttf`, `LINESeedKR-Bd.ttf`를 등록
 - 4-column 마지막 줄의 touch target이 44pt 미만이면 2-column adaptive grid로 변경
 - 접근성 텍스트 크기가 grid 자체를 확대하지는 않지만 action은 별도 accessible custom action으로 제공
 - hero crop이 사람 얼굴을 과도하게 자르는 사례가 많으면 Vision saliency crop 또는 uniform 2-column grid로 단순화
+
+#### Onboarding keepsake — 1+3+3
+
+```text
+┌───────────────────────┐
+│         Hero 1        │
+│         wide          │
+├──────┬──────┬─────────┤
+│ P2   │ P3   │ P4      │
+│ 1:1  │ 1:1  │ 1:1     │
+├──────┼──────┼─────────┤
+│ P5   │ P6   │ P7      │
+│ 1:1  │ 1:1  │ 1:1     │
+└──────┴──────┴─────────┘
+```
+
+- This rule applies only to `FixturePhotoStory(style: .onboarding)`: one
+  wide hero followed by two clean rows of three equal thumbnails.
+- Every horizontal and vertical photo gutter is at least `space.3` (12pt).
+  The compact hero+2+4 composition keeps its existing `space.2` (8pt) token
+  gap.
+- All seven approved fixture photos remain inside one calm Paper/Cream card
+  with the existing vertical exact-seven stitch binding. The binding has its
+  own `space.3` separation from the photo mosaic and never touches a tile.
+- Every tile uses the same `radius.small`, is explicitly clipped to its frame,
+  and has no overlap, touching edge, shadow, gradient, placeholder bar, or
+  stacked-card treatment. The restrained card border stays on the outer paper
+  surface only.
+- This onboarding variant is explanatory artwork, not a replacement for the
+  Weekly Review's compact hero+2+4 layout or its interaction contract.
 
 #### 1–6장
 
@@ -300,14 +378,17 @@ Info.plist의 `UIAppFonts`에 `LINESeedKR-Rg.ttf`, `LINESeedKR-Bd.ttf`를 등록
 
 ### `CMP-03 PrivacyBadge`
 
-- Sage tinted surface + shield/check SF Symbol
-- 예: `이 iPhone에서만 분석`
+- 작은 lock SF Symbol과 짧은 사실 문구를 leading-aligned inline note로 표시
+- full-width tinted rounded rectangle, card, badge-like container를 사용하지 않음
+- 예: `이 iPhone 안에서만 살펴봐요`
 - 버튼처럼 보이지 않으며 상세 링크가 필요하면 별도 text link 제공
 - marketing claim이 아니라 실제 기술 경계와 일치해야 함
 
 ### `CMP-04 WeeklyPhotoGrid`
 
 - 1–7장 adaptive layout
+- 7장은 full-width 16:10 hero → 1:1 중간 2장 → 1:1 하단 4장 순서이며 row/column gap은 `space.2`(8pt)
+- 하단 4장은 각 tile이 최소 44pt를 유지할 수 있을 때 4-column, 그렇지 않으면 2-column으로 전환
 - 제안 photo마다 stable ID, position, `크게 보기`·`사진 교체` custom action
 - 처음부터 7장을 선택하는 empty selection mode를 만들지 않음
 - accept-as-is가 기본 상태이며, 사진마다 선택 checkbox를 반복해서 누르게 하지 않음
@@ -347,7 +428,8 @@ Info.plist의 `UIAppFonts`에 `LINESeedKR-Rg.ttf`, `LINESeedKR-Bd.ttf`를 등록
 
 - 권한 상태를 full/limited/denied/restricted로 구분
 - Limited는 warning이 아니라 정보 상태
-- 앱이 직접 바꿀 수 없는 상태에 허위 switch를 제공하지 않음
+- notDetermined는 권한 요청 action, denied는 Settings recovery action을 제공
+- restricted는 정책 설명만 보여주고 앱이 직접 바꿀 수 없는 상태에 허위 Settings/manage action을 제공하지 않음
 
 ### `CMP-10 PlusCard`
 
@@ -369,20 +451,41 @@ Info.plist의 `UIAppFonts`에 `LINESeedKR-Rg.ttf`, `LINESeedKR-Bd.ttf`를 등록
 - Weekkeep의 `최대 7장` 제약을 나타내는 브랜드 컴포넌트
 - 모든 크기와 상태에서 slot 수는 정확히 `7`
 - 요일, 연속 사용일, 달성 streak를 뜻하지 않음
-- Welcome/Ready는 Coral, 선택 tab은 Plum, 저장 완료는 Sage, 비활성 tab은 muted Ink 사용
-- 진행 상태는 `filledCount + remainingCount == 7`을 항상 만족
-- horizontal rail, vertical album binding, tab icon은 같은 normalized geometry 사용
-- raster/image generation이 최종 개수를 그리지 않으며 SwiftUI와 screenshot export에서 코드로 렌더링
+- 모든 slot은 index별 D-030 muted rainbow(`red → orange → yellow → green → blue → indigo → violet`)를 유지합니다. Welcome/Ready, 선택 tab, 저장 완료, 비활성 tab은 색을 단색으로 바꾸지 않고 semantic tone에 맞는 opacity를 적용합니다.
+- 진행 상태는 `filledCount + remainingCount == 7`을 항상 만족하며 filled/unfilled는 opacity, selected는 4×14pt geometry, 일반 slot은 3×10pt geometry로 구분합니다.
+- visible stitch는 어떤 상태에서도 opacity `0.58` 아래로 내려가지 않습니다. 이 floor는 muted/unfilled 슬롯이 iPhone과 1080p video scale에서 회색으로 뭉개지지 않도록 하며, 상태 의미는 opacity 차이와 geometry로 유지합니다.
+- horizontal rail과 vertical album binding은 같은 normalized stitch geometry를 사용합니다. Bottom tab icon은 functional silhouette만 렌더링하며 exact-seven stitch signature를 포함하지 않습니다.
+- rail은 일곱 개의 독립 stitch와 그 사이의 빈 공간만으로 구성하며 추가 선·막대·분할자를 두지 않습니다.
+- 본 rail과 vertical binding은 SwiftUI code-rendered component입니다. TabView label은 `ThisWeekTabIcon`, `WeeksTabIcon`, `SettingsTabIcon` 세 deterministic original-rendering vector asset을 `.renderingMode(.original)`로 사용해 시스템 template tint를 차단합니다. 세 asset은 각각 calendar/week, stacked album/pages, adjustment sliders의 서로 다른 Plum silhouette만 가지며 bottom tab bar에는 decorative stitch를 렌더링하지 않습니다.
 - rail 자체는 `accessibilityHidden(true)`; 실제 사진 수와 현재 위치는 별도 텍스트로 제공
 - source geometry와 상태별 vector는 [`design/system/SEVEN-STITCH.md`](../design/system/SEVEN-STITCH.md)를 기준으로 함
 - snapshot test에서 visible capsule count가 7인지 검증
+
+### `CMP-13 SemanticTabIcon`
+
+- `This Week`는 calendar/week, `Weeks`는 stacked album/pages, `Settings`는 adjustment sliders의 세 고유 silhouette을 사용합니다.
+- Plum semantic glyph가 실제 tab-bar 크기에서 primary로 읽혀야 하며, bottom tab bar에는 secondary rainbow stitch signature를 그리지 않습니다.
+- 각 asset은 고유 이름(`ThisWeekTabIcon`, `WeeksTabIcon`, `SettingsTabIcon`)과 `template-rendering-intent: original`을 사용합니다. system tint로 semantic glyph가 단색 collapse하지 않습니다.
+- selected/unselected는 semantic glyph opacity로만 구분하며 localized text label과 `TAB-WEEK`, `TAB-ARCHIVE`, `TAB-SETTINGS` accessibility identifiers는 유지합니다.
+
+### `CMP-14 FixturePhotoStory`
+
+- onboarding·Ready·Plus의 설명용 photo-story는 승인된 seven fictional fixture PNG만 사용하고, 실제 사용자 Photos 자산이나 분석 결과를 암시하지 않습니다.
+- 하나의 calm Paper/Cream surface 안에 non-overlapping photo mosaic과 exact-seven rail을 배치합니다. onboarding은 vertical binding과 `1+3+3` mosaic, Ready/Plus는 compact horizontal rail과 `hero+2+4` mosaic를 사용합니다.
+- onboarding `1+3+3`은 `space.3` 이상의 수평·수직 gutter, 동일한 `radius.small`, 명시적 clipping을 사용합니다. compact `hero+2+4`는 기존 `space.2` gutter를 유지합니다.
+- gradient, SF Symbol fake-photo art, generic icon illustration, stacked/overlapping cards, faux device chrome, 3D album cover, extra bezel은 금지합니다.
+- fixture photo tile은 사진을 설명하는 보조 label만 제공하며 사람·가족의 신원이나 감정을 추측하지 않습니다. VoiceOver에는 공유 `accessibility.photoStory` 의미를 제공합니다.
 
 ## 9. 화면별 디자인 방향
 
 ### Welcome
 
-- 실제 product outcome을 대표하는 최대 7-photo mosaic가 hero
-- 배경은 Cream, mosaic 주변 여백 충분히
+- 실제 product outcome을 대표하는 일곱 개의 승인된 fictional fixture를 배치한 공유 `FixturePhotoStory`가 hero
+- onboarding preview는 하나의 warm Paper/Cream surface 안에서 vertical exact-seven binding과 `1+3+3` photo geometry를 보여주며, Ready/Plus는 horizontal rail·compact `hero+2+4` geometry를 사용함
+- onboarding 사진 사이 gutter는 수평·수직 모두 `space.3` 이상이며, 세 칸씩 맞춘 두 thumbnail row와 wide hero가 서로 닿거나 겹치지 않음
+- seven fixture photo가 dominant content이며 faux-content capsule bar, placeholder bar, gradient/SF Symbol fake-photo art, overlapping translucent/card stack, device chrome을 사용하지 않음
+- fixture는 정적 onboarding illustration이며 사용자 사진, Photos 자산, 분석 입력으로 취급하지 않음
+- 배경은 Cream, preview 주변 여백 충분히
 - 첫 viewport에 title, privacy badge, CTA가 모두 들어오되 작은 기기에서는 scroll 허용
 - AI/기술 iconography보다 사진 결과 사용
 - 부모의 상황을 먼저 말하는 headline `사진은 많은데, 정리할 시간은 없으니까.`를 기본안으로 사용
@@ -392,7 +495,7 @@ Info.plist의 `UIAppFonts`에 `LINESeedKR-Rg.ttf`, `LINESeedKR-Bd.ttf`를 등록
 
 - foreground 분석 전에는 `초안이 준비됐어요`라고 말하지 않음
 - `지난주를 남겨볼까요?` → `7장 초안 만들기`가 기본 경로
-- 결과처럼 정렬된 7-photo album 대신 아직 검토되지 않은 camera-roll photo stack을 보여줌
+- Ready explanatory surface는 `FixturePhotoStory`의 compact rail + flat hero+2+4 mosaic를 사용하며, 분석 결과나 사용자 사진 초안처럼 보이게 하지 않음
 - 접근 가능한 사진 수는 local UI에 표시할 수 있지만 외부 분석에는 bucket만 전송
 
 ### Curation Progress
@@ -410,7 +513,10 @@ Info.plist의 `UIAppFonts`에 `LINESeedKR-Rg.ttf`, `LINESeedKR-Bd.ttf`를 등록
 - 첫 photo tap은 해당 tile을 Coral 선택 상태로 만들고 바로 아래 `이 사진 바꾸기`를 reveal
 - 선택된 같은 photo를 두 번째 tap하면 그 index로 full-screen viewer를 열며, 다른 photo tap은 선택 대상만 변경
 - photo tile별 `크게 보기`·`사진 교체`는 VoiceOver custom action으로 직접 접근 가능해야 함
-- 저장 CTA는 bottom safe area 위 sticky
+- header cluster와 photo collage 사이에 두 번째 bar를 두지 않으며, 저장 CTA는 완성된 collage 뒤 helper/replacement action과 privacy note 다음의 normal scroll content에 둠
+- 저장 CTA는 collage를 덮거나 시각적으로 분할하지 않으며, 7장 hero+2+4 전체가 한 흐름으로 읽혀야 함
+- 간격은 `Weekly Review semantic spacing hierarchy`를 따르며, 상단 캡처는 header/title/body/hero story, 하단 캡처는 의도적으로 scroll한 replacement/privacy/save action을 보여 줌. 한 장에 모든 control을 넣기 위해 spacing을 줄이지 않음
+- hosted ScrollView가 status region 아래로 움직여도 동일한 Cream occluder가 unsafe top을 보이지 않게 가리며, lower-action frame의 editorial title/copy는 안전 경계 아래에 온전히 보이거나 완전히 가려져야 함. `scrollRunway` 72pt는 이 상태를 위한 실제 bottom breathing이며 추가 toolbar/divider가 아님
 - 반복 주는 grid 표시 후 한 번의 primary CTA로 완료 가능하며, 활성 조작 중앙값 60초 이하를 usability 기준으로 삼음
 - 7장 미만일 때 부족함을 경고색으로 표현하지 않음
 
@@ -419,7 +525,18 @@ Info.plist의 `UIAppFonts`에 `LINESeedKR-Rg.ttf`, `LINESeedKR-Bd.ttf`를 등록
 - 성공은 짧은 haptic + 저장한 최대 7장이 60–80ms 간격으로 나타나는 약 1초 reveal로 표현
 - reveal은 사진을 다시 고르게 하거나 다음 행동을 요구하지 않는 작은 보상이어야 함
 - confetti, points, streak 없음
+- primary CTA는 `이번 주를 공유하기`이며 저장된 결과를 local share preparation으로 연결합니다. `기록 보기`는 secondary, `완료`는 tertiary입니다.
 - 알림 제안은 confirmation과 한 화면에서 동시에 경쟁시키지 않고 다음 sheet로 분리
+
+### Local Share Artifact
+
+- Story는 9:16 `1080×1920`, Post는 4:5 `1080×1350`의 exact pixel canvas입니다.
+- visual hierarchy는 warm Cream/paper background → canonical Plum wordmark → local date range → real photo composition → exact seven muted stitch palette → restrained `Made with Weekkeep` signature 순서입니다.
+- 7장은 editorial hero+2+4를 사용하고, 1–6장은 빈 placeholder 없이 실제 사진만 adaptive layout에 배치합니다.
+- photo는 cover/crop만 조정하고 saturation filter, child/family label, filename, location, score, analytics, fake content를 넣지 않습니다.
+- wordmark는 canonical `weekkeep` asset를 사용하며, in-app rail/index order는 `#E97A68`, `#E39455`, `#E5A84B`, `#66836E`, `#5F879B`, `#686286`, `#8A6386`을 그대로 씁니다. AppIcon 파일을 재사용하거나 변경하지 않습니다.
+- signature는 visible attribution인 `Made with Weekkeep`만 사용합니다. V1 이미지에는 public install URL을 그리지 않습니다.
+- preview와 native share action은 modal focus를 유지하고, loading/retry/error 상태와 VoiceOver label을 제공합니다. native share preview에는 localized generic title과 이미 만든 artifact thumbnail만 사용하며 public install URL은 넣지 않습니다. 시스템 share sheet는 사용자가 share CTA를 누른 뒤에만 엽니다.
 
 ### Weeks
 
@@ -429,9 +546,12 @@ Info.plist의 `UIAppFonts`에 `LINESeedKR-Rg.ttf`, `LINESeedKR-Bd.ttf`를 등록
 
 ### Paywall
 
-- paywall을 새로운 스타일의 광고처럼 만들지 않고 app surface 연장으로 보이게 함
+- paywall은 별도 boolean modal이 아닌 item-driven full-screen app surface extension으로 표시하며 gray sheet chrome, nested rounded sheet, faux device frame을 만들지 않음
+- hero는 Ready와 같은 `FixturePhotoStory` compact variant를 사용하고 gradient/SF Symbol fake-photo art, stacked card mockup, abstract album cover를 사용하지 않음
 - 이미 만든 기록의 작은 thumbnail은 실제 Photos privacy 검토 후 local render만 사용
 - `한 번 구매`, `평생 이용`을 명확히 구분
+- restore 성공은 paywall 안에 성공 배너를 유지하고 purchase CTA를 Continue로 바꾸며, active entitlement 확인 전에는 닫지 않음
+- Continue 확인이 inactive/unknown이면 차분한 pending 안내와 권한 확인 action을 유지하고 잠금을 낙관적으로 풀지 않음
 - 개인정보 링크에서 현재 iPhone 로컬 저장과 앱 관리형 백업이 없다는 사실을 구매 전에 확인 가능
 - `영구 보관`, `평생 보존`, `어느 기기에서나 복원` 표현 금지
 - countdown, fake discount, ‘오늘만’ 금지
@@ -442,12 +562,14 @@ Info.plist의 `UIAppFonts`에 `LINESeedKR-Rg.ttf`, `LINESeedKR-Bd.ttf`를 등록
 - custom card로 모든 row를 재발명하지 않음
 - 현재 권한/Plus 상태는 오른쪽 value로 명확히 표시
 - 주간 알림 기본값은 문서 계약과 동일한 `월요일 오후 8:30`
+- 저장 기록이 0개이면 Settings 알림 value row는 `첫 기록 저장 후`를 표시하고, `첫 주간 기록을 저장한 뒤 알림을 켤 수 있어요.`라는 static informational row를 둡니다. Button, chevron, tappable permission affordance를 표시하지 않습니다.
+- 저장 기록이 1개 이상일 때만 `알림 켜기` 또는 `알림 설정 열기` action row를 렌더링합니다. VoiceOver에는 상태와 안내를 static text로, 실제 action은 실제 Button으로만 노출합니다.
 - `데이터 저장` row에서 현재 iPhone 로컬 저장·별도 백업 없음·앱 삭제/기기 변경 시 유실 가능성을 한 화면 안에서 확인 가능
 
 ### Privacy
 
 - 큰 방패 하나보다 `사진 앱 → 기기 안의 Weekkeep → 서버 전송 없음`의 실제 경계를 먼저 보여줌
-- connector를 stitch와 혼동할 수 있는 점선으로 표현하지 않음
+- SevenStitchRail은 7개의 독립 stitch만으로 signature를 표현하며 privacy note와 결합하지 않음
 - `기기 안에서 분석`, `추적하지 않음`, `내가 결정` 세 사실을 짧은 row로 제공
 - `외부 전송 없음`과 `별도 백업 없음`을 혼동하지 않게 둘을 모두 설명
 
@@ -469,8 +591,8 @@ Info.plist의 `UIAppFonts`에 `LINESeedKR-Rg.ttf`, `LINESeedKR-Bd.ttf`를 등록
 - spring bounce는 작고 1회만
 - 분석 spinner 외 반복 animation 최소화
 - photo 교체는 crossfade; zoom/flip 금지
-- 저장 성공에서 Review grid는 matched geometry로 Archive Week card 형태에 정렬됨
-- Reduce Motion에서는 이동/scale을 0.2s fade로 대체
+- 저장 성공에서는 최종 사진을 60–80ms 간격으로 순차 reveal해 약 1초 안에 한 주의 앨범이 완성됨
+- Reduce Motion에서는 순차 이동 없이 짧은 fade 한 번으로 대체
 - 자동 재생되는 영상이나 flashing 없음
 
 ## 11. Haptics
@@ -556,7 +678,7 @@ haptic은 시각/음성 feedback을 대체하지 않습니다.
 
 ### 큰 글자 대응
 
-- sticky CTA가 content를 덮지 않음
+- inline CTA가 content를 덮지 않고 마지막 photo와 privacy note 뒤에서 도달 가능함
 - 2-column card가 한 column으로 바뀔 수 있음
 - Settings trailing status가 아래 줄로 wrap 가능
 - paywall legal links가 잘리거나 가로 scroll되지 않음
@@ -572,45 +694,63 @@ haptic은 시각/음성 feedback을 대체하지 않습니다.
 - 영어 30% expansion, 독일어 등 향후 40% expansion을 견딜 layout
 - 사진 장수 pluralization은 String Catalog plural category 사용
 
-## 15. Iconography와 App Icon 방향
+## 15. Brand mark, Iconography와 App Icon 방향
+
+### Brand mark hierarchy
+
+- primary wordmark는 사용자가 제공한 canonical lowercase `weekkeep` asset이며 Plum `#5B415E`, flat fill을 유지합니다. 앱에서는 `design/brand/weekkeep-wordmark.png`를 image resource로 등록해 exact content를 렌더링하며 Text approximation을 사용하지 않습니다.
+- onboarding upper-left와 앱 header·navigation처럼 작은 제품 surface에는 canonical wordmark-only를 사용하고 rainbow, 요일명, bracket, outline, shadow, tint를 붙이지 않습니다.
+- 웹 hero·Shipaton end card·press kit 같은 외부 브랜드 surface에는 wordmark 아래에 **같은 크기와 간격의 horizontal seven-stitch**를 결합한 lockup을 사용할 수 있습니다.
+- 외부 seven-stitch lockup도 app icon과 같은 muted red→orange→yellow→green→blue→indigo→violet 순서와 단색 규칙을 사용합니다. 최소 digital 폭은 120px이며 그보다 작으면 wordmark-only로 전환합니다.
+- `MON`–`SUN` label과 좌우 bracket은 캠페인 illustration에는 사용할 수 있지만 primary logo 구성요소가 아니며, 작은 크기·다국어 surface에는 사용하지 않습니다.
+- canonical asset과 출처는 [`design/brand/`](../design/brand/README.md)가 소유합니다.
 
 ### SF Symbols
 
 - 기본 control icon은 SF Symbols 사용
 - symbol만으로 의미가 불명확하면 text label 병행
 - filled/outline은 selected/unselected 상태에 일관 사용
-- sparkle symbol은 V1에서 사용하지 않음; TAB-WEEK은 `CMP-12 SevenStitchRail` 사용
+- sparkle symbol은 V1에서 사용하지 않음; top-level tabs는 `CMP-13 SemanticTabIcon`의 고유 semantic glyph만 사용하고 decorative seven-stitch는 표시하지 않음
 
 ### App icon creative brief
 
-- 개념: ‘일주일을 담는 7개의 작은 프레임’ 또는 ‘한 장씩 포개진 주간 기억’
-- 형태: 작은 크기에서도 식별되는 하나의 강한 silhouette
-- 색: Plum base + Cream frame + Coral/Gold 한 점
+- 개념: Plum keepsake 위에 일주일의 일곱 순간을 꿰맨 **seven-stitch**
+- 형태: 작은 크기에서도 식별되는 하나의 강한 silhouette와 정확히 7개의 둥근 stitch
+- 배경/몸체: full-bleed Cream `#FBF7F2`, Plum `#5B415E`; 투명 여백이나 미리 둥글린 모서리를 넣지 않음
+- stitch 순서: 왼쪽부터 빨강·주황·노랑·초록·파랑·남색·보라. 순서를 뒤집거나 섞지 않음
+- stitch는 모두 같은 크기·간격·불투명도이며 gradient, glow, 그림자 없이 단색으로 표현
 - 금지: 아기 얼굴, 젖병, 성별색, 숫자 7을 달력 badge처럼 직접 표기, 과도한 gradient/gloss
-- 1024×1024 master에서 만들고 알파 채널/App Store 규칙은 export 단계 확인
+- 1024×1024 opaque sRGB master에서 만들고 알파 채널 없이 export; Apple의 시스템 mask가 모서리를 처리함
 
-앱 아이콘은 별도 exploration 3안 후 실제 홈 화면 29/40/60pt 크기에서 비교합니다.
+#### App icon stitch palette
+
+| 순서 | 이름 | Hex | 기존 palette와의 관계 |
+|---:|---|---|---|
+| 1 | Memory Red | `#E97A68` | Memory Coral 그대로 사용 |
+| 2 | Warm Orange | `#E39455` | Coral과 Golden Hour의 중간 온도 |
+| 3 | Golden Yellow | `#E5A84B` | Golden Hour 그대로 사용 |
+| 4 | Keepsake Green | `#66836E` | Sage를 아이콘 크기에 맞게 조금 밝힘 |
+| 5 | Album Blue | `#5F879B` | Ink/Sage와 조화되는 저채도 blue |
+| 6 | Evening Indigo | `#686286` | Plum과 blue 사이의 저채도 indigo |
+| 7 | Memory Violet | `#8A6386` | Plum을 아이콘 크기에 맞게 밝힌 violet |
+
+이 7색은 `D-030`이 소유하는 Weekkeep muted rainbow입니다. 앱 아이콘, 외부 lockup, 인앱 `CMP-12 SevenStitchRail`이 같은 index order를 공유하며, 인앱 rail의 진행·선택·완료·muted 의미는 색을 교체하지 않고 opacity와 geometry로 표현합니다. `CMP-13 SemanticTabIcon`은 bottom tab bar에서 Plum semantic glyph만 렌더링하고 decorative rainbow signature를 포함하지 않습니다. 앱 아이콘의 벡터 master와 production PNG는 `design/app-icon/`에서 소유하고 `Weekkeep/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png`로 동기화합니다. 이번 visual revision에서는 이 AppIcon 파일을 변경하지 않습니다.
+
+최종 아이콘은 실제 홈 화면 29/40/60pt에서 다음을 확인합니다: stitch 7개가 각각 분리되어 보임, rainbow 순서를 인식할 수 있음, 숫자 7이나 달력으로 오인되지 않음, Cream/Plum silhouette가 배경화면 색과 관계없이 유지됨.
 
 ## 16. App Store와 Shipaton Visuals
 
-### Screenshot narrative
-
-| 순서 | 메시지 | 화면 |
-|---|---|---|
-| 1 | Too many photos. No time to sort them. | Welcome problem-first hero |
-| 2 | Start with a draft, not an empty album. | Progress → Weekly Review |
-| 3 | Change only the photo you do not want. | Selection → Replace interaction |
-| 4 | Your photos stay on this iPhone. | Privacy architecture |
-| 5 | An ordinary week becomes one small album. | Save transition → Weeks archive |
+Screenshot의 순서·headline·locale·export 규격은 [App Store Metadata SSOT](10-APP-STORE-METADATA.md#5-screenshot-ssot)가 소유합니다. Shipaton 영상의 시간표와 narration은 [Shipaton Submission SSOT](11-SHIPATON-SUBMISSION.md#7-72-second-demo-master)가 소유합니다. 이 절은 그 자산의 시각 표현 규칙만 소유합니다.
 
 ### 제작 규칙
 
-- Shipaton 요구 screenshot 1179×2556 대응
-- device frame 사용 금지
+- App Store set은 현재 Apple 허용 규격을 사용하고, Shipaton proof는 정확히 1179×2556으로 별도 export
+- Shipaton proof에 device frame 사용 금지
+- captured app screen은 native full-screen surface를 그대로 보여주며 nested gray sheet chrome, bezel, device-like frame을 추가하지 않음
+- App Store Plus 화면은 flat `FixturePhotoStory`와 canonical lowercase wordmark vocabulary를 유지하고 marketing compositor가 앱 안쪽 mockup을 다시 감싸지 않음
+- website hero와 `og.png`도 같은 flat seven-photo story를 사용하며 3D album/device mockup과 capitalized wordmark를 금지
 - 사용자 허가를 받은 사진 또는 라이선스/fixture 사진만 사용
 - screenshot text는 영어 제출본 우선, 별도 한국어 App Store 세트
-- demo 영상 2분 미만: 결과 → 짧은 permission explanation → 분석 → 교체 → 저장 → archive → paywall
-- 첫 45초 안에 SevenStitchRail 진행, 한 장 교체, grid-to-album transition을 모두 보여줌
 - 사진 식별자, debug overlay, 개인 notification을 화면 녹화에 노출하지 않음
 
 ## 17. Theme 구현 계약
@@ -648,6 +788,7 @@ struct WeekkeepTheme: Sendable {
 | Data | 0, 1, 5, 7 photos, missing asset |
 | Motion | Default, Reduce Motion |
 | Review interaction | Unselected, selected, viewer, VoiceOver direct actions |
+| Review framing | Clean top story; intentional lower-action state after scroll; no screenshot-only compression |
 | Contrast | Default, Increase Contrast |
 | Device | smallest supported width, 6.1-inch, largest iPhone |
 
@@ -696,18 +837,27 @@ struct WeekkeepTheme: Sendable {
 - [ ] primary action은 화면당 하나
 - [ ] 사진 위 흰 텍스트 대비 문제 없음
 - [ ] 한국어/영어 truncation 없음
+- [ ] Weekly Review semantic spacing hierarchy와 top/lower screenshot framing 검증
+- [ ] screenshot fixture launch path에 0–2pt feature stack/grid override 없음
 - [ ] paywall에 현지화 가격, 복원, 약관, 닫기 존재
 - [ ] Settings·paywall 개인정보 맥락에 로컬 보존 한계 ko/en 존재
 - [ ] 평생 이용권을 데이터 영구 보존으로 오해시키는 문구 0
 - [ ] guilt, streak, child identity 문구 없음
-- [ ] stitch가 보이는 모든 상태에서 정확히 7개이며 snapshot test 통과
+- [ ] stitch가 보이는 모든 상태에서 정확히 7개이며 index별 D-030 palette, state opacity/geometry test 통과
+- [ ] 세 bottom-tab icon이 실제 tab-bar 크기에서 calendar/week·stacked album/pages·adjustment sliders로 즉시 구분되고, 각 original-rendered asset이 고유 이름·silhouette·decorative stitch 0개 계약을 통과
+- [ ] onboarding wordmark가 canonical image resource이며 PNG가 design source와 byte-identical
+- [ ] onboarding keepsake preview가 하나의 calm paper/cream card에서 승인된 seven fixture PNG를 모두 사용하고, `1+3+3`의 `space.3` 이상 gutter·non-overlap·small-radius clipping·vertical exact-seven binding을 유지하며 faux-content bars·overlapping card stack 없이 CTA가 Dynamic Type에서 도달 가능
+- [ ] onboarding·Ready·Plus·website hero·`og.png`가 같은 flat `FixturePhotoStory` photo vocabulary를 사용하고 gradient/SF Symbol fake-photo art·abstract keepsake cover·device mockup이 없음
+- [ ] Plus가 item-driven full-screen으로 열리고 gray sheet chrome·nested rounded sheet·bezel이 없음
 - [ ] progress의 filled + remaining = 7
+- [ ] 최종 App Icon이 1024×1024 opaque sRGB, pre-rounded 0이며 red→orange→yellow→green→blue→indigo→violet의 같은 크기 stitch 정확히 7개
+- [ ] `scripts/validate-release-assets.sh` 통과와 29/40/60pt 육안 검증
 - [ ] ready 화면이 foreground 분석 완료를 허위 주장하지 않음
 - [ ] 월요일 20:30 알림이 primer와 Settings에서 일치
 - [ ] 실제 app과 제출 screenshot이 bundled LINE Seed TTF로 렌더링
 - [ ] 첫 tap 선택→교체 reveal, 선택 photo 두 번째 tap→viewer, VoiceOver direct action 검증
-- [ ] grid-to-album transition과 Reduce Motion 0.2초 fade 검증
-- [ ] App Store/Shipaton export 규격 검증
+- [ ] save confirmation의 60–80ms 순차 reveal과 Reduce Motion 짧은 fade 검증
+- [ ] App Store/Shipaton export 규격은 `docs/10`, demo 규격은 `docs/11` 기준으로 검증
 
 ## 21. 참고 원칙
 

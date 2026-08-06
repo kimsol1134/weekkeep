@@ -15,11 +15,12 @@
 
 | 관심사 | 기준 문서 | 소유하는 것 |
 |---|---|---|
-| 디자인 결정값·승인 상태 | [Decision Registry](../docs/00-INDEX.md#5-decision-registry--결정값과-상태의-ssot) | `D-024`, `D-026`–`D-029` |
+| 디자인 결정값·승인 상태 | [Decision Registry](../docs/00-INDEX.md#5-decision-registry--결정값과-상태의-ssot) | `D-024`, `D-026`–`D-035` |
 | 화면 책임·상태·탭·제스처 | [IA](../docs/03-IA.md) | 화면 전이, 선택 상태, viewer·교체 계약 |
 | 시각·컴포넌트·모션·접근성·카피 규칙 | [Design Guide](../docs/05-DESIGN-GUIDE.md) | 토큰, `CMP-*`, 표현 규칙 |
 | 승인된 화면 방향 | [App Screens V2](app-screens-v2/README.md) | 14개 happy-path 화면의 위계·사진 톤·구성 |
 | Seven-stitch geometry | [Seven-stitch System](system/SEVEN-STITCH.md) | 정확히 7개인 code-rendered vector |
+| 로고·App Icon 자산 | [Brand Marks](brand/README.md), [App Icon](app-icon/README.md) | wordmark 계층, 외부 lockup, opaque 1024 master |
 | 제품 폰트 binary·license | [LINE Seed source](../resources/fonts/line-seed-kr/SOURCE.md) | Regular/Bold TTF와 OFL |
 | 디자인 판단 근거 | [V2 Design Review](../docs/08-DESIGN-REVIEW-V2.md) | V1→V2 비평과 선택 이유; 비규범 기록 |
 
@@ -31,11 +32,21 @@
 - LINE Seed Sans KR Regular/Bold (`D-027`)
 - solid Plum primary CTA
 - ordinary iPhone camera-roll에 가까운 가족사진
-- 7장은 hero+2+4, 1–6장은 실제 장수에 맞는 adaptive layout (`D-024`)
+- Weekly Review는 compact header cluster(뒤로가기·주차/날짜·정확히 7개의 독립 stitch) 뒤에 사진 collage를 우선 배치하고, 7장은 full-width 16:10 hero+2+4, 1–6장은 실제 장수에 맞는 adaptive layout (`D-024`)
+- Weekly Review의 간격은 `WeeklyReviewSpacing` semantic hierarchy(screen edge → header → editorial → media → helper/replace → privacy → primary action)를 따르며, root edge는 `WeekkeepScreenLayout`의 20pt(폭 376pt 이상) / 16pt(폭 375pt 이하) responsive contract를 사용하고 header→editorial 32pt, title/body 12pt, editorial/body→media 32pt, photo gutter 8pt, lower actions 16pt·16pt·24pt를 유지함. Platform safe area는 root에서 한 번만 측정하고, hosted ScrollView의 unsafe top underlap은 같은 Cream surface로 invisibly occlude하며 72pt real runway로 lower frame을 안정시킴. App Store top/lower captures는 scroll position만 다르게 하며 production layout을 압축하지 않음
+- Review 저장 CTA는 grid 전체와 helper/replacement action, quiet inline lock/privacy note 뒤의 normal scroll content에 놓이며 safe-area dock으로 collage를 덮지 않음
+- `PrivacyBadge`는 full-width tinted container가 아닌 작은 lock + factual local-only inline note로 표시
 - SevenStitchRail은 모든 상태에서 code-rendered exact 7 (`D-028`)
+- top-level tabs는 calendar/week·stacked album/pages·adjustment sliders의 고유 semantic Plum glyph만 사용하고 decorative exact-seven signature는 제외하며 localized labels와 accessibility identifiers를 유지한다 (`D-030`)
 - Review에서 첫 tap은 사진 선택과 `이 사진 바꾸기` 노출, 선택된 사진의 두 번째 tap은 viewer (`D-029`)
+- 앱 아이콘과 인앱 rail은 왼쪽부터 `#E97A68`–`#E39455`–`#E5A84B`–`#66836E`–`#5F879B`–`#686286`–`#8A6386`의 index별 muted seven-stitch palette를 공유하며, rail state는 opacity와 geometry로 표현 (`D-030`)
+- onboarding upper-left와 작은 인앱 header는 `brand/weekkeep-wordmark.*`에서 파생한 canonical Plum wordmark-only image resource를 사용하고, 외부 브랜드 surface만 exact-seven lockup을 사용할 수 있음 (`D-031`)
+- onboarding·Ready·Plus explanatory preview는 `fixtures/app-store-family-moments/`의 승인된 seven fictional PNG만 공유하는 flat `FixturePhotoStory`를 사용한다. onboarding은 vertical binding, Ready/Plus는 compact exact-seven rail과 hero+2+4 mosaic를 사용하며 faux-content bars, gradient/SF fake-photo art, overlapping card stack, device chrome 없이 하나의 calm paper surface에 배치한다 (`D-031`, `D-035`)
+- website hero와 `site/public/og.png`도 같은 fixture provenance와 flat photo-story geometry를 사용하며, canonical lowercase `weekkeep` wordmark 외 capitalized wordmark·3D album/device mockup을 사용하지 않는다 (`D-035`)
 - VoiceOver custom action은 순차 tap을 요구하지 않고 `크게 보기`와 `사진 교체`로 직접 실행
 - 저장 시 grid-to-album matched-geometry 전환, Reduce Motion에서는 0.2초 fade
+- Save Confirmation은 share-first reward를 사용하고, Archive detail에도 local share entry를 둡니다 (`D-034`).
+- local share artifact는 warm paper, canonical wordmark, exact-seven palette, date range, hero+2+4/adaptive layout, `Made with Weekkeep`를 실제 saved PhotoKit images로 on-device 렌더링합니다. Story `1080×1920`/Post `1080×1350`의 exact output을 사용하며 social feed·cloud upload·server rendering은 V1에 없습니다.
 
 ## 생성 화면 해석 규칙
 

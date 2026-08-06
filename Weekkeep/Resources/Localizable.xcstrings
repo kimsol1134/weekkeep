@@ -1,0 +1,3926 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "app.name": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "weekkeep"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "weekkeep"
+          }
+        }
+      }
+    },
+    "tab.week": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This Week"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 주"
+          }
+        }
+      }
+    },
+    "tab.archive": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weeks"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난 주들"
+          }
+        }
+      }
+    },
+    "tab.settings": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정"
+          }
+        }
+      }
+    },
+    "common.back": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "뒤로"
+          }
+        }
+      }
+    },
+    "common.cancel": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "취소"
+          }
+        }
+      }
+    },
+    "common.close": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "닫기"
+          }
+        }
+      }
+    },
+    "common.done": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "완료"
+          }
+        }
+      }
+    },
+    "common.retry": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다시 시도"
+          }
+        }
+      }
+    },
+    "common.openSettings": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정 열기"
+          }
+        }
+      }
+    },
+    "common.learnMore": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Learn more"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자세히 보기"
+          }
+        }
+      }
+    },
+    "onboarding.headline": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There are so many photos,\nbut no time to sort them."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진은 많은데,\n정리할 시간은 없으니까."
+          }
+        }
+      }
+    },
+    "onboarding.body": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We choose up to seven from your last week.\nChange only the ones you don't want, then save."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난 7일에서 최대 7장을 골라드려요.\n마음에 안 드는 사진만 바꾸고 저장하면 끝이에요."
+          }
+        }
+      }
+    },
+    "onboarding.privacy": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your photos stay on this iPhone"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진은 이 iPhone에서만 살펴봐요"
+          }
+        }
+      }
+    },
+    "onboarding.primary": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep the last 7 days"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난 7일 남기기"
+          }
+        }
+      }
+    },
+    "onboarding.secondary": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How does photo access work?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 접근을 어떻게 쓰나요?"
+          }
+        }
+      }
+    },
+    "onboarding.privacyTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos stay on this iPhone"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진은 이 iPhone 안에만 있어요"
+          }
+        }
+      }
+    },
+    "onboarding.privacyDetail": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep looks at photos on this iPhone to prepare a small weekly draft. Photo pixels and identifiers are not sent to analytics or vendors."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep은 이 iPhone 안의 사진을 살펴보고 작은 주간 초안을 준비해요. 사진 픽셀과 식별자는 분석이나 외부 서비스로 보내지 않아요."
+          }
+        }
+      }
+    },
+    "accessibility.onboardingPreview": {
+      "comment": "Accessibility label for the static onboarding keepsake preview",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keepsake preview with seven moments"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일곱 장면으로 만든 주간 기록 미리보기"
+          }
+        }
+      }
+    },
+    "accessibility.photoStory": {
+      "comment": "Accessibility label for the static seven-photo explanatory story",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seven approved sample photos in one Weekkeep story"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "승인된 샘플 사진 일곱 장으로 만든 Weekkeep 주간 기록"
+          }
+        }
+      }
+    },
+    "week.readyTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Want to save last week?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난주를 남겨볼까요?"
+          }
+        }
+      }
+    },
+    "week.readyBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We will look at last week's photos on this iPhone and make a draft of up to seven."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난주 사진을 이 iPhone에서 살펴보고 최대 7장의 초안을 만들어요."
+          }
+        }
+      }
+    },
+    "week.makeDraft": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make a 7-photo draft"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7장 초안 만들기"
+          }
+        }
+      }
+    },
+    "week.photoCount": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photo from last week"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photos from last week"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "지난주 사진 %lld장"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "지난주 사진 %lld장"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "week.privacy": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos are reviewed only on this iPhone"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진은 이 iPhone 안에서만 살펴봐요"
+          }
+        }
+      }
+    },
+    "week.welcomeTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Want to keep the last 7 days?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난 7일을 남겨볼까요?"
+          }
+        }
+      }
+    },
+    "week.noPhotosTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There are no photos to keep from last week."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난주에는 남길 사진이 없어요."
+          }
+        }
+      }
+    },
+    "week.noPhotosBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only photos inside the requested date range are used. Check your Photos access or try again."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "요청한 날짜 안의 사진만 사용해요. 사진 접근을 확인하거나 다시 시도해 보세요."
+          }
+        }
+      }
+    },
+    "week.waitingTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for the next week to finish."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 기록을 기다리고 있어요."
+          }
+        }
+      }
+    },
+    "week.waitingBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your next regular memory will be ready after a full Monday–Sunday week."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "월요일부터 일요일까지 한 주가 지나면 다음 기록을 만들 수 있어요."
+          }
+        }
+      }
+    },
+    "week.savedTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last week is saved."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난주를 남겼어요."
+          }
+        }
+      }
+    },
+    "week.savedBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can revisit this memory in Weeks."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난 주들에서 이 기록을 다시 볼 수 있어요."
+          }
+        }
+      }
+    },
+    "week.viewRecord": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View record"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기록 보기"
+          }
+        }
+      }
+    },
+    "week.viewWeeks": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See Weeks"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난 주들 보기"
+          }
+        }
+      }
+    },
+    "week.permissionTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos access is needed."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 접근이 필요해요."
+          }
+        }
+      }
+    },
+    "week.permissionBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Photos access so Weekkeep can prepare a weekly draft on this iPhone."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 iPhone에서 주간 초안을 만들려면 사진 접근을 허용해 주세요."
+          }
+        }
+      }
+    },
+    "week.restrictedTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos access is restricted."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 접근이 제한되어 있어요."
+          }
+        }
+      }
+    },
+    "week.restrictedBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A device, parental, or organization policy controls Photos access. Weekkeep cannot change this policy."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 접근은 기기, 보호자 또는 조직 정책으로 관리되고 있어요. Weekkeep에서 이 정책을 바꿀 수 없어요."
+          }
+        }
+      }
+    },
+    "week.limited": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected photos only"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "선택한 사진만 사용 중"
+          }
+        }
+      }
+    },
+    "week.managePhotos": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manage photo access"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 접근 관리"
+          }
+        }
+      }
+    },
+    "week.lockedTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You have kept two weeks."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두 주를 잘 남겼어요."
+          }
+        }
+      }
+    },
+    "week.lockedBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep future weeks with Weekkeep Plus. Your saved records stay readable on this iPhone without Plus."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep Plus로 앞으로의 주도 남겨보세요. 기존 기록은 Plus 없이도 이 iPhone에서 계속 볼 수 있어요."
+          }
+        }
+      }
+    },
+    "week.plus": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue with Plus"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus로 계속하기"
+          }
+        }
+      }
+    },
+    "week.latest": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start with your latest completed week."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최근 완료된 한 주부터 다시 시작해요."
+          }
+        }
+      }
+    },
+    "week.errorTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We couldn't load last week."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난주를 불러오지 못했어요."
+          }
+        }
+      }
+    },
+    "curation.title": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Making a draft of up to seven"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7장의 초안을 만들고 있어요"
+          }
+        }
+      }
+    },
+    "curation.body": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Looking at the last week on this iPhone."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난주의 사진을 이 iPhone 안에서 살펴보는 중이에요."
+          }
+        }
+      }
+    },
+    "curation.fetching": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gathering photos"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진을 모으는 중"
+          }
+        }
+      }
+    },
+    "curation.prefiltering": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choosing a small, balanced set"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "날짜와 시간대가 고른 후보를 고르는 중"
+          }
+        }
+      }
+    },
+    "curation.downloading": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for iCloud photos"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud 사진을 기다리는 중"
+          }
+        }
+      }
+    },
+    "curation.analyzing": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Looking at photo quality"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 상태를 살펴보는 중"
+          }
+        }
+      }
+    },
+    "curation.deduplicating": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sorting similar photos"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "비슷한 사진을 정리하는 중"
+          }
+        }
+      }
+    },
+    "curation.ranking": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing a small draft"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "작은 초안을 준비하는 중"
+          }
+        }
+      }
+    },
+    "curation.privacy": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos never leave this iPhone"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진은 이 iPhone을 떠나지 않아요"
+          }
+        }
+      }
+    },
+    "curation.cancel": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "취소"
+          }
+        }
+      }
+    },
+    "curation.partial": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some photos could not be loaded. We can continue with the ones available."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일부 사진을 불러오지 못했어요. 가능한 사진으로 계속할 수 있어요."
+          }
+        }
+      }
+    },
+    "curation.failed": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We couldn't finish looking at these photos."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진을 끝까지 살펴보지 못했어요."
+          }
+        }
+      }
+    },
+    "review.welcomeTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Want to keep these moments?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 순간들을 남길까요?"
+          }
+        }
+      }
+    },
+    "review.regularTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Want to keep these moments from last week?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난주, 이 순간들을 남길까요?"
+          }
+        }
+      }
+    },
+    "review.body": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "We chose %lld moment for this week. Change it only if it doesn't feel right."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "We chose %lld moments for this week. Change only what doesn't feel right."
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "이번 주의 순간 %lld장을 골랐어요. 마음에 들지 않는 사진만 바꿔보세요."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "이번 주의 순간 %lld장을 골랐어요. 마음에 들지 않는 사진만 바꿔보세요."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "review.bodyCount": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$lld / %#@total@"
+          },
+          "substitutions": {
+            "total": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lld photo"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lld photos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 %2$lld / %#@total@"
+          },
+          "substitutions": {
+            "total": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lld장"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lld장"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "review.helper": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a photo to choose it for replacement."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진을 눌러 바꿀 대상을 선택하세요."
+          }
+        }
+      }
+    },
+    "review.replace": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace this photo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 사진 바꾸기"
+          }
+        }
+      }
+    },
+    "review.keep": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Keep %lld photo"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Keep %lld photos"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "이 %lld장 남기기"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "이 %lld장 남기기"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "review.photoLabel": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo %2$lld of %1$lld"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld장 중 %2$lld번째 사진"
+          }
+        }
+      }
+    },
+    "review.selected": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected for replacement"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "바꿀 사진으로 선택됨"
+          }
+        }
+      }
+    },
+    "review.view": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View larger"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "크게 보기"
+          }
+        }
+      }
+    },
+    "review.replaceAction": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace photo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 교체"
+          }
+        }
+      }
+    },
+    "review.missing": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This photo is no longer available in Photos."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 사진은 사진 앱에서 더 이상 찾을 수 없어요."
+          }
+        }
+      }
+    },
+    "review.saveFailed": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This draft is not saved yet."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아직 저장되지 않았어요."
+          }
+        }
+      }
+    },
+    "review.trySave": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try saving again"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다시 저장하기"
+          }
+        }
+      }
+    },
+    "viewer.position": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$lld장 중 %1$lld번째"
+          }
+        }
+      }
+    },
+    "viewer.swipe": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe left or right to browse."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "좌우로 넘겨보세요."
+          }
+        }
+      }
+    },
+    "replace.title": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which photo should replace it?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어떤 사진으로 바꿀까요?"
+          }
+        }
+      }
+    },
+    "replace.current": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current photo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지금 사진"
+          }
+        }
+      }
+    },
+    "replace.sameDay": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From the same day"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "같은 날 사진"
+          }
+        }
+      }
+    },
+    "replace.sameDayNone": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There are no unused photos from this day."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 날에는 아직 쓰지 않은 사진이 없어요."
+          }
+        }
+      }
+    },
+    "replace.seeOtherDays": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See photos from other days"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다른 날 사진 보기"
+          }
+        }
+      }
+    },
+    "replace.otherDays": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From other days"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다른 날 사진"
+          }
+        }
+      }
+    },
+    "replace.candidates": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other candidates"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다른 후보"
+          }
+        }
+      }
+    },
+    "replace.none": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There are no other candidates for this spot."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 자리를 바꿀 다른 후보가 없어요."
+          }
+        }
+      }
+    },
+    "save.title": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last week became\none small album."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난주가\n한 장의 앨범이 됐어요"
+          }
+        }
+      }
+    },
+    "save.metadata": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photo · Saved on this iPhone"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photos · Saved on this iPhone"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "사진 %lld장 · 이 iPhone에 저장됨"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "사진 %lld장 · 이 iPhone에 저장됨"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "save.body": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An ordinary week you couldn't organize\nis now a memory you can revisit."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "정리하지 못했던 평범한 한 주가,\n이제 다시 볼 수 있는 기억이 됐어요."
+          }
+        }
+      }
+    },
+    "save.view": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View record"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기록 보기"
+          }
+        }
+      }
+    },
+    "save.share": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share this week"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 주 공유하기"
+          }
+        }
+      }
+    },
+    "save.done": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "완료"
+          }
+        }
+      }
+    },
+    "share.title": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make this week yours to share"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 주를 공유할 앨범으로 만들어요"
+          }
+        }
+      }
+    },
+    "share.body": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A local keepsake made from the photos you saved."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장한 사진으로 이 iPhone 안에서 작은 기록을 만들어요."
+          }
+        }
+      }
+    },
+    "share.format": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Format"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "형식"
+          }
+        }
+      }
+    },
+    "share.story": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Story · 9:16"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스토리 · 9:16"
+          }
+        }
+      }
+    },
+    "share.post": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Post · 4:5"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "포스트 · 4:5"
+          }
+        }
+      }
+    },
+    "share.navigationTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "공유"
+          }
+        }
+      }
+    },
+    "share.loading": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing your local album"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 iPhone 안에서 앨범을 준비하는 중"
+          }
+        }
+      }
+    },
+    "share.error": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We couldn't make the share image. Your saved album is unchanged."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "공유 이미지를 만들지 못했어요. 저장된 앨범은 그대로예요."
+          }
+        }
+      }
+    },
+    "share.retry": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try preparing again"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다시 준비하기"
+          }
+        }
+      }
+    },
+    "share.previewLabel": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview of the Weekkeep share image"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep 공유 이미지 미리보기"
+          }
+        }
+      }
+    },
+    "share.privacy": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The image is rendered on this iPhone and shared only after you choose a destination."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미지는 이 iPhone에서 만들고, 공유 대상을 직접 선택한 뒤에만 시스템 공유 화면으로 넘겨요."
+          }
+        }
+      }
+    },
+    "share.share": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share image"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미지 공유하기"
+          }
+        }
+      }
+    },
+    "notification.title": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Want a reminder every Monday evening?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "매주 월요일 저녁에 알려드릴까요?"
+          }
+        }
+      }
+    },
+    "notification.body": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We'll gently remind you when it's time to keep last week."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난주를 남길 때가 되면 가볍게 알려드릴게요."
+          }
+        }
+      }
+    },
+    "notification.schedule": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every Monday · 8:30 PM"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "매주 월요일 · 오후 8:30"
+          }
+        }
+      }
+    },
+    "notification.primary": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get reminders"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림 받기"
+          }
+        }
+      }
+    },
+    "notification.secondary": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not now"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지금은 괜찮아요"
+          }
+        }
+      }
+    },
+    "archive.title": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weeks"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난 주들"
+          }
+        }
+      }
+    },
+    "archive.body": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your saved weeks gather here, one at a time."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "남긴 주는 여기 차곡차곡 쌓여요."
+          }
+        }
+      }
+    },
+    "archive.emptyTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep your first week."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "첫 번째 주를 남겨보세요."
+          }
+        }
+      }
+    },
+    "archive.emptyBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A few photos are enough to start."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 몇 장이면 충분해요."
+          }
+        }
+      }
+    },
+    "archive.errorTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weeks couldn't be loaded."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난 주들을 불러오지 못했어요."
+          }
+        }
+      }
+    },
+    "archive.errorBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your saved records were not changed. Try loading them again."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장된 기록은 바뀌지 않았어요. 다시 불러와 주세요."
+          }
+        }
+      }
+    },
+    "archive.goToWeek": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go to This Week"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 주로 가기"
+          }
+        }
+      }
+    },
+    "archive.photoCount": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photo"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photos"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "사진 %lld장"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "사진 %lld장"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "archive.missing": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some photos unavailable"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일부 사진을 볼 수 없음"
+          }
+        }
+      }
+    },
+    "archive.missingAll": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These photos are no longer available in Photos."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 사진들은 사진 앱에서 더 이상 찾을 수 없어요."
+          }
+        }
+      }
+    },
+    "archive.notFound": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This saved week could not be found on this iPhone."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 iPhone에서 저장된 주를 찾지 못했어요."
+          }
+        }
+      }
+    },
+    "detail.savedOnDevice": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photo · Saved on this iPhone"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photos · Saved on this iPhone"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "사진 %lld장 · 이 iPhone에 저장됨"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "사진 %lld장 · 이 iPhone에 저장됨"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "detail.helper": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a photo to view it larger."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진을 눌러 크게 보세요."
+          }
+        }
+      }
+    },
+    "paywall.title": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "weekkeep plus"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "weekkeep plus"
+          }
+        }
+      }
+    },
+    "paywall.overline": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You've kept two weeks"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두 주를 남겼어요"
+          }
+        }
+      }
+    },
+    "paywall.overlineCount": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "You've kept %lld week"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "You've kept %lld weeks"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld주를 남겼어요"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld주를 남겼어요"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "paywall.overlineUnknown": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your saved weeks"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장한 기록"
+          }
+        }
+      }
+    },
+    "paywall.headline": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep future weeks\nfrom slipping away."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앞으로의 주도\n놓치지 않게"
+          }
+        }
+      }
+    },
+    "paywall.body": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your saved records stay readable on this iPhone\nwithout Plus."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미 만든 기록은 결제하지 않아도\n이 iPhone에서 계속 볼 수 있어요."
+          }
+        }
+      }
+    },
+    "paywall.benefitDraft": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A draft of up to seven every week"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "매주 최대 7장의 초안"
+          }
+        }
+      }
+    },
+    "paywall.benefitPrivate": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos stay on this iPhone"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진은 계속 기기 안에서만"
+          }
+        }
+      }
+    },
+    "paywall.benefitLifetime": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One purchase for lifetime Plus access"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "한 번 구매로 평생 Plus 이용"
+          }
+        }
+      }
+    },
+    "paywall.loading": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading the current Store price…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "현재 스토어 가격을 불러오는 중…"
+          }
+        }
+      }
+    },
+    "paywall.unavailable": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Store price is not available right now."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지금은 스토어 가격을 불러올 수 없어요."
+          }
+        }
+      }
+    },
+    "paywall.productFallback": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lifetime Plus access"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "평생 Plus 이용권"
+          }
+        }
+      }
+    },
+    "paywall.purchase": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start lifetime access"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "평생 이용 시작하기"
+          }
+        }
+      }
+    },
+    "paywall.restore": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore purchase"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "구매 복원"
+          }
+        }
+      }
+    },
+    "paywall.continue": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "계속"
+          }
+        }
+      }
+    },
+    "paywall.checkEntitlement": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check Plus access"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus 이용 권한 확인"
+          }
+        }
+      }
+    },
+    "paywall.terms": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terms of Use"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이용 약관"
+          }
+        }
+      }
+    },
+    "paywall.privacy": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Policy"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "개인정보 처리방침"
+          }
+        }
+      }
+    },
+    "paywall.pending": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The App Store is still processing this purchase. Plus will appear when it is approved."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Store에서 구매를 처리하고 있어요. 승인되면 Plus가 열려요."
+          }
+        }
+      }
+    },
+    "paywall.cancelled": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Purchase cancelled."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "구매를 취소했어요."
+          }
+        }
+      }
+    },
+    "paywall.failed": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We couldn't complete the purchase. Please try again in a moment."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "구매를 완료하지 못했어요. 잠시 후 다시 시도해 주세요."
+          }
+        }
+      }
+    },
+    "paywall.restored": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus access was restored. Your local weekly records are not restored by a purchase restore."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus 이용 권한을 복원했어요. 구매 복원은 주간 기록을 복원하지 않아요."
+          }
+        }
+      }
+    },
+    "paywall.noPurchase": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We couldn't find a previous purchase."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "복원할 구매를 찾지 못했어요."
+          }
+        }
+      }
+    },
+    "settings.title": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정"
+          }
+        }
+      }
+    },
+    "settings.subtitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep only what you need."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "필요한 만큼만, 내 방식대로."
+          }
+        }
+      }
+    },
+    "settings.photos": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진"
+          }
+        }
+      }
+    },
+    "settings.photoAccess": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo access"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 접근"
+          }
+        }
+      }
+    },
+    "settings.fullAccess": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full access"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전체 접근"
+          }
+        }
+      }
+    },
+    "settings.limitedAccess": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected photos"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일부 사진"
+          }
+        }
+      }
+    },
+    "settings.deniedAccess": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not allowed"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접근 안 함"
+          }
+        }
+      }
+    },
+    "settings.restrictedAccess": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restricted by policy"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "정책으로 제한됨"
+          }
+        }
+      }
+    },
+    "settings.notDeterminedAccess": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not requested yet"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아직 요청하지 않음"
+          }
+        }
+      }
+    },
+    "settings.requestPhotoAccess": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow photo access"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 접근 허용"
+          }
+        }
+      }
+    },
+    "settings.manageAccess": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manage photo access"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 접근 관리"
+          }
+        }
+      }
+    },
+    "settings.notifications": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림"
+          }
+        }
+      }
+    },
+    "settings.weeklyReminder": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly reminder"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "주간 알림"
+          }
+        }
+      }
+    },
+    "settings.monday": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monday · 8:30 PM"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "월요일 · 오후 8:30"
+          }
+        }
+      }
+    },
+    "settings.reminderNotSet": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not set"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정 안 됨"
+          }
+        }
+      }
+    },
+    "settings.reminderAvailableAfterSave": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After your first saved week"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "첫 기록 저장 후"
+          }
+        }
+      }
+    },
+    "settings.reminderRequiresSavedAlbum": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save a week before turning on reminders."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "첫 주간 기록을 저장한 뒤 알림을 켤 수 있어요."
+          }
+        }
+      }
+    },
+    "settings.reminderChecking": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "확인 중…"
+          }
+        }
+      }
+    },
+    "settings.reminderOff": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "꺼짐"
+          }
+        }
+      }
+    },
+    "settings.enableReminder": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable weekly reminder"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "주간 알림 켜기"
+          }
+        }
+      }
+    },
+    "settings.openNotificationSettings": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open notification settings"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림 설정 열기"
+          }
+        }
+      }
+    },
+    "settings.plus": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep Plus"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep Plus"
+          }
+        }
+      }
+    },
+    "settings.status": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이용 상태"
+          }
+        }
+      }
+    },
+    "settings.free": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free access"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무료 이용 중"
+          }
+        }
+      }
+    },
+    "settings.active": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus active"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plus 이용 중"
+          }
+        }
+      }
+    },
+    "settings.learnPlus": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Learn about Weekkeep Plus"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep Plus 알아보기"
+          }
+        }
+      }
+    },
+    "settings.restore": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore purchase"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "구매 복원"
+          }
+        }
+      }
+    },
+    "settings.data": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data & support"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터와 도움"
+          }
+        }
+      }
+    },
+    "settings.storage": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data storage"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 저장"
+          }
+        }
+      }
+    },
+    "settings.localOnly": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This iPhone only"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 iPhone만"
+          }
+        }
+      }
+    },
+    "settings.privacy": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos & privacy"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진과 개인정보"
+          }
+        }
+      }
+    },
+    "settings.onDevice": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On-device processing"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기기 내 처리"
+          }
+        }
+      }
+    },
+    "settings.help": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Help & support"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "도움말 및 문의"
+          }
+        }
+      }
+    },
+    "settings.about": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About & support"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "도움말 및 문의"
+          }
+        }
+      }
+    },
+    "settings.version": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep %@"
+          }
+        }
+      }
+    },
+    "privacy.title": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos stay on this iPhone."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진은 밖으로 나가지 않아요"
+          }
+        }
+      }
+    },
+    "privacy.body": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep looks at photos on this iPhone and does not send photo pixels or identifiers to analytics or vendors."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep은 이 iPhone 안에서 사진을 살펴보고 사진 픽셀이나 식별자를 분석·외부 서비스로 보내지 않아요."
+          }
+        }
+      }
+    },
+    "privacy.onDeviceTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Analyzed on this iPhone"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기기 안에서 분석"
+          }
+        }
+      }
+    },
+    "privacy.onDeviceBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo analysis runs in the foreground on your device."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 분석은 이 iPhone의 foreground에서 실행돼요."
+          }
+        }
+      }
+    },
+    "privacy.notTrackedTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No photo tracking"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진을 추적하지 않음"
+          }
+        }
+      }
+    },
+    "privacy.notTrackedBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo names, locations, capture times, thumbnails, and identifiers stay out of analytics."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 이름·위치·촬영 시각·썸네일·식별자는 분석에 보내지 않아요."
+          }
+        }
+      }
+    },
+    "privacy.youDecideTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You decide"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "내가 결정"
+          }
+        }
+      }
+    },
+    "privacy.youDecideBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo access can be changed any time in Settings."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 접근은 언제든 설정에서 바꿀 수 있어요."
+          }
+        }
+      }
+    },
+    "privacy.storageTitle": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly records stay on this iPhone"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기록은 이 iPhone에만 저장돼요"
+          }
+        }
+      }
+    },
+    "privacy.storageBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep doesn't provide a separate backup, so records may be lost if you delete the app or change devices. Your original photos stay in Photos."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep은 별도 백업을 제공하지 않아 앱을 삭제하거나 기기를 바꾸면 기록이 사라질 수 있어요. 원본 사진은 사진 앱에 남아 있어요."
+          }
+        }
+      }
+    },
+    "privacy.openPhotos": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open photo access settings"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 접근 설정 열기"
+          }
+        }
+      }
+    },
+    "privacy.fullPolicy": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View the full Privacy Policy"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전체 개인정보 처리방침 보기"
+          }
+        }
+      }
+    },
+    "about.title": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Help & support"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "도움말 및 문의"
+          }
+        }
+      }
+    },
+    "about.tagline": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Many photos, little time.\nKeep seven from each week."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진은 많고 시간은 없으니까,\n한 주에 7장만."
+          }
+        }
+      }
+    },
+    "about.body": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Even ordinary weeks deserve to be easy to revisit."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "평범한 한 주도 다시 볼 수 있게 남겨요."
+          }
+        }
+      }
+    },
+    "about.help": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Help"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "도움말"
+          }
+        }
+      }
+    },
+    "about.contact": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact us"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "문의하기"
+          }
+        }
+      }
+    },
+    "about.terms": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terms of Use"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이용 약관"
+          }
+        }
+      }
+    },
+    "about.privacy": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Policy"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "개인정보 처리방침"
+          }
+        }
+      }
+    },
+    "about.licenses": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open-source licenses"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오픈소스 라이선스"
+          }
+        }
+      }
+    },
+    "about.licensesBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notices for the font and open-source software used to build Weekkeep."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekkeep을 만드는 데 사용한 글꼴과 오픈소스 소프트웨어의 고지입니다."
+          }
+        }
+      }
+    },
+    "about.licenseUnavailable": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The license text could not be loaded."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "라이선스 전문을 불러올 수 없습니다."
+          }
+        }
+      }
+    },
+    "about.font": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Font used"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사용한 글꼴"
+          }
+        }
+      }
+    },
+    "about.fontName": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LINE Seed Sans KR"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LINE Seed Sans KR"
+          }
+        }
+      }
+    },
+    "about.made": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Made with care in Seoul"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Made with care in Seoul"
+          }
+        }
+      }
+    },
+    "about.rate": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rate Weekkeep"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱 평가하기"
+          }
+        }
+      }
+    },
+    "accessibility.sevenStitches": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seven photo limit"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최대 7장"
+          }
+        }
+      }
+    },
+    "accessibility.photo": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo %2$lld of %1$lld"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld장 중 %2$lld번째 사진"
+          }
+        }
+      }
+    },
+    "accessibility.unavailable": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo unavailable"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진을 볼 수 없음"
+          }
+        }
+      }
+    },
+    "accessibility.replace": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace photo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진 교체"
+          }
+        }
+      }
+    },
+    "accessibility.view": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View larger"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "크게 보기"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

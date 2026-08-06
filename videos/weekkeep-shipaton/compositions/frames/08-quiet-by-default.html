@@ -1,0 +1,491 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Rg.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Bd.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 700;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "JetBrains Mono";
+      src: url("assets/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    #root {
+      --f08-plum: #5B415E;
+      --f08-deep: #25212B;
+      --f08-sage: #537763;
+      --f08-coral: #E97A68;
+      --f08-cream: #FBF7F2;
+    }
+
+    #root {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      color: var(--f08-deep);
+      font-family: "LINE Seed Sans KR";
+    }
+
+    .f08-quiet-background {
+      position: absolute;
+      inset: 0;
+      background: var(--f08-cream);
+    }
+
+    .f08-quiet-topbar {
+      position: absolute;
+      top: 4.2cqh;
+      left: 5cqw;
+      right: 5cqw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 6;
+    }
+
+    .f08-quiet-topbar-label {
+      color: var(--f08-plum);
+      font-family: "JetBrains Mono";
+      font-size: 1.35cqw;
+      line-height: 1;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .f08-quiet-stitch-rail {
+      display: flex;
+      align-items: center;
+      gap: 0.34cqw;
+      transform-origin: right center;
+    }
+
+    .f08-quiet-stitch {
+      width: 1.02cqw;
+      height: 0.48cqw;
+      flex: 0 0 auto;
+      border-radius: 3px;
+      background: var(--f08-plum);
+    }
+
+    .f08-quiet-headline {
+      position: absolute;
+      top: 11.2cqh;
+      left: 5cqw;
+      z-index: 4;
+      color: var(--f08-plum);
+    }
+
+    .f08-quiet-headline-line {
+      display: block;
+      font-family: "LINE Seed Sans KR";
+      font-size: 7.6cqw;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .f08-quiet-evidence-grid {
+      position: absolute;
+      top: 37.6cqh;
+      left: 5cqw;
+      right: 5cqw;
+      height: 36cqh;
+      z-index: 1;
+    }
+
+    .f08-quiet-slot {
+      position: absolute;
+      border: 2px solid var(--f08-plum);
+      border-radius: 8px;
+    }
+
+    .f08-quiet-slot-settings {
+      top: 0;
+      left: 0;
+      width: 39cqw;
+      height: 34cqh;
+    }
+
+    .f08-quiet-slot-privacy {
+      top: 3cqh;
+      left: 43cqw;
+      width: 47cqw;
+      height: 30cqh;
+    }
+
+    .f08-quiet-burst-wrap {
+      position: absolute;
+      top: 36cqh;
+      left: 5cqw;
+      right: 5cqw;
+      height: 38cqh;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .f08-quiet-burst-item {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: 0;
+      will-change: transform;
+    }
+
+    .f08-quiet-media-settings {
+      width: 18cqw;
+      height: 38cqh;
+    }
+
+    .f08-quiet-media-privacy {
+      width: 20cqw;
+      height: 38cqh;
+    }
+
+    .f08-quiet-media-card {
+      box-sizing: border-box;
+      height: 100%;
+      padding: 0.34cqw;
+      border: 2px solid var(--f08-plum);
+      border-radius: 8px;
+      background: var(--f08-cream);
+      overflow: hidden;
+    }
+
+    .f08-quiet-media-card img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .f08-quiet-callout {
+      position: absolute;
+      left: 7cqw;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      gap: 0.72cqw;
+      color: var(--f08-plum);
+      font-size: 1.7cqw;
+      font-weight: 400;
+      line-height: 1.08;
+      white-space: nowrap;
+    }
+
+    .f08-quiet-callout-photos {
+      top: 40.8cqh;
+    }
+
+    .f08-quiet-callout-reminder {
+      top: 45.4cqh;
+    }
+
+    .f08-quiet-callout-marker {
+      width: 0.42cqw;
+      height: 0.42cqw;
+      flex: 0 0 auto;
+      border-radius: 3px;
+      background: var(--f08-coral);
+    }
+
+    .f08-quiet-reminder-focus {
+      position: absolute;
+      top: 64.5%;
+      left: 7%;
+      width: 86%;
+      height: 8.2%;
+      box-sizing: border-box;
+      border: 2px solid var(--f08-coral);
+      border-radius: 6px;
+    }
+
+    .f08-quiet-focus-caption {
+      position: absolute;
+      top: 50.2cqh;
+      left: 7cqw;
+      z-index: 4;
+      color: var(--f08-coral);
+      font-family: "JetBrains Mono";
+      font-size: 1.04cqw;
+      line-height: 1.1;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .f08-quiet-privacy-label {
+      position: absolute;
+      top: 40.4cqh;
+      left: 47.7cqw;
+      z-index: 4;
+      padding-left: 0.8cqw;
+      border-left: 2px solid var(--f08-sage);
+      color: var(--f08-sage);
+      font-family: "JetBrains Mono";
+      font-size: 1.08cqw;
+      line-height: 1.1;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .f08-quiet-connector {
+      position: absolute;
+      top: 56.1cqh;
+      left: 34cqw;
+      width: 33cqw;
+      height: 2px;
+      transform-origin: left center;
+      background: var(--f08-plum);
+      z-index: 2;
+    }
+
+    .f08-quiet-trust-strip {
+      position: absolute;
+      top: 75cqh;
+      left: 5cqw;
+      right: 5cqw;
+      height: 7.2cqh;
+      display: grid;
+      grid-template-columns: 0.72fr 1.18fr 1fr;
+      column-gap: 2.8cqw;
+      z-index: 5;
+    }
+
+    .f08-quiet-trust-item {
+      box-sizing: border-box;
+      padding-top: 1.15cqh;
+      border-top: 2px solid var(--f08-plum);
+      color: var(--f08-plum);
+      font-size: 2.08cqw;
+      font-weight: 400;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+  </style>
+
+  <div data-hf-id="hf-q6ch" id="root" data-composition-id="08-quiet-by-default" data-width="1920" data-height="1080" data-duration="7.4">
+    <div data-hf-id="hf-lch6" class="clip f08-quiet-background" data-start="0" data-duration="7.4" data-track-index="0" aria-hidden="true"></div>
+
+    <div data-hf-id="hf-tlks" class="clip f08-quiet-topbar" data-start="0" data-duration="7.4" data-track-index="1">
+      <div data-hf-id="hf-6iks" class="f08-quiet-topbar-label">08 / TRUST</div>
+      <div data-hf-id="hf-376z" class="f08-quiet-stitch-rail" aria-label="Seven-stitch weekly rhythm">
+        <span data-hf-id="hf-58sg" class="f08-quiet-stitch"></span>
+        <span data-hf-id="hf-ovqw" class="f08-quiet-stitch"></span>
+        <span data-hf-id="hf-nott" class="f08-quiet-stitch"></span>
+        <span data-hf-id="hf-o34u" class="f08-quiet-stitch"></span>
+        <span data-hf-id="hf-mw7r" class="f08-quiet-stitch"></span>
+        <span data-hf-id="hf-nais" class="f08-quiet-stitch"></span>
+        <span data-hf-id="hf-m3lp" class="f08-quiet-stitch"></span>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-j9k7" class="clip f08-quiet-headline" data-start="0" data-duration="7.4" data-track-index="6">
+      <span data-hf-id="hf-fsg8" class="f08-quiet-headline-line" data-layout-allow-overlap="">Quiet</span>
+      <span data-hf-id="hf-jowq" class="f08-quiet-headline-line" data-layout-allow-overlap="">by default.</span>
+    </div>
+
+    <div data-hf-id="hf-o54m" class="clip f08-quiet-evidence-grid" data-start="0" data-duration="7.4" data-track-index="2" aria-hidden="true">
+      <div data-hf-id="hf-secq" class="f08-quiet-slot f08-quiet-slot-settings"></div>
+      <div data-hf-id="hf-o3m7" class="f08-quiet-slot f08-quiet-slot-privacy"></div>
+    </div>
+
+    <div data-hf-id="hf-pcf5" class="clip f08-quiet-evidence-layer" data-start="0" data-duration="7.4" data-track-index="3">
+      <div data-hf-id="hf-pwrt" class="f08-quiet-burst-wrap">
+        <figure data-hf-id="hf-jf1b" class="f08-quiet-burst-item f08-quiet-media-settings" data-target-x="-440" data-target-y="0">
+          <div data-hf-id="hf-rl9l" class="f08-quiet-media-card">
+            <img data-hf-id="hf-z0uy" src="assets/07-settings.jpg" alt="Weekkeep settings screen">
+            <div data-hf-id="hf-n6da" class="f08-quiet-reminder-focus" aria-hidden="true"></div>
+          </div>
+        </figure>
+
+        <figure data-hf-id="hf-0mik" class="f08-quiet-burst-item f08-quiet-media-privacy" data-target-x="430" data-target-y="0">
+          <div data-hf-id="hf-til9" class="f08-quiet-media-card">
+            <img data-hf-id="hf-ro2y" src="assets/10-privacy-primer.jpg" alt="On-device privacy primer">
+          </div>
+        </figure>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-edd1" class="clip f08-quiet-callout f08-quiet-callout-photos" data-start="1.3" data-duration="6.1" data-track-index="4">
+      <span data-hf-id="hf-6a9f" class="f08-quiet-callout-marker" aria-hidden="true"></span>
+      <span data-hf-id="hf-wvgx">Photos control</span>
+    </div>
+
+    <div data-hf-id="hf-zwg7" class="clip f08-quiet-callout f08-quiet-callout-reminder" data-start="1.3" data-duration="6.1" data-track-index="7">
+      <span data-hf-id="hf-jlqr" class="f08-quiet-callout-marker" aria-hidden="true"></span>
+      <span data-hf-id="hf-hz5x">Monday reminder</span>
+    </div>
+
+    <div data-hf-id="hf-mb55" class="clip f08-quiet-focus-caption" data-start="2.28" data-duration="5.12" data-track-index="8">
+      optional Monday reminder
+    </div>
+
+    <div data-hf-id="hf-cl3x" class="clip f08-quiet-privacy-label" data-start="3.3" data-duration="4.1" data-track-index="9">
+      ON-DEVICE ANALYSIS
+    </div>
+
+    <div data-hf-id="hf-odf8" class="clip f08-quiet-connector" data-start="3.3" data-duration="4.1" data-track-index="10" aria-hidden="true"></div>
+
+    <div data-hf-id="hf-na77" class="clip f08-quiet-trust-strip" data-start="5.2" data-duration="2.2" data-track-index="5">
+      <div data-hf-id="hf-vgkw" class="f08-quiet-trust-item">Optional</div>
+      <div data-hf-id="hf-bw42" class="f08-quiet-trust-item">Scheduled on device</div>
+      <div data-hf-id="hf-3siy" class="f08-quiet-trust-item">Boundary stays visible</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script>
+    (() => {
+      const frameId = "08-quiet-by-default";
+      const gsapRef = window.gsap;
+      if (!gsapRef) return;
+
+      const timeline = gsapRef.timeline({ paused: true });
+      const root = document.querySelector('[data-composition-id="08-quiet-by-default"]');
+      const headlineLines = root.querySelectorAll(".f08-quiet-headline-line");
+      const settingsCard = root.querySelector(".f08-quiet-media-settings");
+      const privacyCard = root.querySelector(".f08-quiet-media-privacy");
+      const settingsFocus = root.querySelector(".f08-quiet-reminder-focus");
+      const grid = root.querySelector(".f08-quiet-evidence-grid");
+      const topbar = root.querySelector(".f08-quiet-topbar");
+      const stitchRail = root.querySelector(".f08-quiet-stitch-rail");
+      const photosCallout = root.querySelector(".f08-quiet-callout-photos");
+      const reminderCallout = root.querySelector(".f08-quiet-callout-reminder");
+      const focusCaption = root.querySelector(".f08-quiet-focus-caption");
+      const privacyLabel = root.querySelector(".f08-quiet-privacy-label");
+      const connector = root.querySelector(".f08-quiet-connector");
+      const trustItems = root.querySelectorAll(".f08-quiet-trust-item");
+
+      timeline.fromTo(
+        topbar,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.24, ease: "power2.out" },
+        0.04,
+      );
+
+      timeline.fromTo(
+        grid,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.32, ease: "power2.out" },
+        0.06,
+      );
+
+      headlineLines.forEach((line, index) => {
+        timeline.fromTo(
+          line,
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.42, ease: "power2.out" },
+          0.08 + index * 0.38,
+        );
+      });
+
+      timeline.fromTo(
+        stitchRail,
+        { opacity: 0, scaleX: 0.76 },
+        { opacity: 1, scaleX: 1, duration: 0.4, ease: "power2.out" },
+        0.72,
+      );
+
+      const burstItems = [settingsCard, privacyCard];
+      const burstStartTimes = [1.3, 3.3];
+      burstItems.forEach((item, index) => {
+        const targetX = Number(item.dataset.targetX);
+        const targetY = Number(item.dataset.targetY);
+        const startProgress = 0.28;
+        timeline.fromTo(
+          item,
+          {
+            xPercent: -50,
+            yPercent: -50,
+            x: targetX * startProgress,
+            y: targetY * startProgress,
+            scale: 0.94,
+            opacity: 0,
+          },
+          {
+            x: targetX,
+            y: targetY,
+            scale: 1,
+            opacity: 1,
+            duration: 0.88,
+            ease: "power3.out",
+          },
+          burstStartTimes[index],
+        );
+      });
+
+      timeline.fromTo(
+        photosCallout,
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.34, ease: "power2.out" },
+        1.58,
+      );
+
+      timeline.fromTo(
+        reminderCallout,
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.34, ease: "power2.out" },
+        1.94,
+      );
+
+      timeline.fromTo(
+        settingsFocus,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.26, ease: "power2.out" },
+        2.28,
+      );
+
+      timeline.fromTo(
+        focusCaption,
+        { opacity: 0, y: 8 },
+        { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
+        2.34,
+      );
+
+      timeline.fromTo(
+        connector,
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.56, ease: "power2.out" },
+        3.42,
+      );
+
+      timeline.fromTo(
+        privacyLabel,
+        { opacity: 0, clipPath: "inset(0 100% 0 0)" },
+        { opacity: 1, clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "power2.out" },
+        3.72,
+      );
+
+      trustItems.forEach((item, index) => {
+        timeline.fromTo(
+          item,
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.34, ease: "power2.out" },
+          5.24 + index * 0.38,
+        );
+      });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[frameId] = timeline;
+    })();
+  </script>
+</template>

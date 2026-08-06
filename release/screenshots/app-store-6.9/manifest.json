@@ -1,0 +1,174 @@
+{
+  "composition" : {
+    "background" : "#FBF7F2",
+    "border_color" : "#E8E1DB",
+    "device_frame" : false,
+    "headline_color" : "#5B415E",
+    "headline_font" : "LINESeedSansKR-Bold",
+    "raw_screenshot_corner_radius" : 44,
+    "raw_screenshot_width" : 1050
+  },
+  "device" : {
+    "name" : "Weekkeep AppStore 6.9",
+    "os" : "iOS 26.5",
+    "udid" : "9C794F17-634B-4B7A-86A9-AEE88EE575FF"
+  },
+  "fixture_sources" : [
+    {
+      "filename" : "design\/fixtures\/app-store-family-moments\/01-ginkgo-leaf.png",
+      "sha256" : "5caa8f0beb6c6f3f7e18f5892516b07eeeeccdc780fc6bed495fc86556927e5d"
+    },
+    {
+      "filename" : "design\/fixtures\/app-store-family-moments\/02-pancake-morning.png",
+      "sha256" : "18e1d3051fbe044b1c3001970c2c4a88d133308ee4fcf9cb34c9a5ee4280abdb"
+    },
+    {
+      "filename" : "design\/fixtures\/app-store-family-moments\/03-rainy-puddle.png",
+      "sha256" : "c392ebc057888e6a27974b3c823003d53c3cf99c1a2a9c8e8708d48a856d53c5"
+    },
+    {
+      "filename" : "design\/fixtures\/app-store-family-moments\/04-bedtime-story.png",
+      "sha256" : "e528e538c7e053df523acf19d64ed6388349f27bce767ec2ef4b73bbe939a6c4"
+    },
+    {
+      "filename" : "design\/fixtures\/app-store-family-moments\/05-park-bubbles.png",
+      "sha256" : "74e5c26843eeeb6ccf7dea55357676674b799d0cde3ec70508ac217a19cce8b1"
+    },
+    {
+      "filename" : "design\/fixtures\/app-store-family-moments\/06-acorn-home.png",
+      "sha256" : "698cb80f89dbb184340f652c475d48c9730a9842fe2c22ee7502985ac94b3be0"
+    },
+    {
+      "filename" : "design\/fixtures\/app-store-family-moments\/07-balcony-herbs.png",
+      "sha256" : "276f8db9c6133f44aa3397857277510116ba5f26657871f917d1b6ec6331f86e"
+    }
+  ],
+  "locales" : [
+    {
+      "locale" : "en-US",
+      "screenshots" : [
+        {
+          "filename" : "01-welcome.jpg",
+          "final_sha256" : "3f77dcda6edfef024f93bb80cf4d2d3a7c690ed8fcd86f45409dae501c599e1c",
+          "headline" : "Your week, already waiting.",
+          "semantic" : "welcome",
+          "sequence" : 1,
+          "source" : "release\/local\/visual-qa\/20260806-app-store-build3-onboarding-rerun1\/raw\/en-US\/01-welcome.png",
+          "source_sha256" : "9a098aa5ef747d3c25bcca5d6220e26f4d76c272e2f002e507c29d2cc97f66bf"
+        },
+        {
+          "filename" : "02-curation-progress.jpg",
+          "final_sha256" : "12d941e2509dd1a90d9cd9acf06a5b5bcffdb5b512be4a26767c4f2eb235e8e1",
+          "headline" : "Private from the first tap.",
+          "semantic" : "curation_progress",
+          "sequence" : 2,
+          "source" : "release\/local\/visual-qa\/20260806-app-store-build3-onboarding-rerun1\/raw\/en-US\/02-curation-progress.png",
+          "source_sha256" : "0441cdba7faa180ef1517fae184863ab75f1efe3f539941867476db9ef2b104c"
+        },
+        {
+          "filename" : "03-review.jpg",
+          "final_sha256" : "fff9a3e5e72264cc4333057fd51317687076e27419ef163c2eec7f051c065992",
+          "headline" : "Seven moments. Nothing to sort.",
+          "semantic" : "review",
+          "sequence" : 3,
+          "source" : "release\/local\/visual-qa\/20260806-app-store-build3-onboarding-rerun1\/raw\/en-US\/03-review.png",
+          "source_sha256" : "783342b421d359da7982f0a5a9baaae3176da6ae299a9ae6906618d24375f95c"
+        },
+        {
+          "filename" : "04-replace.jpg",
+          "final_sha256" : "4e4d1d6563d6391dcf601deedc563feeae56a4b787377ed7f7e74f4d2968d252",
+          "headline" : "Change one. Keep the feeling.",
+          "semantic" : "replace",
+          "sequence" : 4,
+          "source" : "release\/local\/visual-qa\/20260806-app-store-build3-onboarding-rerun1\/raw\/en-US\/04-replace.png",
+          "source_sha256" : "6b4c2c775c6b5f18f764136871e69885fc5ec6b0902905e2cd2d0a9f4ddf0a83"
+        },
+        {
+          "filename" : "05-saved-weeks.jpg",
+          "final_sha256" : "0d2135b950d303d585031df2cde07c9663fdc1df5907556d0704915b4d8c49a3",
+          "headline" : "A small album, every week.",
+          "semantic" : "saved_weeks",
+          "sequence" : 5,
+          "source" : "release\/local\/visual-qa\/20260806-app-store-build3-onboarding-rerun1\/raw\/en-US\/05-saved-weeks.png",
+          "source_sha256" : "87ba294e127a74a0cc74a14765c6d209f34d752c0b58e4293c11a34a5f39ae36"
+        },
+        {
+          "filename" : "06-plus.jpg",
+          "final_sha256" : "f1c6bf36e366c2cfad3f921e8461a1c098dca309fa39520fd26727c26a5081c2",
+          "headline" : "Two albums free. Then yours for life.",
+          "semantic" : "plus",
+          "sequence" : 6,
+          "source" : "release\/local\/visual-qa\/20260806-app-store-build3-onboarding-rerun1\/raw\/en-US\/06-plus.png",
+          "source_sha256" : "adcb150448294bdc4e4c03fcdd1a089b27fd8f292e52856c8c4bd1eade777c13"
+        }
+      ]
+    },
+    {
+      "locale" : "ko",
+      "screenshots" : [
+        {
+          "filename" : "01-welcome.jpg",
+          "final_sha256" : "3fbe9451ea78f0cb760ad3abbafb8c29a1d8945c53650bd55bca66e61fa7815f",
+          "headline" : "사진은 많고, 시간은 없으니까.",
+          "semantic" : "welcome",
+          "sequence" : 1,
+          "source" : "release\/local\/visual-qa\/20260806-app-store-build3-onboarding-rerun1\/raw\/ko\/01-welcome.png",
+          "source_sha256" : "8215067a4216bdf638187670009786d5528ec51d4d09d0b7edf16a5da387b79f"
+        },
+        {
+          "filename" : "02-curation-progress.jpg",
+          "final_sha256" : "6b80f80bf2c079617b743d81ef329b81e8bb7a3649d1b9db299b6e301e8f5427",
+          "headline" : "첫 탭부터, 사진은 기기 안에서.",
+          "semantic" : "curation_progress",
+          "sequence" : 2,
+          "source" : "release\/local\/visual-qa\/20260806-app-store-build3-onboarding-rerun1\/raw\/ko\/02-curation-progress.png",
+          "source_sha256" : "741c2155c37b662e833e1ce6cb03e4959395e13bd830a676e0f12cd2b2ed98a2"
+        },
+        {
+          "filename" : "03-review.jpg",
+          "final_sha256" : "ebaa9256b3f03807b802ba91e919b9d4dc15e487767bc99c2e5ca93d3432632a",
+          "headline" : "일주일에 7장만.",
+          "semantic" : "review",
+          "sequence" : 3,
+          "source" : "release\/local\/visual-qa\/20260806-app-store-build3-onboarding-rerun1\/raw\/ko\/03-review.png",
+          "source_sha256" : "acc8036d50aa37f7caf3affe73033ee5e885af52f6fe677184ce2044e1ec4e15"
+        },
+        {
+          "filename" : "04-replace.jpg",
+          "final_sha256" : "d5087a52695599197b6d13c2e739d9cbe10d174c926264b80914cf356bd2addd",
+          "headline" : "마음에 안 드는 한 장만 바꾸세요.",
+          "semantic" : "replace",
+          "sequence" : 4,
+          "source" : "release\/local\/visual-qa\/20260806-app-store-build3-onboarding-rerun1\/raw\/ko\/04-replace.png",
+          "source_sha256" : "4cbff4d591b4c06e82fe18f79186d4c031af9b26d9ef91d280b218e0d0f675d1"
+        },
+        {
+          "filename" : "05-saved-weeks.jpg",
+          "final_sha256" : "94da7a6e08aa6a50ad7ba39f4ca58a8c4f5af421d972a762600056668cd52ce0",
+          "headline" : "작은 한 주가 차곡차곡.",
+          "semantic" : "saved_weeks",
+          "sequence" : 5,
+          "source" : "release\/local\/visual-qa\/20260806-app-store-build3-onboarding-rerun1\/raw\/ko\/05-saved-weeks.png",
+          "source_sha256" : "eed6eafca324febdb18be970ca79fb7564f48f5d01455076515e471a4b5f1818"
+        },
+        {
+          "filename" : "06-plus.jpg",
+          "final_sha256" : "d7fe9b56ed288a9a5fcd124bc1ddd90a4203cd88fc915fddbd2b2badbdfbfa17",
+          "headline" : "두 번 무료, 그다음은 평생 이용권.",
+          "semantic" : "plus",
+          "sequence" : 6,
+          "source" : "release\/local\/visual-qa\/20260806-app-store-build3-onboarding-rerun1\/raw\/ko\/06-plus.png",
+          "source_sha256" : "28bf968ba2f023a8ce583932cfcf007563bcf511e9824dc871e2110ef00b83ff"
+        }
+      ]
+    }
+  ],
+  "output" : {
+    "alpha" : false,
+    "format" : "jpeg",
+    "height" : 2868,
+    "width" : 1320
+  },
+  "schema_version" : 1,
+  "set" : "app-store-6.9"
+}

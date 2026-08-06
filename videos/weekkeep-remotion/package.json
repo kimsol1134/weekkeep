@@ -1,0 +1,38 @@
+{
+  "name": "weekkeep-remotion-preview",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Canonical Weekkeep Shipaton preview composition.",
+  "scripts": {
+    "studio": "remotion studio src/index.ts --no-open",
+    "start": "npm run studio",
+    "captions:rebuild": "node scripts/rebuild-captions.mjs --write",
+    "captions:verify": "node scripts/rebuild-captions.mjs --verify",
+    "validate:captions": "node scripts/validate-captions.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --max-warnings=0",
+    "check": "npm run captions:verify && npm run validate:captions && npm run typecheck && npm run lint",
+    "render:still": "remotion still src/index.ts WeekkeepShipaton72",
+    "render:video": "remotion render src/index.ts WeekkeepShipaton72 out/weekkeep-shipaton-72.mp4"
+  },
+  "dependencies": {
+    "@remotion/captions": "4.0.506",
+    "@remotion/fonts": "4.0.506",
+    "@remotion/media": "4.0.506",
+    "@remotion/transitions": "4.0.506",
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.0",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "remotion": "4.0.506",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.506",
+    "@types/node": "22.15.21",
+    "@typescript-eslint/eslint-plugin": "8.32.1",
+    "@typescript-eslint/parser": "8.32.1",
+    "eslint": "9.26.0",
+    "typescript": "5.8.3"
+  }
+}

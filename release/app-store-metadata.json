@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "source_documents": [
+    "docs/09-APP-PRIVACY-LABEL.md",
+    "docs/10-APP-STORE-METADATA.md",
+    "docs/11-SHIPATON-SUBMISSION.md"
+  ],
+  "app": {
+    "bundle_id": "com.solkim.weekkeep",
+    "sku": "WEEKKEEP-IOS-2026",
+    "version": "1.0.0",
+    "build": "6",
+    "primary_locale": "en-US",
+    "additional_locales": ["ko"],
+    "primary_category": "Photo & Video",
+    "primary_category_identifier": "public.app-category.photo-video",
+    "secondary_category": "Lifestyle",
+    "name": "Weekkeep: Family Photo Album",
+    "copyright": "© 2026 Sol Kim",
+    "marketing_url": null,
+    "support_url": "https://weekkeep-app.kimsol1134.chatgpt.site/support",
+    "privacy_policy_url": "https://weekkeep-app.kimsol1134.chatgpt.site/privacy",
+    "privacy_choices_url": "https://weekkeep-app.kimsol1134.chatgpt.site/privacy",
+    "terms_url": null,
+    "availability": ["US", "KR"],
+    "release_method": "manual",
+    "asc_state": {
+      "app_id": "6798449478",
+      "version_id": "ac4f183e-1019-4ffc-827f-f5514f0d349b",
+      "build_id": "81697c0b-a68e-482a-be6f-50806e56fbff",
+      "build_processing_state": "VALID",
+      "version_state": "WAITING_FOR_REVIEW",
+      "app_availability": ["USA", "KOR"],
+      "iap_availability": ["USA", "KOR"],
+      "iap_state": "WAITING_FOR_REVIEW",
+      "review_detail": "configured",
+      "remote_build_scope": "remote_review_build_3_attached",
+      "remote_unattached_valid_build": "4",
+      "local_candidate_build": "6",
+      "review_submission_id": "88c157ee-ce87-41c3-8a4a-71e614993a58",
+      "review_submission_state": "WAITING_FOR_REVIEW",
+      "review_submission_submitted_at": "2026-08-06T11:47:54.203Z",
+      "review_submission_item_count": 2,
+      "review_submission_items": "exactly_2_READY_items",
+      "review_submission_app_store_version_id": "ac4f183e-1019-4ffc-827f-f5514f0d349b",
+      "review_submission_iap_version_id": "cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f",
+      "historical_review_submission_id": "260abf1a-886b-4014-8262-541d261e60e2",
+      "historical_review_submission_state": "COMPLETE",
+      "historical_review_submission_build": "2"
+    },
+    "remote_unattached_valid_build": {
+      "version": "1.0.0",
+      "build": "4",
+      "status": "VALID_UNATTACHED",
+      "asc_build_id": null,
+      "asc_processing_state": "VALID",
+      "app_store_version_attachment": "UNATTACHED",
+      "evidence_status": "known_external_truth; build identifier not recorded locally"
+    },
+    "local_candidate": {
+      "version": "1.0.0",
+      "build": "6",
+      "status": "LOCAL_NOT_UPLOADED",
+      "upload_state": "not_uploaded",
+      "asc_build_id": null,
+      "asc_processing_state": "NOT_UPLOADED",
+      "app_store_version_attachment": "NOT_ATTACHED",
+      "does_not_replace_existing_review_submission": true,
+      "asc_evidence_path": null,
+      "visual_qa_evidence_directory": "release/local/visual-qa/20260807-build6-notification-settings-rerun1/final",
+      "visual_qa_evidence_scope": "local_build6_notification_settings_visual_qa_not_uploaded",
+      "archive_directory": null,
+      "ipa_path": null
+    },
+    "historical_local_candidate_build_5": {
+      "version": "1.0.0",
+      "build": "5",
+      "status": "HISTORICAL_LOCAL_NOT_UPLOADED",
+      "upload_state": "not_uploaded",
+      "asc_build_id": null,
+      "screenshot_evidence_directory": "release/local/visual-qa/20260807-build5-app-store-candidate-rerun8/final",
+      "evidence_scope": "local_build5_candidate_not_uploaded"
+    }
+  },
+  "locales": {
+    "en-US": {
+      "name": "Weekkeep: Family Photo Album",
+      "subtitle": "Seven photos. One quiet week.",
+      "promotional_text": "Your camera roll is full. Weekkeep prepares up to seven moments from the past week on your iPhone, so one quiet minute becomes a family memory.",
+      "keywords": "family,memory,weekly,parents,baby,children,journal,private,organizer,keepsake,camera,diary",
+      "description": "Your camera roll is full of ordinary moments you meant to keep.\n\nWeekkeep turns one week into a small family album of up to seven photos—without asking you to sort everything.\n\nONE QUIET MINUTE\n\nOn your first visit, start with your recent seven days. After that, a newly completed week waits for you each Monday. Weekkeep prepares a draft on your iPhone. Keep it as it is, or replace only the photos that do not feel right.\n\nMADE FOR REAL FAMILY LIFE\n\n• Up to seven moments, never a fake or empty slot\n• A calm review instead of another daily habit\n• One-tap replacement with a small set of alternatives\n• A Weeks archive that keeps each album easy to revisit\n• A shareable weekly album rendered on-device in Story 9:16 or Post 4:5 format\n• An optional Monday evening reminder, scheduled locally\n• English and Korean support\n\nPRIVATE BY DESIGN\n\nPhoto analysis happens on your iPhone. Weekkeep does not send photo pixels, thumbnails, Photos identifiers, filenames, capture times, or locations to us or to analytics services. When you explicitly choose Share, Weekkeep renders the artifact on-device and presents Apple's system share sheet; Weekkeep does not choose or record the recipient. There is no Weekkeep account and no cloud photo upload.\n\nWeekkeep stores album records locally and refers to the originals in Apple Photos. Deleting the app, changing devices, or deleting an original photo may make a record unavailable. Restoring a purchase restores Plus access, not locally stored albums.\n\nTRY IT FIRST, KEEP IT FOR LIFE\n\nYour first two weekly albums are included. Weekkeep Plus is a one-time lifetime purchase that unlocks future album creation. There is no subscription. Your local price is always shown before purchase.\n\nA week worth keeping."
+    },
+    "ko": {
+      "name": "Weekkeep: 가족 사진 앨범",
+      "subtitle": "일주일을 7장의 추억으로",
+      "promotional_text": "사진은 많고 정리할 시간은 없으니까. Weekkeep이 지난 일주일에서 최대 7장을 기기 안에서 먼저 제안합니다. 한 번 확인하고, 한 주를 남겨보세요.",
+      "keywords": "육아,추억,주간,부모,아기,아이,기록,일기,성장,가정",
+      "description": "사진은 많은데 정리할 시간은 없으니까.\n\nWeekkeep은 평범한 일주일을 최대 7장의 작은 가족 앨범으로 남깁니다. 카메라 롤 전체를 정리하라고 요구하지 않아요.\n\n한 번의 조용한 확인\n\n처음에는 최근 7일로 바로 시작합니다. 그다음부터는 새로 끝난 한 주가 월요일마다 기다립니다. Weekkeep이 이 iPhone 안에서 초안을 준비하면 그대로 저장하거나 마음에 들지 않는 사진만 바꾸세요.\n\n실제 가족 생활을 위한 방식\n\n• 최대 7장, 사진이 부족하면 빈자리를 억지로 채우지 않음\n• 매일 접속이나 연속 기록을 요구하지 않는 주간 경험\n• 작은 후보 목록에서 한 장씩 간단히 교체\n• 지난 기록을 다시 보는 Weeks 보관함\n• 저장한 사진으로 만드는 Story 9:16 또는 Post 4:5 공유 이미지\n• 월요일 저녁에 기기에서 보내는 선택형 알림\n• 한국어와 영어 지원\n\n사진은 기기 안에서\n\n사진 분석은 이 iPhone 안에서 실행됩니다. 사진 픽셀, 썸네일, 사진 식별자, 파일명, 촬영 시각, 위치를 Weekkeep이나 분석 서비스로 보내지 않습니다. 사용자가 명시적으로 공유를 선택하면 기기 안에서 Story 또는 Post 이미지를 만들고 Apple 시스템 공유 시트를 엽니다. Weekkeep은 수신자나 목적지를 선택하거나 기록하지 않습니다. Weekkeep 계정이나 사진 클라우드 업로드도 없습니다.\n\n주간 기록은 이 iPhone에 저장되고 사진 앱의 원본을 참조합니다. 앱을 삭제하거나 기기를 바꾸거나 원본 사진을 지우면 기록을 볼 수 없게 될 수 있습니다. 구매 복원은 Plus 이용 권한만 복원하며 로컬 기록은 복원하지 않습니다.\n\n먼저 두 번 써보고, 한 번의 구매로 계속\n\n첫 두 개의 주간 기록은 무료입니다. Weekkeep Plus는 이후의 기록 생성을 여는 비소모성 평생 이용권이며 구독이 아닙니다. 구매 전에는 App Store가 제공하는 현지 가격을 표시합니다.\n\n남겨둘 만한 일주일."
+    }
+  },
+  "iap": {
+    "type": "non-consumable",
+    "reference_name": "Weekkeep Plus Lifetime",
+    "product_id": "weekkeep_plus_lifetime",
+    "entitlement_id": "plus",
+    "offering_id": "default",
+    "us_base_price_usd": 19.99,
+    "localizations": {
+      "en-US": {
+        "display_name": "Weekkeep Plus Lifetime",
+        "description": "Unlock unlimited weekly albums."
+      },
+      "ko": {
+        "display_name": "Weekkeep Plus 평생 이용권",
+        "description": "주간 기록 수 제한을 한 번의 구매로 해제합니다."
+      }
+    }
+  },
+  "review": {
+    "first_action_en": "Keep the last 7 days",
+    "notes_en": "Weekkeep does not require an account.\n\nCore review path:\n1. Launch the app and tap “Keep the last 7 days.”\n2. Grant Full or Limited Photos access. The permission prompt appears only after this action.\n3. Weekkeep analyzes eligible photos on device and prepares up to seven suggestions.\n4. Tap a photo once to select it, then tap “Replace this photo” to choose an alternative. Same-day alternatives appear first; other dates require an explicit disclosure. Tap the selected photo again to open the viewer.\n5. Save the draft. On Save Confirmation, choose Story (1080×1920) or Post (1080×1350), review the local preview, and tap Share to open the native iOS share sheet. Do not send it anywhere during review.\n6. Open the saved album again from the Weeks tab; the same local share entry point is available in Week Detail.\n\nIn-App Purchase:\nOpen Settings → Weekkeep Plus → Learn about Weekkeep Plus. The paywall is available immediately; reviewers do not need to wait for a third weekly album. The product is the non-consumable `weekkeep_plus_lifetime`, mapped by RevenueCat to the `plus` entitlement in the `default` offering. Purchase restoration is available from both the paywall and Settings.\n\nThe first two saved albums are free. Plus unlocks future album creation; existing albums always remain viewable. No subscription is offered.\n\nPrivacy and storage:\nPhoto analysis and share rendering run locally. Photo pixels and Photos identifiers are not sent to RevenueCat or any analytics service. The share artifact is created only after an explicit user action and is handed to the native iOS share sheet; the app does not upload it or record a recipient. Album records are stored locally on the iPhone; restoring Plus does not restore album data.\n\nNo special hardware, login, or reviewer account is required. Please use a device with several recent photos or grant Limited Access to a small test set."
+  },
+  "screenshots": {
+    "app_store": {
+      "locales": ["en-US", "ko"],
+      "screenshots_per_locale": 6,
+      "portrait": true,
+      "alpha": false,
+      "device_frame": false,
+      "dimensions": "1320x2868",
+        "evidence_build": "5",
+        "evidence_directory": "release/local/visual-qa/20260807-build5-app-store-candidate-rerun8/final",
+        "evidence_scope": "historical_local_build5_candidate_not_uploaded",
+        "current_local_candidate_visual_qa_directory": "release/local/visual-qa/20260807-build6-notification-settings-rerun1/final",
+        "current_local_candidate_visual_qa_scope": "local_build6_notification_settings_visual_qa_not_uploaded",
+        "remote_review_evidence_directory": "release/local/visual-qa/20260806-app-store-build3-onboarding-rerun1/final",
+        "remote_review_evidence_scope": "remote_build3_attached_and_verified",
+        "asc_replaced_and_verified": false,
+        "historical_asc_replaced_and_verified": true
+    },
+    "shipaton_proof": {
+      "width": 1179,
+      "height": 2556,
+      "alpha": false,
+      "device_frame": false,
+      "marketing_headline_overlay": false
+    }
+  }
+}

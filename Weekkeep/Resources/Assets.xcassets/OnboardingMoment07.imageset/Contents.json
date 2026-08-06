@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "07-balcony-herbs.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -29,6 +29,7 @@ Weekkeep의 목표는 대회 마감에 화면만 보이는 데모를 제출하�
 - 현재 iPhone 로컬 저장 한계와 앱 관리형 백업 없음에 대한 Settings·구매 맥락 안내
 - RevenueCat 평생 이용권 구매/복원
 - 첫 저장 후 월요일 20:30 로컬 주간 알림과 7일 완료 창
+- 저장한 실제 사진으로 만드는 로컬 Story/Post 공유 아티팩트와 native share sheet
 - 한국어/영어, 접근성 기본 완결
 
 ### Shipaton submission
@@ -38,8 +39,7 @@ Weekkeep의 목표는 대회 마감에 화면만 보이는 데모를 제출하�
 - 1024×1024 app icon
 - 1179×2556 screenshot, device frame 없음
 - RevenueCat integration 설명과 무료 심사 경로
-- Build in Public evidence
-- Design category용 설계 의사결정과 접근성/프라이버시 설명
+- Shipaton category answers, demo, Build in Public, and submission evidence: [Shipaton Submission SSOT](11-SHIPATON-SUBMISSION.md)
 
 ## 3. Critical Path
 
@@ -49,7 +49,8 @@ flowchart LR
     P --> C["On-device curation"]
     C --> R["Review + replace"]
     R --> S["Atomic save + archive"]
-    S --> PAY["RevenueCat purchase"]
+    S --> X["Local share artifact"]
+    X --> PAY["RevenueCat purchase"]
     PAY --> B["Parent beta"]
     B --> AS["App Store review"]
     AS --> PUB["Public release"]
@@ -64,8 +65,8 @@ Design polish, analytics, notification, content 제작은 이 경로 옆에서 �
 |---|---:|---|---|
 | `M0 Docs Locked` | 08-07 | 없음 | Decision Registry 기반 구현 Gate Ready, 공개 conflict 0 |
 | `M1 First Value Prototype` | 08-13 | Welcome → 준비된 fake 7장 확인 → 저장 | 5명 prototype test 가능 |
-| `M2 Real Photos Alpha` | 08-21 | 실제 지난 7일 사진 분석 | 30/50장 fixture, cancel/partial 동작 |
-| `M3 Core Loop Complete` | 08-29 | 교체·저장·Weeks 재열람 | FR-001–014 P0 test 통과 |
+| `M2 Real Photos Alpha` | 08-21 | 실제 지난 7일 사진 분석 | 0/1/6/7/14/21/35/100/500 fixture, ≤21 Vision contract, cancel/partial 동작 |
+| `M3 Core Loop Complete` | 08-29 | 교체·저장·공유·Weeks 재열람 | FR-001–023 P0 test 통과 |
 | `M4 Monetized Beta` | 09-05 | 세 번째 기록 gate, 구매/복원 | App Store product/RevenueCat mapping 증거 + sandbox end-to-end |
 | `M5 Usability Beta Gate` | 09-12 | 실제 부모 20명의 첫 가치 경험 | P0 crash/privacy/data corruption 0, activation·이해도 수집 |
 | `M6 Release Candidate` | 09-18 | 출시 후보 빌드 | privacy/accessibility/localization QA |
@@ -106,11 +107,12 @@ Design polish, analytics, notification, content 제작은 이 경로 옆에서 �
 - App shell, 세 탭, route/deep link skeleton
 - semantic color/type/spacing tokens, LINE Seed bundle registration
 - `CMP-12 SevenStitchRail` exact-7 component와 snapshot test
+- canonical wordmark image resource와 seven approved synthetic onboarding preview fixtures
 - 7장 hero+2+4와 1–6장 adaptive `WeeklyPhotoGrid`
 - SwiftData schema v1 + in-memory preview store
 - Welcome, fake progress, review, save confirmation UI
 - review 첫 tap 선택/reveal → 선택 photo 두 번째 tap viewer → direct accessibility action prototype
-- grid-to-album matched geometry와 Reduce Motion 0.2초 fade
+- save confirmation의 60–80ms 순차 reveal과 Reduce Motion 짧은 fade
 - fixture photo library와 deterministic fake curation
 - String Catalog ko/en
 
@@ -137,24 +139,27 @@ Design polish, analytics, notification, content 제작은 이 경로 옆에서 �
 
 - Photos authorization state machine
 - WeekRangeCalculator와 eligibility policy
-- PhotoKit descriptor fetch/filter/sampling
-- iCloud progress/cancellation
+- PhotoKit descriptor scan up to 500 and deterministic metadata prefilter to at most 21 Vision candidates
+- Fast 384–448 px analysis delivery, iCloud progress/cancellation, per-asset and global foreground budget
 - Vision aesthetics, utility, feature print wrapper
 - duplicate grouping + diversity selection
-- 0/1/6/7/14/100장 fixture
+- 0/1/6/7/14/35/100/500장 fixture
 - signpost와 성능 harness
 
 ### 검증
 
-- 실제 iPhone 최소 2종에서 30/50/100장 baseline
+- fake contract에서 100 descriptor → ≤21 Vision call과 결정적 day/time distribution 검증
+- 실제 iPhone 최소 2종에서 fast-thumbnail/timeout 동작과 설계 목표 검증; 처리 시간 수치는 아직 미측정으로 기록
 - limited picker/권한 변경
 - offline/local photo flow
 - iCloud partial failure
 - 사진 ID가 log/network에 없는지 1차 audit
 
-### Scope trigger
+### Performance guardrails
 
-- 100장 p95가 180초를 넘으면 입력 상한 60장
+- Vision 입력 상한은 21로 고정하며, 느린 기기에서는 후보를 다시 늘려 해결하지 않음
+- per-asset 약 1.5초, 전체 약 12초는 설계 목표이며 실기기 측정 전에는 성능 달성으로 표현하지 않음
+- 예산을 넘기면 취소·부분 결과로 종료하고, 실제 측정 결과는 별도 Decision/ADR로 검토
 - face quality가 선택 편향을 만들면 해당 가중치 제거
 - OCR/문서 감지는 screenshot subtype만으로 충분하면 제외 유지
 
@@ -168,6 +173,8 @@ Design polish, analytics, notification, content 제작은 이 경로 옆에서 �
 - 선택 index 기반 한 장 확대/교체/취소와 viewer swipe
 - SwiftData atomic upsert
 - Weeks list/detail
+- same-calendar-day replacement default, explicit other-day disclosure, day-grouped alternatives
+- Save Confirmation과 Week Detail의 on-device Story/Post share preparation
 - missing/deleted/revoked asset placeholder
 - draft/save error recovery
 - app lifecycle와 foreground authorization refresh
@@ -316,9 +323,16 @@ Retention Readout은 달력상 Public Release 이후 닫히므로 M6 Release Can
 
 기간: 2026-09-13–09-18
 
+### 11.0 Current release-candidate boundary — 2026-08-07
+
+- Remote App Store Connect build 3 (`1.0.0 (3)`) remains the attached `VALID` build in `WAITING_FOR_REVIEW`; remote build 4 is known as `VALID` but unattached.
+- The local candidate is build 6 from `project.yml`. It is not uploaded, attached, submitted, reviewed, approved, or released. New bilingual Settings evidence is recorded separately from historical build-5 and remote build-3 evidence.
+- Historical local build 5 remains a not-uploaded visual candidate and is not relabeled as build 6.
+- This hardening pass does not perform App Store Connect, RevenueCat, site, public upload, or Git mutations. Public source repository publication and logged-out verification remain external intake gates.
+
 ### Product QA
 
-- FR-001–022 traceability evidence 연결
+- FR-001–023 traceability evidence 연결
 - P0/P1 issue triage
 - 실제 iCloud/offline/권한 변화
 - purchase/restore production-like flow
@@ -335,6 +349,7 @@ Retention Readout은 달력상 Public Release 이후 닫히므로 M6 Release Can
 - Reduce Motion/Increase Contrast
 - 한국어/영어
 - 0/1/5/7/missing photo
+- Story 1080×1920 / Post 1080×1350 렌더링, loading/retry, native share sheet, private-data exclusion
 
 ### Release operations
 
@@ -358,19 +373,11 @@ Retention Readout은 달력상 Public Release 이후 닫히므로 M6 Release Can
 - 신규 사용자 first flow smoke test
 - crash/analytics dashboard 24–48시간 관찰
 
-### Demo video 구성(최대 1분 45초 목표)
+### Demo video
 
-| 시간 | 내용 |
-|---:|---|
-| 0:00–0:12 | 부모 문제: 많은 사진, 남지 않는 일주일 |
-| 0:12–0:25 | Weekkeep 약속과 privacy |
-| 0:25–0:48 | Welcome Week foreground analysis |
-| 0:48–1:05 | 7장 review와 한 장 교체 |
-| 1:05–1:18 | 저장과 Weeks 보관함 |
-| 1:18–1:32 | RevenueCat Plus/paywall/restore |
-| 1:32–1:42 | 실제 공개 앱과 한 문장 마무리 |
+정확히 72초인 canonical composition과 timing/evidence는 [Shipaton Submission SSOT](11-SHIPATON-SUBMISSION.md#7-72-second-demo-master) 및 `videos/weekkeep-remotion/`이 소유합니다. `videos/weekkeep-shipaton/`은 source media와 license/provenance origin만 담당하며, 그 `scripts/validate-provenance.sh`는 계속 release gate에서 실행합니다. 이 Delivery Plan에는 별도 timing table을 두지 않습니다.
 
-앱의 실제 시간이 길면 영상 편집으로 속일 수는 있지만, 진행 화면과 실제 작동 관계가 오해되지 않도록 자막으로 설명합니다.
+Composition의 로컬 exit criteria인 user-approved final MP4 render, 72초/코덱 검증, current-source cut/caption QA는 완료되었습니다. 필요한 실기기 footage 교체·검증, public YouTube/Vimeo upload 후 로그아웃 재생과 duration 확인은 여전히 pending입니다.
 
 ### Submission QA
 
@@ -379,6 +386,7 @@ Retention Readout은 달력상 Public Release 이후 닫히므로 M6 Release Can
 - app icon/screenshot 해상도 확인
 - 영어 문법 원어민 검수
 - 무료 2개 기록 또는 promo instruction 확인
+- 저장 직후와 Weeks detail에서 local share artifact가 실제 PhotoKit 이미지로 생성되고, 사용자의 명시적 share sheet 선택 전에는 외부 전송하지 않는지 확인
 - RevenueCat purchase가 production build에 존재
 - 최종 제출 receipt capture
 
@@ -438,7 +446,7 @@ Retention Readout은 달력상 Public Release 이후 닫히므로 M6 Release Can
 
 ### 공동 결정
 
-- Decision Registry의 제품·기술 결정 승인 또는 거절; GATE-01–11은 그 결과로 계산
+- Decision Registry의 제품·기술 결정 승인 또는 거절; GATE-01–14는 그 결과로 계산
 - P0 scope 추가/제거
 - pricing/free limit
 - privacy 경계 변경

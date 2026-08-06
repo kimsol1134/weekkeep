@@ -1,0 +1,212 @@
+<template id="captions-template" data-composition-id="captions" data-width="1920" data-height="1080">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+
+<style data-brand-tokens="">
+      @font-face { font-family: 'LINE Seed Sans KR'; src: url('assets/fonts/LINE Seed Sans KR-Bold.ttf') format('truetype'); font-weight: 700; font-display: block; }
+      @font-face { font-family: 'LINE Seed Sans KR'; src: url('assets/fonts/LINE Seed Sans KR-Regular.ttf') format('truetype'); font-weight: 400; font-display: block; }
+      :root {
+      --green: #5B415E;
+      --green-deep: #25212B;
+      --green-lite: #537763;
+      --pink: #E97A68;
+      --pink-deep: #E5A84B;
+      --cream: #FBF7F2;
+      --cream-2: #E8E1DB;
+      --ink: #25212B;
+      --cap-ink: #25212B;
+      --cap-canvas: #FBF7F2;
+      --cap-accent: #E5A84B;
+      --cap-accent-2: #E97A68;
+      --font-display: "LINE Seed Sans KR", system-ui, serif;
+      --font-body: "LINE Seed Sans KR", system-ui, sans-serif;
+      --cap-band-top: 900px;
+      --cap-band-height: 180px;
+      }
+    </style>
+
+<style>
+  #captions-root {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .caption-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+  }
+  /* the keep-out band, from captionBand(H) — frame content stays above it */
+  .caption-stage {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--cap-band-top, 900px);
+    height: var(--cap-band-height, 180px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .caption-group {
+    /* every group is absolutely stacked over the SAME band — exactly one shown at a
+       time via opacity. Must be absolute: in-flow groups would lay out side-by-side. */
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+  }
+
+  /* THE oat-cream card — single 2px green hairline border (the system's only
+     separator), 6px card radius, NO shadow (flat, paper-based) */
+  .caption-pill {
+    max-width: 78%;
+    padding: 20px 44px 24px;
+    background: var(--cap-canvas, #efe7d4);
+    border: 2px solid var(--cap-accent, #d27e96);
+    border-radius: 6px;
+  }
+  .caption-line {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.1em 0.34em;
+    font-family: "LINE Seed Sans KR", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(40px, 4.4vw, 58px);
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+  }
+
+  /* upcoming — faint warm ink, no panel */
+  .caption-word {
+    display: inline-block;
+    padding: 0 0.06em;
+    color: color-mix(in srgb, var(--cap-ink, #1a1a17) 42%, var(--cap-canvas, #efe7d4));
+  }
+  /* current word — a quiet dusty-rose panel (box-shadow spread = a soft 6px block w/o
+     layout shift; no blur — editorial restraint, not a loud block), warm ink on top */
+  .caption-word.is-active {
+    color: var(--cap-ink, #1a1a17);
+    background: var(--cap-accent, #d27e96);
+    box-shadow: 0 0 0 0.05em var(--cap-accent, #d27e96);
+    border-radius: 6px;
+  }
+  /* already spoken — solid warm ink, panel cleared */
+  .caption-word.is-spoken {
+    color: var(--cap-ink, #1a1a17);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* optional per-word accents (dormant until a word-classer tags them) */
+  /* brand / key term — heavier serif weight, editorial-forest's only display inflection */
+  .caption-word.cap-brand {
+    font-weight: 600;
+  }
+  /* numerals / data — the mono chrome voice, slightly recessed */
+  .caption-word.cap-num {
+    font-family: "LINE Seed Sans KR", ui-monospace, monospace;
+    color: color-mix(in srgb, var(--cap-ink, #1a1a17) 72%, var(--cap-canvas, #efe7d4));
+  }
+  /* emphasis — a 2px green hairline underline (the system's only separator, never heavy) */
+  .caption-word.cap-cta {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--cap-accent-2, #e89cb1);
+    text-underline-offset: 0.1em;
+  }
+
+  @media (max-aspect-ratio: 9/16) {
+    .caption-pill {
+      max-width: 92%;
+    }
+    .caption-line {
+      font-size: clamp(34px, 5.4vw, 48px);
+    }
+  }
+</style>
+
+<div data-hf-id="hf-n8mp" id="captions-root" data-composition-id="captions" data-timeline-locked="" data-start="0" data-duration="72" data-fps="30" data-width="1920" data-height="1080">
+  <div data-hf-id="hf-9flp" class="caption-layer" aria-hidden="true">
+    <div data-hf-id="hf-ajrg" id="caption-stage" class="caption-stage"></div>
+  </div>
+</div>
+
+<script>
+  // captions.mjs injects the engine's scene-aware groups + real duration here.
+  var GROUPS = [{"id":"caption-group-0","frame":1,"start":0.09,"end":1.14,"text":"Parents don't need","words":[{"id":"caption-word-0-0","text":"Parents","start":0.09,"end":0.5},{"id":"caption-word-0-1","text":"don't","start":0.5,"end":0.84},{"id":"caption-word-0-2","text":"need","start":0.88,"end":1.11}]},{"id":"caption-group-1","frame":1,"start":1.14,"end":1.88,"text":"another app","words":[{"id":"caption-word-1-0","text":"another","start":1.14,"end":1.61},{"id":"caption-word-1-1","text":"app","start":1.68,"end":1.8}]},{"id":"caption-group-2","frame":1,"start":1.88,"end":2.26,"text":"to open","words":[{"id":"caption-word-2-0","text":"to","start":1.88,"end":1.98},{"id":"caption-word-2-1","text":"open","start":1.98,"end":2.26}]},{"id":"caption-group-3","frame":1,"start":2.26,"end":3.17,"text":"every day.","words":[{"id":"caption-word-3-0","text":"every","start":2.26,"end":2.61},{"id":"caption-word-3-1","text":"day.","start":2.61,"end":3.08}]},{"id":"caption-group-4","frame":1,"start":3.17,"end":3.56,"text":"They need","words":[{"id":"caption-word-4-0","text":"They","start":3.17,"end":3.32},{"id":"caption-word-4-1","text":"need","start":3.32,"end":3.51}]},{"id":"caption-group-5","frame":1,"start":3.56,"end":4.03,"text":"one quiet","words":[{"id":"caption-word-5-0","text":"one","start":3.56,"end":3.7},{"id":"caption-word-5-1","text":"quiet","start":3.75,"end":4.03}]},{"id":"caption-group-6","frame":1,"start":4.03,"end":4.5,"text":"minute to","words":[{"id":"caption-word-6-0","text":"minute","start":4.03,"end":4.36},{"id":"caption-word-6-1","text":"to","start":4.38,"end":4.5}]},{"id":"caption-group-7","frame":1,"start":4.5,"end":5.48,"text":"keep the week.","words":[{"id":"caption-word-7-0","text":"keep","start":4.5,"end":4.69},{"id":"caption-word-7-1","text":"the","start":4.76,"end":4.88},{"id":"caption-word-7-2","text":"week.","start":4.96,"end":5.36}]},{"id":"caption-group-8","frame":2,"start":6.04,"end":6.9,"text":"Weekkeep turns","words":[{"id":"caption-word-8-0","text":"Weekkeep","start":6.04,"end":6.4},{"id":"caption-word-8-1","text":"turns","start":6.54,"end":6.9}]},{"id":"caption-group-9","frame":2,"start":6.9,"end":8.06,"text":"a crowded camera","words":[{"id":"caption-word-9-0","text":"a","start":6.9,"end":6.98},{"id":"caption-word-9-1","text":"crowded","start":6.98,"end":7.56},{"id":"caption-word-9-2","text":"camera","start":7.56,"end":8.06}]},{"id":"caption-group-10","frame":2,"start":8.06,"end":8.21,"text":"roll","words":[{"id":"caption-word-10-0","text":"roll","start":8.06,"end":8.09}]},{"id":"caption-group-11","frame":2,"start":8.46,"end":8.81,"text":"into up","words":[{"id":"caption-word-11-0","text":"into","start":8.46,"end":8.67},{"id":"caption-word-11-1","text":"up","start":8.67,"end":8.81}]},{"id":"caption-group-12","frame":2,"start":8.81,"end":9.26,"text":"to seven","words":[{"id":"caption-word-12-0","text":"to","start":8.81,"end":8.82},{"id":"caption-word-12-1","text":"seven","start":8.96,"end":9.26}]},{"id":"caption-group-13","frame":2,"start":9.26,"end":10.43,"text":"family moments worth","words":[{"id":"caption-word-13-0","text":"family","start":9.26,"end":9.65},{"id":"caption-word-13-1","text":"moments","start":9.65,"end":10.11},{"id":"caption-word-13-2","text":"worth","start":10.11,"end":10.42}]},{"id":"caption-group-14","frame":2,"start":10.43,"end":11.24,"text":"keeping.","words":[{"id":"caption-word-14-0","text":"keeping.","start":10.43,"end":11.12}]},{"id":"caption-group-15","frame":3,"start":12.12,"end":13.22,"text":"Photos access is","words":[{"id":"caption-word-15-0","text":"Photos","start":12.12,"end":12.52},{"id":"caption-word-15-1","text":"access","start":12.52,"end":12.99},{"id":"caption-word-15-2","text":"is","start":13.06,"end":13.2}]},{"id":"caption-group-16","frame":3,"start":13.22,"end":15.14,"text":"requested only after this","words":[{"id":"caption-word-16-0","text":"requested","start":13.22,"end":14},{"id":"caption-word-16-1","text":"only","start":14,"end":14.33},{"id":"caption-word-16-2","text":"after","start":14.42,"end":14.77},{"id":"caption-word-16-3","text":"this","start":14.81,"end":15.14}]},{"id":"caption-group-17","frame":3,"start":15.14,"end":16.26,"text":"explanation.","words":[{"id":"caption-word-17-0","text":"explanation.","start":15.14,"end":16.14}]},{"id":"caption-group-18","frame":3,"start":16.26,"end":17.74,"text":"Analysis runs here,","words":[{"id":"caption-word-18-0","text":"Analysis","start":16.26,"end":16.83},{"id":"caption-word-18-1","text":"runs","start":16.89,"end":17.15},{"id":"caption-word-18-2","text":"here,","start":17.2,"end":17.67}]},{"id":"caption-group-19","frame":3,"start":17.74,"end":19.09,"text":"on the iPhone,","words":[{"id":"caption-word-19-0","text":"on","start":17.74,"end":17.87},{"id":"caption-word-19-1","text":"the","start":17.97,"end":18.29},{"id":"caption-word-19-2","text":"iPhone,","start":18.34,"end":19.06}]},{"id":"caption-group-20","frame":3,"start":19.09,"end":20.2,"text":"photo content and","words":[{"id":"caption-word-20-0","text":"photo","start":19.09,"end":19.44},{"id":"caption-word-20-1","text":"content","start":19.44,"end":19.64},{"id":"caption-word-20-2","text":"and","start":19.64,"end":20.08}]},{"id":"caption-group-21","frame":3,"start":20.3,"end":21.44,"text":"identifiers are not","words":[{"id":"caption-word-21-0","text":"identifiers","start":20.3,"end":20.99},{"id":"caption-word-21-1","text":"are","start":21,"end":21.22},{"id":"caption-word-21-2","text":"not","start":21.22,"end":21.44}]},{"id":"caption-group-22","frame":3,"start":21.44,"end":22.16,"text":"uploaded.","words":[{"id":"caption-word-22-0","text":"uploaded.","start":21.44,"end":22.04}]},{"id":"caption-group-23","frame":4,"start":23.53,"end":23.97,"text":"A draft","words":[{"id":"caption-word-23-0","text":"A","start":23.53,"end":23.57},{"id":"caption-word-23-1","text":"draft","start":23.57,"end":23.86}]},{"id":"caption-group-24","frame":4,"start":23.97,"end":25.49,"text":"is already prepared.","words":[{"id":"caption-word-24-0","text":"is","start":23.97,"end":24.09},{"id":"caption-word-24-1","text":"already","start":24.09,"end":24.55},{"id":"caption-word-24-2","text":"prepared.","start":24.6,"end":25.46}]},{"id":"caption-group-25","frame":4,"start":25.49,"end":25.97,"text":"Seven is","words":[{"id":"caption-word-25-0","text":"Seven","start":25.49,"end":25.82},{"id":"caption-word-25-1","text":"is","start":25.93,"end":25.97}]},{"id":"caption-group-26","frame":4,"start":25.97,"end":26.56,"text":"a limit,","words":[{"id":"caption-word-26-0","text":"a","start":25.97,"end":26.03},{"id":"caption-word-26-1","text":"limit,","start":26.04,"end":26.52}]},{"id":"caption-group-27","frame":4,"start":26.56,"end":27.57,"text":"not a target.","words":[{"id":"caption-word-27-0","text":"not","start":26.56,"end":26.77},{"id":"caption-word-27-1","text":"a","start":26.77,"end":26.83},{"id":"caption-word-27-2","text":"target.","start":26.83,"end":27.48}]},{"id":"caption-group-28","frame":4,"start":27.57,"end":27.89,"text":"If the","words":[{"id":"caption-word-28-0","text":"If","start":27.57,"end":27.67},{"id":"caption-word-28-1","text":"the","start":27.67,"end":27.89}]},{"id":"caption-group-29","frame":4,"start":27.89,"end":28.38,"text":"week has","words":[{"id":"caption-word-29-0","text":"week","start":27.89,"end":28.17},{"id":"caption-word-29-1","text":"has","start":28.17,"end":28.38}]},{"id":"caption-group-30","frame":4,"start":28.38,"end":29.11,"text":"fewer usable","words":[{"id":"caption-word-30-0","text":"fewer","start":28.38,"end":28.73},{"id":"caption-word-30-1","text":"usable","start":28.73,"end":28.99}]},{"id":"caption-group-31","frame":4,"start":29.52,"end":29.74,"text":"photos,","words":[{"id":"caption-word-31-0","text":"photos,","start":29.52,"end":29.74}]},{"id":"caption-group-32","frame":4,"start":29.74,"end":31.06,"text":"Weekkeep shows fewer.","words":[{"id":"caption-word-32-0","text":"Weekkeep","start":29.74,"end":30.11},{"id":"caption-word-32-1","text":"shows","start":30.11,"end":30.42},{"id":"caption-word-32-2","text":"fewer.","start":30.42,"end":30.94}]},{"id":"caption-group-33","frame":5,"start":32.55,"end":33.11,"text":"The parent","words":[{"id":"caption-word-33-0","text":"The","start":32.55,"end":32.7},{"id":"caption-word-33-1","text":"parent","start":32.7,"end":33.11}]},{"id":"caption-group-34","frame":5,"start":33.11,"end":34.35,"text":"stays the editor.","words":[{"id":"caption-word-34-0","text":"stays","start":33.11,"end":33.43},{"id":"caption-word-34-1","text":"the","start":33.45,"end":33.64},{"id":"caption-word-34-2","text":"editor.","start":33.64,"end":34.3}]},{"id":"caption-group-35","frame":5,"start":34.35,"end":34.9,"text":"Keep the","words":[{"id":"caption-word-35-0","text":"Keep","start":34.35,"end":34.64},{"id":"caption-word-35-1","text":"the","start":34.64,"end":34.9}]},{"id":"caption-group-36","frame":5,"start":34.9,"end":35.77,"text":"draft or change","words":[{"id":"caption-word-36-0","text":"draft","start":34.9,"end":35.34},{"id":"caption-word-36-1","text":"or","start":35.34,"end":35.48},{"id":"caption-word-36-2","text":"change","start":35.48,"end":35.65}]},{"id":"caption-group-37","frame":5,"start":36.12,"end":36.39,"text":"only the","words":[{"id":"caption-word-37-0","text":"only","start":36.12,"end":36.22},{"id":"caption-word-37-1","text":"the","start":36.22,"end":36.28}]},{"id":"caption-group-38","frame":5,"start":36.39,"end":36.94,"text":"moment that","words":[{"id":"caption-word-38-0","text":"moment","start":36.39,"end":36.74},{"id":"caption-word-38-1","text":"that","start":36.79,"end":36.94}]},{"id":"caption-group-39","frame":5,"start":36.94,"end":38.06,"text":"doesn't feel right.","words":[{"id":"caption-word-39-0","text":"doesn't","start":36.94,"end":37.27},{"id":"caption-word-39-1","text":"feel","start":37.3,"end":37.49},{"id":"caption-word-39-2","text":"right.","start":37.57,"end":37.94}]},{"id":"caption-group-40","frame":6,"start":39.53,"end":39.92,"text":"One Tap","words":[{"id":"caption-word-40-0","text":"One","start":39.53,"end":39.71},{"id":"caption-word-40-1","text":"Tap","start":39.71,"end":39.92}]},{"id":"caption-group-41","frame":6,"start":39.92,"end":40.34,"text":"saves a","words":[{"id":"caption-word-41-0","text":"saves","start":39.92,"end":40.27},{"id":"caption-word-41-1","text":"a","start":40.27,"end":40.34}]},{"id":"caption-group-42","frame":6,"start":40.34,"end":41.47,"text":"small weekly album","words":[{"id":"caption-word-42-0","text":"small","start":40.34,"end":40.69},{"id":"caption-word-42-1","text":"weekly","start":40.69,"end":41.12},{"id":"caption-word-42-2","text":"album","start":41.12,"end":41.47}]},{"id":"caption-group-43","frame":6,"start":41.47,"end":42.14,"text":"locally.","words":[{"id":"caption-word-43-0","text":"locally.","start":41.47,"end":42.02}]},{"id":"caption-group-44","frame":7,"start":44.54,"end":45.12,"text":"Each week","words":[{"id":"caption-word-44-0","text":"Each","start":44.54,"end":44.81},{"id":"caption-word-44-1","text":"week","start":44.81,"end":45.12}]},{"id":"caption-group-45","frame":7,"start":45.12,"end":45.82,"text":"stays easy","words":[{"id":"caption-word-45-0","text":"stays","start":45.12,"end":45.48},{"id":"caption-word-45-1","text":"easy","start":45.52,"end":45.82}]},{"id":"caption-group-46","frame":7,"start":45.82,"end":46.61,"text":"to revisit,","words":[{"id":"caption-word-46-0","text":"to","start":45.82,"end":45.97},{"id":"caption-word-46-1","text":"revisit,","start":45.97,"end":46.56}]},{"id":"caption-group-47","frame":7,"start":46.61,"end":46.95,"text":"with no","words":[{"id":"caption-word-47-0","text":"with","start":46.61,"end":46.83},{"id":"caption-word-47-1","text":"no","start":46.83,"end":46.95}]},{"id":"caption-group-48","frame":7,"start":46.95,"end":47.49,"text":"streak,","words":[{"id":"caption-word-48-0","text":"streak,","start":46.95,"end":47.37}]},{"id":"caption-group-49","frame":7,"start":47.6,"end":48.94,"text":"backlog or account.","words":[{"id":"caption-word-49-0","text":"backlog","start":47.6,"end":48.07},{"id":"caption-word-49-1","text":"or","start":48.07,"end":48.22},{"id":"caption-word-49-2","text":"account.","start":48.22,"end":48.82}]},{"id":"caption-group-50","frame":8,"start":50.54,"end":51.55,"text":"An optional Monday","words":[{"id":"caption-word-50-0","text":"An","start":50.54,"end":50.63},{"id":"caption-word-50-1","text":"optional","start":50.63,"end":51.16},{"id":"caption-word-50-2","text":"Monday","start":51.16,"end":51.54}]},{"id":"caption-group-51","frame":8,"start":51.55,"end":52.86,"text":"reminder is scheduled","words":[{"id":"caption-word-51-0","text":"reminder","start":51.55,"end":52.04},{"id":"caption-word-51-1","text":"is","start":52.19,"end":52.22},{"id":"caption-word-51-2","text":"scheduled","start":52.22,"end":52.86}]},{"id":"caption-group-52","frame":8,"start":52.86,"end":53.65,"text":"on device","words":[{"id":"caption-word-52-0","text":"on","start":52.86,"end":53.09},{"id":"caption-word-52-1","text":"device","start":53.15,"end":53.53}]},{"id":"caption-group-53","frame":8,"start":53.96,"end":54.22,"text":"and the","words":[{"id":"caption-word-53-0","text":"and","start":53.96,"end":54.08},{"id":"caption-word-53-1","text":"the","start":54.08,"end":54.1}]},{"id":"caption-group-54","frame":8,"start":54.23,"end":55.38,"text":"privacy boundary stays","words":[{"id":"caption-word-54-0","text":"privacy","start":54.23,"end":54.62},{"id":"caption-word-54-1","text":"boundary","start":54.62,"end":55.1},{"id":"caption-word-54-2","text":"stays","start":55.1,"end":55.38}]},{"id":"caption-group-55","frame":8,"start":55.38,"end":56.02,"text":"visible.","words":[{"id":"caption-word-55-0","text":"visible.","start":55.38,"end":55.9}]},{"id":"caption-group-56","frame":9,"start":57.54,"end":58.75,"text":"two albums are","words":[{"id":"caption-word-56-0","text":"two","start":57.54,"end":57.78},{"id":"caption-word-56-1","text":"albums","start":57.8,"end":58.41},{"id":"caption-word-56-2","text":"are","start":58.41,"end":58.63}]},{"id":"caption-group-57","frame":9,"start":59.14,"end":59.2,"text":"free.","words":[{"id":"caption-word-57-0","text":"free.","start":59.14,"end":59.16}]},{"id":"caption-group-58","frame":9,"start":59.2,"end":59.51,"text":"Then a","words":[{"id":"caption-word-58-0","text":"Then","start":59.2,"end":59.44},{"id":"caption-word-58-1","text":"a","start":59.44,"end":59.51}]},{"id":"caption-group-59","frame":9,"start":59.51,"end":60.42,"text":"one-time lifetime","words":[{"id":"caption-word-59-0","text":"one-time","start":59.51,"end":60.07},{"id":"caption-word-59-1","text":"lifetime","start":60.07,"end":60.3}]},{"id":"caption-group-60","frame":9,"start":60.83,"end":61.6,"text":"purchase powered","words":[{"id":"caption-word-60-0","text":"purchase","start":60.83,"end":61.22},{"id":"caption-word-60-1","text":"powered","start":61.22,"end":61.6}]},{"id":"caption-group-61","frame":9,"start":61.6,"end":63.58,"text":"by RevenueCat unlocks future","words":[{"id":"caption-word-61-0","text":"by","start":61.6,"end":61.78},{"id":"caption-word-61-1","text":"RevenueCat","start":61.78,"end":62.69},{"id":"caption-word-61-2","text":"unlocks","start":62.75,"end":63.14},{"id":"caption-word-61-3","text":"future","start":63.16,"end":63.46}]},{"id":"caption-group-62","frame":9,"start":63.6,"end":64.02,"text":"weeks,","words":[{"id":"caption-word-62-0","text":"weeks,","start":63.6,"end":64.02}]},{"id":"caption-group-63","frame":9,"start":64.02,"end":64.27,"text":"no","words":[{"id":"caption-word-63-0","text":"no","start":64.02,"end":64.15}]},{"id":"caption-group-64","frame":9,"start":64.37,"end":65.3,"text":"subscription.","words":[{"id":"caption-word-64-0","text":"subscription.","start":64.37,"end":65.18}]},{"id":"caption-group-65","frame":10,"start":67.54,"end":67.92,"text":"Weekkeep.","words":[{"id":"caption-word-65-0","text":"Weekkeep.","start":67.54,"end":67.92}]},{"id":"caption-group-66","frame":10,"start":67.92,"end":68.27,"text":"A week","words":[{"id":"caption-word-66-0","text":"A","start":67.92,"end":67.94},{"id":"caption-word-66-1","text":"week","start":68.01,"end":68.27}]},{"id":"caption-group-67","frame":10,"start":68.27,"end":69.28,"text":"worth keeping.","words":[{"id":"caption-word-67-0","text":"worth","start":68.27,"end":68.62},{"id":"caption-word-67-1","text":"keeping.","start":68.62,"end":69.16}]}];
+  var DURATION = 72;
+
+  (function () {
+    var stage = document.getElementById("caption-stage");
+
+    // build DOM: one .caption-group per group, .caption-word per word
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.createElement("div");
+      groupEl.className = "caption-group";
+      groupEl.id = "caption-group-" + g;
+      var pill = document.createElement("div");
+      pill.className = "caption-pill";
+      var line = document.createElement("div");
+      line.className = "caption-line";
+      (group.words || []).forEach(function (w, i) {
+        var span = document.createElement("span");
+        span.className = "caption-word";
+        span.id = "caption-word-" + g + "-" + i;
+        span.textContent = String(w.text);
+        line.appendChild(span);
+      });
+      pill.appendChild(line);
+      groupEl.appendChild(pill);
+      stage.appendChild(groupEl);
+    });
+
+    window.__timelines = window.__timelines || {};
+    var tl = gsap.timeline({ paused: true });
+
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.getElementById("caption-group-" + g);
+      var words = group.words || [];
+      var next = GROUPS[g + 1];
+      var isLast = g === GROUPS.length - 1;
+      var start = Math.max(0, Number(group.start));
+      var end = isLast ? DURATION : Math.min(Number(next.start), Number(group.end) + 0.3);
+      if (end <= start) end = start + 0.01;
+
+      // group on/off — exactly one group visible at a time
+      tl.set(groupEl, { opacity: 1 }, start);
+      tl.set(groupEl, { opacity: 0 }, end);
+
+      // 3-state karaoke via className SETS — seek-safe (gsap.set applies on the
+      // engine's frame-by-frame seek; .call callbacks would NOT fire).
+      words.forEach(function (w, i) {
+        var el = document.getElementById("caption-word-" + g + "-" + i);
+        var at = Math.max(start, Number(w.start));
+        tl.set(el, { className: "caption-word" }, start); // upcoming (also resets on reverse-seek)
+        tl.set(el, { className: "caption-word is-active" }, at); // current
+        tl.fromTo(el, { scale: 0.985 }, { scale: 1, duration: 0.18, ease: "power1.out" }, at);
+        if (i + 1 < words.length) {
+          var nextAt = Math.max(start, Number(words[i + 1].start));
+          tl.set(el, { className: "caption-word is-spoken" }, nextAt); // demote when next activates
+        }
+      });
+      if (words.length) {
+        var lastEl = document.getElementById("caption-word-" + g + "-" + (words.length - 1));
+        var lastSpoken = Math.min(end, Number(words[words.length - 1].end) + 0.1);
+        tl.set(lastEl, { className: "caption-word is-spoken" }, lastSpoken);
+      }
+    });
+
+    // full-span anchor so the sub-comp timeline spans the whole video
+    tl.to({}, { duration: DURATION }, 0);
+    window.__timelines["captions"] = tl;
+  })();
+</script>
+
+<style>
+  .caption-line { line-height: 1.1 !important; }
+</style>
+</template>

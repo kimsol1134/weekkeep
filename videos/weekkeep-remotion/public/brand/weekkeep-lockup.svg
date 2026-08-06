@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Weekkeep seven-stitch brand lockup</title>
+  <desc id="desc">The lowercase Weekkeep wordmark with seven equal muted rainbow stitches.</desc>
+  <style>
+    .wordmark {
+      font-family: "LINESeedSansKR-Bold", "LINE Seed Sans KR", system-ui, sans-serif;
+      font-size: 238px;
+      font-weight: 700;
+      letter-spacing: -9px;
+    }
+  </style>
+
+  <text class="wordmark" x="900" y="315" fill="#5B415E" text-anchor="middle">weekkeep</text>
+
+  <!-- Exact-seven decorative stitches: equal 108×34 geometry and 32px gaps. -->
+  <g id="seven-stitches">
+    <rect x="426" y="402" width="108" height="34" rx="17" fill="#E97A68"/>
+    <rect x="566" y="402" width="108" height="34" rx="17" fill="#E39455"/>
+    <rect x="706" y="402" width="108" height="34" rx="17" fill="#E5A84B"/>
+    <rect x="846" y="402" width="108" height="34" rx="17" fill="#66836E"/>
+    <rect x="986" y="402" width="108" height="34" rx="17" fill="#5F879B"/>
+    <rect x="1126" y="402" width="108" height="34" rx="17" fill="#686286"/>
+    <rect x="1266" y="402" width="108" height="34" rx="17" fill="#8A6386"/>
+  </g>
+</svg>

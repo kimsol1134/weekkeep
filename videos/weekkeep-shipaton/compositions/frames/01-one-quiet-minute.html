@@ -1,0 +1,378 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Rg.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Bd.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 700;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "JetBrains Mono";
+      src: url("assets/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    #root {
+      --green: #5b415e;
+      --green-deep: #25212b;
+      --green-lite: #537763;
+      --pink: #e97a68;
+      --pink-deep: #e5a84b;
+      --cream: #fbf7f2;
+      --cream-2: #e8e1db;
+      --ink: #25212b;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      color: var(--ink);
+      isolation: isolate;
+    }
+
+    #root,
+    #root * {
+      box-sizing: border-box;
+    }
+
+    .f01-one-quiet-minute-background {
+      position: absolute;
+      inset: 0;
+      background: var(--cream);
+    }
+
+    .f01-one-quiet-minute-world {
+      position: absolute;
+      inset: 0;
+      overflow: visible;
+      transform-origin: 50% 50%;
+      will-change: transform;
+      pointer-events: none;
+    }
+
+    .f01-one-quiet-minute-depth-back {
+      position: absolute;
+      left: 5.7cqw;
+      top: 11cqh;
+      width: 47.4cqw;
+      height: 65cqh;
+      border: 2px solid var(--green-lite);
+      border-radius: 8px;
+      background: var(--cream-2);
+    }
+
+    .f01-one-quiet-minute-portrait-surface {
+      position: absolute;
+      left: 15.625cqw;
+      top: 5.75cqh;
+      width: 24.5cqw;
+      height: 75.55cqh;
+      overflow: hidden;
+      border: 2px solid var(--green);
+      border-radius: 8px;
+      background: var(--cream);
+    }
+
+    .f01-one-quiet-minute-album-shell {
+      position: absolute;
+      inset: 20px;
+      display: grid;
+      place-items: center;
+    }
+
+    .f01-one-quiet-minute-album-frame {
+      position: relative;
+      width: 18.6cqw;
+      height: 71.67cqh;
+    }
+
+    .f01-one-quiet-minute-album-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      filter: blur(var(--dof, 0px));
+      user-select: none;
+    }
+
+    .f01-one-quiet-minute-fixture-target {
+      position: absolute;
+      left: 27.4%;
+      top: 54.9%;
+      width: 21.6%;
+      height: 10%;
+      pointer-events: none;
+    }
+
+    .f01-one-quiet-minute-stitch-row {
+      position: absolute;
+      left: 7.5cqw;
+      top: 7.3cqh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      width: 44cqw;
+      height: 40px;
+      padding: 0 12px;
+      pointer-events: none;
+    }
+
+    .f01-one-quiet-minute-stitch {
+      display: block;
+      width: 8px;
+      height: 34px;
+      border-radius: 6px;
+      background: var(--green-lite);
+      transform-origin: 50% 100%;
+    }
+
+    .f01-one-quiet-minute-topbar {
+      position: absolute;
+      z-index: 20;
+      top: 48px;
+      left: 5cqw;
+      right: 5cqw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--green);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .f01-one-quiet-minute-micro-note {
+      position: absolute;
+      z-index: 20;
+      top: 19.6cqh;
+      left: 58.3cqw;
+      color: var(--green);
+      font-family: "LINE Seed Sans KR", sans-serif;
+      font-size: 1.45cqw;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    .f01-one-quiet-minute-payoff {
+      position: absolute;
+      z-index: 20;
+      top: 31cqh;
+      left: 58.8cqw;
+      width: 33cqw;
+      min-height: 20cqh;
+      color: var(--ink);
+      font-family: "LINE Seed Sans KR", sans-serif;
+      font-size: 5cqw;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 0.96;
+    }
+
+    .f01-one-quiet-minute-payoff-rule {
+      position: absolute;
+      z-index: 20;
+      top: 56.5cqh;
+      left: 58.8cqw;
+      width: 22cqw;
+      height: 2px;
+      transform-origin: 0 50%;
+      background: var(--green);
+    }
+  </style>
+
+  <div data-hf-id="hf-uwq9" id="root" data-composition-id="01-one-quiet-minute" data-width="1920" data-height="1080" data-duration="6.4">
+    <div data-hf-id="hf-l3j9" id="f01-one-quiet-minute-background" class="clip f01-one-quiet-minute-background" data-start="0" data-duration="6.4" data-track-index="0" aria-hidden="true"></div>
+
+    <div data-hf-id="hf-t10t" id="f01-one-quiet-minute-world" class="clip world f01-one-quiet-minute-world" data-start="0" data-duration="6.4" data-track-index="1">
+      <div data-hf-id="hf-at41" id="f01-one-quiet-minute-depth-back" class="clip f01-one-quiet-minute-depth-back" data-start="0" data-duration="6.4" data-track-index="2" aria-hidden="true"></div>
+
+      <div data-hf-id="hf-2p6d" id="f01-one-quiet-minute-portrait-surface" class="clip f01-one-quiet-minute-portrait-surface" data-start="0" data-duration="6.4" data-track-index="3">
+        <div data-hf-id="hf-8uyb" class="f01-one-quiet-minute-album-shell">
+          <div data-hf-id="hf-ro1m" class="f01-one-quiet-minute-album-frame">
+            <img data-hf-id="hf-g88t" id="f01-one-quiet-minute-album-image" class="clip f01-one-quiet-minute-album-image" src="assets/04-save-confirmation.jpg" alt="Saved seven-photo Weekkeep album confirmation" data-start="0" data-duration="6.4" data-track-index="4" draggable="false">
+            <div data-hf-id="hf-fs2v" id="f01-one-quiet-minute-fixture-target" class="f01-one-quiet-minute-fixture-target" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+
+      <div data-hf-id="hf-obc1" id="f01-one-quiet-minute-stitch-row" class="f01-one-quiet-minute-stitch-row" aria-hidden="true">
+        <span data-hf-id="hf-vqy5" class="clip f01-one-quiet-minute-stitch" data-start="0" data-duration="6.4" data-track-index="20"></span>
+        <span data-hf-id="hf-uzac" class="clip f01-one-quiet-minute-stitch" data-start="0" data-duration="6.4" data-track-index="21"></span>
+        <span data-hf-id="hf-3n67" class="clip f01-one-quiet-minute-stitch" data-start="0" data-duration="6.4" data-track-index="22"></span>
+        <span data-hf-id="hf-zp26" class="clip f01-one-quiet-minute-stitch" data-start="0" data-duration="6.4" data-track-index="23"></span>
+        <span data-hf-id="hf-akjt" class="clip f01-one-quiet-minute-stitch" data-start="0" data-duration="6.4" data-track-index="24"></span>
+        <span data-hf-id="hf-7la8" class="clip f01-one-quiet-minute-stitch" data-start="0" data-duration="6.4" data-track-index="25"></span>
+        <span data-hf-id="hf-igrv" class="clip f01-one-quiet-minute-stitch" data-start="0" data-duration="6.4" data-track-index="26"></span>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-sebl" id="f01-one-quiet-minute-topbar" class="clip f01-one-quiet-minute-topbar" data-start="0" data-duration="6.4" data-track-index="10">
+      <span data-hf-id="hf-y59g">WEEKKEEP</span>
+      <span data-hf-id="hf-1wac">01 / 10</span>
+    </div>
+
+    <div data-hf-id="hf-pxx7" id="f01-one-quiet-minute-micro-note" class="clip f01-one-quiet-minute-micro-note" data-start="0" data-duration="6.4" data-track-index="11">Not another daily habit.</div>
+
+    <div data-hf-id="hf-sxqf" id="f01-one-quiet-minute-payoff" class="clip f01-one-quiet-minute-payoff" data-start="0" data-duration="6.4" data-track-index="12" aria-live="off">One</div>
+
+    <div data-hf-id="hf-6pdv" id="f01-one-quiet-minute-payoff-rule" class="clip f01-one-quiet-minute-payoff-rule" data-start="0" data-duration="6.4" data-track-index="13" aria-hidden="true"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (() => {
+      const FRAME_ID = "01-one-quiet-minute";
+      const VIEWPORT_WIDTH = 1920;
+      const VIEWPORT_HEIGHT = 1080;
+      const root = document.getElementById("root");
+      const world = document.getElementById("f01-one-quiet-minute-world");
+      const target = document.getElementById("f01-one-quiet-minute-fixture-target");
+      const albumImage = document.getElementById("f01-one-quiet-minute-album-image");
+      const microNote = document.getElementById("f01-one-quiet-minute-micro-note");
+      const payoff = document.getElementById("f01-one-quiet-minute-payoff");
+      const payoffRule = document.getElementById("f01-one-quiet-minute-payoff-rule");
+      const stitches = world.querySelectorAll(".f01-one-quiet-minute-stitch");
+
+      const cam = { scale: 1, x: 0, y: 0 };
+      const revealScale = 12;
+
+      function applyCamera() {
+        world.style.transform = `translate(${cam.x}px, ${cam.y}px) scale(${cam.scale})`;
+      }
+
+      // Measure the real target in the neutral layout, then use T = -offset × S
+      // so the opening crop is centered without a second camera wrapper.
+      world.style.transform = "translate(0px, 0px) scale(1)";
+      const targetRect = target.getBoundingClientRect();
+      const targetOffsetX = targetRect.left + targetRect.width / 2 - VIEWPORT_WIDTH / 2;
+      const targetOffsetY = targetRect.top + targetRect.height / 2 - VIEWPORT_HEIGHT / 2;
+      const initialCamera = {
+        scale: revealScale,
+        x: -targetOffsetX * revealScale,
+        y: -targetOffsetY * revealScale,
+      };
+
+      Object.assign(cam, initialCamera);
+      applyCamera();
+
+      const dof = { value: 1.2 };
+      albumImage.style.setProperty("--dof", `${dof.value}px`);
+
+      const tl = gsap.timeline({ paused: true });
+      tl.set(cam, { ...initialCamera, onUpdate: applyCamera }, 0);
+      tl.fromTo(
+        microNote,
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.32, ease: "power2.out" },
+        1.18,
+      );
+
+      // One continuous, outward-only camera move. The frame is locked after 4.1s.
+      tl.to(
+        cam,
+        {
+          scale: 1,
+          x: 0,
+          y: 0,
+          duration: 2.4,
+          ease: "expo.out",
+          onUpdate: applyCamera,
+        },
+        1.7,
+      );
+      tl.to(
+        dof,
+        {
+          value: 0,
+          duration: 2.4,
+          ease: "expo.out",
+          onUpdate: () => albumImage.style.setProperty("--dof", `${dof.value}px`),
+        },
+        1.7,
+      );
+
+      tl.fromTo(
+        stitches,
+        { opacity: 0, scaleY: 0.25 },
+        { opacity: 1, scaleY: 1, duration: 0.42, ease: "power3.out", stagger: 0.11 },
+        2.42,
+      );
+
+      const CONTENT = [
+        { title: "One", body: "One", hold: 0.08 },
+        { title: "One quiet minute", body: "One quiet minute", hold: 0.18 },
+        { title: "One quiet minute a week.", body: "One quiet minute a week.", hold: 0.46 },
+      ];
+      const BASE_DURATION = 0.18;
+      const SEC_PER_CHAR = 0.01;
+      const TAIL_PAD = 0.21;
+      let cumulative = 0;
+      const sequence = CONTENT.map((entry) => {
+        const duration = BASE_DURATION + entry.body.length * SEC_PER_CHAR + entry.hold;
+        const start = cumulative;
+        cumulative += duration;
+        return { ...entry, start, end: cumulative };
+      });
+      const sequenceDuration = cumulative + TAIL_PAD;
+
+      function entryAt(time) {
+        for (let index = sequence.length - 1; index >= 0; index -= 1) {
+          if (time >= sequence[index].start) return sequence[index];
+        }
+        return sequence[0];
+      }
+
+      const driver = { t: 0 };
+      let lastTitle = "";
+      tl.fromTo(
+        payoff,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.34, ease: "power3.out" },
+        4.1,
+      );
+      tl.to(
+        driver,
+        {
+          t: sequenceDuration,
+          duration: sequenceDuration,
+          ease: "none",
+          onUpdate: () => {
+            const entry = entryAt(driver.t);
+            if (entry.title !== lastTitle) {
+              payoff.textContent = entry.title;
+              lastTitle = entry.title;
+            }
+          },
+        },
+        4.1,
+      );
+      tl.fromTo(
+        payoffRule,
+        { opacity: 0, scaleX: 0 },
+        { opacity: 1, scaleX: 1, duration: 0.36, ease: "power2.out" },
+        5.42,
+      );
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FRAME_ID] = tl;
+    })();
+  </script>
+</template>

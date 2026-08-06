@@ -1,0 +1,9 @@
+#include "Base.xcconfig"
+#include? "Secrets.xcconfig"
+
+// Release is purchase-capable only when a local/CI Secrets.xcconfig supplies
+// the RevenueCat public SDK key. Analytics stays off in every V1 submission.
+WK_PURCHASES_ENABLED = YES
+WK_ANALYTICS_ENABLED = NO
+WK_POSTHOG_PROJECT_TOKEN =
+WK_POSTHOG_HOST = https:/$()/eu.i.posthog.com

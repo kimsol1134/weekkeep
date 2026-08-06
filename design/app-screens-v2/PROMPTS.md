@@ -68,7 +68,7 @@ Reserve a seven-position progress rail; deterministic overlay shows four coral a
 Back: "이번 주"
 Date: "8월 3일 – 9일"
 Headline: "지난주,\n이 7장을 남길까요?"
-Body: "지난주 사진 42장에서 만든 초안이에요."
+Body: "이번 주의 순간 7장을 골랐어요. 마음에 들지 않는 사진만 바꿔보세요."
 Show exactly seven candid photo regions. One selected photo has label "선택한 사진".
 Helper: "사진을 눌러 선택하세요"
 Secondary: "이 사진 바꾸기"
@@ -91,8 +91,9 @@ Headline: "지난주가\n한 장의 앨범이 됐어요"
 Metadata: "사진 7장 · 이 iPhone에 저장됨"
 Supporting copy: "정리하지 못했던 평범한 한 주가,\n이제 다시 볼 수 있는 기억이 됐어요."
 Show exactly seven photos in one album sheet.
-Primary: "기록 보기"
-Secondary: "완료"
+Primary: "이번 주를 공유하기" (opens local Story/Post preparation)
+Secondary: "기록 보기"
+Tertiary: "완료"
 Reserve exact seven-stitch completion rail in sage. No confetti or notification primer in this screen.
 ```
 
@@ -154,7 +155,7 @@ Title: "7월 27일 – 8월 2일"
 Metadata: "사진 7장 · 이 iPhone에 저장됨"
 Show exactly seven photo regions: one hero plus six supporting.
 Helper: "사진을 눌러 크게 보세요."
-No overflow, share, export, edit, delete, or bottom tab bar.
+Show a restrained top-trailing local share action. No overflow, edit, delete, or bottom tab bar; social feed and cloud upload are out of scope.
 ```
 
 ## 12 — Settings
@@ -214,5 +215,5 @@ Overlay exact seven-stitch coral rail below the wordmark.
 - 알림 = 월요일 20:30
 - ready 화면은 분석 완료를 주장하지 않음
 - archive 3개 상태에는 year filter 없음
-- detail에 share/edit/delete 없음
+- detail에는 local share action이 있고 social feed/edit/delete는 없음
 - 실제 앱/제출 screenshot은 등록된 LINE Seed TTF로 렌더링

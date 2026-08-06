@@ -1,0 +1,376 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Rg.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "LINE Seed Sans KR";
+      src: url("assets/fonts/LINESeedKR-Bd.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 700;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: "JetBrains Mono";
+      src: url("assets/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: block;
+    }
+
+    #root {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      color: #25212B;
+    }
+
+    .wk07-background,
+    .wk07-split-scene,
+    .wk07-topbar,
+    .wk07-title,
+    .wk07-line-mask,
+    .wk07-card,
+    .wk07-arrow,
+    .wk07-pill {
+      position: absolute;
+    }
+
+    .wk07-background {
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background-color: #FBF7F2;
+    }
+
+    .wk07-ambient {
+      position: absolute;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .wk07-ambient-left {
+      top: 5cqh;
+      left: -8cqw;
+      width: 47cqw;
+      height: 74cqh;
+      background-color: #E8E1DB;
+      opacity: 0.36;
+    }
+
+    .wk07-ambient-right {
+      top: 10cqh;
+      right: -8cqw;
+      width: 44cqw;
+      height: 68cqh;
+      background-color: #537763;
+      opacity: 0.09;
+    }
+
+    .wk07-topbar {
+      top: 4.4cqh;
+      left: 5cqw;
+      right: 5cqw;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 3cqh;
+      font-family: "JetBrains Mono";
+      font-size: 26px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .wk07-topbar-counter {
+      color: #5B415E;
+    }
+
+    .wk07-topbar-label {
+      color: #537763;
+    }
+
+    .wk07-title {
+      top: 12.6cqh;
+      left: 5cqw;
+      right: 5cqw;
+      z-index: 4;
+      color: #5B415E;
+      font-family: "LINE Seed Sans KR";
+      font-size: 5cqw;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 0.96;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .wk07-title-accent {
+      color: #537763;
+    }
+
+    .wk07-split-scene {
+      inset: 0;
+      z-index: 2;
+      perspective: 1800px;
+      transform-style: preserve-3d;
+    }
+
+    .wk07-split-stage {
+      position: absolute;
+      top: 24.2cqh;
+      left: 0;
+      right: 0;
+      width: 46.4cqw;
+      height: 53cqh;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      transform-style: preserve-3d;
+    }
+
+    .wk07-card {
+      top: 0;
+      width: 18.2cqw;
+      height: 53cqh;
+      overflow: hidden;
+      border: 2px solid #5B415E;
+      border-radius: 8px;
+      background-color: #FBF7F2;
+      transform-origin: 50% 50%;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      will-change: transform;
+    }
+
+    .wk07-card img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .wk07-card-left {
+      left: 0;
+    }
+
+    .wk07-card-right {
+      right: 0;
+    }
+
+    .wk07-arrow {
+      top: 43.5cqh;
+      left: 50%;
+      width: 10cqw;
+      margin-left: -5cqw;
+      color: #5B415E;
+      font-family: "LINE Seed Sans KR";
+      font-size: 3.2cqw;
+      font-weight: 400;
+      line-height: 1;
+      text-align: center;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    .wk07-pill {
+      left: 50%;
+      width: 12.4cqw;
+      height: 5.2cqh;
+      margin-left: -6.2cqw;
+      display: grid;
+      place-items: center;
+      border: 2px solid #25212B;
+      border-radius: 12px;
+      font-family: "JetBrains Mono";
+      font-size: 26px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      line-height: 1;
+      text-transform: uppercase;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    .wk07-pill-streak {
+      top: 50.5cqh;
+      z-index: 8;
+      color: #25212B;
+      background-color: #E97A68;
+    }
+
+    .wk07-pill-backlog {
+      top: 56.5cqh;
+      z-index: 8;
+      color: #25212B;
+      background-color: #E5A84B;
+    }
+
+    .wk07-pill-account {
+      top: 62.5cqh;
+      z-index: 8;
+      color: #FBF7F2;
+      background-color: #537763;
+    }
+
+    .wk07-line-mask {
+      top: 77.3cqh;
+      left: 5cqw;
+      z-index: 6;
+      width: 90cqw;
+      height: 5.5cqh;
+      overflow: hidden;
+    }
+
+    .wk07-bottom-line {
+      color: #5B415E;
+      font-family: "LINE Seed Sans KR";
+      font-size: 3.2cqw;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 0.96;
+      white-space: nowrap;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+  <div data-hf-id="hf-1dur" id="root" data-composition-id="07-revisit-without-pressure" data-width="1920" data-height="1080" data-duration="6.5">
+    <div data-hf-id="hf-9i1w" class="clip wk07-background" data-start="0" data-duration="6.5" data-track-index="0" aria-hidden="true">
+      <div data-hf-id="hf-z96e" class="wk07-ambient wk07-ambient-left"></div>
+      <div data-hf-id="hf-8xot" class="wk07-ambient wk07-ambient-right"></div>
+    </div>
+
+    <div data-hf-id="hf-62fl" class="clip wk07-topbar" data-start="0" data-duration="6.5" data-track-index="1" aria-hidden="true">
+      <span data-hf-id="hf-xr66" class="wk07-topbar-label">Archive</span>
+      <span data-hf-id="hf-2klj" class="wk07-topbar-counter">07</span>
+    </div>
+
+    <div data-hf-id="hf-lh9h" class="clip wk07-title" data-start="0" data-duration="6.5" data-track-index="2">
+      Revisit, without <span data-hf-id="hf-bg8b" class="wk07-title-accent">pressure.</span>
+    </div>
+
+    <div data-hf-id="hf-y0ly" class="clip wk07-split-scene" data-start="0" data-duration="6.5" data-track-index="3" aria-label="Saved weeks overview and saved week detail">
+      <div data-hf-id="hf-87bz" class="wk07-split-stage">
+        <div data-hf-id="hf-4dhp" class="clip wk07-card wk07-card-left" data-start="1" data-duration="5.5" data-track-index="4">
+          <img data-hf-id="hf-q1z5" src="assets/05-weeks.jpg" alt="Saved weeks overview">
+        </div>
+        <div data-hf-id="hf-cw81" class="clip wk07-card wk07-card-right" data-start="1.2" data-duration="5.3" data-track-index="5">
+          <img data-hf-id="hf-495k" src="assets/06-week-detail.jpg" alt="Saved week detail">
+        </div>
+      </div>
+
+      <div data-hf-id="hf-bpcd" class="clip wk07-arrow" data-start="1.5" data-duration="5" data-track-index="6" aria-hidden="true">
+        →
+      </div>
+
+      <div data-hf-id="hf-0a0l" class="clip wk07-pill wk07-pill-streak" data-start="2.9" data-duration="3.6" data-track-index="7" aria-label="No streak">
+        NO STREAK
+      </div>
+      <div data-hf-id="hf-mxbd" class="clip wk07-pill wk07-pill-backlog" data-start="3.33" data-duration="3.17" data-track-index="8" aria-label="No backlog">
+        NO BACKLOG
+      </div>
+      <div data-hf-id="hf-66yd" class="clip wk07-pill wk07-pill-account" data-start="3.76" data-duration="2.74" data-track-index="9" aria-label="No account">
+        NO ACCOUNT
+      </div>
+    </div>
+
+    <div data-hf-id="hf-s520" class="clip wk07-line-mask" data-start="4.6" data-duration="1.9" data-track-index="10">
+      <div data-hf-id="hf-1b6b" class="wk07-bottom-line">Just the weeks you chose to keep.</div>
+    </div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    const wk07Timeline = gsap.timeline({ paused: true });
+    window.__timelines["07-revisit-without-pressure"] = wk07Timeline;
+
+    wk07Timeline.fromTo(
+      ".wk07-topbar",
+      { opacity: 0 },
+      { opacity: 1, duration: 0.42, ease: "power2.out" },
+      0,
+    );
+
+    wk07Timeline.fromTo(
+      ".wk07-title",
+      { y: -34, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.72, ease: "power3.out" },
+      0.08,
+    );
+
+    wk07Timeline.fromTo(
+      ".wk07-card-left",
+      { x: -390, rotateY: 23, scale: 0.85, opacity: 0 },
+      { x: 0, rotateY: 14, scale: 1, opacity: 1, duration: 1.05, ease: "power3.out" },
+      1,
+    );
+
+    wk07Timeline.fromTo(
+      ".wk07-card-right",
+      { x: 390, rotateY: -23, scale: 0.85, opacity: 0 },
+      { x: 0, rotateY: -14, scale: 1, opacity: 1, duration: 1.05, ease: "power3.out" },
+      1.2,
+    );
+
+    wk07Timeline.fromTo(
+      ".wk07-arrow",
+      { scale: 0, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.42, ease: "power3.out" },
+      1.55,
+    );
+
+    wk07Timeline.to(
+      ".wk07-card-left",
+      { y: -4, duration: 0.62, ease: "sine.inOut" },
+      2.45,
+    );
+    wk07Timeline.to(
+      ".wk07-card-left",
+      { y: 0, duration: 0.62, ease: "sine.inOut" },
+      3.07,
+    );
+    wk07Timeline.to(
+      ".wk07-card-right",
+      { y: 4, duration: 0.62, ease: "sine.inOut" },
+      2.45,
+    );
+    wk07Timeline.to(
+      ".wk07-card-right",
+      { y: 0, duration: 0.62, ease: "sine.inOut" },
+      3.07,
+    );
+
+    [
+      [".wk07-pill-streak", 2.98],
+      [".wk07-pill-backlog", 3.41],
+      [".wk07-pill-account", 3.84],
+    ].forEach(([selector, at]) => {
+      wk07Timeline.fromTo(
+        selector,
+        { scale: 0, y: 8, opacity: 0 },
+        { scale: 1, y: 0, opacity: 1, duration: 0.46, ease: "power3.out" },
+        at,
+      );
+    });
+
+    wk07Timeline.fromTo(
+      ".wk07-line-mask",
+      { clipPath: "inset(0 100% 0 0)" },
+      { clipPath: "inset(0 0% 0 0)", duration: 0.95, ease: "power2.out" },
+      4.65,
+    );
+  </script>
+</template>

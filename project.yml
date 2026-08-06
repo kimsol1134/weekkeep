@@ -1,0 +1,109 @@
+name: Weekkeep
+options:
+  bundleIdPrefix: com.solkim
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+    DEVELOPMENT_TEAM: D48DDX5D5W
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_LANGUAGE: en
+    CLANG_ENABLE_MODULES: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+configFiles:
+  Debug: Config/Debug.xcconfig
+  Release: Config/Release.xcconfig
+packages:
+  RevenueCat:
+    url: https://github.com/RevenueCat/purchases-ios.git
+    exactVersion: 5.83.0
+  PostHog:
+    url: https://github.com/PostHog/posthog-ios.git
+    exactVersion: 3.69.0
+targets:
+  Weekkeep:
+    type: application
+    platform: iOS
+    sources:
+      - path: Weekkeep
+    resources:
+      - path: Weekkeep/Resources
+    dependencies:
+      - package: RevenueCat
+        product: RevenueCat
+      - package: PostHog
+        product: PostHog
+    info:
+      path: Weekkeep/Resources/Info.plist
+      properties:
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        CFBundleURLTypes:
+          - CFBundleTypeRole: Viewer
+            CFBundleURLName: com.solkim.weekkeep
+            CFBundleURLSchemes:
+              - weekkeep
+        ITSAppUsesNonExemptEncryption: false
+        LSApplicationCategoryType: public.app-category.photo-video
+        NSPhotoLibraryUsageDescription: Weekkeep uses your photo library to find this week's moments on your device.
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default Configuration
+        UIAppFonts:
+          - LINESeedKR-Rg.ttf
+          - LINESeedKR-Bd.ttf
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIUserInterfaceStyle: Light
+        WK_ANALYTICS_ENABLED: "$(WK_ANALYTICS_ENABLED)"
+        WK_POSTHOG_HOST: "$(WK_POSTHOG_HOST)"
+        WK_POSTHOG_PROJECT_TOKEN: "$(WK_POSTHOG_PROJECT_TOKEN)"
+        WK_PURCHASES_ENABLED: "$(WK_PURCHASES_ENABLED)"
+        WK_REVENUECAT_API_KEY: "$(WK_REVENUECAT_API_KEY)"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.solkim.weekkeep
+        PRODUCT_NAME: Weekkeep
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "6"
+        TARGETED_DEVICE_FAMILY: "1"
+        INFOPLIST_KEY_CFBundleDisplayName: Weekkeep
+        INFOPLIST_KEY_UIUserInterfaceStyle: Light
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.photo-video
+    scheme:
+      gatherCoverage: true
+      testTargets:
+        - WeekkeepTests
+        - WeekkeepUITests
+  WeekkeepTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: WeekkeepTests
+    dependencies:
+      - target: Weekkeep
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.solkim.weekkeep.tests
+        GENERATE_INFOPLIST_FILE: YES
+  WeekkeepUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: WeekkeepUITests
+    dependencies:
+      - target: Weekkeep
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.solkim.weekkeep.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Weekkeep

@@ -203,7 +203,7 @@ Then 앱 재시작 없이 현재 권한을 다시 읽고 만들기 흐름을 사
 1. Weekkeep이 분석 시작 시각과 rolling 7일 범위를 고정합니다.
 2. 범위 안의 접근 가능한 이미지 자산을 가져옵니다.
 3. 스크린샷과 숨김 자산을 제외합니다.
-4. 최대 100장까지 기기 내 분석합니다.
+4. 최대 500개 descriptor를 metadata scan하고, deterministic local-day/time-bucket prefilter로 최대 21개(7일×3개)만 Vision 분석합니다.
 5. 근접 중복을 묶고 품질과 날짜 분포를 반영해 최대 14장을 순위화합니다.
 6. 최대 7장을 초기 선택하고 나머지 최대 7장을 교체 후보로 둡니다.
 7. `EVT-curation_completed`를 사진 식별자 없이 기록합니다.
@@ -213,7 +213,7 @@ Then 앱 재시작 없이 현재 권한을 다시 읽고 만들기 흐름을 사
 
 - A1. 유효 사진 1–6장: 실제 장수만 보여주고 다음 단계로 진행합니다.
 - A2. 유효 사진 0장: 날짜 범위와 권한 상태에 맞는 empty state를 표시합니다.
-- A3. 접근 자산이 100장 초과: 일자별 대표 샘플링 후 100장만 분석합니다.
+- A3. 접근 자산이 500개 초과: descriptor scan을 500개에서 끝냅니다. 100개 eligible fixture에서도 Vision 호출은 21개를 넘지 않습니다.
 - A4. 사용자가 취소: task를 취소하고 저장/무료 횟수를 변경하지 않은 채 `SCR-WK-01`로 돌아갑니다.
 - E1. 일부 iCloud 사진 다운로드 실패: 성공한 자산이 있으면 부분 결과와 생략 수를 보여줍니다.
 - E2. 전부 실패: `UC-12`의 재시도 경로로 이동합니다.
@@ -306,10 +306,14 @@ And 같은 weekKey가 이미 저장됐다면 새 기록을 만들지 않고 저�
 ### 대안/예외
 
 - A1. 사진 교체: 선택된 사진의 `이 사진 바꾸기`를 탭하고, 아직 선택되지 않은 후보 한 장을 고릅니다. 검토 중에는 같은 grid 위치만 crossfade로 바뀌고 나머지 6장의 표시 위치는 유지됩니다. `EVT-photo_replaced`는 사진 ID 없이 기록합니다.
-- A2. 후보 없음: `교체할 다른 후보가 없어요`를 표시하고 현재 결과를 유지합니다.
-- A3. sheet 취소: 현재 결과를 그대로 유지합니다.
-- A4. 제한 접근 관리 후 후보 변경: 초안을 무효화하고 재분석할지 사용자에게 알립니다.
-- A5. VoiceOver: photo의 `크게 보기` 또는 `사진 교체` custom action을 실행해 선택→재탭 순서를 거치지 않고 각 결과로 직접 이동합니다.
+- A2. replacement sheet 첫 상태에서는 선택 사진과 같은 display-timezone calendar day의 후보만 표시합니다.
+- A3. same-day 후보 없음: 따뜻한 설명과 명시적 `다른 날 사진 보기` action을 표시합니다. 사용자가 opt-in하기 전에는 다른 날짜 후보를 보여주지 않습니다.
+- A4. other-day opt-in: 후보를 날짜별 heading으로 group하고, 선택 즉시 같은 한 slot만 교체합니다.
+- A5. 후보 없음: `교체할 다른 후보가 없어요`를 표시하고 현재 결과를 유지합니다.
+- A6. 분석 결과에 selected day별 unused candidate가 있으면 bounded alternative shortlist에 day coverage를 먼저 보존합니다.
+- A7. sheet 취소: 현재 결과를 그대로 유지합니다.
+- A8. 제한 접근 관리 후 후보 변경: 초안을 무효화하고 재분석할지 사용자에게 알립니다.
+- A9. VoiceOver: photo의 `크게 보기` 또는 `사진 교체` custom action을 실행해 선택→재탭 순서를 거치지 않고 각 결과로 직접 이동합니다.
 - E1. 교체 후보 원본이 그 사이 삭제됨: 후보에서 제외하고 나머지를 유지합니다.
 
 ### 사후 조건
@@ -363,7 +367,9 @@ And 최종 선택에 같은 사진이 두 번 존재하면 안 된다
 7. 저장 성공을 확인한 뒤 무료 저장 수를 파생 계산합니다.
 8. `EVT-album_saved`를 사진 ID 없이 전송합니다. Regular 기록은 `regularCycleStartsAt` 기준 `regular_sequence_bucket`을 포함합니다.
 9. 작고 절제된 완료 haptic과 저장된 최대 7장 사진의 짧은 순차 reveal을 보여줍니다.
-10. 첫 저장이면 `SHEET-NOT-01`로 알림 가치를 제안합니다.
+10. Save Confirmation의 primary action으로 local share preparation을 제공하고 Story 9:16 또는 Post 4:5 format을 고르게 합니다.
+11. renderer가 저장된 실제 PhotoKit image로 temporary local artifact를 준비한 뒤, Parent가 명시적으로 share action을 누르면 native share sheet를 엽니다.
+12. 첫 저장이면 `SHEET-NOT-01`로 알림 가치를 제안합니다.
 
 ### 대안/예외
 
@@ -371,6 +377,7 @@ And 최종 선택에 같은 사진이 두 번 존재하면 안 된다
 - A2. 저장 도중 앱 background: transaction 결과를 재조회해 성공/실패를 결정합니다.
 - E1. 저장 실패: 초안을 유지하고 재시도 CTA를 제공합니다. 무료 수와 이벤트를 증가시키지 않습니다.
 - E2. 사진이 저장 직전 사라짐: 존재하는 사진만으로 저장할지 안내하고 자동 대체하지 않습니다.
+- E3. share preparation failure: 저장된 album은 그대로 유지하고 retry/error UI를 제공합니다. external destination이나 recipient는 기록하지 않습니다.
 
 ### 사후 조건
 
@@ -408,6 +415,7 @@ And 무료 저장 수는 한 번만 증가해야 한다
 3. Parent가 한 주를 탭합니다.
 4. 상세에서 사진을 촬영 시간순으로 봅니다.
 5. 한 장을 탭하면 전체 화면으로 보고 swipe로 이동합니다.
+6. 상세의 share action은 저장 당시와 같은 local renderer를 사용해 나중에도 Story/Post artifact를 만들 수 있습니다.
 
 ### 대안/예외
 
@@ -416,6 +424,7 @@ And 무료 저장 수는 한 번만 증가해야 한다
 - A3. 일부 원본 누락: 누락 위치를 표시하고 다른 사진으로 조용히 바꾸지 않습니다.
 - A4. 모든 원본 누락: 주차 메타데이터와 설명을 남기고 설정/Photos 확인 경로를 제공합니다.
 - A5. 앱 삭제·재설치 또는 새 기기: Weekkeep 자체 기록 복원이나 Photos 원본 기반 자동 재구성을 제공하지 않습니다. OS 수준 복원 여부와 무관하게 제품 기능으로 복원을 약속하지 않습니다.
+- A6. share 원본 일부 누락: 실제로 사용 가능한 사진만 adaptive layout에 넣고 fake photo로 채우지 않으며, 전부 누락이면 share action을 비활성화합니다.
 
 ### 사후 조건
 
@@ -478,17 +487,18 @@ And 첫 기록 저장 전에는 알림 시스템 권한 팝업이 나타나면 �
 - 우선순위: P0
 - 트리거: Welcome을 포함한 저장 기록 2개 이후, 사진 1장 이상인 세 번째 미저장 target의 `만들기`
 - 사전 조건: Plus 비활성
-- 화면: `SHEET-PAY-01 Plus Paywall`
+- 화면: `SHEET-PAY-01 Plus Paywall` (full-screen app surface)
 
 ### 기본 흐름
 
 1. Weekkeep이 기존 기록 열람은 계속 무료라는 점과 Plus 가치를 설명합니다.
-2. RevenueCat offering에서 비소모성 평생 이용권과 Store 현지화 가격을 가져옵니다.
-3. Parent가 평생 이용권 CTA를 탭합니다. 앱은 US 기준 $19.99나 KR 예상 가격을 production UI에 하드코딩하지 않습니다.
-4. App Store 구매 sheet가 나타납니다.
-5. 구매 성공 후 RevenueCat `plus` entitlement를 확인합니다.
-6. paywall을 닫고 원래 만들기 흐름을 자동 재개합니다.
-7. `EVT-purchase_resolved(result: success)`를 기록합니다.
+2. Plus 설명은 앱의 full-screen surface에서 제공되며, 사용자가 명시적으로 닫을 수 있습니다. 앱이 추가 sheet chrome이나 device-like frame을 만들어서는 안 됩니다.
+3. RevenueCat offering에서 비소모성 평생 이용권과 Store 현지화 가격을 가져옵니다.
+4. Parent가 평생 이용권 CTA를 탭합니다. 앱은 US 기준 $19.99나 KR 예상 가격을 production UI에 하드코딩하지 않습니다.
+5. App Store 구매 sheet가 나타납니다.
+6. 구매 성공 후 RevenueCat `plus` entitlement를 확인합니다.
+7. paywall을 닫고 원래 만들기 흐름을 자동 재개합니다.
+8. `EVT-purchase_resolved(result: success)`를 기록합니다.
 
 ### 대안/예외
 
@@ -532,14 +542,18 @@ And 앱을 재실행해도 Plus가 활성이어야 한다
 2. Weekkeep이 RevenueCat restore를 요청합니다.
 3. 응답 CustomerInfo에서 `plus` entitlement를 확인합니다.
 4. 활성이라면 `Plus 이용 권한을 복원했어요` 성공 메시지와 Plus 상태를 갱신합니다.
-5. 로컬 기록이 없는 재설치·새 기기에서는 구매 복원이 주간 기록을 복원하지 않는다는 짧은 안내를 함께 보여줍니다.
-6. `EVT-restore_resolved(result: success)`를 기록합니다.
+5. paywall에서 복원했다면 성공 메시지를 paywall 안에 계속 보여주고 구매 CTA 대신 `계속` action을 제공합니다.
+6. Parent가 `계속`을 탭하면 RevenueCat entitlement를 다시 확인하고, active일 때만 paywall을 닫고 고정된 주간 만들기 target을 재개합니다.
+7. 로컬 기록이 없는 재설치·새 기기에서는 구매 복원이 주간 기록을 복원하지 않는다는 짧은 안내를 함께 보여줍니다.
+8. `EVT-restore_resolved(result: success)`를 기록합니다.
 
 ### 대안/예외
 
 - A1. 복원할 구매 없음: ‘복원할 구매를 찾지 못했어요’라고 중립적으로 표시합니다.
 - E1. 네트워크/스토어 오류: 원인을 구분 가능한 수준에서 설명하고 재시도합니다.
 - E2. 사용자가 다른 App Store 계정 사용: 계정 정보를 앱이 추측하지 않고 Apple 계정 확인을 안내합니다.
+- E3. 복원 callback 뒤 entitlement가 inactive/unknown이면 paywall을 닫지 않고 무서운 오류 없이 대기 상태를 표시합니다.
+- E4. 성공 배너가 표시된 뒤 X로 닫아도 foreground/source-of-truth refresh를 수행하며, 성공 배너를 자동으로 숨기지 않습니다.
 
 ### 사후 조건
 
@@ -609,6 +623,8 @@ And 전체 작업을 처음부터 강제하면 안 된다
 1. Parent가 Photos 접근 상태(full/limited/denied)를 확인합니다.
 2. 필요하면 iOS Settings 또는 limited picker로 이동합니다.
 3. 알림 허용 상태와 기본 시각을 확인합니다.
+   - 저장 기록이 0개이면 알림 권한을 요청하지 않고, 첫 기록 저장 후 켤 수 있다는 비활성 안내만 보여줍니다.
+   - 저장 기록이 1개 이상이면 `notDetermined`에서만 contextual request를 시작하고, 이미 결정된 상태에서는 시스템 설정으로 이동합니다.
 4. Plus 상태와 `구매 복원`을 확인합니다.
 5. 데이터 저장 설명에서 현재 iPhone 로컬 저장, 앱 관리형 백업 없음, 앱 삭제·기기 변경 시 유실 가능성을 확인합니다.
 6. 프라이버시 설명에서 기기 내 분석과 외부 전송 금지 범위를 읽습니다.
@@ -622,7 +638,8 @@ And 전체 작업을 처음부터 강제하면 안 된다
 
 ### 사후 조건
 
-- 설정 열람만으로 권한 팝업이나 구매 sheet를 자동 실행하지 않습니다.
+- 설정 열람만으로 권한 팝업이나 구매 sheet를 자동 실행하지 않습니다. 저장 기록이 0개일 때 알림 permission action을 탭할 수 있는 것처럼 보이게 하지 않습니다.
+- 알림 상태를 다시 불러온 뒤 같은 화면의 state × saved-album-count 정책을 적용하며, 저장 직후 primer가 이미 허용되었거나 결정된 상태에서 system prompt를 두 번 열지 않습니다.
 
 ## 3. 공통 완료 기준
 

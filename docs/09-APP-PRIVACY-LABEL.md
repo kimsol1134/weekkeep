@@ -3,11 +3,11 @@
 | 항목 | 값 |
 |---|---|
 | 기준일 | 2026-08-07 |
-| 대상 | iOS 1.0.0 — current ASC build 6 is `VALID` and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; current review is `WAITING_FOR_REVIEW`; historical build 3 evidence is preserved and its submission was replaced; build 4 is `VALID` but unattached |
+| 대상 | iOS 1.0.0 — canonical ASC build 7 (`1c51b451-d37f-4704-89c9-e426b1ee5725`) is `VALID` and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; current review is `WAITING_FOR_REVIEW`; build 6 and its prior submission are historical/replaced; build 4 is `VALID` but unattached |
 | 공개 정책 URL | `https://weekkeep-app.kimsol1134.chatgpt.site/privacy` |
 | Privacy Choices URL | `https://weekkeep-app.kimsol1134.chatgpt.site/privacy` |
 | Tracking | No |
-| 사진·영상 외부 수집 | No — on-device only |
+| 사진·영상 외부 수집 | No — photo selection and share rendering happen on the iPhone; photo details are not sent for analysis |
 
 이 문서는 App Store Connect의 **App Privacy** 답변을 소유하는 단일 원본입니다. 앱 코드, `PrivacyInfo.xcprivacy`, SDK manifest, 공개 개인정보 처리방침, App Store 답변이 바뀔 때 이 문서를 함께 검토합니다.
 
@@ -15,7 +15,7 @@
 
 | 기능 | 제출 빌드 설정 | 네트워크 처리 |
 |---|---|---|
-| 사진 탐색·분석 | 활성 | Photos/Vision으로 기기 내 처리; 사진 픽셀·썸네일·파일명·위치·촬영 시각·Photos 식별자 전송 없음 |
+| 사진 탐색·분석 | 활성 | Photos/Vision으로 iPhone에서 처리; 사진 픽셀·썸네일·파일명·위치·촬영 시각·Photos 식별자는 분석을 위해 분석 서비스나 다른 서비스로 보내지 않음 |
 | 로컬 기록 | 활성 | SwiftData/App sandbox에만 저장; Weekkeep 서버·CloudKit 없음 |
 | RevenueCat 구매 | 실제 public SDK key가 준비되면 활성 | 자동 생성 익명 App User ID와 구매·entitlement 정보 전송 |
 | PostHog 분석 | **V1 제출은 비활성 (`WK_ANALYTICS_ENABLED = NO`)** | 전송 없음; adapter와 SDK는 deny-by-default 상태로 포함 |
@@ -36,7 +36,7 @@ PostHog를 이후 활성화하려면 사용자 동의 UX, `TST-019`/`TST-022` pa
 
 다음 항목은 V1에서 **수집하지 않음**으로 답합니다.
 
-- Photos or Videos: 사진은 기기 안에서만 처리하며 외부에 전송하지 않음
+- Photos or Videos: 사진 고르기와 공유 이미지 만들기는 iPhone에서 처리하며, 사진 정보는 분석을 위해 분석 서비스나 다른 서비스로 보내지 않음. 공유는 사용자가 직접 선택할 때만 시작
 - Precise/Coarse Location: Photos 위치 metadata를 외부에 전송하지 않음
 - Product Interaction / Other Usage Data: PostHog 비활성
 - Crash Data / Performance Data / Other Diagnostic Data: 자동 crash capture 비활성, 자체 reporter 없음
@@ -71,17 +71,17 @@ PostHog를 이후 활성화하려면 사용자 동의 UX, `TST-019`/`TST-022` pa
 - Release configuration: analytics `NO`, purchases `YES`, PostHog token empty, RevenueCat production public SDK key injected without recording its value
 - IPA contains the app, RevenueCat, PostHog, and PHPLCrashReporter privacy manifests. The app declares no collected data or tracking; SDK declarations remain owned by each SDK.
 - App Store Connect App Privacy was published on 2026-08-06 with the three entries above; the public API cannot independently expose the publish state, so the authenticated UI evidence remains the source for that status. The publication is retained for the current 1.0.0 app-version review; it does not claim App Review approval or public release.
-- Public policy/support site: existing Sites project version 4 is public at `https://weekkeep-app.kimsol1134.chatgpt.site` as of deployment `2026-08-06T09:35:40.860943+00:00`; logged-out `/`, `/privacy`, `/support`, and `/terms` returned HTTP 200, with the intended public support contact present and no internal tester-domain address matches.
+- Public policy/support site: Sites version 5 is public at `https://weekkeep-app.kimsol1134.chatgpt.site`; site tests passed 8 with 0 failures, and logged-out `/`, `/privacy`, `/support`, and `/terms` returned HTTP 200.
 
 Build 2 (`release/local/asc-release-build2-20260806-rerun7/exported/Weekkeep.ipa`) is preserved as historical release evidence only; it was the prior review candidate and is no longer the attached version build.
 
-## 5.1 Current build 6와 historical build 경계 — 2026-08-07
+## 5.1 Current build 7와 historical build 경계 — 2026-08-08
 
 - Remote build 4 (`6e92c470-c044-4512-9276-71491fe97685`) is `VALID` and unattached; it remains historical/non-target.
-- ASC build 6 (`0ffa7586-619f-4df9-abc5-ae7ebbd068b1`) is `1.0.0 (6)`, processed `VALID`, uploaded at `2026-08-06T15:31:16-07:00`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`. The current submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is `WAITING_FOR_REVIEW` with the app-version and IAP-version items both `READY_FOR_REVIEW`.
-- Signed build-6 IPA local verification is recorded without a tracked evidence file: 23,338,085 bytes, SHA256 `feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a`, bundle `com.solkim.weekkeep`, version `1.0.0`, build `6`, purchases `YES`, analytics `NO`, PrivacyInfo present, Apple Distribution `sol kim`, team `D48DDX5D5W`.
-- `release/privacy-manifest.json` scopes the published App Privacy facts to the current `1.0.0` app version; the historical build-3 IPA remains evidence only. Build 6's local IPA verification confirms `PrivacyInfo` is present but does not claim a separate build-6 privacy publication event. No App Review approval or public App Store release is made.
-- The build-6 Settings visual-QA evidence remains separately recorded at `release/local/visual-qa/20260807-build6-notification-settings-rerun1/final/`; it is not an App Store screenshot replacement. Builds 1–5 remain historical/non-target. The physical iPhone fixture-only UI runner started after the lock wait but failed initialization with LocalAuthentication Code `-4` (authentication canceled); its process was safely terminated, and the result bundle is invalid/incomplete because `Info.plist` is missing and is not evidence. Physical UI attachments, purchase/restore verification, target-device footage, actual-library performance, and icon QA remain pending; no credentials were requested or handled and Photos/notification permissions and private pixels were not changed.
+- ASC build 7 (`1c51b451-d37f-4704-89c9-e426b1ee5725`) is `1.0.0 (7)`, processed `VALID`, uploaded at `2026-08-07T08:28:29-07:00`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`. Current submission `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` is `WAITING_FOR_REVIEW` with the app-version and IAP-version items both `READY_FOR_REVIEW`.
+- Canonical release IPA local verification is recorded without a tracked evidence file: 23,420,062 bytes, SHA256 `25c2c1ff17b14bd976392f3d8d6d1c103bd5488de66b866cadb8a5339f627889`, bundle `com.solkim.weekkeep`, version `1.0.0`, build `7`; Apple server-side validation succeeded with no errors before upload.
+- Build 6 (`0ffa7586-619f-4df9-abc5-ae7ebbd068b1`) and previous submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` are historical/replaced; the previous submission is now `COMPLETE` after build 7 became `VALID`. `release/privacy-manifest.json` scopes the published App Privacy facts to the current `1.0.0` app version. No App Review approval or public App Store release is made.
+- The build-6 Settings visual-QA evidence remains separately recorded at `release/local/visual-qa/20260807-build6-notification-settings-rerun1/final/`; it is historical and not an App Store screenshot replacement. Builds 1–6 remain historical/non-target except the current build 7. The physical iPhone fixture-only UI runner and native share/delivery checks remain local QA evidence only; purchase/restore verification, target-device footage, actual-library performance, and icon QA remain pending.
 - The historical local build-5 candidate remains recorded as `not_submitted_for_build5` for exact build-state traceability.
 
 ## 6. 제출 전 검증 체크리스트

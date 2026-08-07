@@ -148,8 +148,7 @@ actor SwiftDataAlbumStore: AlbumStore {
     }
 
     func listAlbums() async throws -> [WeeklyAlbumSummary] {
-        var descriptor = FetchDescriptor<WeeklyAlbumEntity>(sortBy: [SortDescriptor(\.weekStart, order: .reverse)])
-        descriptor.fetchLimit = 200
+        let descriptor = FetchDescriptor<WeeklyAlbumEntity>(sortBy: [SortDescriptor(\.weekStart, order: .reverse)])
         return try modelContext.fetch(descriptor).map(summary(from:))
     }
 

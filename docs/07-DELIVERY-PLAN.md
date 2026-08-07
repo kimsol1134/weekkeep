@@ -2,8 +2,8 @@
 
 | 항목 | 값 |
 |---|---|
-| 버전 | 0.5-approved |
-| 기준일 | 2026-08-05 |
+| 버전 | 0.6-approved |
+| 기준일 | 2026-08-07 |
 | 목표 공개일 | 2026-09-23 KST 이전 |
 | 내부 Shipaton 제출 마감 | 2026-09-28 15:45 KST |
 | 공식 제출 마감 | 2026-10-01 15:45 KST |
@@ -29,6 +29,7 @@ Weekkeep의 목표는 대회 마감에 화면만 보이는 데모를 제출하�
 - 현재 iPhone 로컬 저장 한계와 앱 관리형 백업 없음에 대한 Settings·구매 맥락 안내
 - RevenueCat 평생 이용권 구매/복원
 - 첫 저장 후 월요일 20:30 로컬 주간 알림과 7일 완료 창
+- 가장 최근 완료된 월–일 주 우선의 첫 기록, 적격 사진이 없을 때만 truthful recent-seven fallback, 정확한 다음 가능일 기대
 - 저장한 실제 사진으로 만드는 로컬 Story/Post 공유 아티팩트와 native share sheet
 - 한국어/영어, 접근성 기본 완결
 
@@ -63,9 +64,9 @@ Design polish, analytics, notification, content 제작은 이 경로 옆에서 �
 
 | Milestone | 날짜 | 사용자에게 보이는 결과 | Exit criteria |
 |---|---:|---|---|
-| `M0 Docs Locked` | 08-07 | 없음 | Decision Registry 기반 구현 Gate Ready, 공개 conflict 0 |
+| `M0 Docs Locked` | 08-07 | 없음 | `D-036` 포함 Decision Registry 기반 구현 Gate Ready, 공개 conflict 0 |
 | `M1 First Value Prototype` | 08-13 | Welcome → 준비된 fake 7장 확인 → 저장 | 5명 prototype test 가능 |
-| `M2 Real Photos Alpha` | 08-21 | 실제 지난 7일 사진 분석 | 0/1/6/7/14/21/35/100/500 fixture, ≤21 Vision contract, cancel/partial 동작 |
+| `M2 Real Photos Alpha` | 08-21 | 실제 완료 주 우선·zero-only 최근 7일 fallback 사진 분석 | preferred/fallback 0/1/6/7/14/21/35/100/500 fixture, ≤21 Vision contract, cancel/partial 동작 |
 | `M3 Core Loop Complete` | 08-29 | 교체·저장·공유·Weeks 재열람 | FR-001–023 P0 test 통과 |
 | `M4 Monetized Beta` | 09-05 | 세 번째 기록 gate, 구매/복원 | App Store product/RevenueCat mapping 증거 + sandbox end-to-end |
 | `M5 Usability Beta Gate` | 09-12 | 실제 부모 20명의 첫 가치 경험 | P0 crash/privacy/data corruption 0, activation·이해도 수집 |
@@ -92,10 +93,18 @@ Design polish, analytics, notification, content 제작은 이 경로 옆에서 �
 
 ### Exit criteria
 
-- 모든 문서 `0.5-approved`
+- 모든 문서 `0.6-approved`
 - 구현 Gate가 참조하는 Decision이 모두 `Approved`이고 ADR에는 독립 상태가 없음
 - V1 non-goals 변경 없음
 - 외부 계정/계약 blocker 목록과 owner 존재
+
+### 0.6 return-loop correction evidence
+
+- `D-036`에 따라 completed local ISO week → zero-only recent-seven fallback 순서를 Domain/Flow/UI에 반영합니다.
+- root resolution에서 선택한 `WeekRange`를 CTA와 Photos permission resume 이후 curation까지 유지하고, completed Welcome의 `weekEnd` cycle과 legacy rolling Welcome의 기존 cycle을 구분합니다.
+- `preRegularWaiting`은 최신 저장 snapshot 기반 실제 cover/placeholder, 정확한 next date, 보기/share action을 사용하며 body에 두 번째 SevenStitchRail을 추가하지 않습니다.
+- `eligible_week_opened`는 명시적으로 아는 `direct`/`notification` route origin만 보냅니다. 알 수 없는 진입 source는 추정하지 않습니다.
+- 2026-08-07 safe verification: changed Swift files parse-checked, isolated domain typechecks, catalog JSON/new key checks, and explicit source contracts. Full `xcodebuild`, broad localization/release scripts, device Photos/notification delivery, and vendor network audit are not claimed because the protected Photos adapter must not be read or compiled by this pass.
 
 ## 6. Phase 1 — 제품 뼈대와 첫 가치 prototype
 
@@ -139,6 +148,7 @@ Design polish, analytics, notification, content 제작은 이 경로 옆에서 �
 
 - Photos authorization state machine
 - WeekRangeCalculator와 eligibility policy
+- completed-week-first Welcome, zero-only recent-seven fallback, exact range pinning, and legacy rolling Welcome compatibility
 - PhotoKit descriptor scan up to 500 and deterministic metadata prefilter to at most 21 Vision candidates
 - Fast 384–448 px analysis delivery, iCloud progress/cancellation, per-asset and global foreground budget
 - Vision aesthetics, utility, feature print wrapper
@@ -186,6 +196,7 @@ Design polish, analytics, notification, content 제작은 이 경로 옆에서 �
 - 강제 종료/저장 실패 뒤 store integrity
 - 원본 1개/전체 삭제 상태
 - Welcome → regular cycle 경계
+- completed Welcome `weekEnd` cycle와 rolling/legacy next-Monday cycle의 compatibility
 - Welcome과 겹치지 않는 첫 전체 Regular source week
 - 월요일 00:00 open, 월요일 20:30 reminder, 다음 월요일 00:00 target 교체
 - 놓친 주 backlog/streak 없이 latest-only 복귀
@@ -209,6 +220,7 @@ Welcome → 실제 Photos 권한 → 분석 → 1장 교체 → 저장 → Weeks
 - Plus paywall 상태 전체
 - purchase/cancel/pending/failure/restore
 - local notification primer와 12주 rolling schedule
+- exact next-eligible date in the primer and no-repeat primer policy
 - PostHog EU Cloud anonymous explicit event schema와 deny-by-default adapter
 - privacy/about/support 화면
 
@@ -221,6 +233,7 @@ Welcome → 실제 Photos 권한 → 분석 → 1장 교체 → 저장 → Weeks
 - 기존 기록 열람이 gate되지 않음
 - 구매 복원 전후 WeeklyAlbum mutation 0, 보존 한계 ko/en copy
 - analytics allowlist와 session replay off
+- typed `eligible_week_opened` with only explicit `entry_point=direct|notification`; no week/date/photo/identifier/destination fields
 - 월요일 20:30 알림 문구/deep link와 이미 저장된 target 취소
 
 ### 외부 작업
@@ -325,11 +338,26 @@ Retention Readout은 달력상 Public Release 이후 닫히므로 M6 Release Can
 
 ### 11.0 Current release-candidate boundary — 2026-08-07
 
-- Current App Store Connect build 6 (`1.0.0 (6)`, ID `0ffa7586-619f-4df9-abc5-ae7ebbd068b1`) was uploaded at `2026-08-06T15:31:16-07:00`, processed `VALID`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b` under manual release. The current review submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is `WAITING_FOR_REVIEW` with exactly two `READY_FOR_REVIEW` items.
-- Historical build 3 remains `VALID` evidence only; its former submission `88c157ee-ce87-41c3-8a4a-71e614993a58` was canceled/replaced. Build 4 (`6e92c470-c044-4512-9276-71491fe97685`) is `VALID` but unattached, and builds 1–5 are historical/non-target.
-- The signed build-6 IPA was locally verified without creating a tracked evidence file: 23,338,085 bytes, SHA256 `feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a`, bundle `com.solkim.weekkeep`, version `1.0.0`, build `6`, purchases `YES`, analytics `NO`, PrivacyInfo present, Apple Distribution `sol kim`, team `D48DDX5D5W`. New bilingual Settings evidence remains separate from historical build-5 and build-3 screenshot evidence.
-- TestFlight internal group `Weekkeep Internal QA` (ID `576fd29a-7a64-4521-9164-9697ec1c256f`) contains exactly build 6 in `READY_FOR_BETA_TESTING` and one verified account-holder tester invited (tester ID `bef018ab-9514-4388-804d-bcd363f601d4`, state `INVITED`); this is ready/invited distribution only, not an installed, purchase-tested, or restore-tested result.
-- An earlier hardening pass did not perform App Store Connect, RevenueCat, site, public upload, or Git mutations. The current SSOT records authenticated App Store Connect upload, attachment, and review-submission actions already completed for build 6; this status sync performs no new external mutation. The canonical public source repository and logged-out verification were externally validated on 2026-08-07; App Store, purchase, video, judge, target-device, and Devpost gates remain external.
+- Canonical App Store Connect build 7 (`1.0.0 (7)`, ID `1c51b451-d37f-4704-89c9-e426b1ee5725`) was uploaded at `2026-08-07T08:28:29-07:00`, processed `VALID`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b` under manual release. Current submission `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` was submitted at `2026-08-07T15:33:05.463Z`, is `WAITING_FOR_REVIEW`, and has exactly two `READY_FOR_REVIEW` items.
+- The canonical release IPA is 23,420,062 bytes with SHA-256 `25c2c1ff17b14bd976392f3d8d6d1c103bd5488de66b866cadb8a5339f627889`; Apple server-side validation succeeded with no errors before upload. The build-7 share loop keeps the local image first and adds the cumulative family week ordinal, conversational prompt/invitation, privacy-safe `share_completed`, and canonical URL `https://apps.apple.com/app/id6798449478` as separate native items. It does not change the Story/Post image, add QR/ad overlay, upload photos, or add Kakao/backend behavior. The URL is a configured release target, not a claim that the App Store page is currently public or live.
+- Local build-7 also has an opt-in physical-iPhone native-share-sheet harness: `WeekkeepUITests/WeekkeepUITests/testPhysicalShareSheetQAIsOptInFixtureOnlyNoPrivatePixelsNoSend`. It is gated by `WK_CAPTURE_PHYSICAL_SHARE_QA=1`, defaults to Korean through `WK_PHYSICAL_SHARE_QA_LOCALE`, and launches only bundled `-ui-fixtures`. The exact fixture-only test was retried twice with the paired physical iPhone 16 Pro unlocked. Both runs installed/launched the runner but failed before executing the test body with `Timed out while enabling automation mode.` Read-only Mac-host diagnostics showed `xcrun automationmodetool: Automation Mode is disabled. This device requires user authentication to enable Automation Mode;` and `/usr/sbin/DevToolsSecurity -status: Developer mode is currently disabled.` This remains local QA non-evidence for native share delivery, production PhotoKit behavior, or purchase/restore; the current ASC build identity is recorded separately above.
+- Historical build 3 remains `VALID` evidence only; its former submission `88c157ee-ce87-41c3-8a4a-71e614993a58` was canceled/replaced. Build 4 (`6e92c470-c044-4512-9276-71491fe97685`) is `VALID` but unattached, build 6 (`0ffa7586-619f-4df9-abc5-ae7ebbd068b1`) is historical/replaced, and builds 1–6 are historical/non-target.
+- The signed build-6 IPA remains historical local verification: 23,338,085 bytes, SHA256 `feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a`, bundle `com.solkim.weekkeep`, version `1.0.0`, build `6`, purchases `YES`, analytics `NO`, PrivacyInfo present, Apple Distribution `sol kim`, team `D48DDX5D5W`. New bilingual Settings evidence remains separate from the canonical build-7 release IPA.
+- TestFlight internal group `Weekkeep Internal QA` (ID `576fd29a-7a64-4521-9164-9697ec1c256f`) records exactly build 6 in `READY_FOR_BETA_TESTING` and one verified account-holder tester invited (tester ID `bef018ab-9514-4388-804d-bcd363f601d4`, state `INVITED`); this historical distribution evidence is ready/invited only, not an installed, purchase-tested, or restore-tested result.
+- The current SSOT records authenticated App Store Connect upload, attachment, and review-submission actions completed for build 7; this evidence update performs no new external mutation. Full Xcode test result is 174 passed, 0 failed, 4 skipped (178 total). Public Weekkeep site version 5 is deployed at `https://weekkeep-app.kimsol1134.chatgpt.site` with site tests 8 passed, 0 failed. The canonical public source repository and logged-out verification and the official public YouTube demo plus logged-out playback/duration verification were validated on 2026-08-07; App Review approval, public App Store release, purchase, judge, target-device, and Devpost gates remain external.
+
+### 11.0.1 Physical screenshot evidence — 2026-08-07
+
+- `release/local/target-device-qa/20260807T2006KST-build6-debug-fixture-device-screenshots/` contains the two byte-for-byte Xcode Device Hub screenshots from the physical iPhone 16 Pro, each `1206×2622` and opaque; `QA-SUMMARY.md` records the exact fixture launch commands and `SHA256SUMS.txt` records the hashes.
+- The evidence is local DEBUG fixture build-number 6 only, not remote ASC build 6 or local build 7. Screenshot capture succeeded, but the ready capture shows the primary start CTA below the initial viewport, contrary to the no-scroll-first-CTA requirement.
+- The build-6 finding is historical and remains preserved. Local build-7 screenshot verification is recorded separately below; native share/share delivery, purchase/restore, and actual PhotoKit behavior remain pending. No physical-device video, public release, Devpost submission, or remote-build replacement is claimed; any replacement of remote build 6 requires explicit user authorization.
+
+### 11.0.2 Physical screenshot evidence — local build 7 — 2026-08-07
+
+- `release/local/target-device-qa/20260807T2033KST-build7-physical-screenshots/` contains two byte-for-byte copies from physical iPhone 16 Pro / iOS 26.5.2: `01-production-waiting-physical.png` from local archive `LOCAL_EVIDENCE_DIR/weekkeep-build7-ssot.qTqqz6/Weekkeep.xcarchive/Products/Applications/Weekkeep.app`, and `02-debug-fixture-ready-physical.png` from the existing signed DEBUG app at `LOCAL_DERIVED_DATA_DIR/Weekkeep-aqjmdnptaojxqoaagckmueprnbmk/Build/Products/Debug-iphoneos/Weekkeep.app`. Both pre-install app records were `com.solkim.weekkeep 1.0.0 (7)` with `get-task-allow=true`; the DEBUG executable mtime was `2026-08-07 19:20:27 +0900`.
+- The archive surface was launched without a DEBUG fixture environment and shows waiting state plus distinct three-item bottom navigation; it makes no CTA claim. The DEBUG ready surface used this exact command: `xcrun devicectl device process launch --device 'iPhone' --terminate-existing --environment-variables '{"WK_UI_TEST_FIXTURES":"1","WK_UI_FIXTURE_SCREEN":"ready"}' com.solkim.weekkeep -- -ui-fixtures -ui-fixtures-skip-notification`. It shows `지난주 추억 고르기` fully in the initial viewport above the photo story and distinct calendar/photo/settings bottom-nav icons.
+- This resolves the build-6 local DEBUG below-fold CTA finding for local DEBUG fixture build 7 only. The current installed-on-device note is DEBUG build 7 after the second install. Historical build-6 screenshots remain separate from the canonical remote ASC build 7; the local capture does not prove production PhotoKit, native share delivery, purchase/restore, App Review approval, or public release.
+- `SHA256SUMS.txt` fixes the exact hashes `ff9a9d359f64c7baa604d229d30600619c14199e86c0c8dbf6e7ada8401f485c` and `b679c7bb0c83853701b4216535f06291d00b1139327ec9027933a2c4e103df21`; both PNGs are opaque `1206×2622`. Native share/delivery, purchase/restore, actual PhotoKit performance, physical-device functioning footage, and other external lifecycle gates remain pending. No serial/UDID, contact information, or credentials are recorded.
 
 ### Product QA
 
@@ -378,7 +406,7 @@ Retention Readout은 달력상 Public Release 이후 닫히므로 M6 Release Can
 
 정확히 72초인 canonical composition과 timing/evidence는 [Shipaton Submission SSOT](11-SHIPATON-SUBMISSION.md#7-72-second-demo-master) 및 `videos/weekkeep-remotion/`이 소유합니다. `videos/weekkeep-shipaton/`은 source media와 license/provenance origin만 담당하며, 그 `scripts/validate-provenance.sh`는 계속 release gate에서 실행합니다. 이 Delivery Plan에는 별도 timing table을 두지 않습니다.
 
-Composition의 로컬 exit criteria인 user-approved final MP4 render, 72초/코덱 검증, current-source cut/caption QA는 완료되었습니다. 승인된 MP4는 변경하지 않았고, GitHub Release backup([release](https://github.com/kimsol1134/weekkeep/releases/tag/shipaton-demo-v1), [asset](https://github.com/kimsol1134/weekkeep/releases/download/shipaton-demo-v1/weekkeep-shipaton-72.mp4))은 HTTP 200으로 확인되었습니다. 이는 공식 YouTube/Vimeo gate를 충족하지 않으므로 필요한 실기기 footage 교체·검증, public YouTube/Vimeo upload 후 로그아웃 재생과 duration 확인은 여전히 pending입니다.
+Composition의 로컬 exit criteria인 user-approved final MP4 render, 72초/코덱 검증, current-source cut/caption QA는 완료되었습니다. 승인된 MP4는 변경하지 않았고, GitHub Release backup([release](https://github.com/kimsol1134/weekkeep/releases/tag/shipaton-demo-v1), [asset](https://github.com/kimsol1134/weekkeep/releases/download/shipaton-demo-v1/weekkeep-shipaton-72.mp4))은 HTTP 200으로 확인되었습니다. 공식 public YouTube gate와 로그아웃 playback/duration verification은 2026-08-07에 `Validated`이며, canonical URL과 상세 evidence는 [Shipaton Submission SSOT](11-SHIPATON-SUBMISSION.md#7-72-second-demo-master) 및 manifest가 소유합니다. 실기기 functioning footage 교체·검증은 별도 gate로 여전히 pending입니다.
 
 ### Submission QA
 
@@ -387,7 +415,7 @@ Composition의 로컬 exit criteria인 user-approved final MP4 render, 72초/코
 - app icon/screenshot 해상도 확인
 - 영어 문법 원어민 검수
 - 무료 2개 기록 또는 promo instruction 확인
-- 저장 직후와 Weeks detail에서 local share artifact가 실제 PhotoKit 이미지로 생성되고, 사용자의 명시적 share sheet 선택 전에는 외부 전송하지 않는지 확인
+- 저장 직후와 Weeks detail에서 local share artifact가 실제 PhotoKit 이미지로 생성되고, 사용자의 명시적 share sheet 선택 전에는 외부 전송하지 않는지 확인; link-capable destination의 invitation/URL delivery와 image-only destination의 image retention은 real-device QA에서 확인하되 private activity identifier로 추정하지 않음
 - RevenueCat purchase가 production build에 존재
 - 최종 제출 receipt capture
 
@@ -412,7 +440,7 @@ Composition의 로컬 exit criteria인 user-approved final MP4 render, 72초/코
 |---|---|---|
 | Docs lock | `왜 또 다른 육아앨범을 만들지 않는가` | scope/architecture decision log |
 | Prototype | `5장, 7장, 10장 중 부모가 고른 숫자` | IA/prototype comparison |
-| Real Photos alpha | `사진이 기기를 떠나지 않는다는 약속` | PhotoKit/Vision privacy boundary |
+| Real Photos alpha | `사진 고르기와 공유 이미지 만들기는 iPhone에서 처리하고, 사진 정보는 분석을 위해 외부 서비스로 보내지 않는 약속` | PhotoKit/Vision privacy boundary |
 | Core loop | `사진을 고르는 대신 확인하게 만들기` | selection/replace design |
 | Beta | 익명화한 부모의 실제 반응/quote | metrics와 실패한 가설 |
 | Launch | `당신의 평범한 한 주도 남길 가치가 있다` | complete build story + public app |

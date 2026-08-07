@@ -29,9 +29,9 @@ Create a clean 853:1844 portrait app screenshot with no device bezel, hands, wat
 Create the first-run welcome screen with no tab bar. At the top, show a large rounded hero family photo and six smaller photos in a clean 3-column by 2-row grid. Do not place text over photos.
 
 Render exact copy:
-"아이와 보낸 일주일,\n사진 7장으로 남겨요."
+"아이와 보낸 일주일,\n최대 7장으로 남겨요."
 "지난 7일의 사진을 기기에서 골라드려요."
-Privacy badge with lock: "사진은 이 iPhone에서만 분석돼요"
+Privacy badge with lock: "사진 고르기는 이 iPhone에서 이뤄져요"
 Primary button: "지난 7일 남기기"
 Text link: "사진 접근을 어떻게 사용하나요?"
 ```
@@ -39,7 +39,7 @@ Text link: "사진 접근을 어떻게 사용하나요?"
 ## 02 — This Week / Ready
 
 ```text
-Create the This Week ready tab-root screen. Top coral pill: "이번 주". Date: "8월 3일 – 9일". Large title: "이번 주가\n준비됐어요". Sage lock row: "이 iPhone에서만 분석". Show a large rounded album-preview card with a staggered stack of three warm family photos and the line "지난 7일의 순간을 함께 골라볼까요?". Primary button: "사진 고르기".
+Create the This Week ready tab-root screen. Top coral pill: "이번 주". Date: "8월 3일 – 9일". Large title: "이번 주가\n준비됐어요". Sage lock row: "사진 고르기는 이 iPhone에서 처리해요". Show a large rounded album-preview card with a staggered stack of three warm family photos and the line "지난 7일의 순간을 함께 골라볼까요?". Primary button: "사진 고르기".
 
 Bottom tab bar labels: "이번 주", "지난 주들", "설정". The first tab is selected in plum.
 ```
@@ -47,7 +47,7 @@ Bottom tab bar labels: "이번 주", "지난 주들", "설정". The first tab is
 ## 03 — Curation Progress
 
 ```text
-Create an in-flow progress screen with no tab bar. Top back label: "이번 주". Large title: "이번 주를\n고르는 중이에요". In a white rounded progress card show seven candid thumbnails, some softly faded, with no biometric/scanning overlay. Current stage: "비슷한 사진을 정리하는 중". Thin determinate progress bar at about two-thirds. Count: "사진 28 / 42". Sage lock reassurance: "사진은 이 iPhone을 떠나지 않아요". Bottom outlined action: "취소". No time estimate or fake percentage.
+Create an in-flow progress screen with no tab bar. Top back label: "이번 주". Large title: "이번 주를\n고르는 중이에요". In a white rounded progress card show seven candid thumbnails, some softly faded, with no biometric/scanning overlay. Current stage: "비슷한 사진을 정리하는 중". Thin determinate progress bar at about two-thirds. Count: "사진 28 / 42". Sage lock reassurance: "사진 고르기는 이 iPhone에서 처리해요". Bottom outlined action: "취소". No time estimate or fake percentage.
 ```
 
 ## 04 — Weekly Review
@@ -90,7 +90,7 @@ Show the save-confirmation screen softly blurred and lightly dimmed behind a whi
 ```text
 Create a light full-height paywall that feels like an app surface, not an ad. Top-left X and centered "Weekkeep Plus". Show two compact overlapping album cards with captions "7월 20일 – 26일" and "7월 27일 – 8월 2일". Headline: "앞으로의 주들도\n계속 남겨요.". Supporting line: "지난 기록은 계속 볼 수 있어요.". Benefit rows:
 "매주 새로운 주간 기록"
-"사진은 계속 기기에서 분석"
+"사진 고르기와 공유 이미지는 iPhone에서 처리"
 "한 번 구매로 평생 이용"
 Product card: "평생 이용권" and "₩29,000".
 Primary button: "Weekkeep Plus 시작하기".
@@ -111,7 +111,7 @@ Bottom tabs: "이번 주", "지난 주들", "설정". Select the second tab in p
 ## 11 — Week Detail
 
 ```text
-Create a read-only saved-week detail with no tab bar. Back label: "지난 주들". Center title: "7월 27일 – 8월 2일". Coral pill: "지난 주". Large title: "우리 가족의 지난 주". Secondary line: "사진 7장". Show exactly seven photos: one 16:10 hero family meal, two medium photos, four small photos. Bottom sage lock reassurance: "사진은 이 iPhone에만 있어요". No editing, replace, save, share, delete, or overflow menu.
+Create a read-only saved-week detail with no tab bar. Back label: "지난 주들". Center title: "7월 27일 – 8월 2일". Coral pill: "지난 주". Large title: "우리 가족의 지난 주". Secondary line: "사진 7장". Show exactly seven photos: one 16:10 hero family meal, two medium photos, four small photos. Bottom sage lock reassurance: "사진 고르기는 이 iPhone에서 이뤄져요". No editing, replace, save, share, delete, or overflow menu.
 ```
 
 ## 12 — Settings
@@ -131,9 +131,9 @@ Bottom tabs: "이번 주", "지난 주들", "설정". Select Settings in plum. N
 ## 13 — Privacy
 
 ```text
-Create a privacy detail. Back label: "설정". Large title: "사진과 개인정보". Sage shield-lock icon. Headline: "사진은 이 iPhone을\n떠나지 않아요". Supporting copy: "Weekkeep은 사진을 기기 안에서만 분석해요.".
+Create a privacy detail. Back label: "설정". Large title: "사진과 개인정보". Sage shield-lock icon. Headline: "사진 고르기는 이 iPhone에서\n이뤄져요". Supporting copy: "사진 고르기와 공유 이미지 만들기는 iPhone에서 처리해요. 공유는 직접 선택할 때만 시작돼요.".
 
-Card 1: "기기 안에서 분석" / "사진과 썸네일을 서버로 보내지 않아요."
+Card 1: "사진 고르기는 iPhone에서 처리" / "사진 정보는 분석 서비스나 다른 서비스로 보내지 않아요."
 Card 2: "추적하지 않음" / "사진 이름, 위치, 촬영 시각을 분석 도구에 보내지 않아요."
 Card 3: "내가 결정" / "사진 접근은 언제든 설정에서 바꿀 수 있어요."
 Bottom outlined button: "사진 접근 설정 열기".
@@ -143,7 +143,7 @@ No surveillance imagery, face scanning, cloud illustration, or legal wall of tex
 ## 14 — About & Support
 
 ```text
-Create an About & Support detail. Back label: "설정". Title: "도움말 및 문의". Brand block: "Weekkeep" and seven tiny coral rounded marks in one horizontal row. Tagline: "아이와 보낸 일주일, 사진 7장으로 남겨요.".
+Create an About & Support detail. Back label: "설정". Title: "도움말 및 문의". Brand block: "Weekkeep" and seven tiny coral rounded marks in one horizontal row. Tagline: "아이와 보낸 일주일, 최대 7장으로 남겨요.".
 
 Grouped list rows: "도움말", "문의하기", "이용 약관", "개인정보 처리방침", "오픈소스 라이선스".
 Version: "Weekkeep 1.0 (1)".

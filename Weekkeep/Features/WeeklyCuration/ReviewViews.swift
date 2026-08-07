@@ -41,15 +41,10 @@ struct WeeklyReviewView: View {
   static let partialSuccessAccessibilityIdentifier = "SCR-WK-03-PartialSuccess"
 
   let model: WeeklyFlowModel
-  @Environment(\.weekkeepWindowSafeAreaTop) private var windowSafeAreaTop
 
   var body: some View {
     GeometryReader { proxy in
       let screenEdge = WeeklyReviewSpacing.screenEdge(for: proxy.size.width)
-      // RootView resolves the runtime-first system boundary once. Keep the
-      // local proxy inset as an additional runtime measurement, but do not
-      // reintroduce a device-independent global fallback here.
-      let occlusionHeight = max(windowSafeAreaTop, proxy.safeAreaInsets.top)
 
       ScrollView {
           VStack(alignment: .leading, spacing: 0) {
@@ -124,18 +119,7 @@ struct WeeklyReviewView: View {
           .padding(.bottom, WeeklyReviewSpacing.screenBottom + WeeklyReviewSpacing.scrollRunway)
       }
       .scrollIndicators(.hidden)
-      // The review route is hosted by the tab shell, whose scroll surface can
-      // extend behind the system status region. Keep the header free to
-      // scroll, but invisibly mask unsafe-area content with the same Cream
-      // surface so text never remains legible beneath system indicators.
-      .overlay(alignment: .top) {
-        WeekkeepColors.primaryBackground
-          .frame(maxWidth: .infinity)
-          .frame(height: occlusionHeight)
-          .offset(y: -occlusionHeight)
-          .allowsHitTesting(false)
-          .accessibilityHidden(true)
-      }
+      .weekkeepTopSystemOcclusion(localSafeAreaTop: proxy.safeAreaInsets.top)
     }
     .fullScreenCover(item: viewerBinding) { destination in
       if case .viewer(let index) = destination, let draft = model.draft {

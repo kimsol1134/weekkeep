@@ -2,8 +2,8 @@
 
 | 항목 | 값 |
 |---|---|
-| 버전 | 0.5-approved |
-| 기준일 | 2026-08-05 |
+| 버전 | 0.6-approved |
+| 기준일 | 2026-08-07 |
 | 상태 | Approved |
 | 디자인 기준선 | [Design SSOT](../design/README.md) / App Screens V2 (`Approved`) |
 | 시각 방향 | Warm Private Family Album V2 |
@@ -33,7 +33,7 @@
 | 차가운 기술 — 따뜻한 기억 | 따뜻한 기억 80% |
 | 장난스러움 — 차분함 | 차분함 75% |
 | 장식적 — 사진 중심 | 사진 중심 85% |
-| 자동화 — 통제 | 자동 초안 60%, 사용자 통제 100% |
+| 자동화 — 통제 | 자동 선택 60%, 사용자 통제 100% |
 | 아기자기 — 성숙함 | 성숙함 70% |
 
 ### 피해야 할 인상
@@ -274,7 +274,8 @@ the format picker to generated preview/error content boundary uses
 - safe area 준수
 - 기본 horizontal padding 20pt(소형 화면 16pt 허용)
 - safe-area를 이미 준수하는 root scroll surface에 `GeometryProxy.safeAreaInsets`를 다시 padding으로 더하지 않음
-- 저장 CTA와 privacy note는 normal scroll content 순서에 포함하며, overlay dock이나 별도 safe-area inset을 만들지 않음
+- Weekly Review의 저장 CTA와 privacy note는 normal scroll content 순서에 포함하며, review collage를 덮는 overlay dock을 만들지 않음
+- This Week의 `welcomePending`/`ready` start CTA는 제목·본문 다음, explanatory photo story 전에 normal document flow로 배치합니다. `CMP-01` solid Plum button만 사용하고 safe-area footer, overlay dock, semantic background fade는 추가하지 않습니다. photo story/count/limited notice/privacy context는 normal scroll content에 남기며 실제 bottom clearance로 native floating tab bar 위에서 끝까지 보이게 합니다.
 - iPhone portrait가 기준이며 landscape에서 깨지지 않는 정도만 보장
 - iPad에서 실행 가능하게 둘 경우 centered max width 560pt; V1 별도 iPad UX는 아님
 
@@ -380,7 +381,7 @@ legible in the narrower explanatory card.
 
 - 작은 lock SF Symbol과 짧은 사실 문구를 leading-aligned inline note로 표시
 - full-width tinted rounded rectangle, card, badge-like container를 사용하지 않음
-- 예: `이 iPhone 안에서만 살펴봐요`
+- 예: `사진 고르기는 이 iPhone 안에서 이뤄져요`
 - 버튼처럼 보이지 않으며 상세 링크가 필요하면 별도 text link 제공
 - marketing claim이 아니라 실제 기술 경계와 일치해야 함
 
@@ -489,14 +490,23 @@ legible in the narrower explanatory card.
 - 첫 viewport에 title, privacy badge, CTA가 모두 들어오되 작은 기기에서는 scroll 허용
 - AI/기술 iconography보다 사진 결과 사용
 - 부모의 상황을 먼저 말하는 headline `사진은 많은데, 정리할 시간은 없으니까.`를 기본안으로 사용
-- 본문은 `지난 7일에서 최대 7장`이라고 정직하게 표현하며 항상 7장을 보장하지 않음
+- 본문은 `가장 최근 완료된 월요일부터 일요일까지의 한 주`에서 시작한다고 설명하며 항상 7장을 보장하지 않음. 완료 주가 비었을 때만 최근 7일 fallback copy를 노출
+- privacy badge는 `사진 고르기는 이 iPhone 안에서 이뤄져요`처럼 기기 내 처리 범위를 짧고 자연스럽게 전달함
 
 ### This Week / Ready
 
-- foreground 분석 전에는 `초안이 준비됐어요`라고 말하지 않음
-- `지난주를 남겨볼까요?` → `7장 초안 만들기`가 기본 경로
+- 사진을 살펴보기 전에는 `준비됐어요`라고 말하지 않음
+- `지난주의 순간을 남겨볼까요?` → `지난주 사진에서 다시 보고 싶은 순간을 최대 7장 골라드려요.` → `지난주 추억 고르기`가 기본 경로
 - Ready explanatory surface는 `FixturePhotoStory`의 compact rail + flat hero+2+4 mosaic를 사용하며, 분석 결과나 사용자 사진 초안처럼 보이게 하지 않음
 - 접근 가능한 사진 수는 local UI에 표시할 수 있지만 외부 분석에는 bucket만 전송
+
+### This Week / preRegularWaiting
+
+- compact header에 이미 wordmark와 정확히 7개의 SevenStitchRail이 있으므로 waiting body에 두 번째 decorative rail을 두지 않음
+- 최신 saved album snapshot을 불러와 실제 available cover photo를 `PhotoThumbnailView`로 보여주고, 없거나 unavailable이면 surface 색과 semantic placeholder로 상태를 설명함. fixture/mock photo를 production waiting state에 사용하지 않음
+- card에는 album의 saved date range와 정확한 다음 eligible date를 함께 표시함. 날짜는 schedule cue이며 countdown, 남은 일수, streak, guilt language를 사용하지 않음
+- `저장한 주 보기`는 항상 Archive navigation을 제공하고, `앨범 공유하기`는 기존 `WeeklyAlbumShareView`/native share pipeline을 item-driven `.sheet(item:)`으로 엶. 모든 사진이 unavailable일 때만 share를 disabled 상태로 둠
+- card·buttons는 normal ScrollView flow, semantic surface/border/text tokens, Dynamic Type, VoiceOver combined label, 최소 44pt target, tab-bar bottom clearance를 따름
 
 ### Curation Progress
 
@@ -525,18 +535,18 @@ legible in the narrower explanatory card.
 - 성공은 짧은 haptic + 저장한 최대 7장이 60–80ms 간격으로 나타나는 약 1초 reveal로 표현
 - reveal은 사진을 다시 고르게 하거나 다음 행동을 요구하지 않는 작은 보상이어야 함
 - confetti, points, streak 없음
-- primary CTA는 `이번 주를 공유하기`이며 저장된 결과를 local share preparation으로 연결합니다. `기록 보기`는 secondary, `완료`는 tertiary입니다.
+- primary CTA는 `이 앨범 공유하기`이며 저장된 결과를 local share preparation으로 연결합니다. `기록 보기`는 secondary, `완료`는 tertiary입니다.
 - 알림 제안은 confirmation과 한 화면에서 동시에 경쟁시키지 않고 다음 sheet로 분리
 
 ### Local Share Artifact
 
 - Story는 9:16 `1080×1920`, Post는 4:5 `1080×1350`의 exact pixel canvas입니다.
-- visual hierarchy는 warm Cream/paper background → canonical Plum wordmark → local date range → real photo composition → exact seven muted stitch palette → restrained `Made with Weekkeep` signature 순서입니다.
+- visual hierarchy는 warm Cream/paper background → canonical Plum wordmark → local date range와 optional serial label → real photo composition → conversational footer prompt → exact seven muted stitch palette → restrained `Made with Weekkeep` signature 순서입니다. serial은 `Our family · week N` / `우리 가족의 N번째 주`의 generic cumulative ordinal이며, 확인되지 않으면 완전히 생략합니다.
 - 7장은 editorial hero+2+4를 사용하고, 1–6장은 빈 placeholder 없이 실제 사진만 adaptive layout에 배치합니다.
 - photo는 cover/crop만 조정하고 saturation filter, child/family label, filename, location, score, analytics, fake content를 넣지 않습니다.
 - wordmark는 canonical `weekkeep` asset를 사용하며, in-app rail/index order는 `#E97A68`, `#E39455`, `#E5A84B`, `#66836E`, `#5F879B`, `#686286`, `#8A6386`을 그대로 씁니다. AppIcon 파일을 재사용하거나 변경하지 않습니다.
-- signature는 visible attribution인 `Made with Weekkeep`만 사용합니다. V1 이미지에는 public install URL을 그리지 않습니다.
-- preview와 native share action은 modal focus를 유지하고, loading/retry/error 상태와 VoiceOver label을 제공합니다. native share preview에는 localized generic title과 이미 만든 artifact thumbnail만 사용하며 public install URL은 넣지 않습니다. 시스템 share sheet는 사용자가 share CTA를 누른 뒤에만 엽니다.
+- footer prompt는 `How was your family's week?` / `너희 가족의 이번 주는 어땠어?`를 7-stitch rail 위에 작은 secondary text로 배치합니다. signature는 visible attribution인 `Made with Weekkeep`를 유지합니다. V1 이미지에는 public install URL, QR code, loud ad overlay를 그리지 않습니다.
+- preview와 native share action은 modal focus를 유지하고, loading/retry/error 상태와 VoiceOver label을 제공합니다. native share preview에는 localized generic title과 이미 만든 artifact thumbnail을 사용하고, share payload에는 localized parent invitation과 canonical Apple install URL을 별도 native item으로 추가합니다. image-only destination도 artifact를 받을 수 있도록 image item을 첫 항목으로 유지하며 private destination identifier에 의존하지 않습니다. 시스템 share sheet는 사용자가 share CTA를 누른 뒤에만 엽니다.
 
 ### Weeks
 
@@ -562,16 +572,17 @@ legible in the narrower explanatory card.
 - custom card로 모든 row를 재발명하지 않음
 - 현재 권한/Plus 상태는 오른쪽 value로 명확히 표시
 - 주간 알림 기본값은 문서 계약과 동일한 `월요일 오후 8:30`
-- 저장 기록이 0개이면 Settings 알림 value row는 `첫 기록 저장 후`를 표시하고, `첫 주간 기록을 저장한 뒤 알림을 켤 수 있어요.`라는 static informational row를 둡니다. Button, chevron, tappable permission affordance를 표시하지 않습니다.
-- 저장 기록이 1개 이상일 때만 `알림 켜기` 또는 `알림 설정 열기` action row를 렌더링합니다. VoiceOver에는 상태와 안내를 static text로, 실제 action은 실제 Button으로만 노출합니다.
-- `데이터 저장` row에서 현재 iPhone 로컬 저장·별도 백업 없음·앱 삭제/기기 변경 시 유실 가능성을 한 화면 안에서 확인 가능
+- Photos와 Notifications는 actionable 상태에서 status row 자체를 Button으로 렌더링하며 별도 request/manage action row를 두지 않습니다. restricted Photos와 저장 기록 0개 알림은 필요한 설명만 static text로 제공합니다.
+- 저장 기록이 0개이면 Settings 알림 value row는 `첫 기록 저장 후`를 표시하고, `첫 주간 기록을 저장한 뒤 알림을 켤 수 있어요.`라는 static explanation을 둡니다. Button, chevron, tappable permission affordance를 표시하지 않습니다.
+- Weekkeep Plus는 하나의 status row만 paywall action을 가질 수 있고, Restore purchase는 active entitlement가 아닐 때만 표시합니다. Help & Support는 하나의 compact navigation row로 진입합니다.
+- root Settings에는 데이터 저장·개인정보 요약 row를 두지 않습니다. 현재 iPhone 로컬 저장·별도 백업 없음·앱 삭제/기기 변경 시 유실 가능성은 Archive와 Paywall의 해당 맥락에서만 안내합니다.
 
-### Privacy
+### Trust copy in contextual surfaces
 
 - 큰 방패 하나보다 `사진 앱 → 기기 안의 Weekkeep → 서버 전송 없음`의 실제 경계를 먼저 보여줌
 - SevenStitchRail은 7개의 독립 stitch만으로 signature를 표현하며 privacy note와 결합하지 않음
-- `기기 안에서 분석`, `추적하지 않음`, `내가 결정` 세 사실을 짧은 row로 제공
-- `외부 전송 없음`과 `별도 백업 없음`을 혼동하지 않게 둘을 모두 설명
+- `사진 고르기는 이 iPhone 안에서 이뤄져요`와 `사진 정보는 분석에 보내지 않아요`는 Weekly flow의 contextual inline note로만 제공합니다.
+- `Privacy Policy`는 Help & Support와 Paywall의 실제 link action으로 제공하고, `외부 전송 없음`과 `별도 백업 없음`은 서로 다른 맥락에서만 설명합니다.
 
 ## 10. Motion
 
@@ -621,20 +632,20 @@ haptic은 시각/음성 feedback을 대체하지 않습니다.
 
 | 상황 | Do | Don’t |
 |---|---|---|
-| 가치 | `아이와 보낸 일주일, 사진 7장으로 남겨요.` | `AI가 최고의 아기 사진을 찾아드립니다.` |
+| 가치 | `지난주의 순간을 최대 7장으로 남겨요.` | `AI가 최고의 아기 사진을 찾아드립니다.` |
 | 진행 | `비슷한 사진을 정리하는 중이에요.` | `마법을 부리는 중...` |
-| 검토 | `준비한 7장을 확인해 보세요.` | `사진 7장을 골라 주세요.` |
-| 5장 | `지난주에는 5개의 순간을 찾았어요.` | `사진이 2장 부족해요.` |
+| 검토 | `준비된 사진을 확인해 보세요.` | `사진 7장을 골라 주세요.` |
+| 5장 | `지난주에는 사진 5장을 골라봤어요.` | `사진이 2장 부족해요.` |
 | limited | `선택한 사진으로 기록을 만들어요.` | `전체 접근을 허용해야 더 좋아요.` |
 | save | `지난주를 남겼어요.` | `7일 연속 성공!` |
 | missed | `최근 한 주부터 다시 시작해요.` | `3주나 놓쳤어요.` |
-| notification | `지난주를 1분 만에 남겨볼까요?` | `7장이 준비됐어요.` |
-| purchase | `앞으로의 주들도 계속 남겨요.` | `추억을 잃기 전에 지금 구매하세요.` |
+| notification | `다음 기록 가능일: {정확한 날짜}`와 `월요일 저녁, 여유가 될 때 다시 볼 수 있도록 알려드릴게요.` | `7장이 준비됐어요.` |
+| purchase | `매주 작은 앨범을 계속 남겨요.` | `추억을 잃기 전에 지금 구매하세요.` |
 | error | `일부 사진을 불러오지 못했어요.` | `PHImageError -1001` |
 
 ### CTA 규칙
 
-- 행동 + 결과: `지난 7일 남기기`, `7장 초안 보기`, `지난주 남기기`
+- 행동 + 결과: `첫 주 추억 고르기`, `사진 n장 남기기`, `지난주 추억 고르기`
 - 모호한 `계속`, `확인`은 system flow 외 최소화
 - 부정 CTA `아니요`보다 `지금은 괜찮아요`
 - destructive action이 없으면 빨간 CTA를 사용하지 않음
@@ -643,12 +654,17 @@ haptic은 시각/음성 feedback을 대체하지 않습니다.
 
 | 한국어 | 영어 |
 |---|---|
-| 아이와 보낸 일주일, 사진 7장으로 남겨요. | Keep your week in seven photos. |
-| 사진은 이 iPhone에서만 분석돼요. | Your photos are analyzed on this iPhone. |
-| 지난주, 이 순간들을 남길까요? | Keep these moments from last week? |
-| 지난주를 남겼어요. | Last week is saved. |
-| 매주 월요일 저녁에 알려드릴까요? | Want a reminder every Monday evening? |
-| 지난주를 1분 만에 남겨볼까요? | Take a minute to save last week. |
+| 첫 주 추억 고르기 | Choose your first week. |
+| 가장 최근 완료된 월요일부터 일요일까지의 한 주로 시작해요. | We start with your most recently completed Monday–Sunday week. |
+| 그 주에 적격 사진이 없어 최근 7일을 대신 확인해요. | That week had no eligible photos, so we check your most recent 7 days instead. |
+| 지난주의 순간을 최대 7장으로 남겨요. | Keep up to seven moments from last week. |
+| 사진 고르기는 이 iPhone 안에서 이뤄져요. | Photos are processed on your iPhone. |
+| 지난주, 이 순간들을 남길까요? | Want to keep a few moments from last week? |
+| 지난주가 작은 앨범이 됐어요. | Last week is now one small album. |
+| 다음 기록을 남길 때 알려드릴까요? | Want a gentle reminder when your next week is available? |
+| 월요일 저녁, 여유가 될 때 다시 볼 수 있도록 알려드릴게요. | We’ll remind you on Monday evening, so you can come back when you have a moment. |
+| 너희 가족의 이번 주는 어땠어? | How was your family's week? |
+| 우리 가족의 12번째 주 | Our family · week 12 |
 | Weekkeep은 별도 백업을 제공하지 않아 앱을 삭제하거나 기기를 바꾸면 기록이 사라질 수 있어요. | Weekkeep doesn't provide a separate backup, so records may be lost if you delete the app or change devices. |
 | 원본 사진은 사진 앱에 남아 있어요. | Your original photos stay in Photos. |
 
@@ -840,7 +856,7 @@ struct WeekkeepTheme: Sendable {
 - [ ] Weekly Review semantic spacing hierarchy와 top/lower screenshot framing 검증
 - [ ] screenshot fixture launch path에 0–2pt feature stack/grid override 없음
 - [ ] paywall에 현지화 가격, 복원, 약관, 닫기 존재
-- [ ] Settings·paywall 개인정보 맥락에 로컬 보존 한계 ko/en 존재
+- [ ] Archive·paywall 개인정보 맥락에 로컬 보존 한계 ko/en 존재
 - [ ] 평생 이용권을 데이터 영구 보존으로 오해시키는 문구 0
 - [ ] guilt, streak, child identity 문구 없음
 - [ ] stitch가 보이는 모든 상태에서 정확히 7개이며 index별 D-030 palette, state opacity/geometry test 통과

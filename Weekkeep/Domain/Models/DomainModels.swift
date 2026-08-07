@@ -5,6 +5,18 @@ enum AlbumKind: String, Codable, CaseIterable, Sendable {
     case regular
 }
 
+enum WelcomeAlbumRangeStrategy: String, Codable, CaseIterable, Sendable, Equatable {
+    case completedCalendarWeek
+    case rollingSevenDayFallback
+    case legacyRollingWelcome
+}
+
+struct FirstAlbumRangeSelection: Sendable, Equatable {
+    let range: WeekRange
+    let strategy: WelcomeAlbumRangeStrategy
+    let eligiblePhotoCount: Int
+}
+
 struct PhotoID: Hashable, Codable, Sendable, CustomStringConvertible {
     let rawValue: String
 
@@ -21,6 +33,16 @@ enum PhotoAuthorization: String, Codable, Sendable, Equatable {
     case limited
     case denied
     case restricted
+
+    var analyticsValue: String {
+        switch self {
+        case .authorized: "full"
+        case .limited: "limited"
+        case .denied: "denied"
+        case .restricted: "restricted"
+        case .notDetermined: "not_determined"
+        }
+    }
 
     var accessScope: PhotoAccessScope? {
         switch self {
@@ -87,6 +109,15 @@ struct WeekRange: Codable, Equatable, Hashable, Sendable, Identifiable {
     let kind: AlbumKind
 
     var id: String { key }
+
+    /// The strategy is encoded in the key so existing saved `WeekRange` values
+    /// and `WeeklyAlbumSnapshot` records remain decodable without a migration.
+    var welcomeAlbumRangeStrategy: WelcomeAlbumRangeStrategy? {
+        guard kind == .welcome else { return nil }
+        if key.hasPrefix("welcome-completed-") { return .completedCalendarWeek }
+        if key.hasPrefix("welcome-rolling-") { return .rollingSevenDayFallback }
+        return .legacyRollingWelcome
+    }
 }
 
 struct CurationDraft: Codable, Equatable, Sendable, Identifiable {

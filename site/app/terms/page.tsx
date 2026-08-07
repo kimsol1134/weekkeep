@@ -46,7 +46,7 @@ export default function TermsPage() {
 
             <section className="document-section" id="service">
               <h2>2. 서비스와 라이선스</h2>
-              <p>Weekkeep은 최근 완료된 주간의 허용된 사진을 기기에서 분석해 최대 7장의 초안을 제안하고, 사용자가 검토·교체·저장하도록 돕습니다. 결과는 자동 추천이며 사진의 중요도나 품질을 객관적으로 보증하지 않습니다.</p>
+              <p>Weekkeep은 최근 완료된 주간의 허용된 사진을 기기에서 분석해 최대 7장의 순간을 제안하고, 사용자가 검토·교체·저장하도록 돕습니다. 결과는 자동 추천이며 사진의 중요도나 품질을 객관적으로 보증하지 않습니다.</p>
               <p>본 약관을 지키는 동안 Weekkeep은 사용자의 개인적·비상업적 사용을 위한 제한적이고, 비독점적이며, 양도할 수 없고, 취소 가능한 앱 사용 권한을 부여합니다. 앱과 브랜드, 코드, 디자인에 대한 소유권은 운영자와 해당 라이선스 제공자에게 있습니다. 사용자의 원본 사진 소유권은 사용자에게 남습니다.</p>
               <p>iOS 앱 사용에는 Apple의 <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" rel="noreferrer">Standard Licensed Application End User License Agreement</a>도 적용됩니다. 본 약관과 Apple 표준 EULA가 충돌하면 법령과 Apple 요구사항이 허용하는 범위에서 Apple 표준 EULA가 우선합니다.</p>
             </section>

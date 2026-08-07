@@ -51,8 +51,9 @@ struct OnboardingView: View {
                 .frame(width: contentWidth, alignment: .leading)
                 .padding(.horizontal, screenEdge)
             }
+            .scrollIndicators(.hidden)
+            .weekkeepTopSystemOcclusion(localSafeAreaTop: proxy.safeAreaInsets.top)
         }
-        .scrollIndicators(.hidden)
         .weekkeepScreenBackground()
         .sheet(isPresented: $showPrivacy) {
             OnboardingPrivacySheet()
@@ -68,7 +69,7 @@ struct OnboardingView: View {
                 appVersion: WeekkeepLocalization.appVersion
             ))
             let status = await environment.photoLibrary.requestAuthorization()
-            await environment.analyticsClient.capture(.photoPermissionResolved(status: status.rawValue))
+            await environment.analyticsClient.capture(.photoPermissionResolved(status: status.analyticsValue))
             environment.onboardingCompleted = true
             environment.shouldStartWelcomeCuration = status.accessScope != nil
             isRequesting = false

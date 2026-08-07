@@ -50,7 +50,7 @@ targets:
               - weekkeep
         ITSAppUsesNonExemptEncryption: false
         LSApplicationCategoryType: public.app-category.photo-video
-        NSPhotoLibraryUsageDescription: Weekkeep uses your photo library to find this week's moments on your device.
+        NSPhotoLibraryUsageDescription: Allow Weekkeep to choose your first week from the most recently completed Monday–Sunday week. If it has no eligible photos, Weekkeep may check your most recent 7 days. Photos are processed on your iPhone.
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
           UISceneConfigurations:
@@ -74,7 +74,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.solkim.weekkeep
         PRODUCT_NAME: Weekkeep
         MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "6"
+        CURRENT_PROJECT_VERSION: "7"
         TARGETED_DEVICE_FAMILY: "1"
         INFOPLIST_KEY_CFBundleDisplayName: Weekkeep
         INFOPLIST_KEY_UIUserInterfaceStyle: Light

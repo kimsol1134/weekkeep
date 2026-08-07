@@ -27,6 +27,63 @@ enum WeeklyAlbumShareFormat: String, CaseIterable, Identifiable, Sendable {
     }
 }
 
+enum WeeklyAlbumShareContract {
+    static let appStoreAppID = "6798449478"
+    static let invitationLocalizationKey = "share.invitation"
+    static let canonicalInstallURL: URL = {
+        let string = "https://apps.apple.com/app/id\(appStoreAppID)"
+        guard let url = URL(string: string),
+              url.scheme == "https",
+              url.host == "apps.apple.com",
+              url.path == "/app/id\(appStoreAppID)"
+        else {
+            preconditionFailure("Weekkeep canonical install URL must be the durable Apple App Store URL")
+        }
+        return url
+    }()
+
+    static func localizedInvitation(locale: Locale = .current) -> String {
+        WeekkeepLocalization.string(invitationLocalizationKey, locale: locale)
+    }
+}
+
+struct WeeklyAlbumShareIdentity: Equatable, Sendable {
+    let ordinal: Int?
+
+    init(ordinal: Int?) {
+        self.ordinal = ordinal.flatMap { $0 > 0 ? $0 : nil }
+    }
+
+    func serialLabel(locale: Locale) -> String? {
+        guard let ordinal else { return nil }
+        return WeekkeepLocalization.string("share.serialLabel", locale: locale, ordinal)
+    }
+}
+
+enum WeeklyAlbumShareOrdinal {
+    /// Calculates the cumulative 1-based saved-week position without adding a
+    /// persistence field. Welcome and regular albums share the same sequence.
+    static func ordinal(
+        for album: WeeklyAlbumSnapshot,
+        in summaries: [WeeklyAlbumSummary]
+    ) -> Int? {
+        ordinal(for: album.id, in: summaries)
+    }
+
+    static func ordinal(
+        for albumID: UUID,
+        in summaries: [WeeklyAlbumSummary]
+    ) -> Int? {
+        let ordered = summaries.sorted {
+            if $0.createdAt != $1.createdAt { return $0.createdAt < $1.createdAt }
+            if $0.weekStart != $1.weekStart { return $0.weekStart < $1.weekStart }
+            return $0.id.uuidString < $1.id.uuidString
+        }
+        guard let index = ordered.firstIndex(where: { $0.id == albumID }) else { return nil }
+        return index + 1
+    }
+}
+
 enum WeeklyAlbumShareRenderError: Error, Equatable, Sendable {
     case missingWordmark
     case noAvailablePhotos
@@ -41,15 +98,18 @@ struct WeeklyAlbumShareRenderer {
     let locale: Locale
     let timeZone: TimeZone
     let wordmarkImage: UIImage?
+    let shareIdentity: WeeklyAlbumShareIdentity?
 
     init(
         locale: Locale = .current,
         timeZone: TimeZone = .current,
-        wordmarkImage: UIImage? = UIImage(named: "WeekkeepWordmark")
+        wordmarkImage: UIImage? = UIImage(named: "WeekkeepWordmark"),
+        shareIdentity: WeeklyAlbumShareIdentity? = nil
     ) {
         self.locale = locale
         self.timeZone = timeZone
         self.wordmarkImage = wordmarkImage
+        self.shareIdentity = shareIdentity
     }
 
     func render(
@@ -83,7 +143,8 @@ struct WeeklyAlbumShareRenderer {
                 in: cgContext,
                 canvas: canvas,
                 wordmark: wordmarkImage,
-                dateRange: dateRangeText(for: album)
+                dateRange: dateRangeText(for: album),
+                serialLabel: shareIdentity?.serialLabel(locale: locale)
             )
 
             let frames = Self.layoutFrames(photoCount: orderedImages.count, canvasSize: canvas)
@@ -211,21 +272,49 @@ struct WeeklyAlbumShareRenderer {
         in context: CGContext,
         canvas: CGSize,
         wordmark: UIImage,
-        dateRange: String
+        dateRange: String,
+        serialLabel: String?
     ) {
         let margin = min(canvas.width * 0.067, 72)
         let wordmarkWidth = min(canvas.width * 0.34, 340)
         let wordmarkHeight = wordmarkWidth * (wordmark.size.height / max(wordmark.size.width, 1))
         wordmark.draw(in: CGRect(x: margin, y: canvas.height * 0.065, width: wordmarkWidth, height: wordmarkHeight))
 
-        drawText(
-            dateRange,
-            in: CGRect(x: margin, y: canvas.height * 0.125, width: canvas.width - (margin * 2), height: 42),
-            font: .weekkeepExportHeadline,
-            color: UIColor(WeekkeepColors.plum),
-            alignment: .left,
-            context: context
-        )
+        let headerY = canvas.height * 0.125
+        let headerHeight: CGFloat = 42
+        let contentWidth = canvas.width - (margin * 2)
+        if let serialLabel, !serialLabel.isEmpty {
+            let serialFont = UIFont.weekkeepExportCaption
+            let measuredWidth = (serialLabel as NSString).size(withAttributes: [.font: serialFont]).width
+            let serialWidth = min(max(measuredWidth, 180), contentWidth * 0.42)
+            let gap: CGFloat = 18
+            let dateWidth = max(contentWidth - serialWidth - gap, contentWidth * 0.45)
+            drawText(
+                dateRange,
+                in: CGRect(x: margin, y: headerY, width: dateWidth, height: headerHeight),
+                font: .weekkeepExportHeadline,
+                color: UIColor(WeekkeepColors.plum),
+                alignment: .left,
+                context: context
+            )
+            drawText(
+                serialLabel,
+                in: CGRect(x: margin + dateWidth + gap, y: headerY + 3, width: contentWidth - dateWidth - gap, height: 34),
+                font: serialFont,
+                color: UIColor(WeekkeepColors.secondaryText),
+                alignment: .right,
+                context: context
+            )
+        } else {
+            drawText(
+                dateRange,
+                in: CGRect(x: margin, y: headerY, width: contentWidth, height: headerHeight),
+                font: .weekkeepExportHeadline,
+                color: UIColor(WeekkeepColors.plum),
+                alignment: .left,
+                context: context
+            )
+        }
     }
 
     private func drawFooter(in context: CGContext, canvas: CGSize) {
@@ -237,6 +326,15 @@ struct WeeklyAlbumShareRenderer {
         let stitchGap: CGFloat = 9
         let railWidth = (CGFloat(stitches.count) * stitchWidth) + (CGFloat(stitches.count - 1) * stitchGap)
         let railX = (canvas.width - railWidth) / 2
+
+        drawText(
+            WeekkeepLocalization.string("share.footerPrompt", locale: locale),
+            in: CGRect(x: margin, y: footerY - 72, width: canvas.width - (margin * 2), height: 30),
+            font: .weekkeepExportCaption,
+            color: UIColor(WeekkeepColors.secondaryText),
+            alignment: .center,
+            context: context
+        )
 
         for (index, color) in stitches.enumerated() {
             let rect = CGRect(
@@ -361,9 +459,30 @@ enum ShareSheetAnalyticsGate {
     }
 }
 
-/// Supplies the native share sheet with a branded local preview without
-/// adding a public URL, recipient, or any Photos metadata to the activity
-/// item. The file URL remains the actual item delivered to the chosen app.
+enum ShareCompletionAnalyticsGate {
+    static func eventIfNeeded(
+        didCapture: inout Bool,
+        completed: Bool,
+        format: ShareArtifactFormatAnalyticsValue,
+        entryPoint: ShareEntryPointAnalyticsValue
+    ) -> AnalyticsEvent? {
+        guard completed, !didCapture else { return nil }
+        didCapture = true
+        return .shareCompleted(format: format, entryPoint: entryPoint)
+    }
+
+    static func reset(_ didCapture: inout Bool) {
+        didCapture = false
+    }
+}
+
+/// Supplies the native share sheet with the primary local image artifact.
+///
+/// The invitation and install URL are separate native item sources below. This
+/// keeps image-only destinations eligible for the artifact while destinations
+/// that accept links can receive the text and URL as additional items. The
+/// implementation intentionally does not branch on private third-party
+/// activity identifiers.
 final class WeeklyAlbumShareActivityItemSource: NSObject, UIActivityItemSource {
     let artifactURL: URL
     let previewData: Data
@@ -417,9 +536,99 @@ final class WeeklyAlbumShareActivityItemSource: NSObject, UIActivityItemSource {
         if let image = UIImage(data: previewData) {
             metadata.imageProvider = NSItemProvider(object: image)
         }
-        // Deliberately leave both URL fields empty. Weekkeep has no approved
-        // public install URL in V1, and a local share must not imply one.
+        // Keep the local image preview independent from the install-link item.
+        // The image artifact itself never carries the install URL.
         return metadata
+    }
+}
+
+final class WeeklyAlbumShareInvitationItemSource: NSObject, UIActivityItemSource {
+    let invitation: String
+
+    init(invitation: String) {
+        self.invitation = invitation
+        super.init()
+    }
+
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        _ = activityViewController
+        return invitation
+    }
+
+    func activityViewController(
+        _ activityViewController: UIActivityViewController,
+        itemForActivityType activityType: UIActivity.ActivityType?
+    ) -> Any? {
+        _ = activityViewController
+        _ = activityType
+        return invitation
+    }
+}
+
+final class WeeklyAlbumShareInstallURLItemSource: NSObject, UIActivityItemSource {
+    let url: URL
+    let title: String
+
+    init(title: String) {
+        // The install item is intentionally not caller-configurable. A share
+        // payload must never redirect attribution or privacy-sensitive users
+        // through an arbitrary URL.
+        self.url = WeeklyAlbumShareContract.canonicalInstallURL
+        self.title = title
+        super.init()
+    }
+
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        _ = activityViewController
+        return url
+    }
+
+    func activityViewController(
+        _ activityViewController: UIActivityViewController,
+        itemForActivityType activityType: UIActivity.ActivityType?
+    ) -> Any? {
+        _ = activityViewController
+        _ = activityType
+        return url
+    }
+
+    func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
+        _ = activityViewController
+        let metadata = LPLinkMetadata()
+        metadata.title = title
+        metadata.originalURL = url
+        metadata.url = url
+        return metadata
+    }
+}
+
+struct WeeklyAlbumShareActivityItems {
+    let imageSource: WeeklyAlbumShareActivityItemSource
+    let invitationSource: WeeklyAlbumShareInvitationItemSource
+    let installURLSource: WeeklyAlbumShareInstallURLItemSource
+
+    init(
+        artifactURL: URL,
+        previewData: Data,
+        title: String,
+        locale: Locale = .current
+    ) {
+        imageSource = WeeklyAlbumShareActivityItemSource(
+            artifactURL: artifactURL,
+            previewData: previewData,
+            title: title
+        )
+        invitationSource = WeeklyAlbumShareInvitationItemSource(
+            invitation: WeeklyAlbumShareContract.localizedInvitation(locale: locale)
+        )
+        installURLSource = WeeklyAlbumShareInstallURLItemSource(title: title)
+    }
+
+    /// Keep the image first. UIActivityViewController negotiates the supported
+    /// subset with each native destination; no destination-specific identifiers
+    /// are needed or used here.
+    var activityItems: [Any] {
+        [imageSource, invitationSource, installURLSource]
     }
 }
 
@@ -437,8 +646,10 @@ struct WeeklyAlbumShareView: View {
     @State private var preparationState: WeeklyAlbumSharePreparationState = .idle
     @State private var previewData: Data?
     @State private var artifactURL: URL?
+    @State private var shareIdentity: WeeklyAlbumShareIdentity?
     @State private var isPresentingActivity = false
     @State private var didCaptureShareSheetOpen = false
+    @State private var didCaptureShareCompletion = false
     @State private var preparationRevision = 0
 
     var body: some View {
@@ -486,8 +697,11 @@ struct WeeklyAlbumShareView: View {
         }
         .onDisappear { cleanupArtifact() }
         .sheet(isPresented: $isPresentingActivity, onDismiss: shareSheetDidDismiss) {
-            if let activityItemSource {
-                NativeShareSheet(items: [activityItemSource])
+            if let activityItems {
+                let presentedFormat = selectedFormat
+                NativeShareSheet(items: activityItems.activityItems) { completed in
+                    shareSheetDidComplete(completed, format: presentedFormat)
+                }
             }
         }
         .weekkeepScreenBackground()
@@ -531,7 +745,7 @@ struct WeeklyAlbumShareView: View {
                     .font(.weekkeepCaption)
                     .foregroundStyle(WeekkeepColors.secondaryText)
                 WeekkeepPrimaryButton(title: "share.share") {
-                    guard activityItemSource != nil else { return }
+                    guard activityItems != nil else { return }
                     if let event = ShareSheetAnalyticsGate.eventIfNeeded(
                         didCapture: &didCaptureShareSheetOpen,
                         format: selectedFormat.analyticsValue,
@@ -546,9 +760,9 @@ struct WeeklyAlbumShareView: View {
         }
     }
 
-    private var activityItemSource: WeeklyAlbumShareActivityItemSource? {
+    private var activityItems: WeeklyAlbumShareActivityItems? {
         guard let artifactURL, let previewData else { return nil }
-        return WeeklyAlbumShareActivityItemSource(
+        return WeeklyAlbumShareActivityItems(
             artifactURL: artifactURL,
             previewData: previewData,
             title: WeekkeepLocalization.string("share.title")
@@ -556,11 +770,19 @@ struct WeeklyAlbumShareView: View {
     }
 
     private func prepare() async {
+        await prepare(format: selectedFormat)
+    }
+
+    private func prepare(format: WeeklyAlbumShareFormat) async {
         cleanupArtifact()
         preparationState = .loading
         previewData = nil
+        shareIdentity = nil
 
         do {
+            let identity = await resolveShareIdentity()
+            guard !Task.isCancelled else { return }
+
             var images: [PhotoID: PhotoImageData] = [:]
             for photo in album.photos.sorted(by: { $0.position < $1.position }) where photo.isAvailable {
                 guard !Task.isCancelled else { return }
@@ -576,10 +798,15 @@ struct WeeklyAlbumShareView: View {
                 }
             }
 
-            let renderer = WeeklyAlbumShareRenderer()
-            let data = try renderer.render(album: album, images: images, format: selectedFormat)
+            let renderer = WeeklyAlbumShareRenderer(shareIdentity: identity)
+            let data = try renderer.render(album: album, images: images, format: format)
             guard !Task.isCancelled else { return }
-            let url = try WeeklyAlbumShareFileStore.writeTemporaryArtifact(data, format: selectedFormat)
+            let url = try WeeklyAlbumShareFileStore.writeTemporaryArtifact(data, format: format)
+            guard !Task.isCancelled else {
+                WeeklyAlbumShareFileStore.removeTemporaryArtifact(at: url)
+                return
+            }
+            shareIdentity = identity
             previewData = data
             artifactURL = url
             preparationState = .ready
@@ -590,6 +817,21 @@ struct WeeklyAlbumShareView: View {
         }
     }
 
+    private func resolveShareIdentity() async -> WeeklyAlbumShareIdentity? {
+        guard !Task.isCancelled else { return nil }
+        do {
+            let summaries = try await environment.albumStore.listAlbums()
+            guard !Task.isCancelled,
+                  let ordinal = WeeklyAlbumShareOrdinal.ordinal(for: album, in: summaries)
+            else { return nil }
+            return WeeklyAlbumShareIdentity(ordinal: ordinal)
+        } catch {
+            // The local artifact remains useful if the ordinal lookup is
+            // unavailable or the saved album is no longer in the store.
+            return nil
+        }
+    }
+
     private func cleanupArtifact() {
         WeeklyAlbumShareFileStore.removeTemporaryArtifact(at: artifactURL)
         artifactURL = nil
@@ -597,6 +839,7 @@ struct WeeklyAlbumShareView: View {
 
     private func shareSheetDidDismiss() {
         ShareSheetAnalyticsGate.reset(&didCaptureShareSheetOpen)
+        ShareCompletionAnalyticsGate.reset(&didCaptureShareCompletion)
         cleanupArtifact()
         // The native activity controller consumes the one temporary file. A
         // parent may intentionally share the same saved week again, so make
@@ -604,13 +847,35 @@ struct WeeklyAlbumShareView: View {
         // also means SwiftUI cancels that work if this view disappears.
         preparationRevision += 1
     }
+
+    private func shareSheetDidComplete(_ completed: Bool, format: WeeklyAlbumShareFormat) {
+        guard let event = ShareCompletionAnalyticsGate.eventIfNeeded(
+            didCapture: &didCaptureShareCompletion,
+            completed: completed,
+            format: format.analyticsValue,
+            entryPoint: entryPoint
+        ) else { return }
+        Task { await environment.analyticsClient.capture(event) }
+    }
 }
 
 struct NativeShareSheet: UIViewControllerRepresentable {
     let items: [Any]
+    let onCompletion: (Bool) -> Void
+
+    init(items: [Any], onCompletion: @escaping (Bool) -> Void = { _ in }) {
+        self.items = items
+        self.onCompletion = onCompletion
+    }
+
+    static func completionHandler(for completion: @escaping (Bool) -> Void) -> (UIActivity.ActivityType?, Bool, [Any]?, Error?) -> Void {
+        { _, completed, _, _ in completion(completed) }
+    }
 
     func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
+        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        controller.completionWithItemsHandler = Self.completionHandler(for: onCompletion)
+        return controller
     }
 
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {

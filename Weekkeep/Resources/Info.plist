@@ -36,7 +36,7 @@
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.photo-video</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Weekkeep uses your photo library to find this week's moments on your device.</string>
+	<string>Allow Weekkeep to choose your first week from the most recently completed Monday–Sunday week. If it has no eligible photos, Weekkeep may check your most recent 7 days. Photos are processed on your iPhone.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>LINESeedKR-Rg.ttf</string>

@@ -22,6 +22,122 @@ final class ReleaseCandidateHardeningTests: XCTestCase {
         XCTAssertEqual(restricted.explanationKey, "week.restrictedBody")
     }
 
+    func testSettingsSemanticRolesMatchTruthfulStateMeaning() {
+        XCTAssertEqual(SettingsSemanticRole.photoAccess(.authorized), .success)
+        XCTAssertEqual(SettingsSemanticRole.photoAccess(.limited), .attention)
+        XCTAssertEqual(SettingsSemanticRole.photoAccess(.notDetermined), .attention)
+        XCTAssertEqual(SettingsSemanticRole.photoAccess(.restricted), .attention)
+        XCTAssertEqual(SettingsSemanticRole.photoAccess(.denied), .error)
+
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.authorized, savedAlbumCount: 1),
+            .success
+        )
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.provisional, savedAlbumCount: 1),
+            .attention
+        )
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.denied, savedAlbumCount: 1),
+            .error
+        )
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.authorized, savedAlbumCount: 0),
+            .attention
+        )
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.authorized, savedAlbumCount: nil),
+            .attention
+        )
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.denied, savedAlbumCount: 0),
+            .error
+        )
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.denied, savedAlbumCount: nil),
+            .error
+        )
+
+        XCTAssertEqual(SettingsSemanticRole.entitlement(.active), .success)
+        XCTAssertEqual(SettingsSemanticRole.entitlement(.inactive), .neutral)
+        XCTAssertEqual(SettingsSemanticRole.entitlement(.unknown), .attention)
+    }
+
+    func testSettingsVisualHierarchyUsesSemanticRolesWithoutWeakTitleStyling() throws {
+        let repositoryRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let source = try String(
+            contentsOf: repositoryRoot.appendingPathComponent(
+                "Weekkeep/Features/Settings/SettingsViews.swift"
+            ),
+            encoding: .utf8
+        )
+
+        XCTAssertTrue(source.contains("SettingsSectionHeader"))
+        XCTAssertTrue(source.contains("SettingsSemanticRole"))
+        XCTAssertTrue(source.contains("foregroundStyle(WeekkeepColors.primaryText)"))
+        XCTAssertTrue(source.contains("foregroundStyle(WeekkeepColors.secondaryAction)"))
+        XCTAssertTrue(source.contains("case .status:"))
+        XCTAssertTrue(source.contains("safeAreaInset(edge: .bottom"))
+        XCTAssertFalse(source.contains("SettingsInformationalRow"))
+
+        let normalizedSource = source.replacingOccurrences(
+            of: "\\s+",
+            with: " ",
+            options: .regularExpression
+        )
+        XCTAssertTrue(
+            normalizedSource.contains(
+                "SettingsExplanationRow( title: LocalizedStringKey(explanationKey), role: .photoAccess(model.photoPermission) )"
+            )
+        )
+        XCTAssertTrue(
+            normalizedSource.contains(
+                "SettingsExplanationRow( title: LocalizedStringKey(explanationKey), role: .notification( model.notificationStatus, savedAlbumCount: model.savedAlbumCount ) )"
+            )
+        )
+        XCTAssertFalse(normalizedSource.contains("SettingsExplanationRow( title: LocalizedStringKey(explanationKey), role: .attention )"))
+        XCTAssertFalse(source.contains("case action"))
+        XCTAssertFalse(source.contains("case .action"))
+    }
+
+    func testSettingsSourceKeepsOnlyActionableRowsAndCompactSupport() throws {
+        let repositoryRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let source = try String(
+            contentsOf: repositoryRoot.appendingPathComponent(
+                "Weekkeep/Features/Settings/SettingsViews.swift"
+            ),
+            encoding: .utf8
+        )
+
+        XCTAssertTrue(source.contains("action: photoAccessAction"))
+        XCTAssertTrue(source.contains("action: notificationAction"))
+        XCTAssertFalse(source.contains("SCR-SET-01-NotificationAction"))
+        XCTAssertFalse(source.contains("settings.storage"))
+        XCTAssertFalse(source.contains("settings.data"))
+        XCTAssertFalse(source.contains("about.licenses"))
+        XCTAssertFalse(source.contains("OpenSourceLicensesView"))
+        XCTAssertFalse(source.contains("LicenseNotice"))
+        XCTAssertFalse(source.contains("PrivacyView"))
+        XCTAssertFalse(source.contains("PrivacyFact"))
+        XCTAssertTrue(source.contains("SCR-SET-01-SupportSection"))
+        XCTAssertTrue(source.contains("List {"))
+        XCTAssertTrue(source.contains("AboutLinkRow(title: \"about.help\""))
+        XCTAssertTrue(source.contains("AboutLinkRow(title: \"about.contact\""))
+        XCTAssertTrue(source.contains("AboutLinkRow(title: \"about.terms\""))
+        XCTAssertTrue(source.contains("AboutLinkRow(title: \"about.privacy\""))
+        XCTAssertTrue(source.contains("settings.restore"))
+        XCTAssertFalse(source.contains("settings.learnPlus"))
+        XCTAssertTrue(source.contains("guard model.entitlement == .inactive"))
+        XCTAssertTrue(source.contains("if model.entitlement != .active"))
+
+        let restoreRowCount = source.components(separatedBy: "SettingsActionRow(").count - 1
+        XCTAssertEqual(restoreRowCount, 1, "Only Restore purchase may remain a separate SettingsActionRow")
+    }
+
     func testSettingsNotificationPresentationGatesPermissionUntilAWeekIsSaved() {
         let statuses: [NotificationAuthorization] = [
             .notDetermined,
@@ -111,6 +227,151 @@ final class ReleaseCandidateHardeningTests: XCTestCase {
         XCTAssertTrue(
             NotificationPrimerPolicy.shouldRequestAuthorization(currentStatus: .notDetermined)
         )
+    }
+
+    func testWaitingStateUsesSavedMemoryActionsWithoutASecondContentRail() throws {
+        let repositoryRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let source = try String(
+            contentsOf: repositoryRoot.appendingPathComponent(
+                "Weekkeep/Features/WeeklyCuration/WeeklyViews.swift"
+            ),
+            encoding: .utf8
+        )
+        let waitingStart = try XCTUnwrap(source.range(of: "private struct WaitingStateView"))
+        let savedStart = try XCTUnwrap(source.range(of: "private struct SavedStateView"))
+        let waitingSource = String(source[waitingStart.lowerBound..<savedStart.lowerBound])
+
+        XCTAssertFalse(waitingSource.contains("SevenStitchRail"))
+        XCTAssertTrue(waitingSource.contains("WaitingMemoryCard"))
+        XCTAssertTrue(waitingSource.contains("PhotoThumbnailView"))
+        XCTAssertTrue(waitingSource.contains("week.waitingNextDate"))
+        XCTAssertTrue(waitingSource.contains("week.waitingViewAlbum"))
+        XCTAssertTrue(waitingSource.contains("week.waitingShareAlbum"))
+        XCTAssertTrue(waitingSource.contains("WeeklyAlbumShareView"))
+        XCTAssertTrue(waitingSource.contains(".sheet(item: $destination)"))
+        XCTAssertTrue(waitingSource.contains(".disabled(model.waitingAlbum == nil || model.waitingAlbum?.isMissingAllPhotos == true)"))
+    }
+
+    func testNotificationPrimerUsesTheExactNextDateCue() throws {
+        let repositoryRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let source = try String(
+            contentsOf: repositoryRoot.appendingPathComponent(
+                "Weekkeep/Features/WeeklyCuration/NotificationPrimerView.swift"
+            ),
+            encoding: .utf8
+        )
+
+        XCTAssertTrue(source.contains("notification.nextDate"))
+        XCTAssertTrue(source.contains("model.nextEligibleDate"))
+        XCTAssertTrue(source.contains("notification.schedule"))
+        XCTAssertFalse(source.localizedCaseInsensitiveContains("background analysis"))
+    }
+
+    @MainActor
+    func testWaitingStateLoadsLatestAlbumAndComputesExactNextEligibleDate() async {
+        let environment = makeEnvironment(
+            photoLibrary: SettingsPhotoLibrarySpy(status: .authorized),
+            albumStore: InMemoryAlbumStore(initialAlbums: [savedAlbumSnapshot()])
+        )
+        let cycle = Date().addingTimeInterval(3 * 24 * 60 * 60)
+        environment.regularCycleStartsAt = cycle
+        let model = WeeklyFlowModel(environment: environment)
+
+        await model.refresh()
+
+        XCTAssertEqual(model.rootState, .preRegularWaiting)
+        XCTAssertEqual(model.waitingAlbum?.weekKey, "saved-week-fixture")
+        XCTAssertEqual(
+            model.nextEligibleDate,
+            environment.weekCalculator.regularRange(startingAt: cycle).eligibleFrom
+        )
+        XCTAssertTrue(model.waitingAlbum?.isMissingAllPhotos == true)
+    }
+
+    func testFirstUseCopyAndPhotoPurposeStringsExplainTheCompletedWeekFallback() throws {
+        XCTAssertEqual(
+            WeekkeepLocalization.string("onboarding.primary", locale: Locale(identifier: "en_US")),
+            "Choose your first week"
+        )
+        XCTAssertEqual(
+            WeekkeepLocalization.string("onboarding.primary", locale: Locale(identifier: "ko_KR")),
+            "첫 주 추억 고르기"
+        )
+        XCTAssertTrue(
+            WeekkeepLocalization.string("week.welcomeFallbackBody", locale: Locale(identifier: "en_US"))
+                .contains("most recent 7 days")
+        )
+        XCTAssertTrue(
+            WeekkeepLocalization.string("week.welcomeFallbackBody", locale: Locale(identifier: "ko_KR"))
+                .contains("최근 7일")
+        )
+
+        let root = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let purposeFiles = [
+            "Weekkeep/Resources/Info.plist",
+            "Weekkeep/Resources/en.lproj/InfoPlist.strings",
+            "Weekkeep/Resources/ko.lproj/InfoPlist.strings",
+            "project.yml"
+        ]
+        for path in purposeFiles {
+            let contents = try String(contentsOf: root.appendingPathComponent(path), encoding: .utf8)
+            XCTAssertTrue(contents.contains("most recently completed") || contents.contains("최근 완료된"), path)
+            XCTAssertTrue(contents.contains("most recent 7 days") || contents.contains("최근 7일"), path)
+        }
+    }
+
+    func testReleaseMetadataUsesWarmFirstWeekCopyWithoutCurationJargon() throws {
+        let repositoryRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let copyFiles = [
+            "release/app-store-metadata.json",
+            "docs/10-APP-STORE-METADATA.md"
+        ]
+
+        for path in copyFiles {
+            let contents = try String(
+                contentsOf: repositoryRoot.appendingPathComponent(path),
+                encoding: .utf8
+            )
+            XCTAssertFalse(contents.localizedCaseInsensitiveContains("eligible"), path)
+            XCTAssertFalse(contents.contains("적격"), path)
+            XCTAssertTrue(contents.contains("most recently completed local Monday–Sunday week"), path)
+            XCTAssertTrue(contents.contains("no photos Weekkeep can use"), path)
+            XCTAssertTrue(contents.contains("most recent seven days"), path)
+            XCTAssertTrue(contents.contains("가장 최근 완료된 월요일부터 일요일까지의 한 주"), path)
+            XCTAssertTrue(contents.contains("Weekkeep이 남길 수 있는 사진이 없을 때만 최근 7일"), path)
+        }
+    }
+
+    func testWeeklyReminderScheduleStaysMondayAt2030WithoutDuplicateTargets() {
+        let timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let calculator = WeekRangeCalculator(timeZone: timeZone)
+        var calendar = Calendar(identifier: .iso8601)
+        calendar.timeZone = timeZone
+        let now = ISO8601DateFormatter().date(from: "2026-08-05T12:00:00+09:00")!
+        let cycle = ISO8601DateFormatter().date(from: "2026-08-03T00:00:00+09:00")!
+
+        let requests = WeeklyReminderSchedule.requests(
+            now: now,
+            regularCycleStartsAt: cycle,
+            calendar: calendar,
+            calculator: calculator
+        )
+
+        XCTAssertFalse(requests.isEmpty)
+        XCTAssertEqual(Set(requests.map(\.targetWeekKey)).count, requests.count)
+        for request in requests {
+            XCTAssertEqual(calendar.component(.weekday, from: request.reminderDate), 2)
+            XCTAssertEqual(calendar.component(.hour, from: request.reminderDate), 20)
+            XCTAssertEqual(calendar.component(.minute, from: request.reminderDate), 30)
+        }
     }
 
     @MainActor

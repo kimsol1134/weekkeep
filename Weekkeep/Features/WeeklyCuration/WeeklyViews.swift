@@ -132,9 +132,14 @@ struct ThisWeekView: View {
                     case .recoverableError:
                         RootErrorView { Task { await model.refresh() } }
                     case .welcomePending:
-                        ReadyStateView(model: model, isWelcome: true, photoCount: nil)
+                        ReadyStateView(
+                            isWelcome: true,
+                            photoCount: nil,
+                            welcomeStrategy: model.firstAlbumRangeStrategy,
+                            action: model.startCuration
+                        )
                     case .preRegularWaiting:
-                        WaitingStateView()
+                        WaitingStateView(model: model)
                     case .saved:
                         SavedStateView(model: model)
                     case let .noEligiblePhotos(scope):
@@ -142,11 +147,17 @@ struct ThisWeekView: View {
                     case .entitlementLocked:
                         LockedStateView(model: model)
                     case let .ready(scope, photoCount):
-                        ReadyStateView(model: model, isWelcome: false, photoCount: photoCount, scope: scope)
+                        ReadyStateView(
+                            isWelcome: false,
+                            photoCount: photoCount,
+                            welcomeStrategy: nil,
+                            scope: scope,
+                            action: model.startCuration
+                        )
                     }
                 }
                 .padding(.horizontal, screenEdge)
-                .padding(.bottom, WeekkeepSpacing.six)
+                .padding(.bottom, WeekkeepSpacing.six + WeekkeepTabHostSpacing.bottomScrollClearance)
             }
             .scrollIndicators(.hidden)
         }
@@ -171,28 +182,33 @@ private struct RootLoadingView: View {
 }
 
 private struct ReadyStateView: View {
-    let model: WeeklyFlowModel
     let isWelcome: Bool
     let photoCount: Int?
+    let welcomeStrategy: WelcomeAlbumRangeStrategy?
     var scope: PhotoAccessScope = .full
+    let action: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: WeekkeepSpacing.six) {
             Text(isWelcome ? "week.welcomeTitle" : "week.readyTitle")
                 .font(.weekkeepTitle)
                 .fixedSize(horizontal: false, vertical: true)
-            Text(isWelcome ? "week.readyBody" : "week.readyBody")
+            Text(isWelcome && welcomeStrategy == .rollingSevenDayFallback ? "week.welcomeFallbackBody" : (isWelcome ? "week.welcomeBody" : "week.readyBody"))
                 .font(.weekkeepBody)
+            WeekkeepPrimaryButton(
+                title: isWelcome ? "week.makeWelcomeSelection" : "week.makeDraft",
+                action: action
+            )
+                .accessibilityIdentifier("SCR-WK-01-Start")
             ReadyPhotoStack()
             if let photoCount {
                 Text(WeekkeepLocalization.string("week.photoCount", photoCount))
                     .font(.weekkeepCallout)
                     .foregroundStyle(WeekkeepColors.secondaryText)
+                    .accessibilityIdentifier("SCR-WK-01-PhotoCount")
             }
             if scope == .limited { LimitedAccessNotice() }
             PrivacyBadge(title: "week.privacy")
-            WeekkeepPrimaryButton(title: "week.makeDraft") { model.startCuration() }
-                .accessibilityIdentifier("SCR-WK-01-Start")
         }
         .padding(.top, WeekkeepSpacing.six)
     }
@@ -200,7 +216,33 @@ private struct ReadyStateView: View {
 
 private struct ReadyPhotoStack: View {
     var body: some View {
-        FixturePhotoStory(style: .compact)
+        ZStack {
+            FixturePhotoStory(style: .compact)
+                .accessibilityHidden(true)
+            Color.clear
+                .accessibilityElement()
+                .accessibilityLabel(Text("accessibility.photoStory"))
+                .accessibilityIdentifier("SCR-WK-01-PhotoStory")
+        }
+        // These one-point overlays expose the visual bounds without adding
+        // layout space. The overall story marker above remains for existing
+        // accessibility and contract consumers.
+        .overlay(alignment: .top) {
+            Color.clear
+                .frame(maxWidth: .infinity, minHeight: 1, maxHeight: 1)
+                .accessibilityElement()
+                .accessibilityLabel(Text("accessibility.photoStory"))
+                .accessibilityIdentifier("SCR-WK-01-PhotoStory-Top")
+                .allowsHitTesting(false)
+        }
+        .overlay(alignment: .bottom) {
+            Color.clear
+                .frame(maxWidth: .infinity, minHeight: 1, maxHeight: 1)
+                .accessibilityElement()
+                .accessibilityLabel(Text("accessibility.photoStory"))
+                .accessibilityIdentifier("SCR-WK-01-PhotoStory-Bottom")
+                .allowsHitTesting(false)
+        }
     }
 }
 
@@ -209,6 +251,7 @@ private struct LimitedAccessNotice: View {
         Label("week.limited", systemImage: "photo.on.rectangle.angled")
             .font(.weekkeepCallout)
             .foregroundStyle(WeekkeepColors.secondaryText)
+            .accessibilityIdentifier("SCR-WK-01-LimitedAccess")
     }
 }
 
@@ -261,16 +304,140 @@ private struct RootErrorView: View {
     }
 }
 
+private enum WaitingDestination: Identifiable {
+    case share(WeeklyAlbumSnapshot)
+
+    var id: String {
+        switch self {
+        case let .share(album): "share-\(album.id.uuidString)"
+        }
+    }
+}
+
 private struct WaitingStateView: View {
+    let model: WeeklyFlowModel
+    @State private var destination: WaitingDestination?
+
     var body: some View {
         VStack(alignment: .leading, spacing: WeekkeepSpacing.six) {
-            SevenStitchRail(filledCount: 0, tone: .coral)
             Text("week.waitingTitle")
                 .font(.weekkeepTitle2)
             Text("week.waitingBody")
                 .font(.weekkeepBody)
+            WaitingMemoryCard(
+                album: model.waitingAlbum,
+                photoLibrary: model.environment.photoLibrary
+            )
+            if let nextDate = model.nextEligibleDate {
+                Text(WeekkeepLocalization.string(
+                    "week.waitingNextDate",
+                    WeekkeepLocalization.exactDate(
+                        nextDate,
+                        timeZone: TimeZone(identifier: model.environment.weekCalculator.timeZoneIdentifier) ?? .current
+                    )
+                ))
+                .font(.weekkeepHeadline)
+                .foregroundStyle(WeekkeepColors.success)
+                .accessibilityIdentifier("SCR-WK-01-WaitingNextDate")
+            }
+            WeekkeepPrimaryButton(title: "week.waitingViewAlbum") {
+                if let weekKey = model.waitingAlbum?.weekKey {
+                    model.environment.pendingDeepLink = .album(weekKey: weekKey)
+                }
+                model.environment.selectedTab = .archive
+            }
+            .accessibilityIdentifier("SCR-WK-01-WaitingViewAlbum")
+            WeekkeepSecondaryButton(title: "week.waitingShareAlbum") {
+                guard let album = model.waitingAlbum else { return }
+                destination = .share(album)
+            }
+            .disabled(model.waitingAlbum == nil || model.waitingAlbum?.isMissingAllPhotos == true)
+            .accessibilityIdentifier("SCR-WK-01-WaitingShareAlbum")
         }
         .padding(.top, WeekkeepSpacing.twelve)
+        .sheet(item: $destination) { destination in
+            switch destination {
+            case let .share(album):
+                WeeklyAlbumShareView(
+                    album: album,
+                    environment: model.environment,
+                    entryPoint: .archiveDetail
+                )
+                .presentationDetents([.large])
+            }
+        }
+    }
+}
+
+private struct WaitingMemoryCard: View {
+    let album: WeeklyAlbumSnapshot?
+    let photoLibrary: any PhotoLibraryClient
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: WeekkeepSpacing.three) {
+            if let album,
+               let coverPhoto = coverPhoto(in: album) {
+                PhotoThumbnailView(
+                    photo: photoReference(from: coverPhoto),
+                    photoLibrary: photoLibrary
+                )
+                .frame(maxWidth: .infinity)
+                .frame(height: 220)
+                .clipShape(RoundedRectangle(cornerRadius: WeekkeepRadii.large))
+                Text(WeekkeepLocalization.dateRange(start: album.weekStart, end: album.weekEnd))
+                    .font(.weekkeepHeadline)
+                    .foregroundStyle(WeekkeepColors.primaryText)
+            } else {
+                RoundedRectangle(cornerRadius: WeekkeepRadii.large)
+                    .fill(WeekkeepColors.surface)
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: 160)
+                    .overlay {
+                        VStack(spacing: WeekkeepSpacing.three) {
+                            Image(systemName: "photo.on.rectangle")
+                                .font(.weekkeepTitle2)
+                            Text(LocalizedStringKey(album == nil ? "week.waitingNoAlbum" : "week.waitingMissingPhotos"))
+                                .font(.weekkeepCallout)
+                                .multilineTextAlignment(.center)
+                        }
+                        .foregroundStyle(WeekkeepColors.secondaryText)
+                        .padding(WeekkeepSpacing.six)
+                    }
+                    .accessibilityIdentifier("SCR-WK-01-WaitingPlaceholder")
+                if let album {
+                    Text(WeekkeepLocalization.dateRange(start: album.weekStart, end: album.weekEnd))
+                        .font(.weekkeepHeadline)
+                        .foregroundStyle(WeekkeepColors.primaryText)
+                }
+            }
+        }
+        .padding(WeekkeepSpacing.three)
+        .background(WeekkeepColors.surface, in: RoundedRectangle(cornerRadius: WeekkeepRadii.large))
+        .overlay {
+            RoundedRectangle(cornerRadius: WeekkeepRadii.large)
+                .stroke(WeekkeepColors.subtleBorder, lineWidth: 1)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("SCR-WK-01-WaitingCard")
+    }
+
+    private func coverPhoto(in album: WeeklyAlbumSnapshot) -> AlbumPhotoSnapshot? {
+        if let coverPhotoID = album.coverPhotoID,
+           let coverPhoto = album.photos.first(where: { $0.id == coverPhotoID && $0.isAvailable }) {
+            return coverPhoto
+        }
+        return album.photos.first(where: \.isAvailable)
+    }
+
+    private func photoReference(from photo: AlbumPhotoSnapshot) -> PhotoReference {
+        PhotoReference(
+            id: photo.assetLocalIdentifier,
+            capturedAt: photo.capturedAt ?? Date.distantPast,
+            pixelWidth: 1_200,
+            pixelHeight: 1_600,
+            score: photo.scoreSnapshot ?? 0.5,
+            source: photo.source
+        )
     }
 }
 
@@ -363,7 +530,7 @@ struct CurationProgressView: View {
                     .font(.weekkeepTitle)
                     .padding(.top, WeekkeepSpacing.twelve)
                     .accessibilityIdentifier("SCR-WK-02-CurationProgress")
-                Text("curation.body")
+                Text(curationBodyKey)
                     .font(.weekkeepBody)
                 ProgressCard(progress: model.progress)
                 PrivacyBadge(title: "curation.privacy")
@@ -379,6 +546,13 @@ struct CurationProgressView: View {
     private var filledCount: Int {
         guard let progress = model.progress, progress.overallTotal > 0 else { return 0 }
         return min(7, Int((Double(progress.overallCompleted) / Double(progress.overallTotal) * 7).rounded(.down)))
+    }
+
+    private var curationBodyKey: LocalizedStringKey {
+        guard model.pinnedTarget?.kind == .welcome else { return "curation.body" }
+        return model.pinnedTarget?.welcomeAlbumRangeStrategy == .rollingSevenDayFallback
+            ? "curation.welcomeFallbackBody"
+            : "curation.welcomeBody"
     }
 }
 

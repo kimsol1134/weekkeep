@@ -4,6 +4,24 @@ import XCTest
 @testable import Weekkeep
 
 final class SystemSafeAreaResolverTests: XCTestCase {
+  func testTopOcclusionUsesTheLargestAvailableSystemBoundary() {
+    XCTAssertEqual(
+      WeekkeepTopSystemOcclusion.height(windowSafeAreaTop: 62, localSafeAreaTop: 59),
+      62,
+      accuracy: 0.001
+    )
+    XCTAssertEqual(
+      WeekkeepTopSystemOcclusion.height(windowSafeAreaTop: 0, localSafeAreaTop: 47),
+      47,
+      accuracy: 0.001
+    )
+    XCTAssertEqual(
+      WeekkeepTopSystemOcclusion.height(windowSafeAreaTop: -1, localSafeAreaTop: -2),
+      0,
+      accuracy: 0.001
+    )
+  }
+
   func testRequiredRuntimeAndNormalizedPortraitFallbackCases() {
     let cases: [(String, CGFloat, CGFloat, CGSize, CGFloat)] = [
       ("runtime status 54 and inset 59", 54, 59, CGSize(width: 440, height: 956), 62),

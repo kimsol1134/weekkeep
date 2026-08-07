@@ -3,13 +3,13 @@
 | 항목 | 값 |
 |---|---|
 | 기준일 | 2026-08-07 |
-| 대상 버전 | iOS 1.0.0 — ASC build 6 is the current attached review build; build 3 remains historical evidence and build 4 is valid but unattached |
+| 대상 버전 | iOS 1.0.0 — canonical ASC build 7 is the current attached review build; build 6 and its prior submission are historical/replaced, build 3 remains historical evidence, and build 4 is valid but unattached |
 | Primary locale | English (U.S.) |
 | 추가 locale | Korean |
 | Bundle ID | `com.solkim.weekkeep` |
 | SKU | `WEEKKEEP-IOS-2026` |
 | 가격 | 앱 무료, Plus 비소모성 평생 이용권 US $19.99 |
-| 상태 | ASC build 6 (`0ffa7586-619f-4df9-abc5-ae7ebbd068b1`) is uploaded, `VALID`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; current submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is `WAITING_FOR_REVIEW` with exactly two `READY_FOR_REVIEW` items; build 3 submission `88c157ee-ce87-41c3-8a4a-71e614993a58` is historical canceled/replaced; build 4 is `VALID` but unattached; IAP `weekkeep_plus_lifetime` remains `WAITING_FOR_REVIEW`; approval and public release remain pending |
+| 상태 | ASC build 7 (`1c51b451-d37f-4704-89c9-e426b1ee5725`) is uploaded, `VALID`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; current submission `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` is `WAITING_FOR_REVIEW` with exactly two `READY_FOR_REVIEW` items; previous submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is historical `COMPLETE` after replacement; build 6 is historical/replaced; build 3 submission `88c157ee-ce87-41c3-8a4a-71e614993a58` remains historical canceled/replaced; build 4 is `VALID` but unattached; IAP `weekkeep_plus_lifetime` remains `WAITING_FOR_REVIEW`; approval and public release remain pending |
 
 이 문서는 App Store Connect에 입력하는 이름, 설명, 키워드, 카테고리, URL, 심사 메모, IAP metadata의 단일 원본입니다. 제품 범위와 가격은 [Decision Registry](00-INDEX.md#5-decision-registry--결정값과-상태의-ssot), 개인정보 답변은 [App Privacy Label](09-APP-PRIVACY-LABEL.md)이 소유합니다.
 
@@ -17,8 +17,9 @@
 
 | 상태 | 값 | 의미 |
 |---|---|---|
-| Current submitted review build | `1.0.0 (6)` — ASC ID `0ffa7586-619f-4df9-abc5-ae7ebbd068b1`, `VALID`, attached, uploaded `2026-08-06T15:31:16-07:00` | Current App Store Connect build for version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; manual release; current submission is `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` |
-| TestFlight internal QA | `Weekkeep Internal QA` (`576fd29a-7a64-4521-9164-9697ec1c256f`) contains exactly build 6, `READY_FOR_BETA_TESTING`, and one invited verified account-holder tester (tester ID `bef018ab-9514-4388-804d-bcd363f601d4`, state `INVITED`) | Ready/invited distribution only; not installed, purchase-tested, or restore-tested |
+| Current submitted review build | `1.0.0 (7)` — ASC ID `1c51b451-d37f-4704-89c9-e426b1ee5725`, `VALID`, attached, uploaded `2026-08-07T08:28:29-07:00` | Current App Store Connect build for version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; manual release; current submission is `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` |
+| Historical TestFlight internal QA | `Weekkeep Internal QA` (`576fd29a-7a64-4521-9164-9697ec1c256f`) contains exactly historical build 6, `READY_FOR_BETA_TESTING`, and one invited verified account-holder tester (tester ID `bef018ab-9514-4388-804d-bcd363f601d4`, state `INVITED`) | Historical ready/invited distribution only; not installed, purchase-tested, or restore-tested |
+| Historical/replaced build 6 | `1.0.0 (6)` — ASC ID `0ffa7586-619f-4df9-abc5-ae7ebbd068b1`, `VALID`, previously attached | Replaced by canonical build 7; previous submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is now `COMPLETE` historical |
 | Historical build 3 | `1.0.0 (3)` — `VALID`, historical/non-target | Former submission `88c157ee-ce87-41c3-8a4a-71e614993a58` was canceled/replaced; its local evidence remains historical |
 | Remote unattached valid build | `1.0.0 (4)` — ASC ID `6e92c470-c044-4512-9276-71491fe97685`, `VALID`, unattached | Historical/non-target external truth |
 | Historical builds 1–2 and 5 | Historical/non-target | Preserved evidence; none is the current review target |
@@ -51,7 +52,7 @@
 | Privacy Choices URL | `https://weekkeep-app.kimsol1134.chatgpt.site/privacy` |
 | Terms URL | Omit; ASC app-info schema has no terms URL field. Public `/terms` remains available from the app's supported policy links. |
 
-실제 공개 URL은 기존 Sites project version 4에 배포되어 있으며, `2026-08-06T09:35:40.860943+00:00` 배포 이후 로그아웃 요청으로 `/privacy`, `/support`, `/terms`와 root가 HTTP 200인지 확인했습니다. App Store metadata의 Support, Privacy Policy, Privacy Choices URL은 이 public URL과 일치합니다. 앱이나 export artifact에 설치 URL을 하드코딩하지 않습니다.
+실제 공개 URL은 Sites version 5로 `https://weekkeep-app.kimsol1134.chatgpt.site`에 배포되어 있으며 site tests는 8 passed, 0 failed입니다. 로그아웃 요청으로 `/privacy`, `/support`, `/terms`와 root가 HTTP 200인지 확인했습니다. App Store metadata의 Support, Privacy Policy, Privacy Choices URL은 이 public URL과 일치합니다. 앱이나 export artifact에 설치 URL을 하드코딩하지 않습니다.
 
 ## 3. English (U.S.) metadata
 
@@ -64,13 +65,13 @@ Weekkeep: Family Photo Album
 ### Subtitle — 29/30 characters
 
 ```text
-Seven photos. One quiet week.
+Up to seven moments each week
 ```
 
 ### Promotional text — 170 characters 이하
 
 ```text
-Your camera roll is full. Weekkeep prepares up to seven moments from the past week on your iPhone, so one quiet minute becomes a family memory.
+Your camera roll is full. Weekkeep helps you keep up to seven moments from the past week on your iPhone, so one quiet minute becomes a family memory.
 ```
 
 ### Keywords — 100 bytes 이하
@@ -88,21 +89,21 @@ Weekkeep turns one week into a small family album of up to seven photos—withou
 
 ONE QUIET MINUTE
 
-On your first visit, start with your recent seven days. After that, a newly completed week waits for you each Monday. Weekkeep prepares a draft on your iPhone. Keep it as it is, or replace only the photos that do not feel right.
+On your first visit, start with your most recently completed local Monday–Sunday week. We check your most recent seven days only when that week has no photos Weekkeep can use. After that, a newly completed week waits for you each Monday. Weekkeep chooses up to seven moments on your iPhone. Keep the selection as it is, or change only the photos that do not feel right.
 
 MADE FOR REAL FAMILY LIFE
 
 • Up to seven moments, never a fake or empty slot
 • A calm review instead of another daily habit
-• One-tap replacement with a small set of alternatives
+• Change only the photos that do not feel right
 • A Weeks archive that keeps each album easy to revisit
-• A shareable weekly album rendered on-device in Story 9:16 or Post 4:5 format
+• A shareable weekly album made on-device in Story 9:16 or Post 4:5 format
 • An optional Monday evening reminder, scheduled locally
 • English and Korean support
 
 PRIVATE BY DESIGN
 
-Photo analysis happens on your iPhone. Weekkeep does not send photo pixels, thumbnails, Photos identifiers, filenames, capture times, or locations to us or to analytics services. When you explicitly choose Share, Weekkeep renders the artifact on-device and presents Apple's system share sheet; Weekkeep does not choose or record the recipient. There is no Weekkeep account and no cloud photo upload.
+Photo selection and share rendering are processed on your iPhone. Weekkeep does not send photos, previews, filenames, capture times, locations, or other photo details to analytics services or other services for analysis. Sharing starts only when you explicitly choose it; Weekkeep then presents Apple’s system share sheet and does not choose or record the recipient. There is no Weekkeep account or Weekkeep cloud photo service.
 
 Weekkeep stores album records locally and refers to the originals in Apple Photos. Deleting the app, changing devices, or deleting an original photo may make a record unavailable. Restoring a purchase restores Plus access, not locally stored albums.
 
@@ -124,13 +125,13 @@ Weekkeep: 가족 사진 앨범
 ### 부제
 
 ```text
-일주일을 7장의 추억으로
+최대 7장으로 남기는 일주일
 ```
 
 ### 프로모션 문구
 
 ```text
-사진은 많고 정리할 시간은 없으니까. Weekkeep이 지난 일주일에서 최대 7장을 기기 안에서 먼저 제안합니다. 한 번 확인하고, 한 주를 남겨보세요.
+사진은 많고 정리할 시간은 없으니까. Weekkeep이 지난 일주일에서 다시 보고 싶은 순간을 최대 7장 골라요. 한 번 확인하고, 한 주를 남겨보세요.
 ```
 
 ### 키워드 — UTF-8 100 bytes 이하
@@ -144,25 +145,25 @@ Weekkeep: 가족 사진 앨범
 ```text
 사진은 많은데 정리할 시간은 없으니까.
 
-Weekkeep은 평범한 일주일을 최대 7장의 작은 가족 앨범으로 남깁니다. 카메라 롤 전체를 정리하라고 요구하지 않아요.
+Weekkeep은 평범한 일주일을 최대 7장의 작은 가족 앨범으로 남겨요. 카메라 롤 전체를 정리하라고 하지 않아요.
 
 한 번의 조용한 확인
 
-처음에는 최근 7일로 바로 시작합니다. 그다음부터는 새로 끝난 한 주가 월요일마다 기다립니다. Weekkeep이 이 iPhone 안에서 초안을 준비하면 그대로 저장하거나 마음에 들지 않는 사진만 바꾸세요.
+처음에는 가장 최근 완료된 월요일부터 일요일까지의 한 주에서 다시 보고 싶은 순간을 골라요. 그 주에 Weekkeep이 남길 수 있는 사진이 없을 때만 최근 7일을 정직하게 확인해요. 그다음부터는 새로 끝난 한 주가 월요일마다 기다려요. Weekkeep이 이 iPhone에서 최대 7장의 순간을 골라주면 그대로 남기거나 마음에 들지 않는 사진만 바꾸면 돼요.
 
 실제 가족 생활을 위한 방식
 
 • 최대 7장, 사진이 부족하면 빈자리를 억지로 채우지 않음
 • 매일 접속이나 연속 기록을 요구하지 않는 주간 경험
-• 작은 후보 목록에서 한 장씩 간단히 교체
-• 지난 기록을 다시 보는 Weeks 보관함
+• 마음에 들지 않는 사진만 간단히 바꾸기
+• 지난 기록을 한곳에서 다시 보기
 • 저장한 사진으로 만드는 Story 9:16 또는 Post 4:5 공유 이미지
 • 월요일 저녁에 기기에서 보내는 선택형 알림
 • 한국어와 영어 지원
 
-사진은 기기 안에서
+사진 고르기와 공유 이미지 만들기는 iPhone에서
 
-사진 분석은 이 iPhone 안에서 실행됩니다. 사진 픽셀, 썸네일, 사진 식별자, 파일명, 촬영 시각, 위치를 Weekkeep이나 분석 서비스로 보내지 않습니다. 사용자가 명시적으로 공유를 선택하면 기기 안에서 Story 또는 Post 이미지를 만들고 Apple 시스템 공유 시트를 엽니다. Weekkeep은 수신자나 목적지를 선택하거나 기록하지 않습니다. Weekkeep 계정이나 사진 클라우드 업로드도 없습니다.
+사진 고르기와 공유 이미지 만들기는 이 iPhone에서 처리해요. 사진·미리보기·파일 이름·위치·촬영 시각 같은 사진 정보는 분석을 위해 분석 서비스나 다른 서비스로 보내지 않아요. 공유는 직접 선택할 때만 시작되고, 그때 Apple 시스템 공유 시트를 열어요. Weekkeep은 수신자나 목적지를 선택하거나 기록하지 않아요. Weekkeep 계정이나 Weekkeep 사진 클라우드도 없어요.
 
 주간 기록은 이 iPhone에 저장되고 사진 앱의 원본을 참조합니다. 앱을 삭제하거나 기기를 바꾸거나 원본 사진을 지우면 기록을 볼 수 없게 될 수 있습니다. 구매 복원은 Plus 이용 권한만 복원하며 로컬 기록은 복원하지 않습니다.
 
@@ -188,7 +189,7 @@ App Store와 Shipaton 증거를 분리합니다.
 | 순서 | 화면 | en-US headline | ko headline | 증명할 것 |
 |---:|---|---|---|---|
 | 1 | Welcome | `Your week, already waiting.` | `사진은 많고, 시간은 없으니까.` | 부모 문제와 1분 가치 |
-| 2 | Curation progress | `Private from the first tap.` | `첫 탭부터, 사진은 기기 안에서.` | foreground on-device 처리 |
+| 2 | Curation progress | `Private from the first tap.` | `첫 탭부터, 사진 고르기는 iPhone에서 처리해요.` | foreground on-device 처리 |
 | 3 | Seven-photo review | `Seven moments. Nothing to sort.` | `일주일에 7장만.` | hero+2+4, exact-seven signature |
 | 4 | Replace | `Change one. Keep the feeling.` | `마음에 안 드는 한 장만 바꾸세요.` | 선택→교체 interaction |
 | 5 | Saved/Weeks | `A small album, every week.` | `작은 한 주가 차곡차곡.` | 저장 보상·보관함과 detail local share entry |
@@ -255,8 +256,8 @@ replace the historical six-screen App Store screenshot set.
 
 | Locale | Display Name | Description |
 |---|---|---|
-| en-US | `Weekkeep Plus Lifetime` | `Unlock unlimited weekly albums.` |
-| ko | `Weekkeep Plus 평생 이용권` | `주간 기록 수 제한을 한 번의 구매로 해제합니다.` |
+| en-US | `Weekkeep Plus Lifetime` | `Keep up to seven moments every week.` |
+| ko | `Weekkeep Plus 평생 이용권` | `앞으로의 매주 소중한 순간을 최대 7장씩 남겨요.` |
 
 IAP Review Screenshot은 Settings → Weekkeep Plus에서 열린 실제 paywall을 사용하고, 현지화된 가격·`Restore purchase`·Terms·Privacy·닫기 버튼이 한 화면에 보이게 합니다.
 
@@ -271,12 +272,12 @@ Plus screen (`06-plus.jpg`), and was re-read as `COMPLETE`, opaque JPEG,
 Weekkeep does not require an account.
 
 Core review path:
-1. Launch the app and tap “Keep the last 7 days.”
+1. Launch the app and tap “Choose your first week.” Weekkeep starts with the most recently completed local Monday–Sunday week; we check the most recent 7 days only when that week has no photos Weekkeep can use.
 2. Grant Full or Limited Photos access. The permission prompt appears only after this action.
-3. Weekkeep analyzes eligible photos on device and prepares up to seven suggestions.
-4. Tap a photo once to select it, then tap “Replace this photo” to choose an alternative. Same-day alternatives appear first; other dates require an explicit disclosure. Tap the selected photo again to open the viewer.
-5. Save the draft. On Save Confirmation, choose Story (1080×1920) or Post (1080×1350), review the local preview, and tap Share to open the native iOS share sheet. Do not send it anywhere during review.
-6. Open the saved album again from the Weeks tab; the same local share entry point is available in Week Detail.
+3. Weekkeep checks the photos it can use on the iPhone and chooses up to seven moments.
+4. Tap a photo once to select it, then tap “Change this photo” to choose an alternative. Same-day alternatives appear first; other dates require an explicit disclosure. Tap the selected photo again to open the viewer.
+5. Save the photos. On Save Confirmation, choose Story (1080×1920) or Post (1080×1350), review the local preview, and tap Share to open the native iOS share sheet. Do not send it anywhere during review.
+6. Open the saved album again from the Saved weeks tab; the same local share entry point is available in Week Detail.
 
 In-App Purchase:
 Open Settings → Weekkeep Plus → Learn about Weekkeep Plus. The paywall is available immediately; reviewers do not need to wait for a third weekly album. The product is the non-consumable `weekkeep_plus_lifetime`, mapped by RevenueCat to the `plus` entitlement in the `default` offering. Purchase restoration is available from both the paywall and Settings.
@@ -284,7 +285,7 @@ Open Settings → Weekkeep Plus → Learn about Weekkeep Plus. The paywall is av
 The first two saved albums are free. Plus unlocks future album creation; existing albums always remain viewable. No subscription is offered.
 
 Privacy and storage:
-Photo analysis and share rendering run locally. Photo pixels and Photos identifiers are not sent to RevenueCat or any analytics service. The share artifact is created only after an explicit user action and is handed to the native iOS share sheet; the app does not upload it or record a recipient. Album records are stored locally on the iPhone; restoring Plus does not restore album data.
+Photo selection and share rendering are processed on the iPhone. Photos, previews, filenames, capture times, locations, and other photo details are not sent to RevenueCat, analytics services, or other services for analysis. Sharing starts only after an explicit user action and the image is handed to the native iOS share sheet; the app does not choose or record a recipient. Album records are stored locally on the iPhone; restoring Plus does not restore album data.
 
 No special hardware, login, or reviewer account is required. Please use a device with several recent photos or grant Limited Access to a small test set.
 ```
@@ -311,15 +312,15 @@ No special hardware, login, or reviewer account is required. Please use a device
 - [ ] 앱 icon 1024×1024 opaque, 미리 둥근 모서리 없음, exact-seven rainbow (`D-030`)
 - [x] Historical build-3 App Store en-US/ko screenshot sets: exactly six each, opaque JPEG, `1320×2868`, `APP_IPHONE_67`, remote state `COMPLETE`; retained as historical evidence after build-6 replacement
 - [x] Historical local build-5 App Store candidate screenshots: exactly six each, opaque JPEG, current raw-source provenance/checksums, and local validator pass; not uploaded or relabeled
-- [x] Current build-6 Settings notification visual QA: four bilingual opaque `1320×2868` PNGs, direct XCTest manifests, matching checksums, and local validator pass; separate from App Store screenshot evidence
-- [x] Current review build: build 6 upload, IPA inspection, ASC `VALID` processing, version attachment, and submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` `WAITING_FOR_REVIEW`
+- [x] Historical build-6 Settings notification visual QA: four bilingual opaque `1320×2868` PNGs, direct XCTest manifests, matching checksums, and local validator pass; separate from App Store screenshot evidence
+- [x] Current review build: build 7 upload, canonical IPA inspection, ASC `VALID` processing, version attachment, and submission `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` `WAITING_FOR_REVIEW`
 - [x] Current review submission has exactly two `READY_FOR_REVIEW` items: app version `ac4f183e-1019-4ffc-827f-f5514f0d349b` and IAP version `cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f`
 - [x] 모든 screenshot alpha 없음; Shipaton proof는 `1179×2556`와 no-device-frame 확인
 - [x] Support/Privacy URL responds publicly; ASC en-US/ko app-info localizations use `/support` and `/privacy` consistently
 - [ ] US storefront에서 앱과 IAP 다운로드/구매 가능 — public release remains pending
 - [ ] Review Notes의 버튼명과 Release localization이 글자 단위로 일치
 - [x] App Review contact and IAP review screenshot re-read in ASC
-- [x] App Privacy data-usage answers published in ASC for the current `1.0.0` app version; build 6 `PrivacyInfo` presence is local binary evidence, not a separate build-6 publication event
+- [x] App Privacy data-usage answers published in ASC for the current `1.0.0` app version; build 7 `PrivacyInfo` presence is local binary evidence, not a separate build-7 publication event
 
 ## 10. 공식 기준
 

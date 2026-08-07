@@ -5,11 +5,13 @@ project_root="$(cd "$(dirname "$0")/.." && pwd)"
 metadata="$project_root/release/app-store-metadata.json"
 privacy="$project_root/release/privacy-manifest.json"
 shipaton="$project_root/release/shipaton-manifest.json"
+core_document="$project_root/docs/11-SHIPATON-SUBMISSION.md"
 release_config="$project_root/Config/Release.xcconfig"
 remotion_project="$project_root/videos/weekkeep-remotion"
 provenance_script="$project_root/videos/weekkeep-shipaton/scripts/validate-provenance.sh"
 strict=0
 run_build=0
+core_only=0
 failures=0
 warnings=0
 canonical_repository_url="https://github.com/kimsol1134/weekkeep"
@@ -22,13 +24,15 @@ for argument in "$@"; do
   case "$argument" in
     --strict) strict=1 ;;
     --build) run_build=1 ;;
+    --shipaton-core-only) core_only=1 ;;
     -h|--help)
       cat <<'USAGE'
-Usage: scripts/validate-release.sh [--strict] [--build]
+Usage: scripts/validate-release.sh [--strict] [--build] [--shipaton-core-only]
 
   default   Validate tracked release contracts and report credential/public-state blockers.
   --strict  Treat missing authenticated release state as a failure.
   --build   Also run a Release iOS Simulator build with signing disabled.
+  --shipaton-core-only  Validate the Devpost core-readiness invariant without regenerating the Xcode project.
 USAGE
       exit 0
       ;;
@@ -55,6 +59,130 @@ pass() {
   echo "PASS: $1"
 }
 
+validate_shipaton_core_readiness() {
+  local expected_field_headings
+  local actual_field_headings
+  local core_copy
+  local core_placeholder_lines
+  local disallowed_placeholder_lines
+  local demo_timeline_beat_count
+
+  if ! jq -e '
+    .intake_filter.gates.required_fields_and_category_answers.status == "pending_external"
+    and .intake_filter.gates.required_fields_and_category_answers.core_readiness.status == "ready_to_paste"
+    and .intake_filter.gates.required_fields_and_category_answers.core_readiness.external_submission_status == "pending_external"
+    and .intake_filter.gates.required_fields_and_category_answers.core_readiness.source_document == "docs/11-SHIPATON-SUBMISSION.md"
+    and .intake_filter.gates.required_fields_and_category_answers.core_readiness.source_section == "## 3. Devpost 기본 입력 — English"
+    and .intake_filter.gates.required_fields_and_category_answers.core_readiness.field_range == "### Project name through ### Built with"
+    and .intake_filter.gates.required_fields_and_category_answers.core_readiness.placeholder_invariant == "zero_bracket_placeholders_in_core_copy_blocks"
+    and .intake_filter.gates.required_fields_and_category_answers.category_readiness.conditional_categories == "gated_not_evaluated"
+    and .intake_filter.gates.required_fields_and_category_answers.category_readiness.post_launch_metrics == "excluded_until_evidence"
+    and .intake_filter.gates.required_fields_and_category_answers.placeholder_policy.core == "forbidden"
+    and .intake_filter.gates.required_fields_and_category_answers.placeholder_policy.allowed_scopes_are_excluded_from_core_readiness == true
+    and .intake_filter.gates.required_fields_and_category_answers.placeholder_policy.allowed_sections == [
+      "### Post-launch metrics — excluded until evidence",
+      "## 6. Peace Prize answer — conditional English draft",
+      "### Grand Prize submission block — English (stretch; conditional)",
+      "### Most Viral App (Noise) submission block — English (conditional; gated)",
+      "## 9. Launch evidence dashboard — post-launch metrics (excluded until evidence)"
+    ]
+  ' "$shipaton" >/dev/null; then
+    fail "Shipaton manifest core-readiness status or placeholder policy is missing or inconsistent."
+  else
+    pass "Shipaton manifest distinguishes paste-ready core copy from pending external submission and gated sections."
+  fi
+
+  if ! expected_field_headings="$(jq -er '.intake_filter.gates.required_fields_and_category_answers.core_readiness.required_field_headings[]' "$shipaton")"; then
+    fail "Shipaton manifest does not define the required Devpost core field headings."
+    return
+  fi
+
+  actual_field_headings="$(awk '
+    /^## 3\. Devpost 기본 입력 — English$/ { in_core = 1; next }
+    /^## 4\. Design Award answer — English$/ { in_core = 0 }
+    in_core && /^### / { sub(/^### /, ""); print }
+  ' "$core_document")"
+  if [[ "$actual_field_headings" == "$expected_field_headings" ]]; then
+    pass "Devpost core field headings match the manifest source contract in order."
+  else
+    fail "Devpost core field headings do not match the manifest source contract."
+    echo "Expected headings:" >&2
+    printf '%s\n' "$expected_field_headings" >&2
+    echo "Actual headings:" >&2
+    printf '%s\n' "$actual_field_headings" >&2
+  fi
+
+  core_copy="$(awk '
+    /^## 3\. Devpost 기본 입력 — English$/ { in_core = 1; next }
+    /^## 4\. Design Award answer — English$/ { in_core = 0 }
+    in_core && /^```text$/ { in_copy = 1; next }
+    in_core && in_copy && /^```$/ { in_copy = 0; next }
+    in_core && in_copy { print NR ":" $0 }
+  ' "$core_document")"
+  core_placeholder_lines="$(printf '%s\n' "$core_copy" | rg -n '\[[^]]*\]' || true)"
+  if [[ -n "$core_placeholder_lines" ]]; then
+    fail "Devpost core copy contains bracket placeholders."
+    printf '%s\n' "$core_placeholder_lines" >&2
+  else
+    pass "Devpost core copy from Project name through Built with contains zero bracket placeholders."
+  fi
+
+  disallowed_placeholder_lines="$(awk '
+    function is_placeholder(line) {
+      return line ~ /\[INSERT/ \
+        || line ~ /\[Replace with/ \
+        || line ~ /\[UTC dates\]/ \
+        || line ~ /\[n([ \/;%\]]|$)/ \
+        || line ~ /\[number([\/,;\]]|$)/ \
+        || line ~ /\[specific,/ \
+        || line ~ /\[\$\]/ \
+        || line ~ /\[pending\]/
+    }
+    function allowed_section(section) {
+      return section == "### Post-launch metrics — excluded until evidence" \
+        || section == "## 6. Peace Prize answer — conditional English draft" \
+        || section == "### Grand Prize submission block — English (stretch; conditional)" \
+        || section == "### Most Viral App (Noise) submission block — English (conditional; gated)" \
+        || section == "## 9. Launch evidence dashboard — post-launch metrics (excluded until evidence)"
+    }
+    /^## / { section = $0 }
+    /^### / { section = $0 }
+    is_placeholder($0) && !allowed_section(section) { print NR ":" section ":" $0 }
+  ' "$core_document")"
+  if [[ -n "$disallowed_placeholder_lines" ]]; then
+    fail "Shipaton placeholders appear outside explicitly gated conditional or excluded post-launch sections."
+    printf '%s\n' "$disallowed_placeholder_lines" >&2
+  else
+    pass "Intentionally gated conditional and excluded post-launch placeholders are outside core readiness evaluation."
+  fi
+
+  demo_timeline_beat_count="$(rg -F -c '| 0:39.5–0:44.5 |' "$core_document" || true)"
+  if [[ "$demo_timeline_beat_count" == "1" ]]; then
+    pass "The canonical 0:39.5–0:44.5 save-to-share beat appears once in the submission timeline; approved video timing and hash records remain untouched."
+  else
+    fail "The 0:39.5–0:44.5 save-to-share beat must have exactly one submission-timeline reference (found ${demo_timeline_beat_count:-0})."
+  fi
+}
+
+if (( core_only == 1 )); then
+  if ! command -v jq >/dev/null 2>&1; then
+    fail "required command is missing: jq"
+  elif [[ ! -f "$shipaton" || ! -f "$core_document" ]]; then
+    fail "Shipaton manifest or submission SSOT is missing"
+  elif ! jq empty "$shipaton" >/dev/null; then
+    fail "invalid JSON: release/shipaton-manifest.json"
+  else
+    validate_shipaton_core_readiness
+  fi
+
+  if (( failures > 0 )); then
+    echo "Shipaton core validation failed with $failures failure(s)." >&2
+    exit 1
+  fi
+  echo "Shipaton core validation passed."
+  exit 0
+fi
+
 require_command() {
   if ! command -v "$1" >/dev/null 2>&1; then
     fail "required command is missing: $1"
@@ -69,6 +197,7 @@ for required_file in \
   "$metadata" \
   "$privacy" \
   "$shipaton" \
+  "$core_document" \
   "$release_config" \
   "$remotion_project/package.json" \
   "$remotion_project/package-lock.json" \
@@ -91,6 +220,8 @@ for json_file in "$metadata" "$privacy" "$shipaton"; do
     fail "invalid JSON: ${json_file#$project_root/}"
   fi
 done
+
+validate_shipaton_core_readiness
 
 xcodegen_version="$(xcodegen --version | awk '{print $NF}')"
 if [[ "$xcodegen_version" != "2.46.0" ]]; then

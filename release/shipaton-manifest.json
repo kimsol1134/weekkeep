@@ -440,7 +440,47 @@
         "status": "pending_external",
         "required_fields_source": "docs/11-SHIPATON-SUBMISSION.md",
         "category_answers_source": "docs/11-SHIPATON-SUBMISSION.md",
-        "evidence_ref": "external_evidence.devpost_required_fields_and_category_answers"
+        "evidence_ref": "external_evidence.devpost_required_fields_and_category_answers",
+        "core_readiness": {
+          "status": "ready_to_paste",
+          "external_submission_status": "pending_external",
+          "source_document": "docs/11-SHIPATON-SUBMISSION.md",
+          "source_section": "## 3. Devpost 기본 입력 — English",
+          "field_range": "### Project name through ### Built with",
+          "required_field_headings": [
+            "Project name",
+            "Tagline",
+            "Short description",
+            "Full description",
+            "Inspiration",
+            "What it does",
+            "How we built it",
+            "Challenges",
+            "Accomplishments",
+            "What we learned",
+            "What’s next",
+            "Built with"
+          ],
+          "placeholder_invariant": "zero_bracket_placeholders_in_core_copy_blocks"
+        },
+        "category_readiness": {
+          "RevenueCat Design Award": "local_copy_ready_external_evidence_pending",
+          "HAMM Award (Help Apps Make Money)": "excluded_until_verified_post_launch_metrics",
+          "#BuildInPublic": "excluded_until_public_links_and_feedback_evidence",
+          "conditional_categories": "gated_not_evaluated",
+          "post_launch_metrics": "excluded_until_evidence"
+        },
+        "placeholder_policy": {
+          "core": "forbidden",
+          "allowed_sections": [
+            "### Post-launch metrics — excluded until evidence",
+            "## 6. Peace Prize answer — conditional English draft",
+            "### Grand Prize submission block — English (stretch; conditional)",
+            "### Most Viral App (Noise) submission block — English (conditional; gated)",
+            "## 9. Launch evidence dashboard — post-launch metrics (excluded until evidence)"
+          ],
+          "allowed_scopes_are_excluded_from_core_readiness": true
+        }
       },
       "public_demo_video": {
         "required": true,

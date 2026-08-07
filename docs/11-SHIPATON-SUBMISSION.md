@@ -150,7 +150,7 @@ Peace Prize는 “가족을 구한다” 같은 과장으로 쓰지 않습니다
 | Intake gate | Devpost가 확인하는 것 | Weekkeep 증거와 exit criterion | 현재 상태 |
 |---|---|---|---|
 | Bundle/package identifier + RevenueCat SDK | RevenueCat SDK integration을 확인할 수 있는 유효한 bundle ID 또는 package name | `com.solkim.weekkeep`와 published store record를 연결하고 RevenueCat integration 검증 증거를 남김 | 외부 검증 대기 |
-| Required fields + category answers | 모든 required Devpost fields와 선택한 Focus/검증된 Conditional category questions의 답변 | 이 문서의 영어 입력과 검증된 category blocks만 제출; bracketed placeholder가 남아 있으면 제출하지 않음 | 외부 제출 대기 |
+| Required fields + category answers | 모든 required Devpost fields와 선택한 Focus/검증된 Conditional category questions의 답변 | 이 문서의 영어 입력과 검증된 category blocks만 제출; core 입력에 bracketed placeholder가 남아 있으면 제출하지 않음. 조건부 category와 명시적으로 제외한 post-launch metrics의 placeholder는 readiness에서 제외 | 외부 제출 대기 |
 | Published store page URL | 공개된 App Store/Google Play 또는 허용된 store page URL | US App Store 공개 URL, 로그아웃 상태에서 열기·설치 확인 | 외부 공개 대기 |
 | Public demo video | 공개 YouTube 또는 Vimeo의 앱 demo URL | `videos/weekkeep-remotion/`의 `WeekkeepShipaton72` approved 72-second final render와 QA를 완료했고 GitHub Release backup URL/asset은 HTTP 200; 첫 2분에 elevator pitch·app in use·targeted categories를 명확히 포함 | GitHub backup은 공식 gate가 아님; 실기기 footage·YouTube/Vimeo 공개 업로드·로그아웃 재생 대기 |
 | 1024×1024 app icon | 1024×1024 icon | opaque exact-seven master와 외부 전달/실기기 QA | 로컬 master 준비, 외부 QA 대기 |
@@ -249,7 +249,7 @@ We built the complete first-value loop with real Photos permission states, foreg
 ### What we learned
 
 ```text
-[Replace with observed evidence before submission.] The most important lesson was that parents responded to less work, not more automation. Public feedback changed [specific screen/copy/flow], because [specific participant confusion or request]. We also learned [measured result from activation, photo acceptance, or purchase].
+Our documented product iteration led to four practical lessons. First, Weekkeep should be weekly, not daily: the product returns a parent to one completed week without streaks or guilt. Second, the post-save reward should be useful and shareable, so the saved weekly album leads to a local Story/Post artifact. Third, calm is structural: we refined the design around non-overlapping layouts, semantic spacing, and a distinct navigation hierarchy. Finally, we shifted the message to start with the parent's unfinished camera roll and limited time, not commit counts, model counts, or implementation volume. These are lessons from our product decisions and iteration, not claims about interviews, cohorts, public feedback, installs, purchases, conversion, revenue, or other unverified metrics.
 ```
 
 ### What’s next
@@ -291,7 +291,11 @@ That packaging fits both the audience and the product. Parents already face subs
 
 RevenueCat is the source of truth for the `plus` entitlement. The App Store product `weekkeep_plus_lifetime` is attached to the `default` offering. The app requests the localized product and price, handles purchase cancellation/pending/failure, and restores lifetime access on another device without falsely claiming to restore locally stored albums.
 
-Launch results (replace with verified RevenueCat/App Store data):
+### Post-launch metrics — excluded until evidence
+
+The following values are not part of the current paste-ready answer and remain excluded until verified with RevenueCat/App Store data.
+
+Post-launch metrics — excluded from the current submission until verified with RevenueCat/App Store data:
 • Measurement window: [UTC dates]
 • App installs: [n]
 • First album completed: [n / %]
@@ -376,31 +380,20 @@ What if a family photo app was designed to be opened once a week?
 ```
 
 ```text
-Seven photos, no streaks: the constraint parents chose for Weekkeep.
+Seven photos, no streaks: the constraint we're testing for Weekkeep.
 ```
 
 실제 인터뷰나 poll 결과가 없는 상태에서 `parents chose`라고 단정하지 않습니다. 검증 전에는 질문형 또는 `the constraint we're testing`으로 씁니다.
 
 ### #BuildInPublic submission block — English (supporting; gated)
 
-상태: `NOT SUBMISSION-READY — do not submit until every bracketed field is replaced with public links and verified feedback-to-change evidence.` 이 category는 public links와 public building이 앱을 어떻게 개선했는지에 대한 짧은 설명을 모두 요구합니다.
+상태: `NOT SUBMISSION-READY — this supporting category is excluded until public links and verified feedback-to-change evidence exist.` 이 category는 public links와 public building이 앱을 어떻게 개선했는지에 대한 짧은 설명을 모두 요구합니다. 현재 package에는 public feedback, public post, 또는 그 결과를 주장하는 문구를 포함하지 않습니다.
 
 ```text
-Weekkeep was built in public around a parent problem: meaningful photos accumulate faster than families can turn them into a small record. We shared the problem, the seven-photo constraint, the weekly-not-daily interaction, the select-then-replace review, the on-device privacy boundary, and the lifetime pricing question in public.
-
-Public build links:
-- [INSERT PUBLIC POST URL, DATE, AND PLATFORM FOR THE PROBLEM/PROTOTYPE POST]
-- [INSERT PUBLIC POST URL, DATE, AND PLATFORM FOR THE REVIEW OR PRIVACY POST]
-- [INSERT PUBLIC POST URL, DATE, AND PLATFORM FOR THE LAUNCH OR RETROSPECTIVE POST]
-
-How public building improved the app:
-[INSERT 2–4 ENGLISH SENTENCES describing the specific public feedback, the decision it changed, and the resulting screen, copy, interaction, or pricing change. Do not claim that parents chose a direction unless the linked evidence supports it.]
-
-Evidence map:
-[INSERT each public feedback link → the changed product decision or screen → the local or public evidence link.]
+Excluded from the current submission pending public links and verified feedback-to-change evidence. No public build claim is made here.
 ```
 
-제출 전 gate: 모든 `[INSERT ...]`가 제거되고, 링크가 로그인 없이 열리며, feedback→change 연결이 확인되어야 `Validated`로 바꿉니다.
+제출 전 gate: public links가 로그인 없이 열리고, feedback→change 연결이 확인된 뒤에만 이 category를 `Validated`로 바꿉니다.
 
 ### Grand Prize submission block — English (stretch; conditional)
 
@@ -440,7 +433,7 @@ The campaign changed [INSERT documented product or messaging learning], supporte
 
 제출 전 gate: live Noise campaign/account 사용과 측정 결과가 외부 evidence로 확인된 경우에만 `Validated`; 그렇지 않으면 `Exclude from submission`으로 유지합니다.
 
-## 9. Launch evidence dashboard
+## 9. Launch evidence dashboard — post-launch metrics (excluded until evidence)
 
 | Metric | 정의 | Source | 제출값 |
 |---|---|---|---|
@@ -454,6 +447,7 @@ The campaign changed [INSERT documented product or messaging learning], supporte
 | Photo acceptance | selected_count=7 기록의 kept/7 | consented analytics/beta | `[pending]` |
 
 PostHog를 동의 없이 켜서 숫자를 만들지 않습니다. V1 Release가 analytics off라면 App Store Connect, RevenueCat, 동의한 beta roster만 사용하고 unavailable metric은 `not collected`로 적습니다.
+이 표의 bracketed values는 post-launch evidence가 확인되기 전까지 현재 제출 package에서 명시적으로 제외합니다.
 
 ## 10. 제출 직전 package
 
@@ -494,7 +488,7 @@ submission/
 - [ ] 설명의 모든 기능이 공개 build에서 재현됨
 - [ ] Design/HAMM Award (Help Apps Make Money) 추가 답변이 실제 evidence와 일치
 - [ ] Build in Public post URL과 feedback→change 설명 포함
-- [ ] 실제 수치를 측정 창·denominator와 함께 입력; placeholder 0개
+- [ ] core Devpost input과 제출 대상 답변의 placeholder 0개; 조건부 category와 명시적으로 제외한 post-launch metrics는 evidence 전까지 제출하지 않음
 - [ ] 사진·음악·폰트·SDK license와 인물 동의 확인
 - [ ] 제출 preview를 다른 사람과 영어로 최종 검수
 - [ ] 2026-09-28 15:45 KST 이전 내부 제출·receipt 저장

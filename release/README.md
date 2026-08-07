@@ -65,11 +65,11 @@ It contains the local archive waiting surface and the signed DEBUG fixture ready
 surface from a physical iPhone 16 Pro, each an opaque `1206×2622` PNG with exact
 source/destination hashes and provenance in `QA-SUMMARY.md`. The DEBUG ready
 capture places `지난주 추억 고르기` fully in the initial viewport and shows
-distinct calendar/photo/settings bottom-nav icons, resolving the build-6
-below-fold CTA finding for local DEBUG fixture build 7 only. Native share/delivery,
-purchase/restore, actual PhotoKit performance, physical functioning footage, and
-external App Store/ASC lifecycle gates remain pending; no remote-build
-replacement was performed or authorized.
+distinct calendar/photo/settings bottom-nav icons, resolving the historical build-6
+below-fold CTA finding for local DEBUG fixture build 7 only. The canonical ASC
+replacement is now build 7; native share/delivery, purchase/restore, actual
+PhotoKit performance, physical functioning footage, App Review approval, and
+public App Store release remain pending.
 
 Build-7 capture does not support `WK_FIXTURE_RESULT_BUNDLE`. The script rejects
 that variable because exact same-state `simctl` framebuffer captures require a
@@ -99,15 +99,15 @@ Run the focused gate from the project root:
 
 Release checklist:
 
-- submitted remote ASC build 6 and its signed IPA verification remain labeled with the actual build; build 6 is still `WAITING_FOR_REVIEW` under manual release;
-- local physical screenshot evidence now has separate, ignored build-6 and build-7 directories. Build 7 is screenshot-scope evidence only: the waiting surface makes no CTA claim, while the DEBUG ready surface resolves the build-6 below-fold CTA finding. Native share/delivery and external lifecycle gates remain pending;
-- `project.yml` is the SSOT for the local next candidate `1.0.0 (build 7)`. The local archive `LOCAL_EVIDENCE_DIR/weekkeep-build7-ssot.qTqqz6/Weekkeep.xcarchive` and exported IPA `LOCAL_EVIDENCE_DIR/weekkeep-build7-preflight.8Is5cC/export/Weekkeep.ipa` were inspected successfully; IPA SHA-256 is `6d8b62a2d8d354debf777791cbc795ddde662c01bdb0da91f31640c101b8d2bf`. The inspection passed for `com.solkim.weekkeep`, version `1.0.0`, build `7`, minimum iOS `18.0`, iPhone-only, `ITSAppUsesNonExemptEncryption=false`, valid strict code signature using `Apple Distribution: sol kim` (team `D48DDX5D5W`, `Weekkeep App Store` profile), `get-task-allow=false`, `beta-reports-active=true`, app `PrivacyInfo`, and valid RevenueCat/PostHog manifests;
-- at `2026-08-07 18:58 KST`, exact `asc xcode validate` on that IPA with the existing keychain ASC profile returned `VERIFY SUCCEEDED` with no errors and `validated=true`. This is Apple server-side IPA validation only: it did not upload, register build 7, attach it to a version, submit it for review, obtain approval, or release it. A subsequent read-only ASC builds list still contained only builds `1, 2, 3, 4, 6`; remote version `1.0.0` and its manual-release submission remain `WAITING_FOR_REVIEW` on build 6;
-- build 7 contains the cumulative family week ordinal, conversational prompt/invitation, and privacy-safe `share_completed` improvements, but remains not uploaded, attached, submitted, live, or part of the current remote review submission;
-- the unsubmitted next-candidate local share loop is kept separate from ASC build 6: it uses image-first native sharing plus the localized invitation and canonical Apple URL `https://apps.apple.com/app/id6798449478`; the URL is not claimed live before public release;
+- submitted remote ASC build 7 (`1c51b451-d37f-4704-89c9-e426b1ee5725`) and its canonical IPA verification remain current; build 7 is `VALID`, attached, and `WAITING_FOR_REVIEW` under manual release. Previous submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is historical `COMPLETE`, and build 6 is historical/replaced;
+- local physical screenshot evidence now has separate, ignored build-6 and build-7 directories. Build 7 remains screenshot-scope/fixture evidence only: the waiting surface makes no CTA claim, while the DEBUG ready surface resolves the historical build-6 below-fold CTA finding. Native share/delivery and external lifecycle gates remain pending;
+- canonical release IPA evidence is 23,420,062 bytes with SHA-256 `25c2c1ff17b14bd976392f3d8d6d1c103bd5488de66b866cadb8a5339f627889`; Apple server-side validation succeeded with no errors before upload, and the remote build is now attached/submitted;
+- build 7 contains the cumulative family week ordinal, conversational prompt/invitation, and privacy-safe `share_completed` improvements; its local share/fixture evidence is kept separate from production PhotoKit and native share delivery;
+- the build-7 local share loop uses image-first native sharing plus the localized invitation and canonical Apple URL `https://apps.apple.com/app/id6798449478`; the URL is not claimed publicly live before App Review approval and manual release;
 - the opt-in physical-iPhone native-share-sheet QA harness for local build 7 at `WeekkeepUITests/WeekkeepUITests/testPhysicalShareSheetQAIsOptInFixtureOnlyNoPrivatePixelsNoSend` was retried twice with the paired physical iPhone 16 Pro unlocked. Both runs installed/launched the runner but failed before executing the test body with `Timed out while enabling automation mode.` Read-only Mac-host diagnostics showed `xcrun automationmodetool: Automation Mode is disabled. This device requires user authentication to enable Automation Mode;` and `/usr/sbin/DevToolsSecurity -status: Developer mode is currently disabled.` This is a Mac host security/automation prerequisite, not an app failure or iPhone-lock blocker. The invalid/non-evidence result bundles are `LOCAL_EVIDENCE_DIR/weekkeep-physical-share-build7-unlocked.lRcjSA/PhysicalShareQA.xcresult` and `LOCAL_EVIDENCE_DIR/weekkeep-physical-share-build7-retry.8vH05v/PhysicalShareQA.xcresult`; the earlier locked attempt `LOCAL_EVIDENCE_DIR/weekkeep-physical-share-build7.p0FReh/PhysicalShareQA.xcresult` is historical context only, not the current blocker. No test body executed, no valid attachments/screenshots were produced, no share destination was selected, no send occurred, no private PhotoKit access occurred, and no purchase/restore occurred; physical QA remains pending;
-- TestFlight internal QA distribution records build 6 as `READY_FOR_BETA_TESTING` with one invited verified account-holder tester; installation, purchase, and restore testing remain unverified;
-- historical build-3/build-5 App Store evidence remains separate from the build-6 Settings visual-QA evidence;
+- TestFlight internal QA distribution records historical build 6 as `READY_FOR_BETA_TESTING` with one invited verified account-holder tester; installation, purchase, and restore testing remain unverified;
+- historical build-3/build-5 App Store evidence remains separate from historical build-6 Settings visual-QA evidence and the current build-7 release lifecycle;
+- full Xcode test result is 174 passed, 0 failed, 4 skipped (178 total); public Sites version 5 site tests are 8 passed, 0 failed;
 - root LICENSE is present and locally validated as MIT for Sol Kim;
 - public repository URL, source availability, and logged-out verification are
   recorded as validated for `https://github.com/kimsol1134/weekkeep`;

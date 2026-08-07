@@ -285,86 +285,104 @@ validate_judging_evidence() {
 validate_build_identity_boundary() {
   local project_marketing_version
   local project_build
-  local manifest_candidate_build
+  local manifest_current_build
+  local historical_pre_upload_build
   local boundary_document
 
   project_marketing_version="$(awk '/^[[:space:]]+MARKETING_VERSION:/ { gsub(/"/, "", $2); print $2; exit }' "$project_root/project.yml")"
   project_build="$(awk '/^[[:space:]]+CURRENT_PROJECT_VERSION:/ { gsub(/"/, "", $2); print $2; exit }' "$project_root/project.yml")"
-  manifest_candidate_build="$(jq -er '.local_next_candidate.build' "$shipaton")"
+  manifest_current_build="$(jq -er '.current_release_build.build' "$shipaton")"
+  historical_pre_upload_build="$(jq -er '.historical_local_build_7_pre_upload.build' "$shipaton")"
 
-  if [[ "$project_marketing_version" == "1.0.0" && "$project_build" == "7" && "$manifest_candidate_build" == "7" ]]; then
-    pass "project.yml is the local next-candidate SSOT at marketing version 1.0.0, build 7."
+  if [[ "$project_marketing_version" == "1.0.0" && "$project_build" == "7" && "$manifest_current_build" == "7" && "$historical_pre_upload_build" == "7" ]]; then
+    pass "project.yml and the release manifest identify marketing version 1.0.0, build 7 as the canonical submitted build; the pre-upload validation snapshot is historical."
   else
-    fail "project.yml and Shipaton local next-candidate SSOT must agree on 1.0.0 (build 7) (project=${project_marketing_version:-missing} (${project_build:-missing}), manifest=${manifest_candidate_build:-missing})."
+    fail "project.yml and Shipaton release SSOT must agree on 1.0.0 (build 7), with a separate historical pre-upload snapshot (project=${project_marketing_version:-missing} (${project_build:-missing}), current=${manifest_current_build:-missing}, historical=${historical_pre_upload_build:-missing})."
   fi
 
   if [[ -f "$metadata" ]] && jq -e '
     .app.bundle_id == "com.solkim.weekkeep"
     and .app.version == "1.0.0"
-    and .app.build == "6"
-    and .app.current_build.build == "6"
+    and .app.build == "7"
+    and .app.current_build.build == "7"
     and .app.current_build.upload_state == "uploaded"
+    and .app.current_build.asc_build_id == "1c51b451-d37f-4704-89c9-e426b1ee5725"
+    and .app.current_build.asc_processing_state == "VALID"
     and .app.current_build.app_store_version_attachment == "ATTACHED"
+    and .app.current_build.review_submission_id == "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7"
     and .app.current_build.review_submission_state == "WAITING_FOR_REVIEW"
   ' "$metadata" >/dev/null; then
-    pass "App Store metadata remains the submitted remote 1.0.0 build-6 record."
+    pass "App Store metadata records the canonical submitted remote 1.0.0 build-7 record."
   else
-    fail "App Store metadata must remain the submitted remote 1.0.0 build-6 record."
+    fail "App Store metadata must record the canonical submitted remote 1.0.0 build-7 record."
   fi
 
   if jq -e '
     .build_identity_contract.submitted_remote_build_ref == "current_release_build"
-    and .build_identity_contract.local_next_candidate_build_ref == "local_next_candidate"
+    and .build_identity_contract.historical_pre_upload_build_7_ref == "historical_local_build_7_pre_upload"
     and .build_identity_contract.roles_are_mutually_exclusive == true
     and .build_identity_contract.remote_build_state_is_unchanged == true
     and .build_identity_contract.local_candidate_must_not_claim_remote_submission == true
     and .current_release_build.app_id == "6798449478"
     and .current_release_build.bundle_id == "com.solkim.weekkeep"
     and .current_release_build.version == "1.0.0"
-    and .current_release_build.build == "6"
+    and .current_release_build.build == "7"
     and .current_release_build.upload_state == "uploaded"
+    and .current_release_build.asc_build_id == "1c51b451-d37f-4704-89c9-e426b1ee5725"
+    and .current_release_build.asc_processing_state == "VALID"
     and .current_release_build.app_store_version_attachment == "ATTACHED"
     and .current_release_build.version_state == "WAITING_FOR_REVIEW"
     and .current_release_build.release_method == "manual"
-    and .local_next_candidate.app_id == "6798449478"
-    and .local_next_candidate.bundle_id == "com.solkim.weekkeep"
-    and .local_next_candidate.version == "1.0.0"
-    and .local_next_candidate.build == "7"
-    and .local_next_candidate.source_ssot == "project.yml"
-    and .local_next_candidate.status == "LOCAL_NEXT_CANDIDATE"
-    and .local_next_candidate.upload_state == "NOT_UPLOADED"
-    and .local_next_candidate.asc_build_id == null
-    and .local_next_candidate.asc_processing_state == "NOT_UPLOADED"
-    and .local_next_candidate.app_store_version_attachment == "NOT_ATTACHED"
-    and .local_next_candidate.review_submission_state == "NOT_SUBMITTED"
-    and .local_next_candidate.live_state == "NOT_LIVE"
-    and .local_next_candidate.external_validation_status == "APPLE_SERVER_VALIDATED_ONLY"
-    and .local_next_candidate.apple_server_validation.status == "VERIFY_SUCCEEDED"
-    and .local_next_candidate.apple_server_validation.validated == true
-    and .local_next_candidate.apple_server_validation.scope == "exported_ipa_only"
-    and .local_next_candidate.apple_server_validation.command == "asc xcode validate"
-    and .local_next_candidate.apple_server_validation.remote_registration == "NOT_PERFORMED"
-    and .local_next_candidate.apple_server_validation.ipa_sha256 == "6d8b62a2d8d354debf777791cbc795ddde662c01bdb0da91f31640c101b8d2bf"
-    and .current_release_build.build != .local_next_candidate.build
-    and (.local_next_candidate.next_sharing_improvements | sort) == [
+    and .current_release_build.asc_review_submission_id == "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7"
+    and .current_release_build.asc_review_submission_submitted_at == "2026-08-07T15:33:05.463Z"
+    and .current_release_build.asc_review_submission_item_count == 2
+    and (.current_release_build.asc_review_submission_item_details | all(.[]; .state == "READY_FOR_REVIEW"))
+    and .current_release_build.ipa_local_verification.size_bytes == 23420062
+    and .current_release_build.ipa_local_verification.sha256 == "25c2c1ff17b14bd976392f3d8d6d1c103bd5488de66b866cadb8a5339f627889"
+    and .current_release_build.ipa_local_verification.build == "7"
+    and .current_release_build.apple_server_validation.status == "VERIFY_SUCCEEDED"
+    and .current_release_build.apple_server_validation.validated == true
+    and .current_release_build.apple_server_validation.errors == []
+    and .current_release_build.apple_server_validation.before_upload == true
+    and .historical_local_build_7_pre_upload.app_id == "6798449478"
+    and .historical_local_build_7_pre_upload.bundle_id == "com.solkim.weekkeep"
+    and .historical_local_build_7_pre_upload.version == "1.0.0"
+    and .historical_local_build_7_pre_upload.build == "7"
+    and .historical_local_build_7_pre_upload.source_ssot == "project.yml"
+    and .historical_local_build_7_pre_upload.status == "HISTORICAL_PRE_UPLOAD_VALIDATION"
+    and .historical_local_build_7_pre_upload.upload_state == "NOT_UPLOADED"
+    and .historical_local_build_7_pre_upload.asc_build_id == null
+    and .historical_local_build_7_pre_upload.asc_processing_state == "NOT_UPLOADED"
+    and .historical_local_build_7_pre_upload.app_store_version_attachment == "NOT_ATTACHED"
+    and .historical_local_build_7_pre_upload.review_submission_state == "NOT_SUBMITTED"
+    and .historical_local_build_7_pre_upload.live_state == "NOT_LIVE"
+    and .historical_local_build_7_pre_upload.external_validation_status == "APPLE_SERVER_VALIDATED_ONLY"
+    and .historical_local_build_7_pre_upload.apple_server_validation.status == "VERIFY_SUCCEEDED"
+    and .historical_local_build_7_pre_upload.apple_server_validation.validated == true
+    and .historical_local_build_7_pre_upload.apple_server_validation.scope == "exported_ipa_only"
+    and .historical_local_build_7_pre_upload.apple_server_validation.command == "asc xcode validate"
+    and .historical_local_build_7_pre_upload.apple_server_validation.remote_registration == "NOT_PERFORMED"
+    and .historical_local_build_7_pre_upload.apple_server_validation.ipa_sha256 == "6d8b62a2d8d354debf777791cbc795ddde662c01bdb0da91f31640c101b8d2bf"
+    and (.historical_local_build_7_pre_upload.next_sharing_improvements | sort) == [
       "conversational_prompt_and_invitation",
       "cumulative_family_week_ordinal",
       "privacy_safe_share_completed"
     ]
   ' "$shipaton" >/dev/null; then
-    pass "Shipaton manifest keeps submitted remote build 6 and local next candidate build 7 MECE, recording Apple IPA validation without a remote lifecycle claim."
+    pass "Shipaton manifest records current submitted build 7 and a separately labeled historical pre-upload build-7 validation snapshot, with the replacement lifecycle and IPA evidence exact."
   else
-    fail "Shipaton manifest build identity boundary is inconsistent: remote build 6 and local candidate build 7 must remain separate."
+    fail "Shipaton manifest build identity boundary is inconsistent: current submitted build 7 and its historical pre-upload snapshot must remain distinct."
   fi
 
   for boundary_document in "$project_root/release/README.md" "$project_root/docs/07-DELIVERY-PLAN.md" "$core_document"; do
     if rg -q 'build 7' "$boundary_document" \
-      && rg -q -i 'Apple server-side.*validation|APPLE_SERVER_VALIDATED_ONLY' "$boundary_document" \
-      && rg -q -i 'not uploaded' "$boundary_document" \
-      && rg -q -i 'not uploaded.*(registered|attached|submitted|live|approved|released)' "$boundary_document"; then
-      pass "$(basename "$boundary_document") documents build 7 as Apple-validated IPA only with no remote lifecycle claim."
+      && rg -q -i 'uploaded.*(VALID|attached)|VALID.*attached' "$boundary_document" \
+      && rg -q -i 'WAITING_FOR_REVIEW' "$boundary_document" \
+      && rg -q -i 'approval.*pending|public release.*pending|not.*public.*release' "$boundary_document" \
+      && ! rg -q -i 'build 7[^\n]*(not uploaded|unuploaded|not attached|unattached|not submitted|validation[- ]only)' "$boundary_document"; then
+      pass "$(basename "$boundary_document") documents build 7 as the uploaded/attached review build with approval and release still pending."
     else
-      fail "$(basename "$boundary_document") must document build 7 as Apple-validated IPA only and not uploaded/registered/submitted/released."
+      fail "$(basename "$boundary_document") must document build 7 as uploaded/attached/in review while keeping approval and public release pending."
     fi
   done
 }
@@ -441,7 +459,7 @@ validate_local_physical_screenshot_evidence() {
     .local_build6_debug_fixture_physical_screenshot_evidence.status == "validated_local_debug_fixture_only"
     and .local_build6_debug_fixture_physical_screenshot_evidence.scope == "local_debug_fixture_not_remote_asc_build_6"
     and .local_build6_debug_fixture_physical_screenshot_evidence.remote_build_ref == "current_release_build"
-    and .local_build6_debug_fixture_physical_screenshot_evidence.candidate_build_7_ref == "local_next_candidate"
+    and .local_build6_debug_fixture_physical_screenshot_evidence.current_build_7_ref == "current_release_build"
     and .local_build6_debug_fixture_physical_screenshot_evidence.bundle_id == "com.solkim.weekkeep"
     and .local_build6_debug_fixture_physical_screenshot_evidence.build == "6"
     and (.local_build6_debug_fixture_physical_screenshot_evidence.screenshots | length) == 2
@@ -450,13 +468,13 @@ validate_local_physical_screenshot_evidence() {
     and .local_build6_debug_fixture_physical_screenshot_evidence.visual_finding.contract == "no_scroll_first_cta"
     and .local_build6_debug_fixture_physical_screenshot_evidence.visual_finding.build7_physical_verification == "resolved_in_local_debug_fixture_build7"
     and .local_build6_debug_fixture_physical_screenshot_evidence.visual_finding.remote_replacement_authorization == "explicit_user_authorization_required"
-    and .current_release_build.build == "6"
-    and .current_release_build.asc_build_id == "0ffa7586-619f-4df9-abc5-ae7ebbd068b1"
+    and .current_release_build.build == "7"
+    and .current_release_build.asc_build_id == "1c51b451-d37f-4704-89c9-e426b1ee5725"
     and .current_release_build.upload_state == "uploaded"
     and .current_release_build.app_store_version_attachment == "ATTACHED"
-    and .local_next_candidate.build == "7"
-    and .local_next_candidate.upload_state == "NOT_UPLOADED"
-    and .local_next_candidate.asc_build_id == null
+    and .historical_local_build_7_pre_upload.build == "7"
+    and .historical_local_build_7_pre_upload.upload_state == "NOT_UPLOADED"
+    and .historical_local_build_7_pre_upload.asc_build_id == null
     and .intake_filter.gates.target_device_footage.status == "pending_external"
     and .intake_filter.gates.target_device_footage.local_physical_screenshot_status == "validated_local_debug_fixture_build6_and_local_build7_screenshot_evidence"
     and .intake_filter.gates.target_device_footage.local_physical_screenshot_scope == "build6_historical_finding_preserved_build7_local_physical_screenshots_not_remote_asc_or_production_photokit"
@@ -528,10 +546,10 @@ validate_local_build7_physical_screenshot_evidence() {
     and .local_build7_physical_screenshot_evidence.bundle_id == "com.solkim.weekkeep"
     and .local_build7_physical_screenshot_evidence.version == "1.0.0"
     and .local_build7_physical_screenshot_evidence.build == "7"
-    and .local_build7_physical_screenshot_evidence.scope == "local_physical_device_screenshots_not_remote_asc_build_6_not_production_photokit"
+    and .local_build7_physical_screenshot_evidence.scope == "local_physical_device_screenshots_not_production_photokit"
     and .local_build7_physical_screenshot_evidence.remote_build_ref == "current_release_build"
-    and .local_build7_physical_screenshot_evidence.candidate_build_ref == "local_next_candidate"
-    and .local_build7_physical_screenshot_evidence.remote_asc_build_6_unchanged == true
+    and .local_build7_physical_screenshot_evidence.current_build_ref == "current_release_build"
+    and .local_build7_physical_screenshot_evidence.remote_asc_build_7_identity_recorded == true
     and .local_build7_physical_screenshot_evidence.device == "iPhone 16 Pro"
     and .local_build7_physical_screenshot_evidence.os == "iOS 26.5.2"
     and .local_build7_physical_screenshot_evidence.installed_on_device_note == "DEBUG build 7 after second install"
@@ -561,7 +579,7 @@ validate_local_build7_physical_screenshot_evidence() {
     and (.local_build7_physical_screenshot_evidence.pending_gates | index("remote_asc_registration_attachment_review_approval_release") != null)
     and (.local_build7_physical_screenshot_evidence.non_claims | index("purchase_and_restore") != null)
     and (.local_build7_physical_screenshot_evidence.non_claims | index("actual_photokit_performance") != null)
-    and (.local_build7_physical_screenshot_evidence.non_claims | index("remote_asc_build_6_binary_identity") != null)
+    and (.local_build7_physical_screenshot_evidence.non_claims | index("remote_asc_build_7_binary_identity") != null)
     and (.local_build7_physical_screenshot_evidence.non_claims | index("app_store_live_or_public_release") != null)
     and (.local_build7_physical_screenshot_evidence.non_claims | index("physical_device_video") != null)
     and .local_build6_debug_fixture_physical_screenshot_evidence.visual_finding.build7_physical_verification == "resolved_in_local_debug_fixture_build7"
@@ -846,7 +864,7 @@ validate_remotion_project
 candidate_build="$(jq -er '.app.current_build.build' "$metadata")"
 candidate_screenshot_directory="$(jq -er '.screenshots.app_store.evidence_directory' "$metadata")"
 candidate_visual_qa_directory="$(jq -er '.app.current_build.visual_qa_evidence_directory' "$metadata")"
-local_candidate_build="$(jq -er '.local_next_candidate.build' "$shipaton")"
+local_candidate_build="$(jq -er '.historical_local_build_7_pre_upload.build' "$shipaton")"
 
 metadata_field() {
   jq -er "$1" "$metadata"
@@ -902,39 +920,68 @@ assert_text_limit() {
   fi
 }
 
-assert_jq '.app.bundle_id == "com.solkim.weekkeep" and .app.sku == "WEEKKEEP-IOS-2026" and .app.version == "1.0.0" and .app.build == $candidate_build and .app.release_method == "manual" and .app.current_build.build == $candidate_build and .app.current_build.status == "ASC_CURRENT_ATTACHED" and .app.current_build.upload_state == "uploaded" and .app.current_build.asc_build_id == "0ffa7586-619f-4df9-abc5-ae7ebbd068b1" and .app.current_build.asc_processing_state == "VALID" and .app.current_build.uploaded_at == "2026-08-06T15:31:16-07:00" and .app.current_build.app_store_version_attachment == "ATTACHED" and .app.current_build.app_store_version_id == "ac4f183e-1019-4ffc-827f-f5514f0d349b" and .app.current_build.review_submission_id == "a9b0a18f-6cf6-4af4-8e6f-c77009831e00" and .app.current_build.visual_qa_evidence_directory == $candidate_visual_qa_directory and .app.current_build.visual_qa_evidence_scope == "current_build6_settings_visual_qa_not_app_store_screenshot_evidence"' "App identity and current build-6 attachment match the release contract."
-assert_jq '.app.asc_state.app_id == "6798449478" and .app.asc_state.version_id == "ac4f183e-1019-4ffc-827f-f5514f0d349b" and .app.asc_state.build_id == "0ffa7586-619f-4df9-abc5-ae7ebbd068b1" and .app.asc_state.build_processing_state == "VALID" and .app.asc_state.build_uploaded_at == "2026-08-06T15:31:16-07:00" and .app.asc_state.version_state == "WAITING_FOR_REVIEW" and .app.asc_state.app_store_version_attachment == "ATTACHED" and .app.asc_state.remote_build_scope == "current_build_6_attached" and .app.asc_state.review_submission_id == "a9b0a18f-6cf6-4af4-8e6f-c77009831e00" and .app.asc_state.review_submission_submitted_at == "2026-08-06T22:44:38.573Z" and .app.asc_state.review_submission_item_count == 2 and (.app.asc_state.review_submission_item_details | all(.[]; .state == "READY_FOR_REVIEW")) and .app.asc_state.iap_id == "6798491084" and .app.asc_state.iap_product_id == "weekkeep_plus_lifetime" and .app.asc_state.iap_version_id == "cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f" and .app.asc_state.iap_version_state == "WAITING_FOR_REVIEW" and .app.remote_unattached_valid_build.build == "4" and .app.remote_unattached_valid_build.asc_build_id == "6e92c470-c044-4512-9276-71491fe97685" and .app.remote_unattached_valid_build.status == "VALID_UNATTACHED" and .app.remote_unattached_valid_build.asc_processing_state == "VALID" and .app.remote_unattached_valid_build.app_store_version_attachment == "UNATTACHED" and .app.asc_state.current_build == $candidate_build' "Current build 6 review, IAP, and build 4 unattached state are distinct and exact."
+assert_jq '.app.bundle_id == "com.solkim.weekkeep" and .app.sku == "WEEKKEEP-IOS-2026" and .app.version == "1.0.0" and .app.build == $candidate_build and .app.release_method == "manual" and .app.current_build.build == $candidate_build and .app.current_build.status == "ASC_CURRENT_ATTACHED" and .app.current_build.upload_state == "uploaded" and .app.current_build.asc_build_id == "1c51b451-d37f-4704-89c9-e426b1ee5725" and .app.current_build.asc_processing_state == "VALID" and .app.current_build.uploaded_at == "2026-08-07T08:28:29-07:00" and .app.current_build.app_store_version_attachment == "ATTACHED" and .app.current_build.app_store_version_id == "ac4f183e-1019-4ffc-827f-f5514f0d349b" and .app.current_build.review_submission_id == "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7" and .app.current_build.review_submission_state == "WAITING_FOR_REVIEW" and .app.current_build.review_submission_item_count == 2 and (.app.current_build.review_submission_item_details | all(.[]; .state == "READY_FOR_REVIEW")) and .app.current_build.ipa_local_verification.size_bytes == 23420062 and .app.current_build.ipa_local_verification.sha256 == "25c2c1ff17b14bd976392f3d8d6d1c103bd5488de66b866cadb8a5339f627889" and .app.current_build.ipa_local_verification.build == "7" and .app.current_build.apple_server_validation.status == "VERIFY_SUCCEEDED" and .app.current_build.apple_server_validation.validated == true and .app.current_build.apple_server_validation.errors == [] and .app.current_build.apple_server_validation.before_upload == true and .app.current_build.visual_qa_evidence_directory == $candidate_visual_qa_directory and .app.current_build.visual_qa_evidence_scope == "historical_build6_settings_visual_qa_not_app_store_screenshot_evidence"' "App identity and canonical build-7 attachment match the release contract."
+assert_jq '.app.asc_state.app_id == "6798449478" and .app.asc_state.version_id == "ac4f183e-1019-4ffc-827f-f5514f0d349b" and .app.asc_state.build_id == "1c51b451-d37f-4704-89c9-e426b1ee5725" and .app.asc_state.build_processing_state == "VALID" and .app.asc_state.build_uploaded_at == "2026-08-07T08:28:29-07:00" and .app.asc_state.version_state == "WAITING_FOR_REVIEW" and .app.asc_state.app_store_version_attachment == "ATTACHED" and .app.asc_state.remote_build_scope == "current_build_7_attached" and .app.asc_state.review_submission_id == "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7" and .app.asc_state.review_submission_submitted_at == "2026-08-07T15:33:05.463Z" and .app.asc_state.review_submission_item_count == 2 and (.app.asc_state.review_submission_item_details | all(.[]; .state == "READY_FOR_REVIEW")) and .app.asc_state.iap_id == "6798491084" and .app.asc_state.iap_product_id == "weekkeep_plus_lifetime" and .app.asc_state.iap_version_id == "cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f" and .app.asc_state.iap_version_state == "WAITING_FOR_REVIEW" and .app.remote_unattached_valid_build.build == "4" and .app.remote_unattached_valid_build.asc_build_id == "6e92c470-c044-4512-9276-71491fe97685" and .app.remote_unattached_valid_build.status == "VALID_UNATTACHED" and .app.remote_unattached_valid_build.asc_processing_state == "VALID" and .app.remote_unattached_valid_build.app_store_version_attachment == "UNATTACHED" and .app.asc_state.current_build == $candidate_build and .app.asc_state.historical_review_submission_id == "a9b0a18f-6cf6-4af4-8e6f-c77009831e00" and .app.asc_state.historical_review_submission_state == "COMPLETE" and .app.asc_state.historical_review_submission_build == "6" and .app.asc_state.historical_build_3_review_submission_id == "88c157ee-ce87-41c3-8a4a-71e614993a58"' "Current build-7 review, IAP, and historical build-6/build-3 state are distinct and exact."
 assert_jq '.app.primary_category_identifier == "public.app-category.photo-video"' "App category matches Info.plist."
 assert_jq '
-  .app.current_build.testflight_internal_qa.group_name == "Weekkeep Internal QA"
-  and .app.current_build.testflight_internal_qa.group_id == "576fd29a-7a64-4521-9164-9697ec1c256f"
-  and .app.current_build.testflight_internal_qa.group_builds == ["6"]
-  and .app.current_build.testflight_internal_qa.group_build_count == 1
-  and .app.current_build.testflight_internal_qa.build_status == "READY_FOR_BETA_TESTING"
-  and .app.current_build.testflight_internal_qa.tester_count == 1
-  and .app.current_build.testflight_internal_qa.public_ssot_contains_tester_email == false
-  and ((.app.current_build.testflight_internal_qa.testers | length) == 1)
-  and ((.app.current_build.testflight_internal_qa.testers[0] | has("email")) | not)
-  and .app.current_build.testflight_internal_qa.testers[0].role == "account_holder"
-  and .app.current_build.testflight_internal_qa.testers[0].tester_id == "bef018ab-9514-4388-804d-bcd363f601d4"
-  and .app.current_build.testflight_internal_qa.testers[0].state == "INVITED"
-  and .app.current_build.testflight_internal_qa.testers[0].account_holder_verified == true
-  and .app.current_build.testflight_internal_qa.distribution_status == "ready_invited"
-  and .app.current_build.testflight_internal_qa.installed == false
-  and .app.current_build.testflight_internal_qa.purchase_tested == false
-  and .app.current_build.testflight_internal_qa.restore_tested == false
-' "TestFlight internal QA distribution is ready/invited only and exact, with tester email omitted from public SSOT."
+  .app.current_build.historical_build_6_testflight_internal_qa.group_name == "Weekkeep Internal QA"
+  and .app.current_build.historical_build_6_testflight_internal_qa.group_id == "576fd29a-7a64-4521-9164-9697ec1c256f"
+  and .app.current_build.historical_build_6_testflight_internal_qa.group_builds == ["6"]
+  and .app.current_build.historical_build_6_testflight_internal_qa.group_build_count == 1
+  and .app.current_build.historical_build_6_testflight_internal_qa.build_status == "READY_FOR_BETA_TESTING"
+  and .app.current_build.historical_build_6_testflight_internal_qa.tester_count == 1
+  and .app.current_build.historical_build_6_testflight_internal_qa.public_ssot_contains_tester_email == false
+  and ((.app.current_build.historical_build_6_testflight_internal_qa.testers | length) == 1)
+  and ((.app.current_build.historical_build_6_testflight_internal_qa.testers[0] | has("email")) | not)
+  and .app.current_build.historical_build_6_testflight_internal_qa.testers[0].role == "account_holder"
+  and .app.current_build.historical_build_6_testflight_internal_qa.testers[0].tester_id == "bef018ab-9514-4388-804d-bcd363f601d4"
+  and .app.current_build.historical_build_6_testflight_internal_qa.testers[0].state == "INVITED"
+  and .app.current_build.historical_build_6_testflight_internal_qa.testers[0].account_holder_verified == true
+  and .app.current_build.historical_build_6_testflight_internal_qa.distribution_status == "ready_invited"
+  and .app.current_build.historical_build_6_testflight_internal_qa.installed == false
+  and .app.current_build.historical_build_6_testflight_internal_qa.purchase_tested == false
+  and .app.current_build.historical_build_6_testflight_internal_qa.restore_tested == false
+' "Historical build-6 TestFlight internal QA distribution is ready/invited only and exact, with tester email omitted from public SSOT."
 assert_jq '.iap.product_id == "weekkeep_plus_lifetime" and .iap.entitlement_id == "plus" and .iap.offering_id == "default" and .iap.type == "non-consumable" and .iap.us_base_price_usd == 19.99' "RevenueCat/App Store IAP identifiers and US price match."
 assert_jq '.screenshots.shipaton_proof.width == 1179 and .screenshots.shipaton_proof.height == 2556 and .screenshots.shipaton_proof.alpha == false and .screenshots.shipaton_proof.device_frame == false' "Shipaton screenshot contract is explicit."
-assert_jq '.screenshots.app_store.evidence_build == "5" and .screenshots.app_store.evidence_directory == $candidate_screenshot_directory and .screenshots.app_store.evidence_scope == "historical_local_build5_candidate_not_target" and .screenshots.app_store.current_build_visual_qa_directory == $candidate_visual_qa_directory and .screenshots.app_store.current_build_visual_qa_scope == "current_build6_settings_visual_qa_not_app_store_screenshot_evidence" and .screenshots.app_store.asc_screenshot_replacement_verified == false and .screenshots.app_store.remote_review_evidence_scope == "historical_build3_evidence_replaced_by_build6_review_submission"' "Historical build-5/build-3 screenshot evidence remains separate from current build-6 visual QA."
-assert_privacy_jq '.target.app_id == "6798449478" and .target.build == "6" and .target.asc_build_id == "0ffa7586-619f-4df9-abc5-ae7ebbd068b1" and .target.app_store_version_id == "ac4f183e-1019-4ffc-827f-f5514f0d349b" and .target.review_submission_id == "a9b0a18f-6cf6-4af4-8e6f-c77009831e00" and .target.review_submission_state == "WAITING_FOR_REVIEW" and .target.review_submission_submitted_at == "2026-08-06T22:44:38.573Z" and .target.review_submission_item_count == 2 and .target.review_submission_item_state == "READY_FOR_REVIEW" and .target.iap_id == "6798491084" and .target.iap_product_id == "weekkeep_plus_lifetime" and .target.iap_version_id == "cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f" and .target.iap_version_state == "WAITING_FOR_REVIEW" and .target.app_privacy_publish_state == "PUBLISHED_CURRENT_APP_VERSION" and .target.app_privacy_scope == "current_app_version_1.0.0" and .target.ipa_evidence == null and .target.ipa_evidence_status == "verified_local_without_tracked_evidence_file" and .target.ipa_local_verification.size_bytes == 23338085 and .target.ipa_local_verification.sha256 == "feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a" and .target.ipa_local_verification.bundle_id == "com.solkim.weekkeep" and .target.ipa_local_verification.version == "1.0.0" and .target.ipa_local_verification.build == "6" and .target.ipa_local_verification.purchases == true and .target.ipa_local_verification.analytics == false and .target.ipa_local_verification.privacy_info_present == true and .target.ipa_local_verification.signing_identity == "Apple Distribution sol kim" and .target.ipa_local_verification.team_id == "D48DDX5D5W" and .remote_unattached_valid_build.build == "4" and .remote_unattached_valid_build.asc_build_id == "6e92c470-c044-4512-9276-71491fe97685" and .remote_unattached_valid_build.processing_state == "VALID" and .remote_unattached_valid_build.app_store_version_attachment == "UNATTACHED" and .historical_build_3.build == "3" and .historical_build_3.review_submission_state == "CANCELED_REPLACED" and .historical_local_candidate_build_5.build == "5"' "Privacy manifest scopes publication to the current app version and keeps build-6 PrivacyInfo evidence separate."
+assert_jq '.screenshots.app_store.evidence_build == "5" and .screenshots.app_store.evidence_directory == $candidate_screenshot_directory and .screenshots.app_store.evidence_scope == "historical_local_build5_candidate_not_target" and .screenshots.app_store.current_build_visual_qa_directory == $candidate_visual_qa_directory and .screenshots.app_store.current_build_visual_qa_scope == "historical_build6_settings_visual_qa_not_app_store_screenshot_evidence" and .screenshots.app_store.asc_screenshot_replacement_verified == false and .screenshots.app_store.remote_review_evidence_scope == "historical_build3_evidence_replaced_by_build7_review_submission"' "Historical build-5/build-3 screenshot evidence remains separate from current build-7 lifecycle and historical build-6 visual QA."
+assert_privacy_jq '.target.app_id == "6798449478" and .target.build == "7" and .target.asc_build_id == "1c51b451-d37f-4704-89c9-e426b1ee5725" and .target.app_store_version_id == "ac4f183e-1019-4ffc-827f-f5514f0d349b" and .target.review_submission_id == "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7" and .target.review_submission_state == "WAITING_FOR_REVIEW" and .target.review_submission_submitted_at == "2026-08-07T15:33:05.463Z" and .target.review_submission_item_count == 2 and .target.review_submission_item_state == "READY_FOR_REVIEW" and .target.iap_id == "6798491084" and .target.iap_product_id == "weekkeep_plus_lifetime" and .target.iap_version_id == "cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f" and .target.iap_version_state == "WAITING_FOR_REVIEW" and .target.app_privacy_publish_state == "PUBLISHED_CURRENT_APP_VERSION" and .target.app_privacy_scope == "current_app_version_1.0.0" and .target.ipa_evidence == null and .target.ipa_evidence_status == "verified_local_without_tracked_evidence_file" and .target.ipa_local_verification.size_bytes == 23420062 and .target.ipa_local_verification.sha256 == "25c2c1ff17b14bd976392f3d8d6d1c103bd5488de66b866cadb8a5339f627889" and .target.ipa_local_verification.bundle_id == "com.solkim.weekkeep" and .target.ipa_local_verification.version == "1.0.0" and .target.ipa_local_verification.build == "7" and .target.ipa_local_verification.purchases == true and .target.ipa_local_verification.analytics == false and .target.ipa_local_verification.privacy_info_present == true and .target.ipa_local_verification.signing_identity == "Apple Distribution sol kim" and .target.ipa_local_verification.team_id == "D48DDX5D5W" and .remote_unattached_valid_build.build == "4" and .remote_unattached_valid_build.asc_build_id == "6e92c470-c044-4512-9276-71491fe97685" and .remote_unattached_valid_build.processing_state == "VALID" and .remote_unattached_valid_build.app_store_version_attachment == "UNATTACHED" and .historical_replaced_build_6.build == "6" and .historical_replaced_build_6.review_submission_state == "COMPLETE" and .historical_build_3.build == "3" and .historical_build_3.review_submission_state == "CANCELED_REPLACED" and .historical_local_candidate_build_5.build == "5"' "Privacy manifest scopes publication to the current build-7 app version and preserves historical build-6/build-3 evidence."
 assert_jq '.locales | keys == ["en-US", "ko"]' "English and Korean metadata locales are present."
 assert_jq '.locales["en-US"].subtitle == "Up to seven moments each week" and .locales.ko.subtitle == "최대 7장으로 남기는 일주일" and (.locales["en-US"].description | contains("Photo selection and share rendering are processed on your iPhone")) and (.locales["en-US"].description | contains("Sharing starts only when you explicitly choose it")) and (.locales["en-US"].description | contains("analytics services")) and (.locales["en-US"].description | contains("measurement services") | not) and (.locales.ko.description | contains("사진 고르기와 공유 이미지 만들기는 이 iPhone에서 처리해요")) and (.locales.ko.description | contains("직접 선택할 때만 시작되고"))' "Store subtitles and privacy copy use truthful up-to-seven, on-device, analytics, and explicit-sharing wording."
 assert_jq '(.review.notes_en | contains("Choose your first week")) and (.review.notes_en | contains("Change this photo")) and (.review.notes_en | contains("Learn about Weekkeep Plus"))' "App Review notes use shipped action labels."
 assert_jq '(.review.notes_en | contains("Photo selection and share rendering are processed on the iPhone")) and (.review.notes_en | contains("analytics services")) and (.review.notes_en | contains("measurement services") | not) and (.review.notes_en | contains("explicit user action"))' "App Review privacy notes distinguish on-device processing from explicit sharing and use analytics terminology."
 
 assert_shipaton_jq '(.schema_version == 2) and (.intake_filter.schema_version == 2) and ((.intake_filter.gates | keys | sort) == ["app_icon", "bundle_package_identifier", "judge_unlock", "public_demo_video", "public_source_repository", "published_store_page_url", "required_fields_and_category_answers", "screenshot", "target_device_footage"])' "Shipaton manifest schema and intake gate names are present."
-assert_shipaton_jq '.current_release_build.app_id == "6798449478" and .current_release_build.bundle_id == "com.solkim.weekkeep" and .current_release_build.build == $candidate_build and .current_release_build.release_method == "manual" and .current_release_build.upload_state == "uploaded" and .current_release_build.asc_build_id == "0ffa7586-619f-4df9-abc5-ae7ebbd068b1" and .current_release_build.asc_processing_state == "VALID" and .current_release_build.uploaded_at == "2026-08-06T15:31:16-07:00" and .current_release_build.app_store_version_attachment == "ATTACHED" and .current_release_build.app_store_version_id == "ac4f183e-1019-4ffc-827f-f5514f0d349b" and .current_release_build.asc_review_submission_id == "a9b0a18f-6cf6-4af4-8e6f-c77009831e00" and .current_release_build.asc_review_submission_state == "WAITING_FOR_REVIEW" and .current_release_build.asc_review_submission_submitted_at == "2026-08-06T22:44:38.573Z" and .current_release_build.asc_review_submission_item_count == 2 and (.current_release_build.asc_review_submission_item_details | all(.[]; .state == "READY_FOR_REVIEW")) and .current_release_build.ipa_local_verification.size_bytes == 23338085 and .current_release_build.ipa_local_verification.sha256 == "feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a" and .current_release_build.ipa_local_verification.bundle_id == "com.solkim.weekkeep" and .current_release_build.ipa_local_verification.version == "1.0.0" and .current_release_build.ipa_local_verification.build == "6" and .current_release_build.ipa_local_verification.purchases == true and .current_release_build.ipa_local_verification.analytics == false and .current_release_build.ipa_local_verification.privacy_info_present == true and .current_release_build.ipa_local_verification.signing_identity == "Apple Distribution sol kim" and .current_release_build.ipa_local_verification.team_id == "D48DDX5D5W" and .current_release_build.app_store_screenshot_evidence_scope == "historical_local_build5_candidate_not_target" and .current_release_build.visual_qa_evidence == $candidate_visual_qa_directory and .current_release_build.visual_qa_evidence_scope == "current_build6_settings_visual_qa_not_app_store_screenshot_evidence" and .remote_review_build_3.build == "3" and .remote_review_build_3.asc_processing_state == "VALID" and .remote_review_build_3.app_store_version_attachment == "HISTORICAL_REPLACED_BY_BUILD_6" and .remote_review_build_3.review_submission_state == "CANCELED_REPLACED" and .remote_unattached_valid_build_4.build == "4" and .remote_unattached_valid_build_4.asc_build_id == "6e92c470-c044-4512-9276-71491fe97685" and .remote_unattached_valid_build_4.asc_processing_state == "VALID" and .remote_unattached_valid_build_4.app_store_version_attachment == "UNATTACHED"' "Shipaton manifest records the current build-6 review state and preserves build-3/build-4 history."
+assert_shipaton_jq '.current_release_build.app_id == "6798449478" and .current_release_build.bundle_id == "com.solkim.weekkeep" and .current_release_build.build == $candidate_build and .current_release_build.release_method == "manual" and .current_release_build.upload_state == "uploaded" and .current_release_build.asc_build_id == "1c51b451-d37f-4704-89c9-e426b1ee5725" and .current_release_build.asc_processing_state == "VALID" and .current_release_build.uploaded_at == "2026-08-07T08:28:29-07:00" and .current_release_build.app_store_version_attachment == "ATTACHED" and .current_release_build.app_store_version_id == "ac4f183e-1019-4ffc-827f-f5514f0d349b" and .current_release_build.asc_review_submission_id == "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7" and .current_release_build.asc_review_submission_state == "WAITING_FOR_REVIEW" and .current_release_build.asc_review_submission_submitted_at == "2026-08-07T15:33:05.463Z" and .current_release_build.asc_review_submission_item_count == 2 and (.current_release_build.asc_review_submission_item_details | all(.[]; .state == "READY_FOR_REVIEW")) and .current_release_build.ipa_local_verification.size_bytes == 23420062 and .current_release_build.ipa_local_verification.sha256 == "25c2c1ff17b14bd976392f3d8d6d1c103bd5488de66b866cadb8a5339f627889" and .current_release_build.ipa_local_verification.bundle_id == "com.solkim.weekkeep" and .current_release_build.ipa_local_verification.version == "1.0.0" and .current_release_build.ipa_local_verification.build == "7" and .current_release_build.ipa_local_verification.purchases == true and .current_release_build.ipa_local_verification.analytics == false and .current_release_build.ipa_local_verification.privacy_info_present == true and .current_release_build.ipa_local_verification.signing_identity == "Apple Distribution sol kim" and .current_release_build.ipa_local_verification.team_id == "D48DDX5D5W" and .current_release_build.apple_server_validation.status == "VERIFY_SUCCEEDED" and .current_release_build.apple_server_validation.validated == true and .current_release_build.apple_server_validation.errors == [] and .current_release_build.apple_server_validation.before_upload == true and .current_release_build.app_store_screenshot_evidence_scope == "historical_local_build5_candidate_not_target" and .current_release_build.visual_qa_evidence == $candidate_visual_qa_directory and .current_release_build.visual_qa_evidence_scope == "historical_build6_settings_visual_qa_not_app_store_screenshot_evidence" and .historical_replaced_build_6.build == "6" and .historical_replaced_build_6.asc_build_id == "0ffa7586-619f-4df9-abc5-ae7ebbd068b1" and .historical_replaced_build_6.review_submission_id == "a9b0a18f-6cf6-4af4-8e6f-c77009831e00" and .historical_replaced_build_6.review_submission_state == "COMPLETE" and .remote_review_build_3.build == "3" and .remote_review_build_3.asc_processing_state == "VALID" and .remote_review_build_3.app_store_version_attachment == "HISTORICAL_REPLACED_BY_BUILD_7" and .remote_review_build_3.review_submission_state == "CANCELED_REPLACED" and .remote_unattached_valid_build_4.build == "4" and .remote_unattached_valid_build_4.asc_build_id == "6e92c470-c044-4512-9276-71491fe97685" and .remote_unattached_valid_build_4.asc_processing_state == "VALID" and .remote_unattached_valid_build_4.app_store_version_attachment == "UNATTACHED"' "Shipaton manifest records the canonical build-7 review state and preserves build-6/build-3/build-4 history."
+assert_shipaton_jq '.current_release_build.app_review_approval_state == "NOT_APPROVED" and .current_release_build.public_release_state == "NOT_RELEASED" and .current_release_build.next_action == "WAIT_FOR_APP_REVIEW_THEN_MANUALLY_RELEASE_AFTER_APPROVAL" and .verification_evidence.full_xcode_test_result == {"passed":174,"failed":0,"skipped":4,"total":178} and .verification_evidence.public_site_tests == {"passed":8,"failed":0,"total":8} and (.external_evidence.public_policy_site | contains("sites_version=5"))' "Release lifecycle, full Xcode tests, and Sites version-5 test evidence are exact while App Review and public release remain pending."
+assert_shipaton_jq '
+  .public_policy_site_evidence.project_id == "appgprj_6a72c9365eec81918b26c45fa645d052"
+  and .public_policy_site_evidence.version_id == "appgprj_6a72c9365eec81918b26c45fa645d052~appgver_8f6f65e98d7481918e624d70677135a2"
+  and .public_policy_site_evidence.version_number == 5
+  and .public_policy_site_evidence.source_commit_sha == "600fe8201080a319a9f4d61ba052e27a57a8a078"
+  and .public_policy_site_evidence.archive_storage == {
+    "archive_format": "tar",
+    "content_hash": "sha256:5d7aaaff4eb6e30c14cf75347e62134f9c44f24fc9cf6eb623b8a653a71ba164",
+    "size_bytes": 23357440,
+    "file_count": 100
+  }
+  and .public_policy_site_evidence.deployment_id == "appgdep_6a75fdfb2bdc8191bd8aeff13d9c3143"
+  and .public_policy_site_evidence.provider_deployment_id == "kimsol1134--weekkeep-app"
+  and .public_policy_site_evidence.deployment_status == "succeeded"
+  and .public_policy_site_evidence.deployment_timestamp == "2026-08-07T15:48:08.282102+00:00"
+  and .public_policy_site_evidence.access_mode == "public"
+  and .public_policy_site_evidence.url == "https://weekkeep-app.kimsol1134.chatgpt.site"
+  and .public_policy_site_evidence.routes == ["/", "/privacy", "/support", "/terms"]
+  and .public_policy_site_evidence.logged_out_http_status == 200
+  and .public_policy_site_evidence.http_verification_timestamp == "2026-08-07T16:15:44Z"
+  and .public_policy_site_evidence.site_tests == {"passed":8,"failed":0,"total":8}
+' "Current Sites version-5 provenance, deployment, archive, and four-route HTTP-200 evidence are exact."
+assert_shipaton_jq '
+  .public_policy_site_evidence.historical_version_4.source_commit_sha == "935e647562020d32dc9d2f6079a32c5042067af0"
+  and .public_policy_site_evidence.historical_version_4.deployment_id == "appgdep_6a74555f5b488191bd12c8f047ba655b"
+  and .public_policy_site_evidence.historical_version_4.deployment_timestamp == "2026-08-06T09:35:40.860943+00:00"
+  and .public_policy_site_evidence.historical_version_4.http_verification_timestamp == "2026-08-06T09:37:49+00:00"
+' "Historical Sites version-4 provenance remains separate and exact."
 assert_shipaton_jq '
   .intake_filter.gates.public_source_repository.required == true
   and .intake_filter.gates.public_source_repository.status == "Validated"
@@ -1026,24 +1073,24 @@ assert_shipaton_jq '(.intake_filter.prescreening.submission_is_read == true) and
 assert_shipaton_jq '((.category_decisions | length) == 21) and (([.category_decisions[] | .category] | sort) == ["#BuildInPublic", "Best App for Galaxy / Samsung", "Best Game", "Career Coaching / Leadership Heather", "Catvertising", "Conflict of Interest", "Funnel Vision / Stripe", "Gaming / Mr Lewis Blogs Gaming", "Grand Prize", "Growth Loop / Layers", "HAMM Award (Help Apps Make Money)", "Idea to Income / Replit", "Keep Them Coming Back / OneSignal", "Most Viral App / Noise", "Next Gen", "Nutrition & Healthy Eating / Abbey’s Kitchen", "Productivity / Christopher Lawley", "RevenueCat Design Award", "RevenueCat Peace Prize", "Ship Kotlin Everywhere / JetBrains", "Yoga & Fitness / Simone Sharice"]) and (([.category_decisions[] | .decision] | unique | sort) == ["Conditional", "Exclude", "Focus"]) and (([.category_decisions[] | select(.decision == "Focus") | .category] | sort) == ["#BuildInPublic", "HAMM Award (Help Apps Make Money)", "RevenueCat Design Award"]) and (([.category_decisions[] | select(.decision == "Conditional") | .category] | sort) == ["Grand Prize", "Most Viral App / Noise", "RevenueCat Peace Prize"])' "All 21 official categories have MECE Focus, Conditional, or Exclude decisions."
 
 assert_shipaton_jq '
-  .current_release_build.testflight_internal_qa.group_name == "Weekkeep Internal QA"
-  and .current_release_build.testflight_internal_qa.group_id == "576fd29a-7a64-4521-9164-9697ec1c256f"
-  and .current_release_build.testflight_internal_qa.group_builds == ["6"]
-  and .current_release_build.testflight_internal_qa.group_build_count == 1
-  and .current_release_build.testflight_internal_qa.build_status == "READY_FOR_BETA_TESTING"
-  and .current_release_build.testflight_internal_qa.tester_count == 1
-  and .current_release_build.testflight_internal_qa.public_ssot_contains_tester_email == false
-  and ((.current_release_build.testflight_internal_qa.testers | length) == 1)
-  and ((.current_release_build.testflight_internal_qa.testers[0] | has("email")) | not)
-  and .current_release_build.testflight_internal_qa.testers[0].role == "account_holder"
-  and .current_release_build.testflight_internal_qa.testers[0].tester_id == "bef018ab-9514-4388-804d-bcd363f601d4"
-  and .current_release_build.testflight_internal_qa.testers[0].state == "INVITED"
-  and .current_release_build.testflight_internal_qa.testers[0].account_holder_verified == true
-  and .current_release_build.testflight_internal_qa.distribution_status == "ready_invited"
-  and .current_release_build.testflight_internal_qa.installed == false
-  and .current_release_build.testflight_internal_qa.purchase_tested == false
-  and .current_release_build.testflight_internal_qa.restore_tested == false
-' "Shipaton manifest records exact TestFlight internal QA ready/invited state without install or purchase claims, with tester email omitted from public SSOT."
+  .current_release_build.historical_build_6_testflight_internal_qa.group_name == "Weekkeep Internal QA"
+  and .current_release_build.historical_build_6_testflight_internal_qa.group_id == "576fd29a-7a64-4521-9164-9697ec1c256f"
+  and .current_release_build.historical_build_6_testflight_internal_qa.group_builds == ["6"]
+  and .current_release_build.historical_build_6_testflight_internal_qa.group_build_count == 1
+  and .current_release_build.historical_build_6_testflight_internal_qa.build_status == "READY_FOR_BETA_TESTING"
+  and .current_release_build.historical_build_6_testflight_internal_qa.tester_count == 1
+  and .current_release_build.historical_build_6_testflight_internal_qa.public_ssot_contains_tester_email == false
+  and ((.current_release_build.historical_build_6_testflight_internal_qa.testers | length) == 1)
+  and ((.current_release_build.historical_build_6_testflight_internal_qa.testers[0] | has("email")) | not)
+  and .current_release_build.historical_build_6_testflight_internal_qa.testers[0].role == "account_holder"
+  and .current_release_build.historical_build_6_testflight_internal_qa.testers[0].tester_id == "bef018ab-9514-4388-804d-bcd363f601d4"
+  and .current_release_build.historical_build_6_testflight_internal_qa.testers[0].state == "INVITED"
+  and .current_release_build.historical_build_6_testflight_internal_qa.testers[0].account_holder_verified == true
+  and .current_release_build.historical_build_6_testflight_internal_qa.distribution_status == "ready_invited"
+  and .current_release_build.historical_build_6_testflight_internal_qa.installed == false
+  and .current_release_build.historical_build_6_testflight_internal_qa.purchase_tested == false
+  and .current_release_build.historical_build_6_testflight_internal_qa.restore_tested == false
+' "Shipaton manifest records historical build-6 TestFlight internal QA ready/invited state without install or purchase claims, with tester email omitted from public SSOT."
 assert_shipaton_jq '
   .current_release_build.target_device_qa_scope == "fixture_only_ui_runner_started_local_authentication_canceled_incomplete_result_not_evidence"
   and .current_release_build.target_device_qa_status == "blocked_local_authentication_code_-4_authentication_canceled"

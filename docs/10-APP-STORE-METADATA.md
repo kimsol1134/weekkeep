@@ -3,13 +3,13 @@
 | 항목 | 값 |
 |---|---|
 | 기준일 | 2026-08-07 |
-| 대상 버전 | iOS 1.0.0 — ASC build 6 is the current attached review build; build 3 remains historical evidence and build 4 is valid but unattached |
+| 대상 버전 | iOS 1.0.0 — canonical ASC build 7 is the current attached review build; build 6 and its prior submission are historical/replaced, build 3 remains historical evidence, and build 4 is valid but unattached |
 | Primary locale | English (U.S.) |
 | 추가 locale | Korean |
 | Bundle ID | `com.solkim.weekkeep` |
 | SKU | `WEEKKEEP-IOS-2026` |
 | 가격 | 앱 무료, Plus 비소모성 평생 이용권 US $19.99 |
-| 상태 | ASC build 6 (`0ffa7586-619f-4df9-abc5-ae7ebbd068b1`) is uploaded, `VALID`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; current submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is `WAITING_FOR_REVIEW` with exactly two `READY_FOR_REVIEW` items; build 3 submission `88c157ee-ce87-41c3-8a4a-71e614993a58` is historical canceled/replaced; build 4 is `VALID` but unattached; IAP `weekkeep_plus_lifetime` remains `WAITING_FOR_REVIEW`; approval and public release remain pending |
+| 상태 | ASC build 7 (`1c51b451-d37f-4704-89c9-e426b1ee5725`) is uploaded, `VALID`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; current submission `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` is `WAITING_FOR_REVIEW` with exactly two `READY_FOR_REVIEW` items; previous submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is historical `COMPLETE` after replacement; build 6 is historical/replaced; build 3 submission `88c157ee-ce87-41c3-8a4a-71e614993a58` remains historical canceled/replaced; build 4 is `VALID` but unattached; IAP `weekkeep_plus_lifetime` remains `WAITING_FOR_REVIEW`; approval and public release remain pending |
 
 이 문서는 App Store Connect에 입력하는 이름, 설명, 키워드, 카테고리, URL, 심사 메모, IAP metadata의 단일 원본입니다. 제품 범위와 가격은 [Decision Registry](00-INDEX.md#5-decision-registry--결정값과-상태의-ssot), 개인정보 답변은 [App Privacy Label](09-APP-PRIVACY-LABEL.md)이 소유합니다.
 
@@ -17,8 +17,9 @@
 
 | 상태 | 값 | 의미 |
 |---|---|---|
-| Current submitted review build | `1.0.0 (6)` — ASC ID `0ffa7586-619f-4df9-abc5-ae7ebbd068b1`, `VALID`, attached, uploaded `2026-08-06T15:31:16-07:00` | Current App Store Connect build for version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; manual release; current submission is `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` |
-| TestFlight internal QA | `Weekkeep Internal QA` (`576fd29a-7a64-4521-9164-9697ec1c256f`) contains exactly build 6, `READY_FOR_BETA_TESTING`, and one invited verified account-holder tester (tester ID `bef018ab-9514-4388-804d-bcd363f601d4`, state `INVITED`) | Ready/invited distribution only; not installed, purchase-tested, or restore-tested |
+| Current submitted review build | `1.0.0 (7)` — ASC ID `1c51b451-d37f-4704-89c9-e426b1ee5725`, `VALID`, attached, uploaded `2026-08-07T08:28:29-07:00` | Current App Store Connect build for version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; manual release; current submission is `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` |
+| Historical TestFlight internal QA | `Weekkeep Internal QA` (`576fd29a-7a64-4521-9164-9697ec1c256f`) contains exactly historical build 6, `READY_FOR_BETA_TESTING`, and one invited verified account-holder tester (tester ID `bef018ab-9514-4388-804d-bcd363f601d4`, state `INVITED`) | Historical ready/invited distribution only; not installed, purchase-tested, or restore-tested |
+| Historical/replaced build 6 | `1.0.0 (6)` — ASC ID `0ffa7586-619f-4df9-abc5-ae7ebbd068b1`, `VALID`, previously attached | Replaced by canonical build 7; previous submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is now `COMPLETE` historical |
 | Historical build 3 | `1.0.0 (3)` — `VALID`, historical/non-target | Former submission `88c157ee-ce87-41c3-8a4a-71e614993a58` was canceled/replaced; its local evidence remains historical |
 | Remote unattached valid build | `1.0.0 (4)` — ASC ID `6e92c470-c044-4512-9276-71491fe97685`, `VALID`, unattached | Historical/non-target external truth |
 | Historical builds 1–2 and 5 | Historical/non-target | Preserved evidence; none is the current review target |
@@ -51,7 +52,7 @@
 | Privacy Choices URL | `https://weekkeep-app.kimsol1134.chatgpt.site/privacy` |
 | Terms URL | Omit; ASC app-info schema has no terms URL field. Public `/terms` remains available from the app's supported policy links. |
 
-실제 공개 URL은 기존 Sites project version 4에 배포되어 있으며, `2026-08-06T09:35:40.860943+00:00` 배포 이후 로그아웃 요청으로 `/privacy`, `/support`, `/terms`와 root가 HTTP 200인지 확인했습니다. App Store metadata의 Support, Privacy Policy, Privacy Choices URL은 이 public URL과 일치합니다. 앱이나 export artifact에 설치 URL을 하드코딩하지 않습니다.
+실제 공개 URL은 Sites version 5로 `https://weekkeep-app.kimsol1134.chatgpt.site`에 배포되어 있으며 site tests는 8 passed, 0 failed입니다. 로그아웃 요청으로 `/privacy`, `/support`, `/terms`와 root가 HTTP 200인지 확인했습니다. App Store metadata의 Support, Privacy Policy, Privacy Choices URL은 이 public URL과 일치합니다. 앱이나 export artifact에 설치 URL을 하드코딩하지 않습니다.
 
 ## 3. English (U.S.) metadata
 
@@ -311,15 +312,15 @@ No special hardware, login, or reviewer account is required. Please use a device
 - [ ] 앱 icon 1024×1024 opaque, 미리 둥근 모서리 없음, exact-seven rainbow (`D-030`)
 - [x] Historical build-3 App Store en-US/ko screenshot sets: exactly six each, opaque JPEG, `1320×2868`, `APP_IPHONE_67`, remote state `COMPLETE`; retained as historical evidence after build-6 replacement
 - [x] Historical local build-5 App Store candidate screenshots: exactly six each, opaque JPEG, current raw-source provenance/checksums, and local validator pass; not uploaded or relabeled
-- [x] Current build-6 Settings notification visual QA: four bilingual opaque `1320×2868` PNGs, direct XCTest manifests, matching checksums, and local validator pass; separate from App Store screenshot evidence
-- [x] Current review build: build 6 upload, IPA inspection, ASC `VALID` processing, version attachment, and submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` `WAITING_FOR_REVIEW`
+- [x] Historical build-6 Settings notification visual QA: four bilingual opaque `1320×2868` PNGs, direct XCTest manifests, matching checksums, and local validator pass; separate from App Store screenshot evidence
+- [x] Current review build: build 7 upload, canonical IPA inspection, ASC `VALID` processing, version attachment, and submission `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` `WAITING_FOR_REVIEW`
 - [x] Current review submission has exactly two `READY_FOR_REVIEW` items: app version `ac4f183e-1019-4ffc-827f-f5514f0d349b` and IAP version `cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f`
 - [x] 모든 screenshot alpha 없음; Shipaton proof는 `1179×2556`와 no-device-frame 확인
 - [x] Support/Privacy URL responds publicly; ASC en-US/ko app-info localizations use `/support` and `/privacy` consistently
 - [ ] US storefront에서 앱과 IAP 다운로드/구매 가능 — public release remains pending
 - [ ] Review Notes의 버튼명과 Release localization이 글자 단위로 일치
 - [x] App Review contact and IAP review screenshot re-read in ASC
-- [x] App Privacy data-usage answers published in ASC for the current `1.0.0` app version; build 6 `PrivacyInfo` presence is local binary evidence, not a separate build-6 publication event
+- [x] App Privacy data-usage answers published in ASC for the current `1.0.0` app version; build 7 `PrivacyInfo` presence is local binary evidence, not a separate build-7 publication event
 
 ## 10. 공식 기준
 

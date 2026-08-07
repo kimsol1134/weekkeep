@@ -7,19 +7,19 @@
     "app_id": "6798449478",
     "bundle_id": "com.solkim.weekkeep",
     "version": "1.0.0",
-    "build": "6",
+    "build": "7",
     "release_method": "manual",
     "upload_state": "uploaded",
-    "asc_build_id": "0ffa7586-619f-4df9-abc5-ae7ebbd068b1",
+    "asc_build_id": "1c51b451-d37f-4704-89c9-e426b1ee5725",
     "asc_processing_state": "VALID",
-    "uploaded_at": "2026-08-06T15:31:16-07:00",
+    "uploaded_at": "2026-08-07T08:28:29-07:00",
     "version_state": "WAITING_FOR_REVIEW",
     "app_store_version_id": "ac4f183e-1019-4ffc-827f-f5514f0d349b",
     "app_store_version_attachment": "ATTACHED",
     "app_store_screenshot_evidence": "release/local/visual-qa/20260807-build5-app-store-candidate-rerun8/final",
     "app_store_screenshot_evidence_scope": "historical_local_build5_candidate_not_target",
     "visual_qa_evidence": "release/local/visual-qa/20260807-build6-notification-settings-rerun1/final",
-    "visual_qa_evidence_scope": "current_build6_settings_visual_qa_not_app_store_screenshot_evidence",
+    "visual_qa_evidence_scope": "historical_build6_settings_visual_qa_not_app_store_screenshot_evidence",
     "app_store_screenshot_sets_replaced": false,
     "historical_asc_screenshot_sets_replaced": true,
     "target_device_qa_evidence": null,
@@ -30,8 +30,8 @@
     "target_device_qa_permissions_changed": false,
     "target_device_qa_private_pixels_changed": false,
     "review_contact_fields": "current_submission",
-    "historical_builds_non_target": ["1", "2", "3", "4", "5"],
-    "remote_review_build": "3",
+    "historical_builds_non_target": ["1", "2", "3", "4", "5", "6"],
+    "remote_review_build": "6",
     "remote_review_build_state": "HISTORICAL_VALID_REPLACED",
     "remote_unattached_valid_build": "4",
     "remote_unattached_valid_build_id": "6e92c470-c044-4512-9276-71491fe97685",
@@ -40,9 +40,9 @@
     "asc_review_detail_id": null,
     "asc_iap_version_id": "cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f",
     "asc_iap_version_state": "WAITING_FOR_REVIEW",
-    "asc_review_submission_id": "a9b0a18f-6cf6-4af4-8e6f-c77009831e00",
+    "asc_review_submission_id": "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7",
     "asc_review_submission_state": "WAITING_FOR_REVIEW",
-    "asc_review_submission_submitted_at": "2026-08-06T22:44:38.573Z",
+    "asc_review_submission_submitted_at": "2026-08-07T15:33:05.463Z",
     "asc_review_submission_item_count": 2,
     "asc_review_submission_items": "exactly_2_READY_FOR_REVIEW_items",
     "asc_review_submission_item_details": [
@@ -57,7 +57,7 @@
         "state": "READY_FOR_REVIEW"
       }
     ],
-    "testflight_internal_qa": {
+    "historical_build_6_testflight_internal_qa": {
       "group_name": "Weekkeep Internal QA",
       "group_id": "576fd29a-7a64-4521-9164-9697ec1c256f",
       "group_builds": ["6"],
@@ -78,24 +78,37 @@
       "purchase_tested": false,
       "restore_tested": false
     },
-    "historical_review_submission_id": "88c157ee-ce87-41c3-8a4a-71e614993a58",
-    "historical_review_submission_state": "CANCELED_REPLACED",
-    "historical_review_submission_build": "3",
+    "historical_review_submission_id": "a9b0a18f-6cf6-4af4-8e6f-c77009831e00",
+    "historical_review_submission_state": "COMPLETE",
+    "historical_review_submission_build": "6",
+    "historical_review_submission_canceled_after_build_7_valid": true,
+    "historical_build_3_review_submission_id": "88c157ee-ce87-41c3-8a4a-71e614993a58",
+    "historical_build_3_review_submission_state": "CANCELED_REPLACED",
     "prior_historical_review_submission_id": "260abf1a-886b-4014-8262-541d261e60e2",
     "prior_historical_review_submission_state": "COMPLETE",
     "ipa_local_verification": {
       "evidence_status": "verified_without_tracked_evidence_file",
-      "size_bytes": 23338085,
-      "sha256": "feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a",
+      "size_bytes": 23420062,
+      "sha256": "25c2c1ff17b14bd976392f3d8d6d1c103bd5488de66b866cadb8a5339f627889",
       "bundle_id": "com.solkim.weekkeep",
       "version": "1.0.0",
-      "build": "6",
+      "build": "7",
       "purchases": true,
       "analytics": false,
       "privacy_info_present": true,
       "signing_identity": "Apple Distribution sol kim",
       "team_id": "D48DDX5D5W"
     },
+    "apple_server_validation": {
+      "status": "VERIFY_SUCCEEDED",
+      "validated": true,
+      "errors": [],
+      "scope": "exported_ipa_only",
+      "before_upload": true
+    },
+    "app_review_approval_state": "NOT_APPROVED",
+    "public_release_state": "NOT_RELEASED",
+    "next_action": "WAIT_FOR_APP_REVIEW_THEN_MANUALLY_RELEASE_AFTER_APPROVAL",
     "app_privacy": {
       "status": "PUBLISHED_CURRENT_APP_VERSION",
       "scope": "current_app_version_1.0.0",
@@ -122,6 +135,32 @@
       ]
     }
   },
+  "historical_replaced_build_6": {
+    "app_id": "6798449478",
+    "bundle_id": "com.solkim.weekkeep",
+    "version": "1.0.0",
+    "build": "6",
+    "status": "HISTORICAL_REPLACED_BY_BUILD_7",
+    "upload_state": "uploaded",
+    "asc_build_id": "0ffa7586-619f-4df9-abc5-ae7ebbd068b1",
+    "asc_processing_state": "VALID",
+    "uploaded_at": "2026-08-06T15:31:16-07:00",
+    "app_store_version_attachment": "HISTORICAL_REPLACED",
+    "review_submission_id": "a9b0a18f-6cf6-4af4-8e6f-c77009831e00",
+    "review_submission_state": "COMPLETE",
+    "replaced_after_build_7_processing_state": "VALID",
+    "ipa_local_verification": {
+      "size_bytes": 23338085,
+      "sha256": "feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a",
+      "bundle_id": "com.solkim.weekkeep",
+      "version": "1.0.0",
+      "build": "6",
+      "purchases": true,
+      "analytics": false,
+      "privacy_info_present": true
+    },
+    "historical_testflight_internal_qa_ref": "current_release_build.historical_build_6_testflight_internal_qa"
+  },
   "local_build6_debug_fixture_physical_screenshot_evidence": {
     "status": "validated_local_debug_fixture_only",
     "evidence_directory": "release/local/target-device-qa/20260807T2006KST-build6-debug-fixture-device-screenshots",
@@ -132,7 +171,7 @@
     "build": "6",
     "scope": "local_debug_fixture_not_remote_asc_build_6",
     "remote_build_ref": "current_release_build",
-    "candidate_build_7_ref": "local_next_candidate",
+    "current_build_7_ref": "current_release_build",
     "device": "iPhone 16 Pro",
     "os": "iOS 26.5.2",
     "passcode_required": false,
@@ -190,10 +229,10 @@
     "bundle_id": "com.solkim.weekkeep",
     "version": "1.0.0",
     "build": "7",
-    "scope": "local_physical_device_screenshots_not_remote_asc_build_6_not_production_photokit",
+    "scope": "local_physical_device_screenshots_not_production_photokit",
     "remote_build_ref": "current_release_build",
-    "candidate_build_ref": "local_next_candidate",
-    "remote_asc_build_6_unchanged": true,
+    "current_build_ref": "current_release_build",
+    "remote_asc_build_7_identity_recorded": true,
     "device": "iPhone 16 Pro",
     "os": "iOS 26.5.2",
     "mixed_surface_scope": "local_archive_waiting_surface_and_local_debug_fixture_ready_surface",
@@ -266,7 +305,7 @@
       "native_share_sheet_and_share_delivery",
       "purchase_and_restore",
       "actual_photokit_performance",
-      "remote_asc_registration_attachment_review_approval_release",
+      "app_review_approval_and_manual_release",
       "target_device_functioning_footage",
       "public_app_store_release",
       "devpost_submission"
@@ -275,20 +314,20 @@
       "native_share_sheet_and_share_delivery",
       "purchase_and_restore",
       "actual_photokit_performance",
-      "remote_asc_build_6_binary_identity",
+      "remote_asc_build_7_binary_identity",
       "app_store_live_or_public_release",
       "physical_device_video",
       "devpost_submission"
     ]
   },
-  "local_next_candidate": {
+  "historical_local_build_7_pre_upload": {
     "app_id": "6798449478",
     "bundle_id": "com.solkim.weekkeep",
     "version": "1.0.0",
     "build": "7",
     "source_ssot": "project.yml",
     "release_method": "manual",
-    "status": "LOCAL_NEXT_CANDIDATE",
+    "status": "HISTORICAL_PRE_UPLOAD_VALIDATION",
     "upload_state": "NOT_UPLOADED",
     "asc_build_id": null,
     "asc_processing_state": "NOT_UPLOADED",
@@ -463,7 +502,7 @@
   },
   "build_identity_contract": {
     "submitted_remote_build_ref": "current_release_build",
-    "local_next_candidate_build_ref": "local_next_candidate",
+    "historical_pre_upload_build_7_ref": "historical_local_build_7_pre_upload",
     "roles_are_mutually_exclusive": true,
     "remote_build_state_is_unchanged": true,
     "local_candidate_must_not_claim_remote_submission": true
@@ -485,7 +524,7 @@
     "build": "3",
     "asc_build_id": "81697c0b-a68e-482a-be6f-50806e56fbff",
     "asc_processing_state": "VALID",
-    "app_store_version_attachment": "HISTORICAL_REPLACED_BY_BUILD_6",
+    "app_store_version_attachment": "HISTORICAL_REPLACED_BY_BUILD_7",
     "app_store_version_state": "HISTORICAL",
     "review_submission_id": "88c157ee-ce87-41c3-8a4a-71e614993a58",
     "review_submission_state": "CANCELED_REPLACED",
@@ -1114,13 +1153,34 @@
     "upload_or_publish": false,
     "requires_revenuecat_public_key": true
   },
+  "verification_evidence": {
+    "full_xcode_test_result": {
+      "passed": 174,
+      "failed": 0,
+      "skipped": 4,
+      "total": 178
+    },
+    "public_site_tests": {
+      "passed": 8,
+      "failed": 0,
+      "total": 8
+    }
+  },
   "public_policy_site_evidence": {
     "project_id": "appgprj_6a72c9365eec81918b26c45fa645d052",
-    "source_commit_sha": "935e647562020d32dc9d2f6079a32c5042067af0",
-    "version_number": 4,
-    "deployment_id": "appgdep_6a74555f5b488191bd12c8f047ba655b",
+    "version_id": "appgprj_6a72c9365eec81918b26c45fa645d052~appgver_8f6f65e98d7481918e624d70677135a2",
+    "version_number": 5,
+    "source_commit_sha": "600fe8201080a319a9f4d61ba052e27a57a8a078",
+    "archive_storage": {
+      "archive_format": "tar",
+      "content_hash": "sha256:5d7aaaff4eb6e30c14cf75347e62134f9c44f24fc9cf6eb623b8a653a71ba164",
+      "size_bytes": 23357440,
+      "file_count": 100
+    },
+    "deployment_id": "appgdep_6a75fdfb2bdc8191bd8aeff13d9c3143",
+    "provider_deployment_id": "kimsol1134--weekkeep-app",
     "deployment_status": "succeeded",
-    "deployment_timestamp": "2026-08-06T09:35:40.860943+00:00",
+    "deployment_timestamp": "2026-08-07T15:48:08.282102+00:00",
     "access_mode": "public",
     "url": "https://weekkeep-app.kimsol1134.chatgpt.site",
     "routes": [
@@ -1133,7 +1193,18 @@
     "app_store_metadata_url_match": true,
     "contact_email": "kimsol1134@gmail.com",
     "internal_tester_domain_matches": 0,
-    "http_verification_timestamp": "2026-08-06T09:37:49+00:00"
+    "site_tests": {
+      "passed": 8,
+      "failed": 0,
+      "total": 8
+    },
+    "http_verification_timestamp": "2026-08-07T16:15:44Z",
+    "historical_version_4": {
+      "source_commit_sha": "935e647562020d32dc9d2f6079a32c5042067af0",
+      "deployment_id": "appgdep_6a74555f5b488191bd12c8f047ba655b",
+      "deployment_timestamp": "2026-08-06T09:35:40.860943+00:00",
+      "http_verification_timestamp": "2026-08-06T09:37:49+00:00"
+    }
   },
   "external_evidence": {
     "first_public_release": "pending_release_window_store_record",
@@ -1142,12 +1213,12 @@
     "bundle_and_revenuecat_sdk_validation": "pending_authenticated_account",
     "devpost_required_fields_and_category_answers": "pending_submission",
     "revenuecat_product_and_sandbox_purchase": "pending_authenticated_account",
-    "public_policy_site": "validated_public_policy_site_url=https://weekkeep-app.kimsol1134.chatgpt.site;deployment_timestamp=2026-08-06T09:35:40.860943+00:00;access=public;logged_out_routes_http_200=4;contact=kimsol1134@gmail.com;internal_tester_domain_matches=0",
+    "public_policy_site": "validated_public_policy_site_url=https://weekkeep-app.kimsol1134.chatgpt.site;sites_version=5;site_tests_passed=8;site_tests_failed=0;access=public;logged_out_routes_http_200=4",
     "real_device_icon_qa": "pending_physical_device",
-    "shipaton_fixture_screenshot": "pending_external_selection_and_authenticated_upload;local_candidate=fixture_only_build7_four_screen_candidate_complete;not_production_not_asc_not_devpost",
-    "app_store_screenshots": "validated_historical_build3_en_us_ko_six_complete_onboarding_rerun1;current_build6_screenshot_replacement_not_claimed",
-    "app_privacy": "validated_published_2026-08-06_current_app_version_exactly_three_entries_no_tracking;privacyinfo_present_in_build6_ipa",
-    "app_store_review_submission": "validated_current_ios_submission=a9b0a18f-6cf6-4af4-8e6f-c77009831e00;submitted_at=2026-08-06T22:44:38.573Z;exactly_two_ready_for_review_items;build6_attached;build3_submission=88c157ee-ce87-41c3-8a4a-71e614993a58_canceled_replaced;historical_submission=260abf1a-886b-4014-8262-541d261e60e2_complete",
+    "shipaton_fixture_screenshot": "pending_external_selection_and_authenticated_upload;local_fixture=build7_four_screen_fixture_complete;not_production_not_app_store_screenshot_not_devpost",
+    "app_store_screenshots": "validated_historical_build3_en_us_ko_six_complete_onboarding_rerun1;build7_screenshot_replacement_not_claimed",
+    "app_privacy": "validated_published_2026-08-06_current_app_version_exactly_three_entries_no_tracking;privacyinfo_present_in_build7_ipa",
+    "app_store_review_submission": "validated_current_ios_submission=6d2feeff-0f90-4b34-b0c8-b22a3b1928b7;submitted_at=2026-08-07T15:33:05.463Z;exactly_two_ready_for_review_items;build7_attached;previous_submission=a9b0a18f-6cf6-4af4-8e6f-c77009831e00_complete_after_build7_valid;build3_submission=88c157ee-ce87-41c3-8a4a-71e614993a58_canceled_replaced;historical_submission=260abf1a-886b-4014-8262-541d261e60e2_complete",
     "target_device_physical_screenshots": "validated_local_debug_fixture_build6_and_local_build7_two_opaque_1206x2622_pngs_each;build6_directory=release/local/target-device-qa/20260807T2006KST-build6-debug-fixture-device-screenshots;build7_directory=release/local/target-device-qa/20260807T2033KST-build7-physical-screenshots;build6_finding=ready_primary_start_cta_below_initial_viewport;build7_resolution=resolved_in_local_debug_fixture_build7;build7_waiting_surface=no_cta_claim_and_distinct_three_item_bottom_navigation;build7_ready_surface=primary_cta_in_initial_viewport_and_distinct_calendar_photo_settings_bottom_nav;not_remote_asc_build6;not_production_photokit;native_share_pending;external_lifecycle_pending",
     "target_device_footage": "pending_physical_device_recording;build6_fixture_ui_runner_started_after_lock_wait;local_authentication_code_-4_authentication_canceled;process_safely_terminated;result_bundle_invalid_incomplete_info_plist_missing_not_evidence;build7_native_share_unlocked_retried_twice;runner_installed_and_launched;test_body_not_executed;timed_out_while_enabling_automation_mode;mac_host_automation_mode_disabled_user_authentication_required;mac_host_developer_mode_disabled;result_bundles_invalid_non_evidence;earlier_build7_locked_attempt_historical_only;historical_build3_install_and_fixture_argument_launch=release/local/target-device-qa/20260806T2102KST-build3/QA-SUMMARY.md;physical_ui_attachments_pending;purchase_restore_verification_pending;actual_library_performance_pending;icon_qa_pending;quicktime_preview_unusable;no_credentials_requested_or_handled;no_permissions_or_private_pixels_changed",
     "public_demo_video": "validated_youtube_public_demo;platform=YouTube;visibility=Public;channel=sol kim;video_id=WJP6xoWV440;title=Weekkeep — A Week Worth Keeping | Shipaton 2026;short_url=https://youtu.be/WJP6xoWV440;watch_url=https://www.youtube.com/watch?v=WJP6xoWV440;published_on=2026-08-07;logged_out_curl=short_url_followed_to_watch_url_http_200;oembed=exact_title_author_sol_kim_embeddable_iframe_thumbnail_provider_youtube;yt_dlp_no_cookies=duration_72_availability_public_live_status_not_live_age_limit_0_formats_count_12_channel_sol_kim_upload_date_20260807;copyright_check=no_issues_found;metadata=English (United States), Science & Technology, not made for kids, altered/synthetic disclosure yes, embedding allowed, Shorts remix disabled;protected_local_mp4=videos/weekkeep-remotion/out/weekkeep-shipaton-72.mp4;protected_local_mp4_status=unchanged;github_release_backup=https://github.com/kimsol1134/weekkeep/releases/tag/shipaton-demo-v1;github_asset=https://github.com/kimsol1134/weekkeep/releases/download/shipaton-demo-v1/weekkeep-shipaton-72.mp4;release_http_status=200;asset_http_status=200;asset_sha256=9d4afb5332d3bbaeb0fc40e5d1d71c6a66b7cf2d72b79ed8a7ab3c2864e5a01a",

@@ -1,11 +1,13 @@
 # Weekkeep
 
-> 아이와 보낸 일주일, 사진 7장으로 남겨요.  
-> Keep your week in seven photos.
+> 아이와 보낸 일주일, 최대 7장으로 남겨요.
+> Keep your week in up to seven moments.
 
-Weekkeep은 바쁜 부모가 매주 사진첩을 다시 뒤지지 않아도, 기기가 먼저 제안한 지난 일주일의 가족 사진 최대 7장을 1분 안에 확인하고 하나의 주간 기록으로 남기게 돕는 iPhone 앱입니다.
+Weekkeep은 바쁜 부모가 매주 사진첩을 다시 뒤지지 않아도, 지난 일주일에서 다시 보고 싶은 가족의 순간을 최대 7장 골라 1분 안에 작은 앨범으로 남기게 돕는 iPhone 앱입니다.
 
-현재 단계는 **Implementation / release review pending**입니다. App Store Connect build 6 (`1.0.0 (6)`, `0ffa7586-619f-4df9-abc5-ae7ebbd068b1`)이 `VALID` 처리되어 version `ac4f183e-1019-4ffc-827f-f5514f0d349b`에 첨부되었고, manual release의 current review submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00`은 `WAITING_FOR_REVIEW`입니다. TestFlight `Weekkeep Internal QA` 그룹에는 `READY_FOR_BETA_TESTING` build 6과 초대된 verified account-holder tester 1명이 있으며, internal distribution은 ready/invited 상태일 뿐 설치·purchase·restore test는 아직 확인하지 않았습니다. builds 1–5는 historical/non-target evidence로 분리하며, build 4는 `VALID`/미첨부 상태입니다. build 6의 `WeekkeepTests`는 122/122, 일반 `WeekkeepUITests`는 12/12 통과했고 opt-in 캡처 테스트는 설계대로 제외/skip되었습니다. 알림 집중 테스트는 21/21, build-6 bilingual notification-settings capture는 2/2 통과했습니다. 공개 GitHub 저장소 [kimsol1134/weekkeep](https://github.com/kimsol1134/weekkeep)의 source availability와 logged-out verification은 2026-08-07에 검증되었고, 공식 YouTube demo upload와 logged-out playback/duration verification은 `Validated`입니다. App Review/public release, RevenueCat sandbox purchase/restore와 judge redemption, target-device footage, Devpost receipt는 아직 외부 게이트로 남아 있습니다. 이 상태는 App Store 승인이나 공개 출시를 주장하지 않습니다. 세부 evidence와 blocker 상태는 [traceability](docs/06-TRACEABILITY.md#12-release-blockers--완료-전-implemented로-닫지-않음)에서 추적합니다.
+현재 단계는 **Implementation / release review pending**입니다. App Store Connect build 6 (`1.0.0 (6)`, `0ffa7586-619f-4df9-abc5-ae7ebbd068b1`)이 `VALID` 처리되어 version `ac4f183e-1019-4ffc-827f-f5514f0d349b`에 첨부되었고, manual release의 current review submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00`은 `WAITING_FOR_REVIEW`입니다. TestFlight `Weekkeep Internal QA` 그룹에는 `READY_FOR_BETA_TESTING` build 6과 초대된 verified account-holder tester 1명이 있으며, internal distribution은 ready/invited 상태일 뿐 설치·purchase·restore test는 아직 확인하지 않았습니다. builds 1–5는 historical/non-target evidence로 분리하며, build 4는 `VALID`/미첨부 상태입니다. build 6의 `WeekkeepTests`는 142/142, focused curation cancellation regression은 3/3, 일반 `WeekkeepUITests`는 12/12 통과했고 opt-in 캡처 테스트는 설계대로 제외/skip되었습니다. 알림 집중 테스트는 21/21, build-6 bilingual notification-settings capture는 2/2 통과했습니다. 로컬 next candidate build 7의 exported IPA는 2026-08-07 18:58 KST에 Apple server-side validation만 성공했으며, upload·remote registration·attachment·submission·approval·release는 수행되지 않았고 원격 build 목록에는 여전히 1, 2, 3, 4, 6만 있습니다. 공개 GitHub 저장소 [kimsol1134/weekkeep](https://github.com/kimsol1134/weekkeep)의 source availability와 logged-out verification은 2026-08-07에 검증되었고, 공식 YouTube demo upload와 logged-out playback/duration verification은 `Validated`입니다. App Review/public release, RevenueCat sandbox purchase/restore와 judge redemption, target-device footage, Devpost receipt는 아직 외부 게이트로 남아 있습니다. 이 상태는 App Store 승인이나 공개 출시를 주장하지 않습니다. 세부 evidence와 blocker 상태는 [traceability](docs/06-TRACEABILITY.md#12-release-blockers--완료-전-implemented로-닫지-않음)에서 추적합니다.
+
+The local next candidate `1.0.0 (build 7)` is `APPLE_SERVER_VALIDATED_ONLY`: its exported IPA passed Apple server-side validation, but it was not uploaded, registered, attached, submitted, live, approved, or released. The submitted remote build remains build 6.
 
 ## 문서
 
@@ -101,13 +103,13 @@ git diff --check
 `scripts/validate-release.sh --build` additionally performs the generic iOS Simulator Release build. `--strict` is for a later authenticated release state and is expected to report the remaining store and other external blockers. Generated `Weekkeep.xcodeproj` and all local credentials/evidence remain uncommitted.
 
 - 대상: 0–6세 아이를 둔, 사진은 많이 찍지만 기록은 꾸준히 못 하는 iPhone 사용자
-- 핵심 루프: 주간 사진 수집 → 기기 내 분석 → 최대 7장 검토/교체 → 주간 기록 저장 → branded Story/Post 공유 (`D-004`, `D-005`, `D-034`)
-- 첫 경험: 최근 7일의 사진으로 즉시 만드는 `Welcome Week`
+- 핵심 루프: 주간 사진 살펴보기 → 최대 7장 검토/교체 → 주간 기록 저장 → branded Story/Post 공유 (`D-004`, `D-005`, `D-034`)
+- 첫 경험: 가장 최근 완료된 월–일 주를 우선 사용하고 비어 있을 때만 최근 7일로 fallback하는 `Welcome Week`
 - 반복 기준: 완료된 월–일 기록을 다음 월–일 동안 저장 (`D-012`)
 - 기본 리마인더: 월요일 20:30 로컬 알림, 이미 준비됐다는 표현 없이 앱으로 초대 (`D-009`, `D-013`)
-- 반복 경험: 초안을 확인하며 활성 조작 목표는 분석 대기 제외 60초 이하 (`D-014`)
+- 반복 경험: 준비된 사진을 확인하며 활성 조작 목표는 사진 살펴보기 대기 제외 60초 이하 (`D-014`)
 - 놓친 주: streak·밀린 목록 없이 가장 최근 완료 주 하나부터 다시 시작 (`D-015`)
-- 프라이버시: 사진 분석과 사진 식별자는 기기 밖으로 보내지 않음 (`D-006`)
+- 프라이버시: 사진 고르기와 공유 이미지 만들기는 iPhone에서 처리하고, 사진 정보는 분석을 위해 외부 서비스로 보내지 않음 (`D-006`)
 - 플랫폼: iPhone, iOS 18 이상 (`D-003`)
 - 승인 디자인: Light only, LINE Seed Sans KR, hero+2+4/adaptive grid, code-rendered exact-7 stitch (`D-024`, `D-026`–`D-028`)
 - Review 상호작용: 첫 tap은 사진 선택·교체 action 노출, 선택된 사진의 두 번째 tap은 viewer; 접근성은 직접 action 제공 (`D-029`)
@@ -133,5 +135,5 @@ Codex와 Claude Code는 각각 [AGENTS.md](AGENTS.md)와 [CLAUDE.md](CLAUDE.md)�
 - 문서 버전: `0.5-approved`
 - 기준일: `2026-08-05`
 - 제품 공동 책임: Kim Sol + Codex
-- 최근 로컬 검증: ASC build 6, `WeekkeepTests` 122/122, 일반 `WeekkeepUITests` 12/12, focused notification tests 21/21, bilingual notification-settings capture 2/2; localization, release-assets, public-source, `scripts/validate-release.sh --build`, `git diff --check` 통과
+- 최근 로컬 검증: build-7 IPA local inspection 및 Apple server-side validation only, current local code `WeekkeepTests` 143/143, focused curation regression 3/3, 일반 `WeekkeepUITests` 21 executed/4 skipped/0 failures, focused notification tests 21/21, bilingual notification-settings capture 2/2; localization, release-assets, public-source, core-only/full `scripts/validate-release.sh`, `git diff --check` 통과
 - 외부 상태: ASC build 6은 `VALID`/version 첨부, current review submission은 `WAITING_FOR_REVIEW`, TestFlight Internal QA distribution은 `READY_FOR_BETA_TESTING`/`INVITED`만 확인, builds 1–5는 historical/non-target이며 build 4는 `VALID`/미첨부. 공개 GitHub source availability·logged-out verification과 공식 YouTube demo·logged-out playback/duration verification은 `Validated`이고, App Review 승인/public release와 RevenueCat purchase/restore, judge, target-device, Devpost receipt 등 Shipaton external gates는 pending

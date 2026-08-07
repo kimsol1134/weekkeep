@@ -2,8 +2,8 @@
 
 | 항목 | 값 |
 |---|---|
-| 버전 | 0.5-approved |
-| 기준일 | 2026-08-05 |
+| 버전 | 0.6-approved |
+| 기준일 | 2026-08-07 |
 | 상태 | Approved |
 | 대상 | Weekkeep V1 |
 | 기준 제품 문서 | [PRD](01-PRD.md) |
@@ -74,6 +74,7 @@ ADR은 승인 상태를 소유하지 않습니다. 결정값과 현재 상태는
 | `ADR-014` | `D-033` | replacement 후보를 same-day first로 분리하고 명시적 other-day opt-in과 selected-day alternative retention을 domain/UI adapter에 반영 |
 | `ADR-015` | `D-034` | saved PhotoKit images를 on-device renderer로 Story/Post temporary artifact로 만들고 native share sheet에만 전달; social/cloud/server 경계는 추가하지 않음 |
 | `ADR-016` | `D-035` | approved fixture image resource를 소비하는 focused `FixturePhotoStory` SwiftUI component가 onboarding vertical binding과 Ready/Plus compact rail variant의 geometry를 공유한다. Plus routing은 기존 `WeeklySheet.paywall` item을 `fullScreenCover(item:)`로 표시하고 notification/replacement sheet state와 같은 enum을 필터링해 별도 boolean modal state를 만들지 않는다. web/OG는 같은 fixture source와 flat geometry를 deterministic tooling으로 소비한다 |
+| `ADR-017` | `D-036` | `WeekRangeCalculator`가 completed local ISO week와 rolling fallback 후보를 순서대로 제시하고 eligible descriptor count로 단일 선택을 확정한다. 선택된 `WeekRange`는 `WeeklyFlowModel.resolvedCurationRange`로 root resolution부터 curation까지 pin하며, strategy는 기존 저장 schema를 깨지 않도록 Welcome key namespace에서 파생한다. completed Welcome은 `weekEnd`, fallback/legacy rolling은 저장 시점 다음 월요일을 cycle로 사용하고 persisted cycle을 보존한다. `preRegularWaiting`은 최신 snapshot을 availability와 함께 읽어 실제 cover/placeholder·exact date·archive/share action을 제공하고 header rail을 중복 렌더링하지 않는다 |
 
 ## 5. 시스템 컨텍스트
 
@@ -166,7 +167,8 @@ weekkeep/
 - onboarding/Ready/Plus explanatory preview는 `design/fixtures/app-store-family-moments/01...07` PNG를 seven named image sets로 bundle하고, 하나의 `FixturePhotoStory` component 안에서 onboarding vertical binding 또는 compact exact-seven rail과 hero+2+4 geometry를 공유합니다. faux-content bar, overlapping card-stack fallback, gradient/SF Symbol fake-photo art는 포함하지 않습니다. 이 이미지는 정적 product preview일 뿐 Photos user content나 analytics/vendor payload가 아닙니다.
 - Weekly Review는 기존 header/date rows를 하나의 compact semantic header cluster로 구성하고, 7-photo grid는 semantic photo order와 visual placement를 분리해 full-width 16:10 hero+2+4를 8pt token gap으로 렌더링합니다. 44pt target·지원 폭 조건을 만족하지 못하면 하단 adaptive layout을 2-column으로 선택합니다.
 - Onboarding, This Week, Weekly Review, Archive, Plus, share, and custom Settings roots use the shared `WeekkeepScreenLayout` contract: 20pt horizontal content edges above 375pt and 16pt at or below 375pt. Weekly Review keeps its local hierarchy explicit through `WeeklyReviewSpacing` (32pt header→editorial, 12pt title/body, 32pt editorial/body→media, 8pt photo gutter, 16pt helper/privacy, 24pt primary action); share preparation keeps picker/control internals native and uses a 24pt picker→content boundary through `WeeklyAlbumShareSpacing`.
-- review의 save action은 safe-area inset이나 overlay dock이 아니라 complete grid와 helper/replacement action, PrivacyBadge 뒤의 normal scroll content에 배치합니다. PrivacyBadge는 tinted container 없이 factual local-only inline note이며, SevenStitchRail은 일곱 개의 독립 stitch와 추가 선 없는 geometry로 렌더링합니다.
+- review의 save action은 safe-area inset이나 overlay dock이 아니라 complete grid와 helper/replacement action, PrivacyBadge 뒤의 normal scroll content에 배치합니다. PrivacyBadge는 tinted container 없이 기기 내 처리 범위를 설명하는 factual inline note이며, SevenStitchRail은 일곱 개의 독립 stitch와 추가 선 없는 geometry로 렌더링합니다.
+- `ThisWeekView`의 `welcomePending`/`ready` start action은 `ReadyStateView` 안에서 제목·본문 다음, explanatory photo story 전에 normal document flow로 렌더링합니다. `WeekkeepTabHostSpacing.bottomScrollClearance`는 CTA와 무관한 실제 scroll runway로, photo story/count/limited notice/PrivacyBadge가 native floating tab bar 위에서 끝까지 settle하도록 합니다. safe-area footer, overlay dock, pinned naming은 사용하지 않으며 다른 root state와 route surface에는 CTA를 추가하지 않습니다.
 - iOS 26의 hosted tab route가 ScrollView content를 status region 아래로 underlap할 수 있으므로 RootView는 pure `WeekkeepSystemSafeAreaResolver`를 runtime-first로 호출하고, runtime 값이 모두 0일 때만 active scene/RootView portrait geometry fallback을 사용해 `WeekkeepSystemSafeArea` environment boundary를 주입합니다. `WeeklyReviewView`는 이 boundary와 local proxy safe-area만 소비해 동일한 Cream surface를 unsafe 영역까지 offset한 non-interactive occluder로 사용합니다. visible inset bar/divider/dock은 추가하지 않으며, 72pt real scroll runway가 lower-action state를 editorial whole-or-occluded boundary와 함께 안정시키도록 합니다.
 - review의 `selectedIndex: Int?`와 modal destination은 서로 독립된 명시적 state입니다. 첫 photo intent는 선택, 같은 선택 photo의 다음 intent는 viewer, replace intent는 그 index의 sheet로 reducer가 결정합니다.
 - VoiceOver의 `크게 보기`·`사진 교체` custom action은 tap count에 의존하지 않고 index를 destination에 직접 전달합니다.
@@ -211,7 +213,7 @@ flowchart TD
 | 필드 | 타입 | 규칙 |
 |---|---|---|
 | `id` | UUID | local stable ID |
-| `weekKey` | String | unique, regular는 `YYYY-Www`, Welcome은 별도 namespace |
+| `weekKey` | String | unique, regular는 `YYYY-Www`, Welcome은 `welcome-completed-*`/`welcome-rolling-*`/legacy `welcome-*` namespace |
 | `kindRaw` | String | `welcome` / `regular` |
 | `weekStart` | Date | 절대 시각 저장 |
 | `weekEnd` | Date | nominal range end |
@@ -315,6 +317,14 @@ struct WeekRange: Sendable, Equatable {
 
 Regular Week의 내부 날짜 범위는 `[start, end)` 반개구간으로 표현합니다. `start`는 월요일 00:00, `end`는 다음 월요일 00:00이며 UI에서는 마지막 포함일을 일요일로 표시합니다. `eligibleUntil`도 exclusive입니다. Welcome Week는 이 regular gate를 거치지 않으므로 두 eligibility 값이 `nil`입니다.
 
+첫 앨범 resolution은 다음 순수 계약을 따릅니다.
+
+- `preferredFirstAlbumRange(now:)`: 현재 local ISO week의 직전 월요일–일요일 완료 주를 반환합니다.
+- preferred 범위의 eligible count가 0일 때만 `rollingFirstAlbumRange(analysisStartedAt:)`를 조회합니다.
+- `selectFirstAlbumRange`는 preferred count > 0이면 completed strategy를, preferred가 0이고 fallback > 0이면 rolling fallback strategy를 선택하며 둘 다 0이면 `nil`입니다.
+- strategy는 `WeekRange`의 Welcome key prefix로 파생하므로 SwiftData schema migration이 없습니다. 기존 `welcome-*`는 `legacyRollingWelcome`으로 해석합니다.
+- `WeeklyFlowModel`은 root resolution에서 선택한 exact range를 `resolvedCurationRange`에 보관하고 CTA·권한 resume·paywall resume에서 현재 시각으로 다시 계산하지 않습니다.
+
 ### `WeekRootStateReducer`
 
 [IA의 우선순위 계약](03-IA.md#weekrootstatereducer-계약)을 순수 함수로 구현합니다. feature view나 비동기 callback이 여러 boolean을 조합해 root 상태를 직접 만들 수 없습니다.
@@ -351,11 +361,11 @@ enum WeekRootState: Sendable, Equatable {
 
 1. 내부 연산은 injected Calendar/TimeZone을 사용하고 `Calendar.current`를 여러 곳에서 직접 읽지 않습니다.
 2. regular `weekKey` 생성은 week-based year와 week-of-year를 함께 사용합니다.
-3. Welcome 저장 시 다음 월요일 00:00을 `regularCycleStartsAt`으로 고정합니다. Regular target 후보는 반드시 `start >= regularCycleStartsAt`이어야 하며, 그 전 주를 Welcome 직후 다시 만들지 않습니다.
+3. completed-calendar-week Welcome 저장 시 `regularCycleStartsAt = album.weekEnd`로 고정합니다. rolling fallback과 legacy rolling Welcome은 저장 시점 다음 월요일을 사용하고, 이미 persisted 값이 있으면 덮어쓰지 않습니다. Regular target 후보는 반드시 `start >= regularCycleStartsAt`이어야 하며, 그 전 주를 Welcome 직후 다시 만들지 않습니다.
 4. Regular target은 현재 시각보다 먼저 완전히 끝난 가장 최근 월요일–월요일 반개구간 하나입니다. 진행 중인 주는 대상이 아닙니다.
 5. `eligibleFrom`은 대상 주의 `end`, `eligibleUntil`은 calendar로 7일을 더한 다음 월요일 00:00입니다. `eligibleFrom <= now < eligibleUntil`이면 언제든 시작할 수 있습니다.
 6. 월요일 20:30 알림은 진입점일 뿐 eligibility를 열거나 닫지 않습니다.
-7. Regular Week의 `cutoff`는 완료된 주의 `end`로 고정합니다. Welcome Week만 분석 시작 시각을 cutoff로 사용합니다.
+7. Regular Week의 `cutoff`는 완료된 주의 `end`로 고정합니다. completed Welcome도 `end`를 cutoff로 사용하고 rolling/legacy Welcome만 분석 시작 시각을 cutoff로 사용합니다.
 8. 완료 창을 놓쳐 다음 주가 끝나면 이전 미저장 범위를 queue에 쌓지 않고 최신 완료 주로 대체합니다.
 9. eligibility 안에서 `CurationDraft`를 만들면 그 `weekKey`를 flow lifetime 동안 pin합니다. 자정이나 significant time change가 와도 저장·취소 전에는 target을 교체하지 않습니다.
 10. DST로 하루가 23/25시간이어도 calendar date interval을 사용하고 초 단위 `7*24h` 계산을 하지 않습니다.
@@ -513,9 +523,9 @@ selectionValue(candidate) =
 
 - `WeeklyAlbumShareRenderer`는 `WeeklyAlbumSnapshot`과 PhotoKit `displayImage` value data를 받아 `UIImage`/Core Graphics로만 렌더링합니다. `PHAsset`은 renderer 경계를 넘지 않습니다.
 - Story는 정확히 1080×1920, Post는 정확히 1080×1350 canvas입니다. 7장은 hero+2+4 frame table, 1–6장은 실제 image count에 맞춘 adaptive frame table을 사용합니다.
-- canvas는 semantic Weekkeep palette로 warm paper, canonical wordmark, local date range, exact seven muted stitches, `Made with Weekkeep`를 그립니다. filename, location, Photos identifier, score, analytics data, child/family identity와 fake image는 draw input이 아닙니다.
-- renderer output은 temporary `WeekkeepShare` directory의 atomic file 1개에만 쓰고, 새 준비 시 강제 종료 등으로 남은 이전 artifact를 먼저 정리합니다. explicit share button 뒤 `UIActivityViewController`에 `UIActivityItemSource`를 전달해 localized generic title과 이미 렌더링한 artifact thumbnail을 native preview로 제공하며, 실제 item은 local file URL입니다. metadata에는 public URL을 넣지 않고 destination/recipient는 수집하지 않습니다.
-- V1 artifact에는 public install URL을 그리지 않습니다. 실제 App Store URL을 native share payload에 추가하는 변경은 URL 공개 뒤 별도 configuration·QA를 거칩니다. local share는 backup/import/export of app state가 아니라 user-triggered presentation artifact입니다.
+- canvas는 semantic Weekkeep palette로 warm paper, canonical wordmark, local date range, optional cumulative serial label, exact seven muted stitches 위의 localized conversational prompt, `Made with Weekkeep`를 그립니다. serial ordinal은 `AlbumStore.listAlbums()`의 `createdAt` → `weekStart` → UUID 문자열 deterministic sort에서 1-based로 파생하며 SwiftData에 저장하지 않습니다. filename, location, Photos identifier, score, analytics data, child/family identity와 fake image는 draw input이 아닙니다.
+- renderer output은 temporary `WeekkeepShare` directory의 atomic file 1개에만 쓰고, 새 준비 시 강제 종료 등으로 남은 이전 artifact를 먼저 정리합니다. explicit share button 뒤 `UIActivityViewController`에 image `UIActivityItemSource`를 첫 항목으로 전달해 localized generic title과 이미 렌더링한 artifact thumbnail을 native preview로 제공하며, 실제 image item은 local file URL입니다. 별도의 native item sources로 localized parent invitation과 canonical URL `https://apps.apple.com/app/id6798449478`을 전달합니다. UIActivityViewController의 destination 협상에 따라 image-only destination은 image를 유지하고 link-capable destination은 text와 URL을 사용할 수 있습니다. private activity identifier나 destination별 분기를 사용하지 않습니다.
+- V1 artifact에는 public install URL, QR code, loud ad overlay를 그리지 않으며 existing `Made with Weekkeep` branding을 유지합니다. recipient/destination/photo metadata는 수집하지 않습니다. 이 next-candidate는 제출된 ASC build 6에 포함되지 않았고, URL이 공개 릴리스 전에 live라고 주장하지 않습니다. local share는 backup/import/export of app state가 아니라 user-triggered presentation artifact입니다.
 - Photos availability가 줄면 renderer는 실제 available images만으로 adaptive layout을 만들고, 모두 없으면 share preparation을 실패 상태로 표시합니다.
 
 ## 12. Concurrency와 메모리
@@ -590,7 +600,7 @@ save가 실패하면 analytics 성공 이벤트와 notification primer를 실행
 - iOS의 기기 backup 또는 전송이 앱 데이터를 옮기는 경우가 있더라도 Weekkeep 제품 기능으로 성공을 보장하지 않습니다. 복원된 `localIdentifier`는 모두 다시 availability 검증합니다.
 - 원본 사진이 Photos에 남아 있어도 저장했던 선택과 순서를 자동 추론·재생성하지 않습니다.
 - `PurchaseClient.restore()`는 entitlement만 갱신하며 `AlbumStore`를 호출하지 않습니다.
-- Settings·paywall 개인정보 링크의 보존 안내는 `FR-022`의 한국어·영어 카피를 사용합니다.
+- Archive와 Paywall의 개인정보·보존 안내는 `FR-022`의 한국어·영어 카피를 사용합니다. Settings는 중복 보존 요약을 렌더링하지 않고 Help & Support의 Privacy Policy action으로 연결합니다.
 
 ### 원본 누락
 
@@ -664,22 +674,24 @@ canReadSavedAlbum = true
 UserNotifications의 local notification만 사용합니다. Settings는 `SettingsNotificationPresentation`이라는 순수 policy로 notification status × saved album count를 결정하며, count가 0이거나 아직 count를 확인하지 못한 경우 `.none` action을 반환합니다.
 
 - 첫 album 저장 후 contextual primer; 저장 성공 직후 authorization status를 다시 확인해 `notDetermined`일 때만 primer를 제안하며, 이미 결정되었거나 primer를 본 상태에서는 제안하지 않음
-- Settings에서 저장 기록이 0개이면 permission request와 system settings 이동을 모두 막고, 설명형 disabled/informational row만 렌더링
-- Settings에서 저장 기록이 1개 이상이면 `notDetermined`만 request, `authorized`/`provisional`/`denied`/`ephemeral`은 system settings 이동
+- Settings에서 저장 기록이 0개이면 permission request와 system settings 이동을 모두 막고, status row와 설명형 static row만 렌더링
+- Settings에서 저장 기록이 1개 이상이면 status row 자체가 `notDetermined`에서 request하고, `authorized`/`provisional`/`denied`/`ephemeral`에서는 system settings로 이동하며 별도 notification action row는 렌더링하지 않음
 - model action은 policy가 `.none`이면 notification client의 request를 호출하지 않음; 저장 기록 count는 reminder scheduling의 전제
-- primer copy: `매주 월요일 저녁에 알려드릴까요?`
-- 사용자 승인 뒤 향후 12주 월요일 20:30을 `weeklyReminder.{targetWeekKey}` 식별자의 one-off calendar trigger로 예약
-- 민감정보 없고 background 완료를 주장하지 않는 copy: `지난주를 1분 만에 남겨볼까요?`
+- primer copy: `다음 기록을 남길 때 알려드릴까요?`와 `다음 기록 가능일: {localized exact date}`
+- 사용자 승인 뒤 향후 12주 월요일 20:30을 `weeklyReminder.{targetWeekKey}` 식별자의 one-off calendar trigger로 예약하며 `WeeklyReminderSchedule`이 target key를 dedupe
+- 민감정보 없고 background 완료를 주장하지 않는 copy: `월요일 저녁, 여유가 될 때 다시 볼 수 있도록 알려드릴게요.`
 - deep link: `weekkeep://weekly/current`
 - foreground에서 authorization/status 재조회; primer accept 시에도 status를 재확인해 이미 결정된 상태에서 두 번째 system request를 만들지 않음
 - foreground, 저장 성공, significant time change에서 12주 rolling schedule을 다시 계산
 - 알림의 `targetWeekKey`는 직전 완료된 월–일 주이며, 알림 전 이미 저장됐다면 해당 pending request를 제거하고 다음 주 알림은 유지
 - `targetWeekStart < regularCycleStartsAt`인 알림은 예약하지 않아 Welcome Week 직후 중복 기록을 유도하지 않음
 - 알림을 놓쳐도 대상은 다음 일요일 23:59까지 eligible이며 별도 재촉 알림은 보내지 않음
+- completed Welcome의 next eligible date는 `regularRange(startingAt: regularCycleStartsAt).eligibleFrom`으로 계산하고, notification primer와 `preRegularWaiting`이 같은 값을 사용
+- 알림 delegate만 `entryPoint=notification`, 일반 initial/tab/deep-link 진입은 `entryPoint=direct`로 typed event에 전달하며 timestamp로 추론하지 않음
 
 ### 왜 background album을 만들지 않는가
 
-iOS background task 실행 시각은 보장되지 않으며 Photos/iCloud 작업은 네트워크와 권한 상태에 좌우됩니다. V1 알림은 ‘완성된 앨범 도착’이 아니라 앱을 열어 초안을 만들고, 준비된 결과를 1분 안의 활성 조작으로 검토하라는 **리마인더**입니다. foreground 분석 대기 시간은 60초 활성 검토 목표에 포함하지 않습니다.
+iOS background task 실행 시각은 보장되지 않으며 Photos/iCloud 작업은 네트워크와 권한 상태에 좌우됩니다. V1 알림은 ‘완성된 앨범 도착’이 아니라 앱을 열어 한 주의 선택을 준비하고, 준비된 결과를 1분 안의 활성 조작으로 검토하라는 **리마인더**입니다. 사진을 살펴보는 대기 시간은 60초 활성 검토 목표에 포함하지 않습니다.
 
 ### OneSignal gate
 
@@ -729,7 +741,8 @@ protocol AnalyticsClient: Sendable {
 - 분석 진행, 저장 처리, 알림에서 앱을 열기 전 시간은 제외합니다.
 - 원시 초 단위 값은 외부로 보내지 않고 `under_30s`, `30_60s`, `60_120s`, `over_120s` bucket을 `EVT-album_saved.active_review_duration_bucket`으로 보냅니다.
 - `EVT-album_saved.regular_sequence_bucket`은 target `weekStart`와 `regularCycleStartsAt`의 캘린더 주 차이로 `w1`, `w2`, `w3_plus`를 계산합니다. 저장 횟수나 앱 재실행 횟수로 계산하지 않으며 Welcome은 `not_applicable`입니다.
-- `EVT-share_sheet_opened`는 local artifact가 준비된 뒤 native share sheet를 여는 명시적 탭에서 한 presentation당 한 번만 기록합니다. 허용 값은 `format=story|post`, `entry_point=save_confirmation|archive_detail`뿐이며 외부 destination, recipient, completion은 관찰하거나 추정하지 않습니다.
+- `EVT-share_sheet_opened`는 local artifact가 준비된 뒤 native share sheet를 여는 명시적 탭에서 한 presentation당 한 번만 기록합니다. `EVT-share_completed`는 `UIActivityViewController.completionWithItemsHandler`의 `completed == true`일 때만 presentation당 한 번 기록합니다. 두 event 모두 허용 값은 `format=story|post`, `entry_point=save_confirmation|archive_detail`뿐이며 activity type, returned items, error, destination, recipient, message contents는 adapter 경계를 넘지 않습니다. 취소는 completion event를 만들지 않습니다.
+- `EVT-eligible_week_opened`는 unsaved eligible regular target이 This Week root에서 열릴 때만 기록합니다. 허용 property는 `entry_point=direct|notification` 하나이며 weekKey/date/photo/identifier/recipient/destination/free-form 값은 보내지 않습니다. AppRouter notification delegate와 `onOpenURL`의 명시적 route origin을 사용하고 timestamp로 origin을 추론하지 않습니다.
 
 ### Event privacy compile-time rule
 
@@ -810,11 +823,11 @@ vendor error 원문은 release UI에 직접 표시하지 않습니다. 진단 �
 
 한국어:
 
-> Weekkeep이 지난 일주일의 사진을 기기에서 골라 주간 기록을 만들 수 있도록 사진 접근을 허용해 주세요.
+> 최근 완료된 월요일부터 일요일까지의 한 주에서 첫 추억을 고를 수 있도록 사진 접근을 허용해 주세요. 그 주에 적격 사진이 없으면 최근 7일을 확인할 수 있어요. 사진 고르기는 이 iPhone 안에서 이뤄져요.
 
 영어:
 
-> Allow Weekkeep to choose photos from your last week on this device and create a weekly memory.
+> Allow Weekkeep to choose your first week from the most recently completed Monday–Sunday week. If it has no eligible photos, Weekkeep may check your most recent 7 days. Photos are processed on your iPhone.
 
 ## 19. Accessibility Engineering
 
@@ -836,7 +849,7 @@ vendor error 원문은 release UI에 직접 표시하지 않습니다. 진단 �
 
 | 영역 | 필수 사례 |
 |---|---|
-| WeekRangeCalculator | 연말, DST, 시간대 변경, Monday eligibility window, latest-only, Welcome → regular |
+| WeekRangeCalculator | 연말, DST, 시간대 변경, Monday eligibility window, latest-only, preferred completed Welcome, zero-only rolling fallback, 1–7 day next eligibility, legacy Welcome → regular |
 | WeekRootStateReducer | pending/permission/error/welcome/waiting/saved/0-photo/locked/ready 조합의 단일 상태와 우선순위 |
 | WeeklyReview interaction reducer | nil→선택, 다른 index→선택 이동, 같은 index 재탭→viewer, direct replace/view action, save와 선택 독립 |
 | CandidateSampler / MetadataCandidatePrefilter | 0/1/6/7/14/21/35/100/500장, local-day·time-bucket coverage, favorite/resolution tie-breaker, deterministic seed, maximum Vision 21 |
@@ -844,7 +857,7 @@ vendor error 원문은 release UI에 직접 표시하지 않습니다. 진단 �
 | AlbumValidator | duplicate asset, invalid position, empty selection, >7 |
 | AlbumStore | insert/update, double tap race, rollback, count derivation |
 | EntitlementPolicy | free 0/1/2, active/inactive/unknown |
-| Analytics schema | 금지 key/value type, event snapshot |
+| Analytics schema | 금지 key/value type, `eligible_week_opened` direct/notification event snapshot |
 | DeepLink parser | valid/invalid/missing album, no photo ID route |
 
 ### Integration tests
@@ -853,11 +866,13 @@ vendor error 원문은 release UI에 직접 표시하지 않습니다. 진단 �
 - fixture image set + Vision pipeline golden result tolerance
 - fake PhotoLibrary/SignalAnalyzer로 100 descriptor → ≤21 Vision call, 416px target, monotonic progress, per-asset timeout, global budget partial draft
 - CurationDraft replacement same-day default, explicit other-day opt-in, selected-day alternative retention
-- WeeklyAlbumShareRenderer synthetic image contract: Story/Post dimensions, adaptive frame count, nonempty output, no photo identifiers/private metadata, temporary file cleanup
+- WeeklyAlbumShareRenderer and native share contract: Story/Post dimensions, adaptive frame count, nonempty output, no photo identifiers/private metadata or rendered install URL, temporary file cleanup, image-first item composition, canonical HTTPS URL, localized invitation, and no Kakao/upload dependency
 - fake Photos library states full/limited/denied/restricted
 - iCloud partial failure와 cancellation
 - RevenueCat adapter contract fake
 - local notification scheduling calendar verification
+- first-album waiting snapshot loading, exact date, view/share actions, no duplicate content rail
+- Korean/English first-use copy and localized Photos purpose strings
 
 ### UI tests
 

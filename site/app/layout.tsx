@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     template: "%s · Weekkeep",
   },
   description:
-    "Weekkeep helps parents turn the last week on their iPhone into a small album of up to seven photos—privately, on device.",
+    "Weekkeep helps parents keep up to seven moments from the past week. Photo selection and share rendering happen on your iPhone; sharing starts only when you choose it.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Weekkeep — A week worth keeping",
     description:
-      "Turn the last week into a small album of up to seven photos. Your photos stay on your iPhone.",
+      "Keep up to seven moments from the last week. Photo selection and share rendering happen on your iPhone; sharing starts only when you choose it.",
     type: "website",
     images: [{ url: "/og.png", width: 1200, height: 630 }],
   },

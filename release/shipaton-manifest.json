@@ -122,6 +122,352 @@
       ]
     }
   },
+  "local_build6_debug_fixture_physical_screenshot_evidence": {
+    "status": "validated_local_debug_fixture_only",
+    "evidence_directory": "release/local/target-device-qa/20260807T2006KST-build6-debug-fixture-device-screenshots",
+    "summary": "release/local/target-device-qa/20260807T2006KST-build6-debug-fixture-device-screenshots/QA-SUMMARY.md",
+    "sha256sums": "release/local/target-device-qa/20260807T2006KST-build6-debug-fixture-device-screenshots/SHA256SUMS.txt",
+    "bundle_id": "com.solkim.weekkeep",
+    "version": "1.0.0",
+    "build": "6",
+    "scope": "local_debug_fixture_not_remote_asc_build_6",
+    "remote_build_ref": "current_release_build",
+    "candidate_build_7_ref": "local_next_candidate",
+    "device": "iPhone 16 Pro",
+    "os": "iOS 26.5.2",
+    "passcode_required": false,
+    "unlocked_since_boot": true,
+    "fixtures_only": true,
+    "launch_commands": [
+      "xcrun devicectl device process launch --device 'iPhone' --terminate-existing com.solkim.weekkeep -- -ui-fixtures",
+      "xcrun devicectl device process launch --device 'iPhone' --terminate-existing --environment-variables '{\"WK_UI_TEST_FIXTURES\":\"1\",\"WK_UI_FIXTURE_SCREEN\":\"ready\"}' com.solkim.weekkeep -- -ui-fixtures -ui-fixtures-skip-notification"
+    ],
+    "screenshots": [
+      {
+        "name": "01-onboarding-physical.png",
+        "path": "release/local/target-device-qa/20260807T2006KST-build6-debug-fixture-device-screenshots/01-onboarding-physical.png",
+        "width": 1206,
+        "height": 2622,
+        "alpha": false,
+        "opacity": "opaque",
+        "sha256": "5a8dd42a98531eefa4cb74e1b4a42ac237c1ae2cb8b1e174b9f4d28c5fa7d47f"
+      },
+      {
+        "name": "02-ready-physical.png",
+        "path": "release/local/target-device-qa/20260807T2006KST-build6-debug-fixture-device-screenshots/02-ready-physical.png",
+        "width": 1206,
+        "height": 2622,
+        "alpha": false,
+        "opacity": "opaque",
+        "sha256": "f3e528007d1dbcf47c3dae674c6bb64c25fc204327ef69316f82fdebf3b10f5e"
+      }
+    ],
+    "visual_finding": {
+      "status": "found",
+      "scope": "local_debug_build_6_physical_visual_finding",
+      "finding": "ready_primary_start_cta_below_initial_viewport",
+      "contract": "no_scroll_first_cta",
+      "build7_physical_verification": "resolved_in_local_debug_fixture_build7",
+      "build7_physical_verification_evidence_ref": "local_build7_physical_screenshot_evidence",
+      "remote_replacement_authorization": "explicit_user_authorization_required"
+    },
+    "non_claims": [
+      "local_build7_physical_behavior",
+      "native_share_sheet_and_share_delivery",
+      "purchase_and_restore",
+      "actual_photokit_performance",
+      "remote_asc_binary_identity",
+      "public_app_store_release",
+      "devpost_submission",
+      "physical_device_video"
+    ]
+  },
+  "local_build7_physical_screenshot_evidence": {
+    "status": "validated_local_physical_screenshots_only",
+    "evidence_directory": "release/local/target-device-qa/20260807T2033KST-build7-physical-screenshots",
+    "summary": "release/local/target-device-qa/20260807T2033KST-build7-physical-screenshots/QA-SUMMARY.md",
+    "sha256sums": "release/local/target-device-qa/20260807T2033KST-build7-physical-screenshots/SHA256SUMS.txt",
+    "bundle_id": "com.solkim.weekkeep",
+    "version": "1.0.0",
+    "build": "7",
+    "scope": "local_physical_device_screenshots_not_remote_asc_build_6_not_production_photokit",
+    "remote_build_ref": "current_release_build",
+    "candidate_build_ref": "local_next_candidate",
+    "remote_asc_build_6_unchanged": true,
+    "device": "iPhone 16 Pro",
+    "os": "iOS 26.5.2",
+    "mixed_surface_scope": "local_archive_waiting_surface_and_local_debug_fixture_ready_surface",
+    "installed_on_device_note": "DEBUG build 7 after second install",
+    "install_sequence": [
+      {
+        "order": 1,
+        "artifact_path": "LOCAL_ARCHIVE_BUILD7/Weekkeep.xcarchive/Products/Applications/Weekkeep.app",
+        "artifact_role": "local_archive_waiting_surface",
+        "pre_install_version": "1.0.0",
+        "pre_install_build": "7",
+        "development_signed": true,
+        "get_task_allow": true,
+        "device_verification": "Xcode Device Hub installed-app row and devicectl both showed com.solkim.weekkeep 1.0.0 build 7"
+      },
+      {
+        "order": 2,
+        "artifact_path": "SIGNED_DEBUG_FIXTURE_BUILD7/Build/Products/Debug-iphoneos/Weekkeep.app",
+        "artifact_role": "signed_debug_fixture_ready_surface",
+        "pre_install_version": "1.0.0",
+        "pre_install_build": "7",
+        "development_signed": true,
+        "get_task_allow": true,
+        "executable_mtime": "2026-08-07 19:20:27 +0900",
+        "device_verification": "devicectl showed com.solkim.weekkeep 1.0.0 build 7"
+      }
+    ],
+    "launch_commands": {
+      "archive_waiting": {
+        "command": "Launched without a DEBUG fixture environment.",
+        "standalone_shell_command_supplied": false,
+        "scope": "local archive build-7 waiting surface"
+      },
+      "debug_fixture_ready": "xcrun devicectl device process launch --device 'iPhone' --terminate-existing --environment-variables '{\"WK_UI_TEST_FIXTURES\":\"1\",\"WK_UI_FIXTURE_SCREEN\":\"ready\"}' com.solkim.weekkeep -- -ui-fixtures -ui-fixtures-skip-notification"
+    },
+    "screenshots": [
+      {
+        "name": "01-production-waiting-physical.png",
+        "path": "release/local/target-device-qa/20260807T2033KST-build7-physical-screenshots/01-production-waiting-physical.png",
+        "source_path": "PHYSICAL_DEVICE_CAPTURE/01-production-waiting-physical.png",
+        "surface": "local_archive_waiting_surface",
+        "width": 1206,
+        "height": 2622,
+        "alpha": false,
+        "opacity": "opaque",
+        "sha256": "ff9a9d359f64c7baa604d229d30600619c14199e86c0c8dbf6e7ada8401f485c",
+        "visual_finding": "waiting_state_and_distinct_three_item_bottom_navigation;no_cta_claim_waiting_state"
+      },
+      {
+        "name": "02-debug-fixture-ready-physical.png",
+        "path": "release/local/target-device-qa/20260807T2033KST-build7-physical-screenshots/02-debug-fixture-ready-physical.png",
+        "source_path": "PHYSICAL_DEVICE_CAPTURE/02-debug-fixture-ready-physical.png",
+        "surface": "signed_debug_fixture_ready_surface",
+        "width": 1206,
+        "height": 2622,
+        "alpha": false,
+        "opacity": "opaque",
+        "sha256": "b679c7bb0c83853701b4216535f06291d00b1139327ec9027933a2c4e103df21",
+        "visual_finding": "primary_cta_fully_visible_in_initial_viewport;no_scroll_first_cta_resolved_local_debug_fixture_build7;distinct_calendar_photo_settings_bottom_nav_icons"
+      }
+    ],
+    "finding_resolution": {
+      "historical_build6_finding": "ready_primary_start_cta_below_initial_viewport",
+      "contract": "no_scroll_first_cta",
+      "status": "resolved_in_local_debug_fixture_build7",
+      "scope": "local_debug_fixture_only",
+      "remote_replacement": "not_performed_or_authorized"
+    },
+    "pending_gates": [
+      "native_share_sheet_and_share_delivery",
+      "purchase_and_restore",
+      "actual_photokit_performance",
+      "remote_asc_registration_attachment_review_approval_release",
+      "target_device_functioning_footage",
+      "public_app_store_release",
+      "devpost_submission"
+    ],
+    "non_claims": [
+      "native_share_sheet_and_share_delivery",
+      "purchase_and_restore",
+      "actual_photokit_performance",
+      "remote_asc_build_6_binary_identity",
+      "app_store_live_or_public_release",
+      "physical_device_video",
+      "devpost_submission"
+    ]
+  },
+  "local_next_candidate": {
+    "app_id": "6798449478",
+    "bundle_id": "com.solkim.weekkeep",
+    "version": "1.0.0",
+    "build": "7",
+    "source_ssot": "project.yml",
+    "release_method": "manual",
+    "status": "LOCAL_NEXT_CANDIDATE",
+    "upload_state": "NOT_UPLOADED",
+    "asc_build_id": null,
+    "asc_processing_state": "NOT_UPLOADED",
+    "app_store_version_attachment": "NOT_ATTACHED",
+    "review_submission_state": "NOT_SUBMITTED",
+    "live_state": "NOT_LIVE",
+    "external_validation_status": "APPLE_SERVER_VALIDATED_ONLY",
+    "apple_server_validation": {
+      "status": "VERIFY_SUCCEEDED",
+      "validated": true,
+      "scope": "exported_ipa_only",
+      "command": "asc xcode validate",
+      "checked_at": "2026-08-07T18:58:00+09:00",
+      "archive_path": "LOCAL_ARCHIVE_BUILD7/Weekkeep.xcarchive",
+      "ipa_path": "LOCAL_EXPORT_BUILD7_PREFLIGHT/Weekkeep.ipa",
+      "ipa_sha256": "6d8b62a2d8d354debf777791cbc795ddde662c01bdb0da91f31640c101b8d2bf",
+      "remote_registration": "NOT_PERFORMED"
+    },
+    "next_sharing_improvements": [
+      "cumulative_family_week_ordinal",
+      "conversational_prompt_and_invitation",
+      "privacy_safe_share_completed"
+    ],
+    "physical_native_share_qa": {
+      "test": "WeekkeepUITests/WeekkeepUITests/testPhysicalShareSheetQAIsOptInFixtureOnlyNoPrivatePixelsNoSend",
+      "environment": "WK_CAPTURE_PHYSICAL_SHARE_QA=1",
+      "launch_arguments": ["-ui-fixtures"],
+      "status": "ATTEMPTED_INVALID_INCOMPLETE",
+      "device": "iPhone 16 Pro",
+      "device_state": "UNLOCKED",
+      "attempt_count": 2,
+      "runner_install_launch": "COMPLETED",
+      "test_body_executed": false,
+      "failure": "Timed out while enabling automation mode.",
+      "host_diagnostics": [
+        {
+          "command": "xcrun automationmodetool",
+          "result": "Automation Mode is disabled. This device requires user authentication to enable Automation Mode;"
+        },
+        {
+          "command": "/usr/sbin/DevToolsSecurity -status",
+          "result": "Developer mode is currently disabled."
+        }
+      ],
+      "blocker": "MAC_HOST_SECURITY_AUTOMATION_PREREQUISITE",
+      "app_failure": false,
+      "iphone_lock_blocker": false,
+      "result_bundle_paths": {
+        "unlocked_attempt": "LOCAL_RESULT_BUNDLE/physical-share-build7-unlocked/PhysicalShareQA.xcresult",
+        "retry_attempt": "LOCAL_RESULT_BUNDLE/physical-share-build7-retry/PhysicalShareQA.xcresult",
+        "earlier_locked_attempt_historical": "LOCAL_RESULT_BUNDLE/physical-share-build7-locked-historical/PhysicalShareQA.xcresult"
+      },
+      "evidence": {
+        "result_bundles_valid": false,
+        "attachments_valid": false,
+        "screenshots_valid": false,
+        "share_destination_selected": false,
+        "send_occurred": false,
+        "private_photokit_access": false,
+        "purchase_or_restore_occurred": false
+      },
+      "historical_context": "The earlier locked attempt is retained as historical attempt context only; it is not the current blocker."
+    }
+  },
+  "build7_shipaton_screenshot_evidence": {
+    "status": "fixture_only_local_evidence",
+    "candidate_build": "1.0.0 (7)",
+    "selected_contract": [
+      "01-welcome",
+      "02-review",
+      "03-save-confirmation",
+      "04-share-preview"
+    ],
+    "evidence_directory": "release/local/visual-qa/20260807-build7-shipaton-sharing-v12",
+    "final_directory": "release/local/visual-qa/20260807-build7-shipaton-sharing-v12/final",
+    "raw_xctest_attachments": "release/local/visual-qa/20260807-build7-shipaton-sharing-v12/raw/attachments",
+    "raw_simulator_captures": "release/local/visual-qa/20260807-build7-shipaton-sharing-v12/raw/simulator-captures",
+    "result_bundle": "release/local/visual-qa/20260807-build7-shipaton-sharing-v12/raw/build7-shipaton-capture.xcresult",
+    "provenance": "release/local/visual-qa/20260807-build7-shipaton-sharing-v12/PROVENANCE.md",
+    "sha256": "release/local/visual-qa/20260807-build7-shipaton-sharing-v12/SHA256SUMS.txt",
+    "source": "Same-state exact simulator JPEG framebuffer captures from bundled SamplePhotoFixtures; XCTest attachments are retained and resolved by attachment name",
+    "photo_kit_evidence": false,
+    "private_photo_pixels": false,
+    "native_share_sheet_opened": false,
+    "upload_or_submission_performed": false,
+    "simulator": {
+      "name": "Weekkeep Shipaton Build7 iPhone 15 Pro",
+      "logical_device_label": "build7_shipaton_iphone15pro_simulator_fixture",
+      "device_model_identifier": "com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro",
+      "runtime_identifier": "com.apple.CoreSimulator.SimRuntime.iOS-26-5",
+      "runtime_version": "iOS 26.5",
+      "source_dimensions": "1179x2556"
+    },
+    "locale": "en",
+    "final_sha256": {
+      "01-welcome.jpg": "aea255375a247f3ae90b1ae07ac200ff21d7892e46c094786fc066a65d3487fc",
+      "02-review.jpg": "e86fd547c99f6836874e9e3be2ac37d658e6ace72259701b21fd82b1b044f26e",
+      "03-save-confirmation.jpg": "fb00de5c569b8e764d1eb7e5db4898b3cf9713aae0fab33ef9830c514d9268c6",
+      "04-share-preview.jpg": "3f647db922df9178ab6d3726cc2b7c773622715a7f3b2875142bf0692ef47bb1"
+    }
+  },
+  "judging_evidence": {
+    "status": "local_evidence_ready_external_submission_pending",
+    "source_document": "docs/11-SHIPATON-SUBMISSION.md",
+    "prescreening_messages": {
+      "elevator_pitch": "docs/11-SHIPATON-SUBMISSION.md#심사위원이-20초-안에-이해해야-할-문장",
+      "app_in_use": "docs/11-SHIPATON-SUBMISSION.md#72-second-demo-master",
+      "targeted_categories": [
+        "RevenueCat Design Award",
+        "HAMM Award (Help Apps Make Money)"
+      ],
+      "demo_category_cue": "videos/weekkeep-remotion/src/scenes/Scene10EndCard.tsx"
+    },
+    "categories": {
+      "RevenueCat Design Award": {
+        "decision": "Focus",
+        "role": "primary",
+        "answer_section": "## 4. Design Award answer — English",
+        "evidence_status": "local_contracts_and_demo_ready_external_submission_pending",
+        "local_evidence_refs": [
+          "docs/06-TRACEABILITY.md:TST-019",
+          "docs/06-TRACEABILITY.md:TST-041",
+          "docs/06-TRACEABILITY.md:TST-042",
+          "docs/06-TRACEABILITY.md:TST-049",
+          "release/local/visual-qa/20260807-build7-shipaton-sharing-v12/final",
+          "videos/weekkeep-remotion/src/scenes/Scene10EndCard.tsx"
+        ],
+        "external_evidence_required": [
+          "external_evidence.devpost_required_fields_and_category_answers"
+        ]
+      },
+      "HAMM Award (Help Apps Make Money)": {
+        "decision": "Focus",
+        "role": "secondary",
+        "answer_section": "## 5. HAMM Award (Help Apps Make Money) answer — English",
+        "evidence_status": "copy_ready_purchase_and_post_launch_metrics_pending",
+        "local_evidence_refs": [
+          "docs/06-TRACEABILITY.md:TST-016",
+          "docs/06-TRACEABILITY.md:TST-017",
+          "release/app-store-metadata.json",
+          "release/shipaton-manifest.json:.iap",
+          "release/shipaton-manifest.json:.intake_filter.gates.judge_unlock"
+        ],
+        "external_evidence_required": [
+          "external_evidence.revenuecat_product_and_sandbox_purchase",
+          "external_evidence.app_store_record"
+        ],
+        "post_launch_metrics_status": "excluded_until_evidence",
+        "prohibited_claims_without_external_evidence": [
+          "purchase_completion",
+          "conversion",
+          "revenue"
+        ]
+      },
+      "#BuildInPublic": {
+        "decision": "Focus",
+        "role": "supporting",
+        "answer_section": "### #BuildInPublic submission block — English (supporting; gated)",
+        "evidence_status": "excluded_until_public_links_and_feedback_evidence",
+        "local_evidence_refs": [],
+        "external_evidence_required": [
+          "public_post_links",
+          "verified_feedback_to_change_evidence"
+        ],
+        "prohibited_claims_without_external_evidence": [
+          "public_feedback",
+          "public_building_outcome"
+        ]
+      }
+    },
+    "no_metric_claims_without_external_evidence": true
+  },
+  "build_identity_contract": {
+    "submitted_remote_build_ref": "current_release_build",
+    "local_next_candidate_build_ref": "local_next_candidate",
+    "roles_are_mutually_exclusive": true,
+    "remote_build_state_is_unchanged": true,
+    "local_candidate_must_not_claim_remote_submission": true
+  },
   "historical_local_build_5": {
     "version": "1.0.0",
     "build": "5",
@@ -561,7 +907,12 @@
         "target_device": "iPhone",
         "must_show_functioning_project": true,
         "local_physical_qa_evidence": "release/local/target-device-qa/20260806T2102KST-build3/QA-SUMMARY.md",
-        "local_physical_qa_status": "validated_build3_install_and_fixture_argument_launch;build6_ui_runner_started_after_lock_wait;local_authentication_code_-4_authentication_canceled;process_safely_terminated;result_bundle_invalid_incomplete_info_plist_missing_not_evidence;target_device_recording_pending",
+        "local_physical_qa_status": "validated_build3_install_and_fixture_argument_launch;build6_ui_runner_started_after_lock_wait;local_authentication_code_-4_authentication_canceled;process_safely_terminated;result_bundle_invalid_incomplete_info_plist_missing_not_evidence;build7_native_share_unlocked_retried_twice;runner_installed_and_launched;test_body_not_executed;timed_out_while_enabling_automation_mode;mac_host_automation_mode_disabled_user_authentication_required;mac_host_developer_mode_disabled;result_bundles_invalid_non_evidence;earlier_build7_locked_attempt_historical_only;target_device_recording_pending",
+        "local_physical_screenshot_evidence": "release/local/target-device-qa/20260807T2006KST-build6-debug-fixture-device-screenshots/QA-SUMMARY.md",
+        "local_physical_screenshot_status": "validated_local_debug_fixture_build6_and_local_build7_screenshot_evidence",
+        "local_physical_screenshot_scope": "build6_historical_finding_preserved_build7_local_physical_screenshots_not_remote_asc_or_production_photokit",
+        "local_build7_physical_screenshot_evidence": "release/local/target-device-qa/20260807T2033KST-build7-physical-screenshots/QA-SUMMARY.md",
+        "build7_physical_qa_status": "validated_screenshots_only_native_share_purchase_restore_photokit_and_external_lifecycle_pending",
         "evidence_ref": "external_evidence.target_device_footage"
       },
       "app_icon": {
@@ -576,14 +927,22 @@
       },
       "screenshot": {
         "required": true,
-        "minimum_count": 1,
+        "minimum_count": 4,
         "status": "pending_external",
         "width": 1179,
         "height": 2556,
         "alpha": false,
         "device_frame": false,
-        "local_artifact_status": "local_1179x2556_no_frame_fixture_complete",
-        "evidence_ref": "external_evidence.shipaton_fixture_screenshot"
+        "selected_names": [
+          "01-welcome",
+          "02-review",
+          "03-save-confirmation",
+          "04-share-preview"
+        ],
+        "local_artifact_status": "fixture_only_local_build7_four_screen_candidate_complete",
+        "evidence_ref": "external_evidence.shipaton_fixture_screenshot",
+        "local_evidence_ref": "build7_shipaton_screenshot_evidence",
+        "external_selection_and_upload": "pending_external"
       },
       "judge_unlock": {
         "required": true,
@@ -722,6 +1081,22 @@
   },
   "fixture_capture": {
     "launch_argument": "-ui-fixtures",
+    "test_environment": "WK_CAPTURE_BUILD7_SHIPATON_SCREENSHOTS=1",
+    "test_locale_environment": "WK_BUILD7_SHIPATON_LOCALE=en",
+    "simulator_capture_protocol": "XCTest publishes one marker per named state; the script captures same-state simctl --type=jpeg frames and acknowledges before the test continues",
+    "milestones": [
+      "01-welcome",
+      "02-review",
+      "03-save-confirmation",
+      "04-share-preview"
+    ],
+    "capture_test": "WeekkeepUITests/WeekkeepUITests/testCaptureBuild7ShipatonSubmissionScreenshotsWhenRequested",
+    "capture_script": "scripts/capture-build7-shipaton-screenshots.sh",
+    "source_contract": "bundled SamplePhotoFixtures; exact iPhone 15 Pro simulator framebuffer; no PhotoKit/private pixels; no native share sheet"
+  },
+  "legacy_fixture_capture": {
+    "status": "historical_only",
+    "launch_argument": "-ui-fixtures",
     "test_environment": "WK_CAPTURE_SCREENSHOTS=1",
     "milestones": [
       "01-welcome",
@@ -729,7 +1104,9 @@
       "03-review-selected",
       "04-save-confirmation"
     ],
-    "capture_script": "scripts/capture-fixture-screenshots.sh"
+    "capture_test": "WeekkeepUITests/WeekkeepUITests/testCaptureDeterministicFixtureMilestonesWhenRequested",
+    "capture_script": "scripts/capture-fixture-screenshots.sh",
+    "validator_mode": "scripts/validate-submission-screenshots.sh --legacy"
   },
   "archive": {
     "script": "scripts/archive-release.sh",
@@ -767,11 +1144,12 @@
     "revenuecat_product_and_sandbox_purchase": "pending_authenticated_account",
     "public_policy_site": "validated_public_policy_site_url=https://weekkeep-app.kimsol1134.chatgpt.site;deployment_timestamp=2026-08-06T09:35:40.860943+00:00;access=public;logged_out_routes_http_200=4;contact=kimsol1134@gmail.com;internal_tester_domain_matches=0",
     "real_device_icon_qa": "pending_physical_device",
-    "shipaton_fixture_screenshot": "pending_final_selection_and_authenticated_upload",
+    "shipaton_fixture_screenshot": "pending_external_selection_and_authenticated_upload;local_candidate=fixture_only_build7_four_screen_candidate_complete;not_production_not_asc_not_devpost",
     "app_store_screenshots": "validated_historical_build3_en_us_ko_six_complete_onboarding_rerun1;current_build6_screenshot_replacement_not_claimed",
     "app_privacy": "validated_published_2026-08-06_current_app_version_exactly_three_entries_no_tracking;privacyinfo_present_in_build6_ipa",
     "app_store_review_submission": "validated_current_ios_submission=a9b0a18f-6cf6-4af4-8e6f-c77009831e00;submitted_at=2026-08-06T22:44:38.573Z;exactly_two_ready_for_review_items;build6_attached;build3_submission=88c157ee-ce87-41c3-8a4a-71e614993a58_canceled_replaced;historical_submission=260abf1a-886b-4014-8262-541d261e60e2_complete",
-    "target_device_footage": "pending_physical_device_recording;build6_fixture_ui_runner_started_after_lock_wait;local_authentication_code_-4_authentication_canceled;process_safely_terminated;result_bundle_invalid_incomplete_info_plist_missing_not_evidence;historical_build3_install_and_fixture_argument_launch=release/local/target-device-qa/20260806T2102KST-build3/QA-SUMMARY.md;physical_ui_attachments_pending;purchase_restore_verification_pending;actual_library_performance_pending;icon_qa_pending;quicktime_preview_unusable;no_credentials_requested_or_handled;no_permissions_or_private_pixels_changed",
+    "target_device_physical_screenshots": "validated_local_debug_fixture_build6_and_local_build7_two_opaque_1206x2622_pngs_each;build6_directory=release/local/target-device-qa/20260807T2006KST-build6-debug-fixture-device-screenshots;build7_directory=release/local/target-device-qa/20260807T2033KST-build7-physical-screenshots;build6_finding=ready_primary_start_cta_below_initial_viewport;build7_resolution=resolved_in_local_debug_fixture_build7;build7_waiting_surface=no_cta_claim_and_distinct_three_item_bottom_navigation;build7_ready_surface=primary_cta_in_initial_viewport_and_distinct_calendar_photo_settings_bottom_nav;not_remote_asc_build6;not_production_photokit;native_share_pending;external_lifecycle_pending",
+    "target_device_footage": "pending_physical_device_recording;build6_fixture_ui_runner_started_after_lock_wait;local_authentication_code_-4_authentication_canceled;process_safely_terminated;result_bundle_invalid_incomplete_info_plist_missing_not_evidence;build7_native_share_unlocked_retried_twice;runner_installed_and_launched;test_body_not_executed;timed_out_while_enabling_automation_mode;mac_host_automation_mode_disabled_user_authentication_required;mac_host_developer_mode_disabled;result_bundles_invalid_non_evidence;earlier_build7_locked_attempt_historical_only;historical_build3_install_and_fixture_argument_launch=release/local/target-device-qa/20260806T2102KST-build3/QA-SUMMARY.md;physical_ui_attachments_pending;purchase_restore_verification_pending;actual_library_performance_pending;icon_qa_pending;quicktime_preview_unusable;no_credentials_requested_or_handled;no_permissions_or_private_pixels_changed",
     "public_demo_video": "validated_youtube_public_demo;platform=YouTube;visibility=Public;channel=sol kim;video_id=WJP6xoWV440;title=Weekkeep — A Week Worth Keeping | Shipaton 2026;short_url=https://youtu.be/WJP6xoWV440;watch_url=https://www.youtube.com/watch?v=WJP6xoWV440;published_on=2026-08-07;logged_out_curl=short_url_followed_to_watch_url_http_200;oembed=exact_title_author_sol_kim_embeddable_iframe_thumbnail_provider_youtube;yt_dlp_no_cookies=duration_72_availability_public_live_status_not_live_age_limit_0_formats_count_12_channel_sol_kim_upload_date_20260807;copyright_check=no_issues_found;metadata=English (United States), Science & Technology, not made for kids, altered/synthetic disclosure yes, embedding allowed, Shorts remix disabled;protected_local_mp4=videos/weekkeep-remotion/out/weekkeep-shipaton-72.mp4;protected_local_mp4_status=unchanged;github_release_backup=https://github.com/kimsol1134/weekkeep/releases/tag/shipaton-demo-v1;github_asset=https://github.com/kimsol1134/weekkeep/releases/download/shipaton-demo-v1/weekkeep-shipaton-72.mp4;release_http_status=200;asset_http_status=200;asset_sha256=9d4afb5332d3bbaeb0fc40e5d1d71c6a66b7cf2d72b79ed8a7ab3c2864e5a01a",
     "public_source_repository": "validated_public_source_repository;repository_url=https://github.com/kimsol1134/weekkeep;owner=kimsol1134;name=weekkeep;visibility=PUBLIC;isPrivate=false;source_availability=Validated;source_url=https://github.com/kimsol1134/weekkeep;source_http_status=200;logged_out_verification=Validated;checked_at=2026-08-07T07:03:22+09:00;logged_out_repository_url=https://github.com/kimsol1134/weekkeep;logged_out_repository_http_status=200;raw_license_url=https://raw.githubusercontent.com/kimsol1134/weekkeep/main/LICENSE;raw_license_http_status=200;github_license_evidence=GitHub recognizes root LICENSE as MIT;default_branch=main;git_ls_remote_main_commit=282ae29a0efddaca439177b447676ec2cbe90f0e",
     "final_video_approval_and_render": "validated_approved_72_second_mp4_unchanged;github_backup_http_200_and_digest_match",

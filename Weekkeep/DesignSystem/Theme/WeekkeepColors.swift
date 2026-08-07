@@ -73,9 +73,9 @@ enum WeekkeepScreenLayout {
 /// floating TabView bar. This is real scroll content space, not a visible
 /// replacement for the system tab bar.
 enum WeekkeepTabHostSpacing {
+    /// Real scroll content runway so the final This Week content can settle
+    /// above the native floating tab bar.
     static let bottomScrollClearance = WeekkeepSpacing.sixteen + WeekkeepSpacing.two
-    /// Opaque coverage for the floating tab bar and the lower system region.
-    static let bottomTabBarOcclusion = bottomScrollClearance + WeekkeepSpacing.four
 }
 
 enum WeekkeepRadii {

@@ -5,7 +5,7 @@ import { SiteShell } from "./components/SiteShell";
 export const metadata: Metadata = {
   title: "A week worth keeping",
   description:
-    "Weekkeep helps parents choose up to seven photos from the last week, privately on iPhone.",
+    "Weekkeep helps busy parents keep up to seven moments from the past week in a private iPhone album.",
 };
 
 export default function Home() {
@@ -23,9 +23,9 @@ export default function Home() {
               없으니까.
             </h1>
             <p className="hero-lead">
-              Weekkeep은 지난 일주일의 사진을 이 iPhone 안에서 살펴보고,
-              최대 7장의 작은 앨범 초안을 준비해요. 마음에 들지 않는 한 장만
-              바꾸고 그대로 남기세요.
+              Weekkeep은 지난 일주일의 사진에서 다시 보고 싶은 순간을 최대 7장
+              골라 작은 앨범으로 준비해요. 마음에 들지 않는 한 장만 바꾸고
+              그대로 남기세요.
             </p>
             <div className="hero-actions">
               <span className="status-pill">iPhone · iOS 18+ · 출시 준비 중</span>
@@ -53,8 +53,8 @@ export default function Home() {
             </li>
             <li>
               <span>02</span>
-              <h3>초안을 확인해요</h3>
-              <p>기기 안에서 준비된 최대 7장을 보고, 원하는 사진만 바꿔요.</p>
+              <h3>준비된 순간을 확인해요</h3>
+              <p>기기 안에서 준비된 최대 7장을 보고, 마음에 들지 않는 사진만 바꿔요.</p>
             </li>
             <li>
               <span>03</span>
@@ -68,11 +68,11 @@ export default function Home() {
           <div className="lock-mark" aria-hidden="true">⌁</div>
           <div>
             <p className="eyebrow">ON-DEVICE BY DESIGN</p>
-            <h2>사진은 이 iPhone을 떠나지 않아요.</h2>
+            <h2>사진 고르기는 이 iPhone 안에서 이뤄져요.</h2>
             <p>
-              사진 분석은 foreground에서 기기 안에서만 이뤄집니다. 사진 픽셀,
-              위치, 촬영 시각, 파일 이름, Photos 식별자를 분석 서비스나 구매
-              서비스로 보내지 않습니다.
+              사진 고르기와 공유 이미지 만들기는 iPhone에서 처리해요. 사진·
+              미리보기·파일 이름·위치·촬영 시각 같은 사진 정보는 분석을 위해
+              다른 서비스로 보내지 않아요. 공유는 직접 선택할 때만 시작돼요.
             </p>
           </div>
           <a className="secondary-button" href="/privacy">전체 개인정보 처리방침</a>
@@ -83,8 +83,9 @@ export default function Home() {
           <h2>A week worth keeping.</h2>
           <p>
             Weekkeep turns the last completed week on your iPhone into a small,
-            private album of up to seven photos. No account. No photo upload. No
-            backlog to catch up on.
+            private album of up to seven moments. Photo selection and share
+            rendering happen on your iPhone, and sharing starts only when you
+            choose it. No account. No backlog to catch up on.
           </p>
         </section>
       </main>

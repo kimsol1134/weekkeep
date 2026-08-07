@@ -64,13 +64,13 @@ Weekkeep: Family Photo Album
 ### Subtitle — 29/30 characters
 
 ```text
-Seven photos. One quiet week.
+Up to seven moments each week
 ```
 
 ### Promotional text — 170 characters 이하
 
 ```text
-Your camera roll is full. Weekkeep prepares up to seven moments from the past week on your iPhone, so one quiet minute becomes a family memory.
+Your camera roll is full. Weekkeep helps you keep up to seven moments from the past week on your iPhone, so one quiet minute becomes a family memory.
 ```
 
 ### Keywords — 100 bytes 이하
@@ -88,21 +88,21 @@ Weekkeep turns one week into a small family album of up to seven photos—withou
 
 ONE QUIET MINUTE
 
-On your first visit, start with your recent seven days. After that, a newly completed week waits for you each Monday. Weekkeep prepares a draft on your iPhone. Keep it as it is, or replace only the photos that do not feel right.
+On your first visit, start with your most recently completed local Monday–Sunday week. We check your most recent seven days only when that week has no photos Weekkeep can use. After that, a newly completed week waits for you each Monday. Weekkeep chooses up to seven moments on your iPhone. Keep the selection as it is, or change only the photos that do not feel right.
 
 MADE FOR REAL FAMILY LIFE
 
 • Up to seven moments, never a fake or empty slot
 • A calm review instead of another daily habit
-• One-tap replacement with a small set of alternatives
+• Change only the photos that do not feel right
 • A Weeks archive that keeps each album easy to revisit
-• A shareable weekly album rendered on-device in Story 9:16 or Post 4:5 format
+• A shareable weekly album made on-device in Story 9:16 or Post 4:5 format
 • An optional Monday evening reminder, scheduled locally
 • English and Korean support
 
 PRIVATE BY DESIGN
 
-Photo analysis happens on your iPhone. Weekkeep does not send photo pixels, thumbnails, Photos identifiers, filenames, capture times, or locations to us or to analytics services. When you explicitly choose Share, Weekkeep renders the artifact on-device and presents Apple's system share sheet; Weekkeep does not choose or record the recipient. There is no Weekkeep account and no cloud photo upload.
+Photo selection and share rendering are processed on your iPhone. Weekkeep does not send photos, previews, filenames, capture times, locations, or other photo details to analytics services or other services for analysis. Sharing starts only when you explicitly choose it; Weekkeep then presents Apple’s system share sheet and does not choose or record the recipient. There is no Weekkeep account or Weekkeep cloud photo service.
 
 Weekkeep stores album records locally and refers to the originals in Apple Photos. Deleting the app, changing devices, or deleting an original photo may make a record unavailable. Restoring a purchase restores Plus access, not locally stored albums.
 
@@ -124,13 +124,13 @@ Weekkeep: 가족 사진 앨범
 ### 부제
 
 ```text
-일주일을 7장의 추억으로
+최대 7장으로 남기는 일주일
 ```
 
 ### 프로모션 문구
 
 ```text
-사진은 많고 정리할 시간은 없으니까. Weekkeep이 지난 일주일에서 최대 7장을 기기 안에서 먼저 제안합니다. 한 번 확인하고, 한 주를 남겨보세요.
+사진은 많고 정리할 시간은 없으니까. Weekkeep이 지난 일주일에서 다시 보고 싶은 순간을 최대 7장 골라요. 한 번 확인하고, 한 주를 남겨보세요.
 ```
 
 ### 키워드 — UTF-8 100 bytes 이하
@@ -144,25 +144,25 @@ Weekkeep: 가족 사진 앨범
 ```text
 사진은 많은데 정리할 시간은 없으니까.
 
-Weekkeep은 평범한 일주일을 최대 7장의 작은 가족 앨범으로 남깁니다. 카메라 롤 전체를 정리하라고 요구하지 않아요.
+Weekkeep은 평범한 일주일을 최대 7장의 작은 가족 앨범으로 남겨요. 카메라 롤 전체를 정리하라고 하지 않아요.
 
 한 번의 조용한 확인
 
-처음에는 최근 7일로 바로 시작합니다. 그다음부터는 새로 끝난 한 주가 월요일마다 기다립니다. Weekkeep이 이 iPhone 안에서 초안을 준비하면 그대로 저장하거나 마음에 들지 않는 사진만 바꾸세요.
+처음에는 가장 최근 완료된 월요일부터 일요일까지의 한 주에서 다시 보고 싶은 순간을 골라요. 그 주에 Weekkeep이 남길 수 있는 사진이 없을 때만 최근 7일을 정직하게 확인해요. 그다음부터는 새로 끝난 한 주가 월요일마다 기다려요. Weekkeep이 이 iPhone에서 최대 7장의 순간을 골라주면 그대로 남기거나 마음에 들지 않는 사진만 바꾸면 돼요.
 
 실제 가족 생활을 위한 방식
 
 • 최대 7장, 사진이 부족하면 빈자리를 억지로 채우지 않음
 • 매일 접속이나 연속 기록을 요구하지 않는 주간 경험
-• 작은 후보 목록에서 한 장씩 간단히 교체
-• 지난 기록을 다시 보는 Weeks 보관함
+• 마음에 들지 않는 사진만 간단히 바꾸기
+• 지난 기록을 한곳에서 다시 보기
 • 저장한 사진으로 만드는 Story 9:16 또는 Post 4:5 공유 이미지
 • 월요일 저녁에 기기에서 보내는 선택형 알림
 • 한국어와 영어 지원
 
-사진은 기기 안에서
+사진 고르기와 공유 이미지 만들기는 iPhone에서
 
-사진 분석은 이 iPhone 안에서 실행됩니다. 사진 픽셀, 썸네일, 사진 식별자, 파일명, 촬영 시각, 위치를 Weekkeep이나 분석 서비스로 보내지 않습니다. 사용자가 명시적으로 공유를 선택하면 기기 안에서 Story 또는 Post 이미지를 만들고 Apple 시스템 공유 시트를 엽니다. Weekkeep은 수신자나 목적지를 선택하거나 기록하지 않습니다. Weekkeep 계정이나 사진 클라우드 업로드도 없습니다.
+사진 고르기와 공유 이미지 만들기는 이 iPhone에서 처리해요. 사진·미리보기·파일 이름·위치·촬영 시각 같은 사진 정보는 분석을 위해 분석 서비스나 다른 서비스로 보내지 않아요. 공유는 직접 선택할 때만 시작되고, 그때 Apple 시스템 공유 시트를 열어요. Weekkeep은 수신자나 목적지를 선택하거나 기록하지 않아요. Weekkeep 계정이나 Weekkeep 사진 클라우드도 없어요.
 
 주간 기록은 이 iPhone에 저장되고 사진 앱의 원본을 참조합니다. 앱을 삭제하거나 기기를 바꾸거나 원본 사진을 지우면 기록을 볼 수 없게 될 수 있습니다. 구매 복원은 Plus 이용 권한만 복원하며 로컬 기록은 복원하지 않습니다.
 
@@ -188,7 +188,7 @@ App Store와 Shipaton 증거를 분리합니다.
 | 순서 | 화면 | en-US headline | ko headline | 증명할 것 |
 |---:|---|---|---|---|
 | 1 | Welcome | `Your week, already waiting.` | `사진은 많고, 시간은 없으니까.` | 부모 문제와 1분 가치 |
-| 2 | Curation progress | `Private from the first tap.` | `첫 탭부터, 사진은 기기 안에서.` | foreground on-device 처리 |
+| 2 | Curation progress | `Private from the first tap.` | `첫 탭부터, 사진 고르기는 iPhone에서 처리해요.` | foreground on-device 처리 |
 | 3 | Seven-photo review | `Seven moments. Nothing to sort.` | `일주일에 7장만.` | hero+2+4, exact-seven signature |
 | 4 | Replace | `Change one. Keep the feeling.` | `마음에 안 드는 한 장만 바꾸세요.` | 선택→교체 interaction |
 | 5 | Saved/Weeks | `A small album, every week.` | `작은 한 주가 차곡차곡.` | 저장 보상·보관함과 detail local share entry |
@@ -255,8 +255,8 @@ replace the historical six-screen App Store screenshot set.
 
 | Locale | Display Name | Description |
 |---|---|---|
-| en-US | `Weekkeep Plus Lifetime` | `Unlock unlimited weekly albums.` |
-| ko | `Weekkeep Plus 평생 이용권` | `주간 기록 수 제한을 한 번의 구매로 해제합니다.` |
+| en-US | `Weekkeep Plus Lifetime` | `Keep up to seven moments every week.` |
+| ko | `Weekkeep Plus 평생 이용권` | `앞으로의 매주 소중한 순간을 최대 7장씩 남겨요.` |
 
 IAP Review Screenshot은 Settings → Weekkeep Plus에서 열린 실제 paywall을 사용하고, 현지화된 가격·`Restore purchase`·Terms·Privacy·닫기 버튼이 한 화면에 보이게 합니다.
 
@@ -271,12 +271,12 @@ Plus screen (`06-plus.jpg`), and was re-read as `COMPLETE`, opaque JPEG,
 Weekkeep does not require an account.
 
 Core review path:
-1. Launch the app and tap “Keep the last 7 days.”
+1. Launch the app and tap “Choose your first week.” Weekkeep starts with the most recently completed local Monday–Sunday week; we check the most recent 7 days only when that week has no photos Weekkeep can use.
 2. Grant Full or Limited Photos access. The permission prompt appears only after this action.
-3. Weekkeep analyzes eligible photos on device and prepares up to seven suggestions.
-4. Tap a photo once to select it, then tap “Replace this photo” to choose an alternative. Same-day alternatives appear first; other dates require an explicit disclosure. Tap the selected photo again to open the viewer.
-5. Save the draft. On Save Confirmation, choose Story (1080×1920) or Post (1080×1350), review the local preview, and tap Share to open the native iOS share sheet. Do not send it anywhere during review.
-6. Open the saved album again from the Weeks tab; the same local share entry point is available in Week Detail.
+3. Weekkeep checks the photos it can use on the iPhone and chooses up to seven moments.
+4. Tap a photo once to select it, then tap “Change this photo” to choose an alternative. Same-day alternatives appear first; other dates require an explicit disclosure. Tap the selected photo again to open the viewer.
+5. Save the photos. On Save Confirmation, choose Story (1080×1920) or Post (1080×1350), review the local preview, and tap Share to open the native iOS share sheet. Do not send it anywhere during review.
+6. Open the saved album again from the Saved weeks tab; the same local share entry point is available in Week Detail.
 
 In-App Purchase:
 Open Settings → Weekkeep Plus → Learn about Weekkeep Plus. The paywall is available immediately; reviewers do not need to wait for a third weekly album. The product is the non-consumable `weekkeep_plus_lifetime`, mapped by RevenueCat to the `plus` entitlement in the `default` offering. Purchase restoration is available from both the paywall and Settings.
@@ -284,7 +284,7 @@ Open Settings → Weekkeep Plus → Learn about Weekkeep Plus. The paywall is av
 The first two saved albums are free. Plus unlocks future album creation; existing albums always remain viewable. No subscription is offered.
 
 Privacy and storage:
-Photo analysis and share rendering run locally. Photo pixels and Photos identifiers are not sent to RevenueCat or any analytics service. The share artifact is created only after an explicit user action and is handed to the native iOS share sheet; the app does not upload it or record a recipient. Album records are stored locally on the iPhone; restoring Plus does not restore album data.
+Photo selection and share rendering are processed on the iPhone. Photos, previews, filenames, capture times, locations, and other photo details are not sent to RevenueCat, analytics services, or other services for analysis. Sharing starts only after an explicit user action and the image is handed to the native iOS share sheet; the app does not choose or record a recipient. Album records are stored locally on the iPhone; restoring Plus does not restore album data.
 
 No special hardware, login, or reviewer account is required. Please use a device with several recent photos or grant Limited Access to a small test set.
 ```

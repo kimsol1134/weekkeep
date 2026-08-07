@@ -11,8 +11,9 @@
 | Sponsor/Admin/Judges 무료 접근 기한 | 2026-10-13 12:00 PDT 종료 시점까지, 그 이후로 Offer Code 만료 설정 |
 | 내부 제출 마감 | 2026-09-28 15:45 KST |
 | 공식 제출 마감 | 2026-10-01 15:45 KST |
-| 상태 | ASC build 6 (`0ffa7586-619f-4df9-abc5-ae7ebbd068b1`) is the attached and processed-`VALID` review build for version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; build 4 (`6e92c470-c044-4512-9276-71491fe97685`) is `VALID` but unattached; build 3 submission `88c157ee-ce87-41c3-8a4a-71e614993a58` is historical canceled/replaced; current submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` has exactly 2 `READY_FOR_REVIEW` items and is `WAITING_FOR_REVIEW`; IAP remains `WAITING_FOR_REVIEW`; the canonical public source repository and logged-out verification are `Validated`; the canonical public YouTube demo and logged-out playback/duration verification are `Validated`; app approval, public release, production judge code, target-device footage, and later external gates remain pending; the approved 72-second video remains unchanged |
-| 현재 App Store 후보 | ASC `1.0.0 (build 6)` is `VALID`, uploaded and attached under manual release; builds 1–5 are historical/non-target, with build 4 still valid but unattached |
+| 상태 | ASC build 6 (`0ffa7586-619f-4df9-abc5-ae7ebbd068b1`) is the attached and processed-`VALID` review build for version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; build 4 (`6e92c470-c044-4512-9276-71491fe97685`) is `VALID` but unattached; build 3 submission `88c157ee-ce87-41c3-8a4a-71e614993a58` is historical canceled/replaced; current submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` has exactly 2 `READY_FOR_REVIEW` items and is `WAITING_FOR_REVIEW`; IAP remains `WAITING_FOR_REVIEW`; local next candidate build 7 passed Apple server-side IPA validation only, and its physical screenshot scope is separately validated, but it is not uploaded, remotely registered, attached, submitted, live, approved, or released; the canonical public source repository and logged-out verification are `Validated`; the canonical public YouTube demo and logged-out playback/duration verification are `Validated`; app approval, public release, production judge code, native share/delivery, purchase/restore, target-device functioning footage, and later external gates remain pending; the approved 72-second video remains unchanged |
+| 제출된 원격 App Store build | ASC `1.0.0 (build 6)` is `VALID`, uploaded and attached under manual release; builds 1–5 are historical/non-target, with build 4 still valid but unattached |
+| 로컬 next candidate | `project.yml` defines `1.0.0 (build 7)` for the cumulative family week ordinal, conversational prompt/invitation, and privacy-safe `share_completed` sharing improvements. Apple server-side validation passed for its exported IPA, but it is not uploaded, remotely registered, attached, submitted, live, approved, or released, and it is not the submitted build |
 
 이 문서는 Devpost 제출 문구, 수상 카테고리 전략, 데모 영상, Build in Public, 제출 증거를 소유합니다. App Store 필드는 [App Store Metadata](10-APP-STORE-METADATA.md), 제품 결정은 [Decision Registry](00-INDEX.md#5-decision-registry--결정값과-상태의-ssot)를 따릅니다.
 
@@ -31,7 +32,7 @@
 | Compliance metadata | Photo & Video / Lifestyle, no third-party content, all-none age questionnaire, public `/support` and `/privacy` URLs, copyright `© 2026 Sol Kim`; iPhone VoiceOver-only declaration remains saved as draft because Apple gates its publication until the app is live |
 | App Privacy | Published 2026-08-06 for the current `1.0.0` app version with exactly: Customer Support = App Functionality, linked to user, no tracking; User ID = App Functionality, not linked, no tracking; Purchase History = App Functionality, not linked, no tracking. Build 6 contains `PrivacyInfo`; no separate build-6 publication event is claimed |
 | Review and validation | Review detail remains configured; no demo account. Current submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00`, submitted `2026-08-06T22:44:38.573Z`, has exactly two `READY_FOR_REVIEW` items: app version `ac4f183e-1019-4ffc-827f-f5514f0d349b` and IAP version `cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f`; state `WAITING_FOR_REVIEW`. |
-| Physical target-device QA | After the lock wait, the build-6 fixture-only UI runner started but initialization failed with LocalAuthentication Code `-4` (authentication canceled); the process was safely terminated. The result bundle is invalid/incomplete because `Info.plist` is missing and is not evidence | Physical UI attachments, purchase/restore verification, target-device footage, actual-library performance, and icon QA remain pending; no credentials were requested or handled and Photos/notification permissions and private pixels were not changed |
+| Physical target-device QA | The earlier build-6 fixture-only UI runner started after a lock wait but initialization failed with LocalAuthentication Code `-4` (authentication canceled); its result bundle is invalid/incomplete because `Info.plist` is missing and is not evidence. A separate local build-7 fixture-only native-share attempt was retried twice with the paired physical iPhone 16 Pro unlocked and failed before executing the test body with `Timed out while enabling automation mode`; that remains non-evidence. Separately, local build-7 archive and signed DEBUG apps were installed on the physical iPhone 16 Pro, and the waiting/ready screenshots are recorded in `release/local/target-device-qa/20260807T2033KST-build7-physical-screenshots/` with exact hashes and no-alpha `1206×2622` dimensions. The ready screenshot resolves the build-6 local DEBUG below-fold CTA finding for local DEBUG fixture build 7 only and shows distinct bottom navigation; the remote ASC build 6 remains separate and unchanged | Screenshot scope is validated; native share-sheet screenshots/delivery, destination selection/send, private PhotoKit access/performance, purchase/restore verification, target-device functioning footage, actual-library performance, and icon QA remain pending; no remote lifecycle or public-release claim is made |
 | Shipaton judge-access Offer Code | ASC app `6798449478` / IAP `6798491084`; `Shipaton Judge Access 2026` offer ID `bb4f7fd6-2b08-4aa7-9f55-e140a3e94e28`, free prices `USA:FREE` and `KOR:FREE`, eligibilities `NON_SPENDER`, `ACTIVE_SPENDER`, `CHURNED_SPENDER`; SANDBOX batch ID `7791e39d-f462-4647-be72-e00c75a50eff` | Configured and generated remotely; batch has 10 codes expiring `2026-10-31`; redemption is not tested; production judge code is blocked until app `Ready for Distribution` and IAP `Approved` |
 
 Builds 1–5 remain historical/non-target evidence. Build 3 (`81697c0b-a68e-482a-be6f-50806e56fbff`) remains `VALID` historical evidence, but its former review submission `88c157ee-ce87-41c3-8a4a-71e614993a58` was canceled/replaced. The current submission is `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` and is `WAITING_FOR_REVIEW`. No public release, production Offer Code, sandbox redemption test, or Devpost submission was performed. The remote judge-access offer is configured free in USA/KOR and its SANDBOX batch is generated, but the batch has not been redeemed.
@@ -63,10 +64,49 @@ The prior iOS review submission `260abf1a-886b-4014-8262-541d261e60e2` is histor
 
 | 항목 | 현재 검증 상태 |
 |---|---|
-| Project/version | `project.yml` / `1.0.0 (6)`; ASC build `0ffa7586-619f-4df9-abc5-ae7ebbd068b1` is the current uploaded build |
+| Submitted artifact / version | ASC `1.0.0 (build 6)` / build ID `0ffa7586-619f-4df9-abc5-ae7ebbd068b1` is the current uploaded build; local `project.yml` now points to the separate next candidate build 7 and is not evidence about this submitted binary |
 | FR-015 implementation surface | Settings notification authorization is disabled and informational until at least one album is saved; saved-user states retain request/open-settings behavior; post-save primer avoids a second system request |
 | Settings visual QA | Evidence directory `release/local/visual-qa/20260807-build6-notification-settings-rerun1/final/`; four bilingual opaque `1320×2868` PNGs cover zero-saved informational and saved-user action states; it remains separate from App Store screenshot evidence |
 | ASC state | Uploaded `2026-08-06T15:31:16-07:00`, processing `VALID`, attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; current review submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is `WAITING_FOR_REVIEW` |
+
+## 0.4 Local next candidate build 7 — 2026-08-07
+
+| 항목 | 현재 검증 상태 |
+|---|---|
+| Project SSOT | `project.yml` defines marketing version `1.0.0`, local candidate build `7` |
+| External state | `APPLE_SERVER_VALIDATED_ONLY`; the candidate remains `NOT_UPLOADED`, `NOT_REGISTERED_REMOTELY`, `NOT_ATTACHED`, `NOT_SUBMITTED`, `NOT_LIVE`, `NOT_APPROVED`, and `NOT_RELEASED`; it is not the submitted build |
+| Local archive/export and bundle inspection | Archive `LOCAL_EVIDENCE_DIR/weekkeep-build7-ssot.qTqqz6/Weekkeep.xcarchive`; exported IPA `LOCAL_EVIDENCE_DIR/weekkeep-build7-preflight.8Is5cC/export/Weekkeep.ipa`; SHA-256 `6d8b62a2d8d354debf777791cbc795ddde662c01bdb0da91f31640c101b8d2bf` | Pass — `com.solkim.weekkeep`, version `1.0.0`, build `7`, minimum iOS `18.0`, iPhone-only, `ITSAppUsesNonExemptEncryption=false`, valid strict code signature, `Apple Distribution: sol kim`, team `D48DDX5D5W`, `Weekkeep App Store` profile, `get-task-allow=false`, `beta-reports-active=true`, app `PrivacyInfo`, and valid RevenueCat/PostHog manifests |
+| Apple server-side validation | At `2026-08-07 18:58 KST`, exact `asc xcode validate` ran against the exported IPA with the existing keychain ASC profile | `VERIFY SUCCEEDED` with no errors and `validated=true`. This is Apple server-side validation only, not upload, remote build registration, attachment, submission, approval, or release. A subsequent read-only ASC builds list still contained only builds `1, 2, 3, 4, 6`; current remote version `1.0.0` and submission remain `WAITING_FOR_REVIEW` on build `6` under manual release |
+| Included next-sharing improvements | Cumulative family week ordinal, conversational prompt/invitation, and privacy-safe `share_completed` |
+| Shipaton screenshot candidate | `release/local/visual-qa/20260807-build7-shipaton-sharing-v12/final/`; exactly four opaque `1179×2556` JPEGs named `01-welcome.jpg`, `02-review.jpg`, `03-save-confirmation.jpg`, `04-share-preview.jpg`; parent directory contains raw XCTest attachments, same-state exact simulator captures, result reference, provenance, and SHA256 |
+| Capture source | Dedicated booted iPhone 15 Pro simulator `2F0F4A33-669F-4B0F-8193-A02009DDC8B3`, `com.apple.CoreSimulator.SimRuntime.iOS-26-5`; XCTest names anchor each same-state `simctl` JPEG framebuffer; bundled `SamplePhotoFixtures` only; no PhotoKit/private pixels; native share sheet not opened |
+
+This is an unsubmitted working-tree candidate and is not part of ASC App Store version `1.0.0` build `6`, which remains `WAITING_FOR_REVIEW` under manual release. The local screenshot candidate is fixture-only evidence: its first three frames show the current welcome/review/save flow and its fourth frame shows the real in-app rendered Story/Post preview before any native share action. It does not claim production PhotoKit, ASC, Devpost, or external delivery. After a parent explicitly chooses the existing native share action, `UIActivityViewController` receives the locally rendered Story/Post image first, followed by a short localized invitation and the canonical HTTPS URL `https://apps.apple.com/app/id6798449478` as separate native items. A cumulative saved-week ordinal is derived at share preparation time from local album summaries; it is not persisted, includes Welcome and regular albums, and is omitted if lookup fails. The image keeps the date, generic serial label when available, conversational footer prompt, muted seven-stitch rainbow, `Made with Weekkeep`, Story 9:16, and Post 4:5 rendering; there is no QR code, loud ad overlay, Kakao SDK, upload, photo metadata, backend, or public album.
+
+The Korean invitation is `우리 가족의 일주일 🌈\nWeekkeep으로 남겼어요.\n너희 가족의 이번 주는 어땠어?` and the English invitation is `A week with our family 🌈\nMade with Weekkeep.\nHow was your family's week?` Image-only destinations should retain the image, while link-capable destinations may use text and URL according to native iOS negotiation. `share_sheet_opened` records explicit presentation and `share_completed` records only an iOS `completed == true` callback once per presentation; no recipient, destination, activity type, returned items, error, message contents, photo content, or photo metadata is measured. The Apple URL is a configured release target only; its public availability, install resolution, and destination-specific delivery require post-release/real-device QA, and this document does not claim that it is live before public release.
+
+## 0.5 Physical screenshot evidence — 2026-08-07
+
+| 항목 | 현재 검증 상태 |
+|---|---|
+| Local physical evidence | `release/local/target-device-qa/20260807T2006KST-build6-debug-fixture-device-screenshots/QA-SUMMARY.md` contains onboarding and ready screenshots from physical iPhone 16 Pro / iOS 26.5.2, local DEBUG fixture build-number 6, `com.solkim.weekkeep`; both are opaque `1206×2622` PNGs and their exact hashes are in `SHA256SUMS.txt` |
+| Boundary | This evidence is not remote ASC build 6, not local build 7, not production PhotoKit, and not the 1179×2556 Shipaton submission screenshot set. The current remote review build 6 remains unchanged and the local build-7 candidate remains unsubmitted/not live |
+| Visual finding | The ready capture places the primary start CTA below the initial viewport, contradicting the no-scroll-first-CTA requirement. The separate build-7 DEBUG fixture ready capture resolves that finding locally: `지난주 추억 고르기` is fully visible in the initial viewport and calendar/photo/settings bottom-nav icons are distinct. This resolution is local screenshot evidence only; explicit user authorization is still required for any remote replacement |
+| Remaining non-claims | Native share sheet/share delivery, purchase/restore, actual PhotoKit performance, remote binary identity/lifecycle, physical-device video, public release, App Review approval, or Devpost submission is not claimed |
+
+The exact read-only `xcrun devicectl` launch commands, fixture-only provenance, Mac-host XCTest Automation Mode/DevToolsSecurity blocker, and the separate successful Xcode Device Hub screenshot capture are recorded in the evidence summary. No security setting was changed.
+
+## 0.6 Local build-7 physical screenshot evidence — 2026-08-07
+
+The MECE local physical screenshot record is `release/local/target-device-qa/20260807T2033KST-build7-physical-screenshots/QA-SUMMARY.md`. It contains `01-production-waiting-physical.png` from the local archive `LOCAL_EVIDENCE_DIR/weekkeep-build7-ssot.qTqqz6/Weekkeep.xcarchive/Products/Applications/Weekkeep.app` and `02-debug-fixture-ready-physical.png` from the existing signed DEBUG app at `LOCAL_DERIVED_DATA_DIR/Weekkeep-aqjmdnptaojxqoaagckmueprnbmk/Build/Products/Debug-iphoneos/Weekkeep.app`. Both are local `1.0.0 (7)` app surfaces on iPhone 16 Pro / iOS 26.5.2, with `get-task-allow=true` recorded before install. The current installed-on-device note is DEBUG build 7 after the second install.
+
+The archive waiting surface was launched without a DEBUG fixture environment and shows the waiting state and distinct three-item bottom navigation; it makes no CTA claim. The DEBUG ready surface used the exact command below and shows `지난주 추억 고르기` fully in the initial viewport above the photo story plus distinct calendar/photo/settings bottom-nav icons:
+
+```sh
+xcrun devicectl device process launch --device 'iPhone' --terminate-existing --environment-variables '{"WK_UI_TEST_FIXTURES":"1","WK_UI_FIXTURE_SCREEN":"ready"}' com.solkim.weekkeep -- -ui-fixtures -ui-fixtures-skip-notification
+```
+
+The build-6 local DEBUG below-fold CTA finding is therefore resolved in local DEBUG fixture build 7 for this screenshot scope only. This evidence does not establish remote ASC build identity, native share or delivery, purchase/restore, actual PhotoKit performance, upload/attachment/review/approval/public release, physical-device functioning footage, or Devpost submission. `SHA256SUMS.txt` and the manifest fix the exact hashes `ff9a9d359f64c7baa604d229d30600619c14199e86c0c8dbf6e7ada8401f485c` and `b679c7bb0c83853701b4216535f06291d00b1139327ec9027933a2c4e103df21`; no device serial/UDID, contact information, or credentials are recorded.
 
 ## 1. 승리 전략
 
@@ -111,6 +151,18 @@ Peace Prize는 “가족을 구한다” 같은 과장으로 쓰지 않습니다
 | Growth Loop / Layers | Exclude | Layers integration이나 별도 growth-loop scope가 없으며 SDK를 추가하지 않음 |
 | Funnel Vision / Stripe | Exclude | The official category requires a live web-to-app funnel using RevenueCat Funnels with Stripe. Weekkeep has no such live funnel; V1 uses a native App Store non-consumable purchase through RevenueCat, and we will not add a web funnel only to chase the category. |
 
+### Current judging evidence map — local readiness only
+
+이 표는 심사 대상 category의 답변과 현재 저장소 안의 재현 가능한 근거를 연결합니다. `local_*` 상태는 Devpost 제출이나 외부 심사 evidence가 아닙니다. 구매·conversion·revenue, public feedback, public post, 공개 release와 같은 값은 외부 근거가 생기기 전까지 주장하지 않습니다. 기계 판독 가능한 동일한 매핑은 [`release/shipaton-manifest.json`](../release/shipaton-manifest.json)의 `judging_evidence`가 소유합니다.
+
+| 대상 | 답변 | 현재 내부 evidence | 아직 필요한 외부 evidence |
+|---|---|---|---|
+| RevenueCat Design Award | `## 4. Design Award answer — English` | `TST-019`, `TST-041`, `TST-042`, `TST-049`, build-7 fixture-only four-screen candidate, approved demo end-card category cue | Devpost submission and any final judge-access/store verification |
+| HAMM Award (Help Apps Make Money) | `## 5. HAMM Award (Help Apps Make Money) answer — English` | `TST-016`, `TST-017`, localized metadata/IAP contract, configured judge-access plan | App Store/RevenueCat product and purchase evidence, then verified post-launch conversion/revenue metrics |
+| #BuildInPublic | `### #BuildInPublic submission block — English (supporting; gated)` | No public-feedback evidence is claimed | Public post links and a verified feedback→product-change chain |
+
+The first-two-minute message contract remains: elevator pitch, app in use, and targeted categories. The canonical 72-second demo carries the `RevenueCat Design Award · HAMM Award` category cue in its restrained end card. This is local package readiness evidence only; the public submission receipt remains pending.
+
 ### 심사위원이 20초 안에 이해해야 할 문장
 
 > Weekkeep is a calm, private weekly ritual that turns a crowded camera roll into up to seven family moments worth keeping—in about one quiet minute.
@@ -119,7 +171,7 @@ Peace Prize는 “가족을 구한다” 같은 과장으로 쓰지 않습니다
 
 1. 문제를 개발자의 생산성이 아니라 부모의 미완성 camera roll로 시작합니다.
 2. 핵심 flow 하나를 완성도 높게 보여줍니다: 제안 → 한 장 교체 → 저장 → Story 공유 → 다시 보기.
-3. “사진은 기기 밖으로 나가지 않는다”를 설명이 아니라 처리 구조와 화면 copy로 증명합니다.
+3. “사진 고르기와 공유 이미지 만들기는 iPhone에서 처리되고, 사진 정보는 분석을 위해 외부 서비스로 보내지 않는다”는 약속을 처리 구조와 화면 copy로 증명합니다.
 4. Seven-stitch, 7장 구성, 1분 interaction, 두 번 무료라는 숫자를 하나의 기억법으로 만듭니다.
 5. 매출은 과장하지 않고 설치→무료 기록→paywall→구매를 cohort와 기간까지 명시해 보고합니다.
 
@@ -137,7 +189,7 @@ Peace Prize는 “가족을 구한다” 같은 과장으로 쓰지 않습니다
 | YouTube 또는 Vimeo 공개 URL | unlisted가 아니라 publicly visible로 확인 | `Validated` — [https://youtu.be/WJP6xoWV440](https://youtu.be/WJP6xoWV440), watch URL `https://www.youtube.com/watch?v=WJP6xoWV440`, video ID `WJP6xoWV440`, title `Weekkeep — A Week Worth Keeping \| Shipaton 2026`, channel `sol kim`, Public, published/uploaded `2026-08-07` |
 | 앱이 target device에서 동작하는 footage | Release/TestFlight iPhone screen recording에서 프로젝트가 실제로 동작하는 장면 | build 3 fixture-safe install과 argument launch command proof 완료; build-6 fixture-only UI runner는 lock wait 뒤 시작했지만 LocalAuthentication Code `-4` authentication canceled로 initialization failed, process terminated; result bundle is invalid/incomplete (`Info.plist` missing) and is not evidence. QuickTime preview/recording은 gray라서 target-device footage로 인정하지 않음 (`release/local/target-device-qa/20260806T2102KST-build3/`) |
 | 1024×1024 app icon | 사용자 원안 기반 exact-seven rainbow opaque master | 자동 검증·@3x 축소 QA 통과; 실제 iPhone 확인 대기 |
-| screenshot 최소 1장 | `1179×2556`, alpha 없음, device frame 없음 | 한국어·영어 bundled-fixture UI 각 4장 로컬 규격·시각 QA 완료; 최종 선정·업로드 대기 |
+| screenshot 최소 1장 | `1179×2556`, alpha 없음, device frame 없음 | build-7 selected fixture-only local candidate has four opaque JPEGs — `01-welcome`, `02-review`, `03-save-confirmation`, `04-share-preview` — with the real in-app Story/Post preview; external selection/upload remains pending |
 | Sponsor/Admin/Judges 무료·무제한 접근 | `weekkeep_plus_lifetime`용 Apple free IAP Offer Code를 US에서 everyone eligible로 발행; Devpost field에서는 promo code라고 부를 수 있음 | `Shipaton Judge Access 2026` offer 구성과 USA/KOR free price, 세 eligibility 확인; 10개 SANDBOX batch 생성(만료 `2026-10-31`)했지만 redemption은 미테스트이며 production judge code는 app `Ready for Distribution` 및 IAP `Approved` 전까지 차단 |
 | third-party 권리 | SDK license, LINE Seed OFL, 허가된 fixture photo | license bundle 완료; 사진 consent 대기 |
 
@@ -187,13 +239,13 @@ Weekkeep
 ### Tagline
 
 ```text
-A week worth keeping—in seven private moments.
+A week worth keeping—in up to seven moments.
 ```
 
 ### Short description
 
 ```text
-Weekkeep is a calm, privacy-first iPhone app for busy parents. It prepares a draft of up to seven photos from the past week on device, lets the parent replace only what feels wrong, saves the result as a small weekly album, and can render that saved album locally as a shareable Story or Post image.
+Weekkeep is a calm, privacy-first iPhone app for busy parents. It prepares up to seven moments from the past week on device, lets the parent replace only what feels wrong, saves the result as a small weekly album, and can render that saved album locally as a shareable Story or Post image.
 ```
 
 ### Full description
@@ -201,15 +253,15 @@ Weekkeep is a calm, privacy-first iPhone app for busy parents. It prepares a dra
 ```text
 Parents do not have a shortage of photos. They have a shortage of time to decide which moments matter.
 
-Weekkeep turns that unfinished camera roll into one small weekly ritual. On the first visit, a parent can start with the most recent seven days. After that, each completed week becomes available on Monday. Weekkeep examines eligible photos on the iPhone, prepares a draft of up to seven moments, and asks for one gentle decision: keep the draft, or replace only the photos that do not feel right.
+Weekkeep turns that unfinished camera roll into one small weekly ritual. On the first visit, a parent can start with the most recent seven days. After that, each completed week becomes available on Monday. Weekkeep examines eligible photos on the iPhone, prepares up to seven moments, and asks for one gentle decision: keep the selection, or replace only the photos that do not feel right.
 
 The product is deliberately not a daily habit tracker. There are no streaks, backlogs, countdowns, or guilt. If a family took only five usable photos, Weekkeep shows five. The parent remains the editor, and every saved week can be revisited or explicitly exported in a quiet local archive.
 
-The saved-week reward is a local share artifact: Story is 1080×1920 and Post is 1080×1350. It uses the real saved Photos images, warm paper, the canonical Weekkeep wordmark, the exact seven muted rainbow stitches, the date range, and a restrained “Made with Weekkeep” signature. Rendering happens on device and the native iOS share sheet appears only after the parent chooses to share; there is no photo upload service, account, or server rendering.
+The saved-week reward is a local share artifact: Story is 1080×1920 and Post is 1080×1350. It uses the real saved Photos images, warm paper, the canonical Weekkeep wordmark, the date range, an optional generic cumulative serial, a conversational prompt above the exact seven muted rainbow stitches, and a restrained “Made with Weekkeep” signature. Share rendering happens on the iPhone and the native iOS share sheet appears only after the parent chooses to share; there is no Weekkeep cloud photo service, account, or server rendering.
 
-Privacy is part of the interaction, not a footer. Photo analysis runs in the foreground on device. Photo pixels, thumbnails, Photos identifiers, filenames, capture times, and locations are not sent to Weekkeep, RevenueCat, or analytics services. The first App Store release has no Weekkeep account, no photo upload, no CloudKit album sync, and no session replay.
+Privacy is part of the interaction, not a footer. Photo selection and share rendering run in the foreground on the iPhone. Photo pixels, thumbnails, Photos identifiers, filenames, capture times, locations, and other photo details are not sent to Weekkeep, RevenueCat, analytics services, or other services for analysis. Sharing starts only after the parent explicitly chooses it. The first App Store release has no Weekkeep account or Weekkeep cloud photo service, no CloudKit album sync, and no session replay.
 
-Weekkeep uses RevenueCat for a simple business model that fits the product. The first two weekly albums are free, so parents can feel the value before seeing a paywall. A one-time $19.99 Weekkeep Plus purchase unlocks future album creation. There is no subscription. RevenueCat provides the localized store product, purchase state, lifetime entitlement, and restoration flow while the photo experience stays local.
+Weekkeep uses RevenueCat for a simple business model that fits the product. The first two weekly albums are free, so parents can feel the value before seeing a paywall. A one-time $19.99 Weekkeep Plus purchase unlocks future album creation. There is no subscription. RevenueCat provides the localized store product, purchase state, lifetime entitlement, and restoration flow while photo selection and share rendering happen on the iPhone and photo details stay out of analysis requests.
 
 The visual language is built around seven rounded stitches: one for each possible moment in a week. The same constraint shapes the progress rail, adaptive photo composition, app icon, and save transition. It makes the limit understandable without turning the week into a score.
 
@@ -255,7 +307,7 @@ Our documented product iteration led to four practical lessons. First, Weekkeep 
 ### What’s next
 
 ```text
-After launch we will follow the first real cohorts through two eligible weekly cycles. We will measure completion, initial-photo acceptance, reminder return, purchase conversion, and save-confirmation share-sheet intent by Story/Post format without collecting photo identifiers, content, recipients, destinations, or claiming an external post completed. Those results will decide whether to improve curation, timing, pricing, or the local share reward before considering family sharing or cloud backup.
+After launch we will follow the first real cohorts through two eligible weekly cycles. We will measure weekly album completion, initial-photo acceptance, reminder return, purchase conversion, and both save-confirmation share-sheet intent and native `completed == true` share completion by Story/Post format without collecting photo identifiers, content, recipients, destinations, activity type, returned items, errors, message contents, or claiming an external post completed. Those results will decide whether to improve curation, timing, pricing, or the local share reward before considering family sharing or cloud backup.
 ```
 
 ### Built with
@@ -287,7 +339,7 @@ Weekkeep's monetization is intentionally small and aligned with its cost structu
 
 The first two saved weekly albums are free. This lets a parent experience the complete value twice before the third album-creation attempt opens the paywall. Existing albums always remain readable. Weekkeep Plus is a single non-consumable lifetime purchase at a US base price of $19.99, with Apple's localized equivalent shown in every storefront. There is no subscription and no artificial urgency.
 
-That packaging fits both the audience and the product. Parents already face subscription fatigue, while Weekkeep has no recurring photo-storage or server-analysis expense: photo curation and album storage stay on the iPhone. A one-time purchase can therefore feel honest to the parent and remain economically sustainable as the user base grows.
+That packaging fits both the audience and the product. Parents already face subscription fatigue, while Weekkeep has no recurring photo-storage or server-analysis expense: photo selection and share rendering happen on the iPhone, and album records are stored locally. A one-time purchase can therefore feel honest to the parent and remain economically sustainable as the user base grows.
 
 RevenueCat is the source of truth for the `plus` entitlement. The App Store product `weekkeep_plus_lifetime` is attached to the `default` offering. The app requests the localized product and price, handles purchase cancellation/pending/failure, and restores lifetime access on another device without falsely claiming to restore locally stored albums.
 
@@ -315,7 +367,7 @@ We will not combine fixture paywall tests with real purchase conversion, and we 
 ```text
 Weekkeep addresses a small but widespread source of family mental load: parents accumulate thousands of meaningful photos while the work of sorting them remains unfinished. The app reduces that task to one calm decision a week and avoids the guilt mechanics commonly used to increase engagement.
 
-The privacy model matters because family photos can reveal children, homes, routines, and locations. Weekkeep analyzes photos on device and does not upload photo content or identifiers. Parents can use the core experience without creating an account.
+The privacy model matters because family photos can reveal children, homes, routines, and locations. Photo selection and share rendering happen on the iPhone; photo content and identifiers are not sent to analytics services or other services for analysis. Sharing starts only after the parent explicitly chooses it. Parents can use the core experience without creating an account.
 
 Observed impact (required before submission): [number] parents completed a first weekly album; [number/percentage] could accurately explain where their photos were processed; and [specific, consented, anonymized finding] showed how the one-minute format reduced the burden of memory keeping.
 ```
@@ -328,7 +380,7 @@ Observed impact (required before submission): [number] parents completed a first
 |---:|---|---|
 | 0:00–0:06 | 저장된 7장 앨범과 exact-seven rail로 시작 | `Parents don't need another app to open every day. They need one quiet minute to keep the week.` |
 | 0:06–0:12 | Weekkeep 소개와 review surface | `Weekkeep turns a crowded camera roll into up to seven family moments worth keeping.` |
-| 0:12–0:23.5 | 권한 primer, on-device와 no-upload boundary | `Photos access is requested only after this explanation. Analysis runs here, on the iPhone; photo content and identifiers are not uploaded.` |
+| 0:12–0:23.5 | 권한 primer, on-device와 analysis boundary | `Photos access is requested only after this explanation. Photo selection runs here, on the iPhone; photo content and identifiers are not sent to analytics services or other services for analysis. Sharing starts only when the parent chooses it.` |
 | 0:23.5–0:32.5 | draft와 seven-is-a-limit 증거 | `A draft is already prepared. Seven is a limit, not a target—if the week has fewer usable photos, Weekkeep shows fewer.` |
 | 0:32.5–0:39.5 | 선택한 한 장만 교체 | `The parent stays the editor. Keep the draft, or change only the moment that doesn't feel right.` |
 | 0:39.5–0:44.5 | Save confirmation → production-rendered 9:16 Story artifact, `READY TO SHARE` | `One tap saves a small weekly album locally.` |
@@ -393,7 +445,7 @@ What if a family photo app was designed to be opened once a week?
 ```
 
 ```text
-Seven photos, no streaks: the constraint we're testing for Weekkeep.
+Up to seven moments, no streaks: the constraint we're testing for Weekkeep.
 ```
 
 실제 인터뷰나 poll 결과가 없는 상태에서 `parents chose`라고 단정하지 않습니다. 검증 전에는 질문형 또는 `the constraint we're testing`으로 씁니다.
@@ -413,7 +465,7 @@ Excluded from the current submission pending public links and verified feedback-
 상태: `NOT SUBMISSION-READY — stretch category; submit only after the public release and launch/growth metrics are verified.` Grand Prize는 현재 Focus가 아니며, 아래 수치를 채우기 위해 placeholder를 추정하지 않습니다.
 
 ```text
-Weekkeep launched publicly in the United States on [INSERT FIRST PUBLIC RELEASE UTC TIMESTAMP WITHIN THE SUBMISSION WINDOW], after being fully published in the eligible App Store. It turns a crowded camera roll into up to seven family moments in one quiet weekly review, while keeping photo processing on device.
+Public US launch has not been verified and is intentionally left as a placeholder until App Review approval, manual release, and an independent store-availability check are complete. The intended product outcome is to turn a crowded camera roll into up to seven family moments in one quiet weekly review, while keeping photo processing on device.
 
 Verified launch and growth evidence for [INSERT UTC MEASUREMENT WINDOW]:
 - Public release and store URL: [INSERT VERIFIED URL AND RELEASE RECORD]

@@ -8,6 +8,10 @@ enum WeekkeepLocalization {
         localizedFormat(for: key)
     }
 
+    static func string(_ key: String, locale: Locale) -> String {
+        localizedFormat(for: key, locale: locale, bundle: localizationBundle(for: locale))
+    }
+
     static func string(_ key: String, _ argument: String) -> String {
         String.localizedStringWithFormat(localizedFormat(for: key), argument)
     }
@@ -85,6 +89,14 @@ enum WeekkeepLocalization {
         formatter.locale = locale
         formatter.timeZone = timeZone
         formatter.setLocalizedDateFormatFromTemplate("MMM d")
+        return formatter.string(from: date)
+    }
+
+    static func exactDate(_ date: Date, locale: Locale = .current, timeZone: TimeZone = .current) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.timeZone = timeZone
+        formatter.setLocalizedDateFormatFromTemplate("yMMMMdEEEE")
         return formatter.string(from: date)
     }
 

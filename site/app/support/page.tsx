@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     title: "항상 7장이 나오나요?",
-    body: "아니요. Weekkeep은 최대 7장을 제안해요. 허용된 사진이 적거나 분석 기준을 통과한 후보가 부족하면 1–6장으로 정직하게 보여줍니다.",
+    body: "아니요. Weekkeep은 남길 순간을 최대 7장 골라드려요. 허용된 사진이 적으면 1–6장으로 정직하게 보여줘요.",
     en: "No. Weekkeep suggests up to seven photos. If fewer eligible photos are available, it shows an honest 1–6 photo result.",
   },
   {
@@ -43,9 +43,9 @@ const faqs = [
     en: "Manage the Monday 8:30 PM local reminder in Weekkeep Settings, and system permission in iOS Settings › Notifications › Weekkeep.",
   },
   {
-    title: "사진이 서버나 분석 도구로 전송되나요?",
-    body: "아니요. 사진 픽셀, 썸네일, 파일명, 위치, 촬영 시각, Photos 식별자는 기기를 떠나지 않아요. 구매 상태와 선택적 coarse 제품 이벤트는 개인정보 처리방침에 공개한 범위에서만 별도 처리합니다.",
-    en: "No photo pixels, thumbnails, file names, locations, timestamps, or Photos identifiers leave the device. Purchase status and optional coarse product events are handled separately as disclosed in the Privacy Policy.",
+    title: "사진 처리는 어디에서 이뤄지나요?",
+    body: "사진 고르기와 공유 이미지 만들기는 iPhone에서 처리돼요. 사진 픽셀·썸네일·파일명·위치·촬영 시각 같은 사진 정보는 분석을 위해 분석 서비스나 다른 서비스로 보내지 않아요. 공유는 직접 선택할 때만 시작돼요.",
+    en: "Photo selection and share rendering happen on your iPhone. Photo pixels, thumbnails, filenames, locations, timestamps, and other photo details are not sent to analytics services or other services for analysis. Sharing starts only when you choose it.",
   },
 ];
 

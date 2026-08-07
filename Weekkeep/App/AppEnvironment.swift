@@ -20,6 +20,7 @@ final class AppEnvironment {
     var selectedTab: AppTab = .week
     var shouldStartWelcomeCuration = false
     var pendingDeepLink: AppDeepLink?
+    var pendingWeeklyEntryPoint: WeeklyEntryPointAnalyticsValue?
     var onboardingCompleted: Bool {
         didSet { defaults.set(onboardingCompleted, forKey: Keys.onboardingCompleted) }
     }
@@ -113,19 +114,30 @@ final class AppEnvironment {
     static func fixtures(purchaseState: EntitlementState = .inactive) -> AppEnvironment {
         let defaults = UserDefaults(suiteName: "weekkeep.fixtures") ?? .standard
         defaults.removePersistentDomain(forName: "weekkeep.fixtures")
+        // A fixture app can be relaunched by several XCTest cases in one
+        // runner process. Clear the known state keys explicitly as well as
+        // the suite domain so a prior fixture screen cannot leak into the
+        // next launch through UserDefaults caching.
+        for key in ["onboardingCompleted", "regularCycleStartsAt", "notificationPrimerShown"] {
+            defaults.removeObject(forKey: key)
+        }
         if ProcessInfo.processInfo.arguments.contains("-ui-fixtures-skip-notification") {
             defaults.set(true, forKey: "notificationPrimerShown")
         }
         let fixtureCount = ProcessInfo.processInfo.environment["WK_UI_FIXTURE_PHOTO_COUNT"].flatMap(Int.init)
         let descriptors = fixtureCount.map { FixturePhotoLibraryClient.makeDescriptors(count: min(max($0, 0), 7)) }
-        let photoLibrary = FixturePhotoLibraryClient(descriptors: descriptors ?? FixturePhotoLibraryClient.makeDescriptors(count: 42))
-        let analysis = FixturePhotoAnalysisService(photoLibrary: photoLibrary)
         let fixtureScreen = ProcessInfo.processInfo.environment["WK_UI_FIXTURE_SCREEN"]
+        let fixturePermission: PhotoAuthorization = fixtureScreen == "ready-limited" ? .limited : .authorized
+        let photoLibrary = FixturePhotoLibraryClient(
+            descriptors: descriptors ?? FixturePhotoLibraryClient.makeDescriptors(count: 42),
+            permission: fixturePermission
+        )
+        let analysis = FixturePhotoAnalysisService(photoLibrary: photoLibrary)
         let albumStore: any AlbumStore
-        if fixtureScreen == "ready" || fixtureScreen == "ready-empty" {
+        if ["ready", "ready-empty", "ready-limited", "welcome-pending"].contains(fixtureScreen) {
             defaults.set(true, forKey: "onboardingCompleted")
             defaults.set(Date().addingTimeInterval(-14 * 24 * 60 * 60), forKey: "regularCycleStartsAt")
-            if fixtureScreen == "ready" {
+            if fixtureScreen == "ready" || fixtureScreen == "ready-limited" {
                 let now = Date()
                 let calculator = WeekRangeCalculator()
                 let welcome = calculator.welcomeRange(analysisStartedAt: now)

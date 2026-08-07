@@ -13,6 +13,11 @@ enum ShareEntryPointAnalyticsValue: String, CaseIterable, Sendable, Equatable {
     case archiveDetail = "archive_detail"
 }
 
+enum WeeklyEntryPointAnalyticsValue: String, CaseIterable, Sendable, Equatable {
+    case direct
+    case notification
+}
+
 enum AnalyticsEvent: Sendable, Equatable {
     case onboardingStarted(locale: String, appVersion: String)
     case photoPermissionResolved(status: String)
@@ -22,6 +27,8 @@ enum AnalyticsEvent: Sendable, Equatable {
     case photoReplaced(replacementIndex: Int)
     case albumSaved(albumKind: AlbumKind, regularSequenceBucket: String, selectedCount: Int, replacementCount: Int, activeReviewDurationBucket: String)
     case shareSheetOpened(format: ShareArtifactFormatAnalyticsValue, entryPoint: ShareEntryPointAnalyticsValue)
+    case shareCompleted(format: ShareArtifactFormatAnalyticsValue, entryPoint: ShareEntryPointAnalyticsValue)
+    case eligibleWeekOpened(entryPoint: WeeklyEntryPointAnalyticsValue)
     case notificationPermissionResolved(status: String)
     case paywallViewed(freeAlbumCount: Int)
     case purchaseResolved(result: String, productType: String, localizedPriceBucket: String?)
@@ -37,6 +44,8 @@ enum AnalyticsEvent: Sendable, Equatable {
         case .photoReplaced: "photo_replaced"
         case .albumSaved: "album_saved"
         case .shareSheetOpened: "share_sheet_opened"
+        case .shareCompleted: "share_completed"
+        case .eligibleWeekOpened: "eligible_week_opened"
         case .notificationPermissionResolved: "notification_permission_resolved"
         case .paywallViewed: "paywall_viewed"
         case .purchaseResolved: "purchase_resolved"
@@ -71,6 +80,13 @@ enum AnalyticsEvent: Sendable, Equatable {
                 "format": format.rawValue,
                 "entry_point": entryPoint.rawValue
             ]
+        case let .shareCompleted(format, entryPoint):
+            return [
+                "format": format.rawValue,
+                "entry_point": entryPoint.rawValue
+            ]
+        case let .eligibleWeekOpened(entryPoint):
+            return ["entry_point": entryPoint.rawValue]
         case let .notificationPermissionResolved(status):
             return ["status": status]
         case let .paywallViewed(freeAlbumCount):
@@ -146,7 +162,7 @@ enum AnalyticsSchema {
     static let allowedEventNames: Set<String> = [
         "onboarding_started", "photo_permission_resolved", "curation_started", "curation_completed",
         "curation_failed", "photo_replaced", "album_saved", "notification_permission_resolved",
-        "share_sheet_opened", "paywall_viewed", "purchase_resolved", "restore_resolved"
+        "share_sheet_opened", "share_completed", "eligible_week_opened", "paywall_viewed", "purchase_resolved", "restore_resolved"
     ]
     static let forbiddenFragments = [
         "asset", "photo", "localidentifier", "filename", "path", "location", "capture", "weekkey",
@@ -165,6 +181,8 @@ enum AnalyticsSchema {
             "active_review_duration_bucket"
         ],
         "share_sheet_opened": ["format", "entry_point"],
+        "share_completed": ["format", "entry_point"],
+        "eligible_week_opened": ["entry_point"],
         "notification_permission_resolved": ["status"],
         "paywall_viewed": ["free_album_count"],
         "purchase_resolved": ["result", "product_type", "localized_price_bucket"],
@@ -226,6 +244,12 @@ enum AnalyticsSchema {
             return ShareArtifactFormatAnalyticsValue.allCases.map(\.rawValue).contains(value)
         case ("share_sheet_opened", "entry_point"):
             return ShareEntryPointAnalyticsValue.allCases.map(\.rawValue).contains(value)
+        case ("share_completed", "format"):
+            return ShareArtifactFormatAnalyticsValue.allCases.map(\.rawValue).contains(value)
+        case ("share_completed", "entry_point"):
+            return ShareEntryPointAnalyticsValue.allCases.map(\.rawValue).contains(value)
+        case ("eligible_week_opened", "entry_point"):
+            return WeeklyEntryPointAnalyticsValue.allCases.map(\.rawValue).contains(value)
         default:
             return true
         }

@@ -201,7 +201,7 @@ Observed impact (required before submission): [number] parents completed a first
 | Time | Footage | Voice-over |
 |---:|---|---|
 | 0:00–0:08 | 저장된 7장 앨범과 exact-seven rail로 시작 | `Parents don't need another app to open every day. They need one quiet minute to keep the week.` |
-| 0:08–0:20 | Welcome → `Keep the last 7 days` | `Weekkeep turns a crowded camera roll into up to seven family moments worth keeping.` |
+| 0:08–0:20 | Welcome → `Choose your first week` | `Weekkeep starts with the most recently completed week, then turns a crowded camera roll into up to seven family moments worth keeping.` |
 | 0:20–0:34 | 권한 primer와 system Photos 선택, 분석 progress | `Photos access is requested only after this explanation. Analysis runs here, on the iPhone; photo content and identifiers are not uploaded.` |
 | 0:34–0:53 | hero+2+4 review, rail, 사진 1회 선택 | `A draft is already prepared. Seven is a limit, not a target—if the week has fewer usable photos, Weekkeep shows fewer.` |
 | 0:53–1:07 | `Replace this photo` → 후보 1장 교체 → viewer | `The parent stays the editor. Keep the draft, or change only the moment that doesn't feel right.` |

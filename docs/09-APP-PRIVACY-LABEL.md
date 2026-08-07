@@ -7,7 +7,7 @@
 | 공개 정책 URL | `https://weekkeep-app.kimsol1134.chatgpt.site/privacy` |
 | Privacy Choices URL | `https://weekkeep-app.kimsol1134.chatgpt.site/privacy` |
 | Tracking | No |
-| 사진·영상 외부 수집 | No — on-device only |
+| 사진·영상 외부 수집 | No — photo selection and share rendering happen on the iPhone; photo details are not sent for analysis |
 
 이 문서는 App Store Connect의 **App Privacy** 답변을 소유하는 단일 원본입니다. 앱 코드, `PrivacyInfo.xcprivacy`, SDK manifest, 공개 개인정보 처리방침, App Store 답변이 바뀔 때 이 문서를 함께 검토합니다.
 
@@ -15,7 +15,7 @@
 
 | 기능 | 제출 빌드 설정 | 네트워크 처리 |
 |---|---|---|
-| 사진 탐색·분석 | 활성 | Photos/Vision으로 기기 내 처리; 사진 픽셀·썸네일·파일명·위치·촬영 시각·Photos 식별자 전송 없음 |
+| 사진 탐색·분석 | 활성 | Photos/Vision으로 iPhone에서 처리; 사진 픽셀·썸네일·파일명·위치·촬영 시각·Photos 식별자는 분석을 위해 분석 서비스나 다른 서비스로 보내지 않음 |
 | 로컬 기록 | 활성 | SwiftData/App sandbox에만 저장; Weekkeep 서버·CloudKit 없음 |
 | RevenueCat 구매 | 실제 public SDK key가 준비되면 활성 | 자동 생성 익명 App User ID와 구매·entitlement 정보 전송 |
 | PostHog 분석 | **V1 제출은 비활성 (`WK_ANALYTICS_ENABLED = NO`)** | 전송 없음; adapter와 SDK는 deny-by-default 상태로 포함 |
@@ -36,7 +36,7 @@ PostHog를 이후 활성화하려면 사용자 동의 UX, `TST-019`/`TST-022` pa
 
 다음 항목은 V1에서 **수집하지 않음**으로 답합니다.
 
-- Photos or Videos: 사진은 기기 안에서만 처리하며 외부에 전송하지 않음
+- Photos or Videos: 사진 고르기와 공유 이미지 만들기는 iPhone에서 처리하며, 사진 정보는 분석을 위해 분석 서비스나 다른 서비스로 보내지 않음. 공유는 사용자가 직접 선택할 때만 시작
 - Precise/Coarse Location: Photos 위치 metadata를 외부에 전송하지 않음
 - Product Interaction / Other Usage Data: PostHog 비활성
 - Crash Data / Performance Data / Other Diagnostic Data: 자동 crash capture 비활성, 자체 reporter 없음

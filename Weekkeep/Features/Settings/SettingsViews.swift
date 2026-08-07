@@ -87,154 +87,100 @@ struct SettingsTabView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            NavigationStack {
-                List {
-                    Section {
-                        SettingsValueRow(
-                            title: "settings.photoAccess",
-                            value: LocalizedStringKey(model.photoAccessPresentation.statusKey),
-                            role: .photoAccess(model.photoPermission),
-                            treatment: .status,
-                            action: photoAccessAction
-                        )
-                        if let explanationKey = model.photoAccessPresentation.explanationKey {
-                            SettingsExplanationRow(
-                                title: LocalizedStringKey(explanationKey),
-                                role: .photoAccess(model.photoPermission)
-                            )
-                        }
-                        if let actionTitleKey = model.photoAccessPresentation.actionTitleKey {
-                            SettingsActionRow(
-                                title: LocalizedStringKey(actionTitleKey),
-                                action: model.performPhotoAccessAction
-                            )
-                        }
-                    } header: {
-                        SettingsSectionHeader(
-                            title: "settings.photos",
-                            accessibilityIdentifier: "SCR-SET-01-PhotosSection"
+        NavigationStack {
+            List {
+                Section {
+                    SettingsValueRow(
+                        title: "settings.photoAccess",
+                        value: LocalizedStringKey(model.photoAccessPresentation.statusKey),
+                        role: .photoAccess(model.photoPermission),
+                        treatment: .status,
+                        action: photoAccessAction
+                    )
+                    if let explanationKey = model.photoAccessPresentation.explanationKey {
+                        SettingsExplanationRow(
+                            title: LocalizedStringKey(explanationKey),
+                            role: .photoAccess(model.photoPermission)
                         )
                     }
-                    Section {
-                        SettingsValueRow(
-                            title: "settings.weeklyReminder",
-                            value: notificationValueLabel,
+                } header: {
+                    SettingsSectionHeader(
+                        title: "settings.photos",
+                        accessibilityIdentifier: "SCR-SET-01-PhotosSection"
+                    )
+                }
+                Section {
+                    SettingsValueRow(
+                        title: "settings.weeklyReminder",
+                        value: notificationValueLabel,
+                        role: .notification(
+                            model.notificationStatus,
+                            savedAlbumCount: model.savedAlbumCount
+                        ),
+                        treatment: .status,
+                        action: notificationAction
+                    )
+                    .accessibilityIdentifier("SCR-SET-01-NotificationStatus")
+                    if let explanationKey = model.notificationPresentation.explanationKey {
+                        SettingsExplanationRow(
+                            title: LocalizedStringKey(explanationKey),
                             role: .notification(
                                 model.notificationStatus,
                                 savedAlbumCount: model.savedAlbumCount
-                            ),
-                            treatment: .status
-                        )
-                        .accessibilityIdentifier("SCR-SET-01-NotificationStatus")
-                        if let explanationKey = model.notificationPresentation.explanationKey {
-                            SettingsExplanationRow(
-                                title: LocalizedStringKey(explanationKey),
-                                role: .notification(
-                                    model.notificationStatus,
-                                    savedAlbumCount: model.savedAlbumCount
-                                )
                             )
-                            .accessibilityIdentifier("SCR-SET-01-NotificationGate")
-                        }
-                        if let actionTitleKey = model.notificationPresentation.actionTitleKey {
-                            SettingsActionRow(
-                                title: LocalizedStringKey(actionTitleKey),
-                                action: model.manageNotifications
-                            )
-                            .accessibilityIdentifier("SCR-SET-01-NotificationAction")
-                        }
-                    } header: {
-                        SettingsSectionHeader(
-                            title: "settings.notifications",
-                            accessibilityIdentifier: "SCR-SET-01-NotificationsSection"
                         )
+                        .accessibilityIdentifier("SCR-SET-01-NotificationGate")
                     }
-                    Section {
-                        SettingsValueRow(
-                            title: "settings.status",
-                            value: entitlementLabel,
-                            role: .entitlement(model.entitlement),
-                            treatment: .status,
-                            action: { purchaseModel.sheet = .paywall }
-                        )
-                        SettingsActionRow(
-                            title: "settings.learnPlus",
-                            action: { purchaseModel.sheet = .paywall }
-                        )
-                        .accessibilityIdentifier("SHEET-PAY-01-Open")
+                } header: {
+                    SettingsSectionHeader(
+                        title: "settings.notifications",
+                        accessibilityIdentifier: "SCR-SET-01-NotificationsSection"
+                    )
+                }
+                Section {
+                    SettingsValueRow(
+                        title: "settings.status",
+                        value: entitlementLabel,
+                        role: .entitlement(model.entitlement),
+                        treatment: .status,
+                        action: plusAction
+                    )
+                    .accessibilityIdentifier("SHEET-PAY-01-Open")
+                    if model.entitlement != .active {
                         SettingsActionRow(title: "settings.restore", action: model.restorePurchase)
-                    } header: {
-                        SettingsSectionHeader(
-                            title: "settings.plus",
-                            accessibilityIdentifier: "SCR-SET-01-PlusSection"
-                        )
                     }
-                    Section {
-                        NavigationLink(value: AppRoute.privacy) {
-                            SettingsValueRow(
-                                title: "settings.privacy",
-                                value: "settings.onDevice",
-                                role: .success,
-                                treatment: .supporting
-                            )
-                        }
-                        SettingsValueRow(
-                            title: "settings.storage",
-                            value: "settings.localOnly",
-                            role: .neutral,
-                            treatment: .supporting
-                        )
-                        NavigationLink(value: AppRoute.about) {
-                            SettingsValueRow(
-                                title: "settings.help",
-                                value: "settings.about",
-                                role: .neutral,
-                                treatment: .supporting
-                            )
-                        }
-                    } header: {
-                        SettingsSectionHeader(
-                            title: "settings.data",
-                            accessibilityIdentifier: "SCR-SET-01-DataSection"
-                        )
-                    }
-                    Section {
-                        Text(WeekkeepLocalization.string("settings.version", WeekkeepLocalization.appVersion))
-                            .font(.weekkeepCaption)
-                            .foregroundStyle(WeekkeepColors.secondaryText)
-                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .center)
-                            .listRowBackground(WeekkeepColors.primaryBackground)
-                    }
+                } header: {
+                    SettingsSectionHeader(
+                        title: "settings.plus",
+                        accessibilityIdentifier: "SCR-SET-01-PlusSection"
+                    )
                 }
-                .navigationTitle("settings.title")
-                .navigationDestination(for: AppRoute.self) { route in
-                    switch route {
-                    case .privacy: PrivacyView(environment: environment)
-                    case .about: AboutSupportView()
-                    case .album: EmptyView()
+                Section {
+                    NavigationLink(value: AppRoute.about) {
+                        SettingsNavigationRow(title: "settings.help")
                     }
-                }
-                .scrollContentBackground(.hidden)
-                .background(WeekkeepColors.primaryBackground)
-                .listStyle(.insetGrouped)
-                // Keep the final native section header above the floating tab bar
-                // without introducing a custom settings surface.
-                .listSectionSpacing(0)
-                .safeAreaInset(edge: .bottom, spacing: 0) {
-                    Color.clear
-                        .frame(height: WeekkeepTabHostSpacing.bottomScrollClearance)
-                        .accessibilityHidden(true)
+                    .accessibilityIdentifier("SCR-SET-01-SupportSection")
                 }
             }
-            WeekkeepColors.primaryBackground
-                .frame(maxWidth: .infinity)
-                .frame(height: WeekkeepTabHostSpacing.bottomTabBarOcclusion)
-                .allowsHitTesting(false)
-                .accessibilityHidden(true)
-                .zIndex(1)
+            .navigationTitle("settings.title")
+            .navigationDestination(for: AppRoute.self) { route in
+                switch route {
+                case .about: AboutSupportView()
+                case .album: EmptyView()
+                }
+            }
+            .scrollContentBackground(.hidden)
+            .background(WeekkeepColors.primaryBackground)
+            .listStyle(.insetGrouped)
+            // Keep the final native section header above the floating tab bar
+            // without introducing a custom settings surface.
+            .listSectionSpacing(0)
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                Color.clear
+                    .frame(height: WeekkeepTabHostSpacing.bottomScrollClearance)
+                    .accessibilityHidden(true)
+            }
         }
-        .ignoresSafeArea(edges: .bottom)
         .task { await model.load() }
         .onChange(of: scenePhase) { _, phase in
             guard phase == .active else { return }
@@ -274,6 +220,16 @@ struct SettingsTabView: View {
     private var photoAccessAction: (() -> Void)? {
         guard model.photoAccessPresentation.showsAction else { return nil }
         return model.performPhotoAccessAction
+    }
+
+    private var notificationAction: (() -> Void)? {
+        guard model.notificationPresentation.showsAction else { return nil }
+        return model.manageNotifications
+    }
+
+    private var plusAction: (() -> Void)? {
+        guard model.entitlement == .inactive else { return nil }
+        return { purchaseModel.sheet = .paywall }
     }
 
     private var entitlementLabel: LocalizedStringKey {
@@ -387,6 +343,26 @@ private struct SettingsValueTreatmentModifier: ViewModifier {
     }
 }
 
+private struct SettingsNavigationRow: View {
+    let title: LocalizedStringKey
+
+    var body: some View {
+        HStack {
+            Text(title)
+                .font(.weekkeepBody)
+                .foregroundStyle(WeekkeepColors.primaryText)
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(WeekkeepColors.secondaryAction)
+                .accessibilityHidden(true)
+        }
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+        .contentShape(Rectangle())
+        .listRowBackground(WeekkeepColors.surface)
+    }
+}
+
 private struct SettingsActionRow: View {
     let title: LocalizedStringKey
     let action: () -> Void
@@ -432,130 +408,30 @@ private struct SettingsExplanationRow: View {
     }
 }
 
-struct PrivacyView: View {
-    let environment: AppEnvironment
-    @State private var model: SettingsModel
-
-    init(environment: AppEnvironment) {
-        self.environment = environment
-        _model = State(initialValue: SettingsModel(environment: environment))
-    }
-
-    var body: some View {
-        GeometryReader { proxy in
-            let screenEdge = WeekkeepScreenLayout.horizontalPadding(for: proxy.size.width)
-
-            ScrollView {
-                VStack(alignment: .leading, spacing: WeekkeepSpacing.six) {
-                    SevenStitchRail(tone: .sage)
-                    Text("privacy.title")
-                        .font(.weekkeepTitle)
-                    Text("privacy.body")
-                        .font(.weekkeepBody)
-                    PrivacyFact(icon: "iphone", title: "privacy.onDeviceTitle", detail: "privacy.onDeviceBody")
-                    PrivacyFact(icon: "eye.slash", title: "privacy.notTrackedTitle", detail: "privacy.notTrackedBody")
-                    PrivacyFact(icon: "hand.raised", title: "privacy.youDecideTitle", detail: "privacy.youDecideBody")
-                    VStack(alignment: .leading, spacing: WeekkeepSpacing.three) {
-                        Label("privacy.storageTitle", systemImage: "internaldrive")
-                            .font(.weekkeepHeadline)
-                        Text("privacy.storageBody")
-                            .font(.weekkeepCallout)
-                            .foregroundStyle(WeekkeepColors.secondaryText)
-                    }
-                    .padding(WeekkeepSpacing.four)
-                    .background(WeekkeepColors.surface, in: RoundedRectangle(cornerRadius: WeekkeepRadii.medium))
-                    .overlay { RoundedRectangle(cornerRadius: WeekkeepRadii.medium).stroke(WeekkeepColors.subtleBorder, lineWidth: 1) }
-                    if let explanationKey = model.photoAccessPresentation.explanationKey {
-                        Text(LocalizedStringKey(explanationKey))
-                            .font(.weekkeepCaption)
-                            .foregroundStyle(WeekkeepColors.secondaryText)
-                    }
-                    if let actionTitleKey = model.photoAccessPresentation.actionTitleKey {
-                        WeekkeepSecondaryButton(title: LocalizedStringKey(actionTitleKey)) {
-                            model.performPhotoAccessAction()
-                        }
-                    }
-                    Link(destination: AppLinks.privacy) {
-                        Label("privacy.fullPolicy", systemImage: "doc.text")
-                            .font(.weekkeepBody)
-                            .foregroundStyle(WeekkeepColors.secondaryAction)
-                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-                    }
-                }
-                .padding(.horizontal, screenEdge)
-                .padding(.vertical, WeekkeepSpacing.four)
-            }
-        }
-        .navigationTitle("settings.privacy")
-        .navigationBarTitleDisplayMode(.inline)
-        .task { await model.refreshPhotoPermission() }
-        .weekkeepScreenBackground()
-    }
-}
-
-private struct PrivacyFact: View {
-    let icon: String
-    let title: LocalizedStringKey
-    let detail: LocalizedStringKey
-
-    var bodyView: some View {
-        HStack(alignment: .top, spacing: WeekkeepSpacing.four) {
-            Image(systemName: icon)
-                .font(.system(size: 24, weight: .light))
-                .foregroundStyle(WeekkeepColors.success)
-                .frame(width: 32)
-            VStack(alignment: .leading, spacing: WeekkeepSpacing.one) {
-                Text(title).font(.weekkeepHeadline)
-                Text(detail).font(.weekkeepCallout).foregroundStyle(WeekkeepColors.secondaryText)
-            }
-        }
-    }
-
-    var body: some View { bodyView }
-}
-
 struct AboutSupportView: View {
     var body: some View {
-        GeometryReader { proxy in
-            let screenEdge = WeekkeepScreenLayout.horizontalPadding(for: proxy.size.width)
-
-            ScrollView {
-                VStack(alignment: .leading, spacing: WeekkeepSpacing.six) {
-                    WeekkeepWordmark()
-                    SevenStitchRail()
-                    Text("about.title")
-                        .font(.weekkeepTitle)
-                    Text("about.tagline")
-                        .font(.weekkeepTitle2)
-                    Text("about.body")
-                        .font(.weekkeepBody)
-                    AboutLinkRow(title: "about.help", destination: AppLinks.support)
-                    AboutLinkRow(title: "about.contact", destination: AppLinks.contact)
-                    AboutLinkRow(title: "about.terms", destination: AppLinks.terms)
-                    AboutLinkRow(title: "about.privacy", destination: AppLinks.privacy)
-                    NavigationLink {
-                        OpenSourceLicensesView()
-                    } label: {
-                        AboutRowLabel(title: "about.licenses")
-                    }
-                    HStack {
-                        Text("about.font")
-                        Spacer()
-                        Text("about.fontName").foregroundStyle(WeekkeepColors.secondaryText)
-                    }
-                    .font(.weekkeepCallout)
-                    Text(WeekkeepLocalization.string("settings.version", WeekkeepLocalization.appVersion))
-                        .font(.weekkeepCaption)
-                        .foregroundStyle(WeekkeepColors.secondaryText)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                    Text("about.made")
-                        .font(.weekkeepCaption)
-                        .foregroundStyle(WeekkeepColors.secondaryText)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }
-                .padding(.horizontal, screenEdge)
-                .padding(.vertical, WeekkeepSpacing.four)
+        List {
+            Section {
+                AboutLinkRow(title: "about.help", destination: AppLinks.support)
+                AboutLinkRow(title: "about.contact", destination: AppLinks.contact)
+                AboutLinkRow(title: "about.terms", destination: AppLinks.terms)
+                AboutLinkRow(title: "about.privacy", destination: AppLinks.privacy)
+            } footer: {
+                Text(WeekkeepLocalization.string("settings.version", WeekkeepLocalization.appVersion))
+                    .font(.weekkeepCaption)
+                    .foregroundStyle(WeekkeepColors.secondaryText)
+                    .textCase(nil)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
+        }
+        .scrollContentBackground(.hidden)
+        .background(WeekkeepColors.primaryBackground)
+        .listStyle(.insetGrouped)
+        .listSectionSpacing(0)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            Color.clear
+                .frame(height: WeekkeepTabHostSpacing.bottomScrollClearance)
+                .accessibilityHidden(true)
         }
         .navigationTitle("about.title")
         .navigationBarTitleDisplayMode(.inline)
@@ -571,6 +447,7 @@ private struct AboutLinkRow: View {
         Link(destination: destination) {
             AboutRowLabel(title: title)
         }
+        .listRowBackground(WeekkeepColors.surface)
     }
 }
 
@@ -587,85 +464,6 @@ private struct AboutRowLabel: View {
         }
         .font(.weekkeepBody)
         .foregroundStyle(WeekkeepColors.primaryText)
-        .frame(maxWidth: .infinity, minHeight: 48, alignment: .leading)
-        .overlay(alignment: .bottom) {
-            Rectangle().fill(WeekkeepColors.subtleBorder).frame(height: 1)
-        }
-    }
-}
-
-private struct OpenSourceLicensesView: View {
-    private let notices = [
-        LicenseNotice(
-            title: "LINE Seed Sans KR",
-            attribution: "LY Corporation · LINE VX Design · Sandoll Inc. · Dalton Maag Ltd. · SIL Open Font License 1.1",
-            resource: "LINESeedKR-OFL"
-        ),
-        LicenseNotice(
-            title: "RevenueCat Purchases SDK",
-            attribution: "Copyright © 2024 RevenueCat, Inc. · MIT License",
-            resource: "RevenueCat-LICENSE"
-        ),
-        LicenseNotice(
-            title: "PostHog iOS SDK",
-            attribution: "Copyright © 2023 PostHog · MIT License",
-            resource: "PostHog-LICENSE"
-        )
-    ]
-
-    var body: some View {
-        GeometryReader { proxy in
-            let screenEdge = WeekkeepScreenLayout.horizontalPadding(for: proxy.size.width)
-
-            ScrollView {
-                VStack(alignment: .leading, spacing: WeekkeepSpacing.four) {
-                    Text("about.licensesBody")
-                        .font(.weekkeepBody)
-                        .foregroundStyle(WeekkeepColors.secondaryText)
-                    ForEach(notices) { notice in
-                        DisclosureGroup {
-                            Text(notice.licenseText)
-                                .font(.system(.caption, design: .monospaced))
-                                .textSelection(.enabled)
-                                .padding(.top, WeekkeepSpacing.two)
-                        } label: {
-                            VStack(alignment: .leading, spacing: WeekkeepSpacing.one) {
-                                Text(notice.title).font(.weekkeepHeadline)
-                                Text(notice.attribution)
-                                    .font(.weekkeepCaption)
-                                    .foregroundStyle(WeekkeepColors.secondaryText)
-                            }
-                        }
-                        .tint(WeekkeepColors.secondaryAction)
-                        .padding(WeekkeepSpacing.four)
-                        .background(WeekkeepColors.surface, in: RoundedRectangle(cornerRadius: WeekkeepRadii.medium))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: WeekkeepRadii.medium)
-                                .stroke(WeekkeepColors.subtleBorder, lineWidth: 1)
-                        }
-                    }
-                }
-                .padding(.horizontal, screenEdge)
-                .padding(.vertical, WeekkeepSpacing.four)
-            }
-        }
-        .navigationTitle("about.licenses")
-        .navigationBarTitleDisplayMode(.inline)
-        .weekkeepScreenBackground()
-    }
-}
-
-private struct LicenseNotice: Identifiable {
-    let title: String
-    let attribution: String
-    let resource: String
-
-    var id: String { resource }
-
-    var licenseText: String {
-        guard let url = Bundle.main.url(forResource: resource, withExtension: "txt"),
-              let text = try? String(contentsOf: url, encoding: .utf8)
-        else { return WeekkeepLocalization.string("about.licenseUnavailable") }
-        return text
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
     }
 }

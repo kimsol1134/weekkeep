@@ -203,7 +203,9 @@ final class WeekkeepUITests: XCTestCase {
             seeOtherDays.tap()
             XCTAssertTrue(app.staticTexts["SHEET-REP-01-OtherDays"].waitForExistence(timeout: 3))
         } else {
-            XCTAssertTrue(app.otherElements["SHEET-REP-01-Content"].exists)
+            XCTAssertTrue(
+                app.staticTexts["SHEET-REP-01-None"].waitForExistence(timeout: 3)
+            )
         }
     }
 

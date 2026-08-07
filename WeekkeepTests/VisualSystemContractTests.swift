@@ -583,7 +583,10 @@ final class VisualSystemContractTests: XCTestCase {
     XCTAssertTrue(weeklySource.contains("SCR-WK-01-Start"))
     XCTAssertTrue(weeklySource.contains("action: model.startCuration"))
     XCTAssertTrue(weeklySource.contains("WeekkeepPrimaryButton("))
-    let readyBodyRange = try XCTUnwrap(weeklySource.range(of: "Text(isWelcome ? \"week.welcomeBody\""))
+    let readyBodyRange = try XCTUnwrap(
+      weeklySource.range(of: "isWelcome ? \"week.welcomeBody\""),
+      "ReadyStateView must keep the completed-week body in the welcome branch"
+    )
     let readyCTARange = try XCTUnwrap(weeklySource.range(of: "WeekkeepPrimaryButton("))
     let readyPhotoStoryRange = try XCTUnwrap(weeklySource.range(of: "ReadyPhotoStack()"))
     XCTAssertLessThan(readyBodyRange.lowerBound, readyCTARange.lowerBound)

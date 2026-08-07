@@ -51,8 +51,9 @@ struct OnboardingView: View {
                 .frame(width: contentWidth, alignment: .leading)
                 .padding(.horizontal, screenEdge)
             }
+            .scrollIndicators(.hidden)
+            .weekkeepTopSystemOcclusion(localSafeAreaTop: proxy.safeAreaInsets.top)
         }
-        .scrollIndicators(.hidden)
         .weekkeepScreenBackground()
         .sheet(isPresented: $showPrivacy) {
             OnboardingPrivacySheet()

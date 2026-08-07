@@ -117,6 +117,82 @@ final class WeekkeepUITests: XCTestCase {
         XCTAssertEqual(app.descendants(matching: .any).matching(identifier: "TAB-WEEK").count, 0)
     }
 
+    func testThisWeekInitialFrameKeepsLowerContentOutsideFloatingTabBar() {
+        let app = launchFixture(screen: "ready")
+        let tabBar = app.tabBars.firstMatch
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+
+        for identifier in [
+            "SCR-WK-01-PhotoCount",
+            "CMP-03-PrivacyBadge",
+            "SCR-WK-01-Start",
+        ] {
+            let element = app.descendants(matching: .any)[identifier]
+            XCTAssertTrue(element.waitForExistence(timeout: 5), "Missing \(identifier)")
+            let message = identifier
+                + " overlaps the floating tab bar before scrolling"
+                + " elementFrame=" + String(describing: element.frame)
+                + " tabBarFrame=" + String(describing: tabBar.frame)
+                + " hittable=" + String(element.isHittable)
+            XCTAssertFalse(
+                element.frame.intersects(tabBar.frame) && element.isHittable,
+                message
+            )
+        }
+    }
+
+    func testThisWeekFinalActionCanSettleAboveFloatingTabBar() {
+        let app = launchFixture(screen: "ready")
+        let start = app.buttons["SCR-WK-01-Start"]
+        XCTAssertTrue(start.waitForExistence(timeout: 8))
+
+        let scrollView = app.scrollViews.firstMatch
+        let tabBar = app.tabBars.firstMatch
+        XCTAssertTrue(scrollView.waitForExistence(timeout: 5))
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+
+        for _ in 0..<12 {
+            if start.isHittable && start.frame.maxY <= tabBar.frame.minY {
+                break
+            }
+            scrollView.swipeUp()
+            Thread.sleep(forTimeInterval: 0.15)
+        }
+
+        XCTAssertTrue(start.isHittable)
+        XCTAssertLessThanOrEqual(start.frame.maxY, tabBar.frame.minY)
+    }
+
+    func testSettingsFinalSectionCanSettleAboveFloatingTabBar() {
+        let app = launchFixture(screen: "ready")
+        let settingsTab = app.tabBars.buttons.element(boundBy: 2)
+        XCTAssertTrue(settingsTab.waitForExistence(timeout: 5))
+        settingsTab.tap()
+
+        let dataSection = app.descendants(matching: .any)["SCR-SET-01-DataSection"]
+        let tabBar = app.tabBars.firstMatch
+        XCTAssertTrue(dataSection.waitForExistence(timeout: 5))
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+
+        XCTAssertFalse(
+            dataSection.isHittable && dataSection.frame.intersects(tabBar.frame),
+            "The Settings data section must not be tappable under the floating tab bar. "
+                + "elementFrame=" + String(describing: dataSection.frame)
+                + " tabBarFrame=" + String(describing: tabBar.frame)
+        )
+
+        for _ in 0..<12 {
+            if dataSection.isHittable && dataSection.frame.maxY <= tabBar.frame.minY {
+                break
+            }
+            app.swipeUp()
+            Thread.sleep(forTimeInterval: 0.15)
+        }
+
+        XCTAssertTrue(dataSection.isHittable)
+        XCTAssertLessThanOrEqual(dataSection.frame.maxY, tabBar.frame.minY)
+    }
+
     func testSavedFixtureReachesShellWithThreeDistinctLocalizedTabs() {
         let app = launchFixture()
         let primary = app.buttons["SCR-ONB-01-Primary"]

@@ -104,6 +104,45 @@ enum WeekkeepSystemSafeArea {
     }
 }
 
+/// Pure geometry for masking content that can scroll into the system status
+/// region. The modifier keeps the mask out of layout, hit testing, and the
+/// accessibility tree.
+enum WeekkeepTopSystemOcclusion {
+    static func height(windowSafeAreaTop: CGFloat, localSafeAreaTop: CGFloat) -> CGFloat {
+        max(0, max(windowSafeAreaTop, localSafeAreaTop))
+    }
+}
+
+private struct WeekkeepTopSystemOcclusionModifier: ViewModifier {
+    let localSafeAreaTop: CGFloat
+    @Environment(\.weekkeepWindowSafeAreaTop) private var windowSafeAreaTop
+
+    func body(content: Content) -> some View {
+        let occlusionHeight = WeekkeepTopSystemOcclusion.height(
+            windowSafeAreaTop: windowSafeAreaTop,
+            localSafeAreaTop: localSafeAreaTop
+        )
+
+        content.overlay(alignment: .top) {
+            WeekkeepColors.primaryBackground
+                .frame(maxWidth: .infinity)
+                .frame(height: occlusionHeight)
+                .offset(y: -occlusionHeight)
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+        }
+    }
+}
+
+/// Masks only the unsafe top/status region while leaving scroll geometry
+/// unchanged. Callers provide their local runtime safe-area measurement; the
+/// root-injected boundary remains the other side of the same max calculation.
+extension View {
+    func weekkeepTopSystemOcclusion(localSafeAreaTop: CGFloat) -> some View {
+        modifier(WeekkeepTopSystemOcclusionModifier(localSafeAreaTop: localSafeAreaTop))
+    }
+}
+
 extension EnvironmentValues {
     @Entry var weekkeepTheme = WeekkeepTheme()
     @Entry var weekkeepWindowSafeAreaTop: CGFloat = 0

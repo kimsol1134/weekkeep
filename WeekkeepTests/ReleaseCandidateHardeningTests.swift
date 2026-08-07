@@ -22,6 +22,86 @@ final class ReleaseCandidateHardeningTests: XCTestCase {
         XCTAssertEqual(restricted.explanationKey, "week.restrictedBody")
     }
 
+    func testSettingsSemanticRolesMatchTruthfulStateMeaning() {
+        XCTAssertEqual(SettingsSemanticRole.photoAccess(.authorized), .success)
+        XCTAssertEqual(SettingsSemanticRole.photoAccess(.limited), .attention)
+        XCTAssertEqual(SettingsSemanticRole.photoAccess(.notDetermined), .attention)
+        XCTAssertEqual(SettingsSemanticRole.photoAccess(.restricted), .attention)
+        XCTAssertEqual(SettingsSemanticRole.photoAccess(.denied), .error)
+
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.authorized, savedAlbumCount: 1),
+            .success
+        )
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.provisional, savedAlbumCount: 1),
+            .attention
+        )
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.denied, savedAlbumCount: 1),
+            .error
+        )
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.authorized, savedAlbumCount: 0),
+            .attention
+        )
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.authorized, savedAlbumCount: nil),
+            .attention
+        )
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.denied, savedAlbumCount: 0),
+            .error
+        )
+        XCTAssertEqual(
+            SettingsSemanticRole.notification(.denied, savedAlbumCount: nil),
+            .error
+        )
+
+        XCTAssertEqual(SettingsSemanticRole.entitlement(.active), .success)
+        XCTAssertEqual(SettingsSemanticRole.entitlement(.inactive), .neutral)
+        XCTAssertEqual(SettingsSemanticRole.entitlement(.unknown), .attention)
+    }
+
+    func testSettingsVisualHierarchyUsesSemanticRolesWithoutWeakTitleStyling() throws {
+        let repositoryRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let source = try String(
+            contentsOf: repositoryRoot.appendingPathComponent(
+                "Weekkeep/Features/Settings/SettingsViews.swift"
+            ),
+            encoding: .utf8
+        )
+
+        XCTAssertTrue(source.contains("SettingsSectionHeader"))
+        XCTAssertTrue(source.contains("SettingsSemanticRole"))
+        XCTAssertTrue(source.contains("foregroundStyle(WeekkeepColors.primaryText)"))
+        XCTAssertTrue(source.contains("foregroundStyle(WeekkeepColors.secondaryAction)"))
+        XCTAssertTrue(source.contains("case .status:"))
+        XCTAssertTrue(source.contains("safeAreaInset(edge: .bottom"))
+        XCTAssertFalse(source.contains("SettingsInformationalRow"))
+
+        let normalizedSource = source.replacingOccurrences(
+            of: "\\s+",
+            with: " ",
+            options: .regularExpression
+        )
+        XCTAssertTrue(
+            normalizedSource.contains(
+                "SettingsExplanationRow( title: LocalizedStringKey(explanationKey), role: .photoAccess(model.photoPermission) )"
+            )
+        )
+        XCTAssertTrue(
+            normalizedSource.contains(
+                "SettingsExplanationRow( title: LocalizedStringKey(explanationKey), role: .notification( model.notificationStatus, savedAlbumCount: model.savedAlbumCount ) )"
+            )
+        )
+        XCTAssertFalse(normalizedSource.contains("SettingsExplanationRow( title: LocalizedStringKey(explanationKey), role: .attention )"))
+        XCTAssertFalse(source.contains("case action"))
+        XCTAssertFalse(source.contains("case .action"))
+    }
+
     func testSettingsNotificationPresentationGatesPermissionUntilAWeekIsSaved() {
         let statuses: [NotificationAuthorization] = [
             .notDetermined,

@@ -111,45 +111,61 @@ struct ThisWeekView: View {
     let model: WeeklyFlowModel
 
     var body: some View {
-        GeometryReader { proxy in
-            let screenEdge = WeekkeepScreenLayout.horizontalPadding(for: proxy.size.width)
+        ZStack(alignment: .bottom) {
+            GeometryReader { proxy in
+                let screenEdge = WeekkeepScreenLayout.horizontalPadding(for: proxy.size.width)
 
-            ScrollView {
-                VStack(alignment: .leading, spacing: WeekkeepSpacing.six) {
-                    HStack {
-                        WeekkeepWordmark()
-                        Spacer()
-                        SevenStitchRail(tone: .coral)
-                            .frame(width: 118)
-                    }
-                    .padding(.top, WeekkeepSpacing.four)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: WeekkeepSpacing.six) {
+                        HStack {
+                            WeekkeepWordmark()
+                            Spacer()
+                            SevenStitchRail(tone: .coral)
+                                .frame(width: 118)
+                        }
+                        .padding(.top, WeekkeepSpacing.four)
 
-                    switch model.rootState {
-                    case let .loading(stage):
-                        RootLoadingView(stage: stage)
-                    case let .permissionBlocked(issue):
-                        PermissionBlockedView(issue: issue, model: model)
-                    case .recoverableError:
-                        RootErrorView { Task { await model.refresh() } }
-                    case .welcomePending:
-                        ReadyStateView(model: model, isWelcome: true, photoCount: nil)
-                    case .preRegularWaiting:
-                        WaitingStateView()
-                    case .saved:
-                        SavedStateView(model: model)
-                    case let .noEligiblePhotos(scope):
-                        NoPhotosStateView(scope: scope, model: model)
-                    case .entitlementLocked:
-                        LockedStateView(model: model)
-                    case let .ready(scope, photoCount):
-                        ReadyStateView(model: model, isWelcome: false, photoCount: photoCount, scope: scope)
+                        switch model.rootState {
+                        case let .loading(stage):
+                            RootLoadingView(stage: stage)
+                        case let .permissionBlocked(issue):
+                            PermissionBlockedView(issue: issue, model: model)
+                        case .recoverableError:
+                            RootErrorView { Task { await model.refresh() } }
+                        case .welcomePending:
+                            ReadyStateView(model: model, isWelcome: true, photoCount: nil)
+                        case .preRegularWaiting:
+                            WaitingStateView()
+                        case .saved:
+                            SavedStateView(model: model)
+                        case let .noEligiblePhotos(scope):
+                            NoPhotosStateView(scope: scope, model: model)
+                        case .entitlementLocked:
+                            LockedStateView(model: model)
+                        case let .ready(scope, photoCount):
+                            ReadyStateView(model: model, isWelcome: false, photoCount: photoCount, scope: scope)
+                        }
                     }
+                    .padding(.horizontal, screenEdge)
+                    .padding(.bottom, WeekkeepSpacing.six + WeekkeepTabHostSpacing.bottomScrollClearance)
                 }
-                .padding(.horizontal, screenEdge)
-                .padding(.bottom, WeekkeepSpacing.six)
+                .scrollIndicators(.hidden)
+                .safeAreaInset(edge: .bottom, spacing: 0) {
+                    WeekkeepColors.primaryBackground
+                        .frame(height: WeekkeepTabHostSpacing.bottomScrollClearance)
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+                }
             }
-            .scrollIndicators(.hidden)
+
+            WeekkeepColors.primaryBackground
+                .frame(maxWidth: .infinity)
+                .frame(height: WeekkeepTabHostSpacing.bottomTabBarOcclusion)
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+                .zIndex(1)
         }
+        .ignoresSafeArea(edges: .bottom)
         .weekkeepScreenBackground()
     }
 }
@@ -188,6 +204,7 @@ private struct ReadyStateView: View {
                 Text(WeekkeepLocalization.string("week.photoCount", photoCount))
                     .font(.weekkeepCallout)
                     .foregroundStyle(WeekkeepColors.secondaryText)
+                    .accessibilityIdentifier("SCR-WK-01-PhotoCount")
             }
             if scope == .limited { LimitedAccessNotice() }
             PrivacyBadge(title: "week.privacy")

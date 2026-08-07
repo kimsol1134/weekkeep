@@ -484,12 +484,19 @@
       },
       "public_demo_video": {
         "required": true,
-        "status": "pending_external",
+        "status": "Validated",
         "accepted_platforms": [
           "YouTube",
           "Vimeo"
         ],
-        "public_url": null,
+        "public_url": "https://youtu.be/WJP6xoWV440",
+        "canonical_short_url": "https://youtu.be/WJP6xoWV440",
+        "canonical_watch_url": "https://www.youtube.com/watch?v=WJP6xoWV440",
+        "video_id": "WJP6xoWV440",
+        "title": "Weekkeep — A Week Worth Keeping | Shipaton 2026",
+        "channel": "sol kim",
+        "visibility": "Public",
+        "published_on": "2026-08-07",
         "duration_seconds": 72,
         "maximum_seconds": 120,
         "duration_must_be_less_than_maximum": true,
@@ -497,13 +504,55 @@
         "unlicensed_third_party_material_allowed": false,
         "source_project": "videos/weekkeep-remotion",
         "prescreening_ref": "prescreening.first_two_minutes.required_messages",
-        "local_artifact_status": "approved_72_second_mp4_unchanged_github_backup_verified_official_youtube_vimeo_upload_pending",
+        "local_artifact_status": "approved_72_second_mp4_unchanged_github_backup_and_official_youtube_verified",
         "backup_release_url": "https://github.com/kimsol1134/weekkeep/releases/tag/shipaton-demo-v1",
         "backup_asset_url": "https://github.com/kimsol1134/weekkeep/releases/download/shipaton-demo-v1/weekkeep-shipaton-72.mp4",
         "backup_release_http_status": 200,
         "backup_asset_http_status": 200,
         "backup_asset_sha256": "9d4afb5332d3bbaeb0fc40e5d1d71c6a66b7cf2d72b79ed8a7ab3c2864e5a01a",
-        "official_platform_gate": "pending_external_youtube_or_vimeo_logged_out_playback",
+        "official_platform_gate": "validated_youtube_public_logged_out_playback_and_duration",
+        "logged_out_verification": {
+          "status": "Validated",
+          "checked_on": "2026-08-07",
+          "curl": {
+            "short_url_followed": true,
+            "watch_url_http_status": 200
+          },
+          "oembed": {
+            "status": "Validated",
+            "title": "Weekkeep — A Week Worth Keeping | Shipaton 2026",
+            "author": "sol kim",
+            "embeddable_iframe": true,
+            "thumbnail_present": true,
+            "provider": "YouTube"
+          },
+          "yt_dlp": {
+            "status": "Validated",
+            "cookies": "none",
+            "duration_seconds": 72,
+            "availability": "public",
+            "live_status": "not_live",
+            "age_limit": 0,
+            "formats_count": 12,
+            "channel": "sol kim",
+            "upload_date": "20260807"
+          },
+          "duration_verification": {
+            "status": "Validated",
+            "duration_seconds": 72,
+            "maximum_seconds": 120,
+            "constraint": "less_than_maximum"
+          }
+        },
+        "youtube_metadata": {
+          "language": "English (United States)",
+          "category": "Science & Technology",
+          "made_for_kids": false,
+          "altered_or_synthetic_disclosure": "yes_approved_generated_narration_provenance",
+          "embedding_allowed": true,
+          "shorts_remix": "disabled"
+        },
+        "copyright_check": "no_issues_found",
         "evidence_ref": "external_evidence.public_demo_video"
       },
       "target_device_footage": {
@@ -723,7 +772,7 @@
     "app_privacy": "validated_published_2026-08-06_current_app_version_exactly_three_entries_no_tracking;privacyinfo_present_in_build6_ipa",
     "app_store_review_submission": "validated_current_ios_submission=a9b0a18f-6cf6-4af4-8e6f-c77009831e00;submitted_at=2026-08-06T22:44:38.573Z;exactly_two_ready_for_review_items;build6_attached;build3_submission=88c157ee-ce87-41c3-8a4a-71e614993a58_canceled_replaced;historical_submission=260abf1a-886b-4014-8262-541d261e60e2_complete",
     "target_device_footage": "pending_physical_device_recording;build6_fixture_ui_runner_started_after_lock_wait;local_authentication_code_-4_authentication_canceled;process_safely_terminated;result_bundle_invalid_incomplete_info_plist_missing_not_evidence;historical_build3_install_and_fixture_argument_launch=release/local/target-device-qa/20260806T2102KST-build3/QA-SUMMARY.md;physical_ui_attachments_pending;purchase_restore_verification_pending;actual_library_performance_pending;icon_qa_pending;quicktime_preview_unusable;no_credentials_requested_or_handled;no_permissions_or_private_pixels_changed",
-    "public_demo_video": "pending_official_youtube_or_vimeo_upload_and_logged_out_playback;github_release_backup=https://github.com/kimsol1134/weekkeep/releases/tag/shipaton-demo-v1;github_asset=https://github.com/kimsol1134/weekkeep/releases/download/shipaton-demo-v1/weekkeep-shipaton-72.mp4;release_http_status=200;asset_http_status=200;asset_sha256=9d4afb5332d3bbaeb0fc40e5d1d71c6a66b7cf2d72b79ed8a7ab3c2864e5a01a;backup_does_not_satisfy_official_platform_gate",
+    "public_demo_video": "validated_youtube_public_demo;platform=YouTube;visibility=Public;channel=sol kim;video_id=WJP6xoWV440;title=Weekkeep — A Week Worth Keeping | Shipaton 2026;short_url=https://youtu.be/WJP6xoWV440;watch_url=https://www.youtube.com/watch?v=WJP6xoWV440;published_on=2026-08-07;logged_out_curl=short_url_followed_to_watch_url_http_200;oembed=exact_title_author_sol_kim_embeddable_iframe_thumbnail_provider_youtube;yt_dlp_no_cookies=duration_72_availability_public_live_status_not_live_age_limit_0_formats_count_12_channel_sol_kim_upload_date_20260807;copyright_check=no_issues_found;metadata=English (United States), Science & Technology, not made for kids, altered/synthetic disclosure yes, embedding allowed, Shorts remix disabled;protected_local_mp4=videos/weekkeep-remotion/out/weekkeep-shipaton-72.mp4;protected_local_mp4_status=unchanged;github_release_backup=https://github.com/kimsol1134/weekkeep/releases/tag/shipaton-demo-v1;github_asset=https://github.com/kimsol1134/weekkeep/releases/download/shipaton-demo-v1/weekkeep-shipaton-72.mp4;release_http_status=200;asset_http_status=200;asset_sha256=9d4afb5332d3bbaeb0fc40e5d1d71c6a66b7cf2d72b79ed8a7ab3c2864e5a01a",
     "public_source_repository": "validated_public_source_repository;repository_url=https://github.com/kimsol1134/weekkeep;owner=kimsol1134;name=weekkeep;visibility=PUBLIC;isPrivate=false;source_availability=Validated;source_url=https://github.com/kimsol1134/weekkeep;source_http_status=200;logged_out_verification=Validated;checked_at=2026-08-07T07:03:22+09:00;logged_out_repository_url=https://github.com/kimsol1134/weekkeep;logged_out_repository_http_status=200;raw_license_url=https://raw.githubusercontent.com/kimsol1134/weekkeep/main/LICENSE;raw_license_http_status=200;github_license_evidence=GitHub recognizes root LICENSE as MIT;default_branch=main;git_ls_remote_main_commit=282ae29a0efddaca439177b447676ec2cbe90f0e",
     "final_video_approval_and_render": "validated_approved_72_second_mp4_unchanged;github_backup_http_200_and_digest_match",
     "judge_unlock": "pending_external;offer_configured=bb4f7fd6-2b08-4aa7-9f55-e140a3e94e28;free_prices=USA:FREE,KOR:FREE;sandbox_batch_generated=7791e39d-f462-4647-be72-e00c75a50eff;redemption_not_tested;attempted_custom_code=WEEKKEEPJUDGES_rejected_parent_iap_not_approved;production_code_created=false;production_judge_code_blocked_until_app_ready_for_distribution_and_iap_approved",

@@ -33,8 +33,10 @@ current-source QA are validated and unchanged. A GitHub Release backup is
 available at `https://github.com/kimsol1134/weekkeep/releases/tag/shipaton-demo-v1`
 with direct asset
 `https://github.com/kimsol1134/weekkeep/releases/download/shipaton-demo-v1/weekkeep-shipaton-72.mp4`
-(both HTTP 200). This backup is not the official YouTube/Vimeo gate; logged-out
-official playback and target-device evidence remain external release gates.
+(both HTTP 200). The official public YouTube gate is validated at
+`https://youtu.be/WJP6xoWV440`; logged-out playback and duration verification
+are recorded in the manifest and [Shipaton Submission SSOT](../docs/11-SHIPATON-SUBMISSION.md#7-72-second-demo-master).
+Target-device functioning footage remains a separate pending release gate.
 The backup asset digest is
 `9d4afb5332d3bbaeb0fc40e5d1d71c6a66b7cf2d72b79ed8a7ab3c2864e5a01a`, matching the
 protected approved MP4.

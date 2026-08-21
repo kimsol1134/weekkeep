@@ -379,7 +379,8 @@ private struct WaitingMemoryCard: View {
                let coverPhoto = coverPhoto(in: album) {
                 PhotoThumbnailView(
                     photo: photoReference(from: coverPhoto),
-                    photoLibrary: photoLibrary
+                    photoLibrary: photoLibrary,
+                    targetSize: PhotoDisplayTarget.cover
                 )
                 .frame(maxWidth: .infinity)
                 .frame(height: 220)

@@ -2,14 +2,14 @@
 
 | 항목 | 값 |
 |---|---|
-| 기준일 | 2026-08-07 |
-| 대상 버전 | iOS 1.0.0 — canonical ASC build 7 is the current attached review build; build 6 and its prior submission are historical/replaced, build 3 remains historical evidence, and build 4 is valid but unattached |
+| 기준일 | 2026-08-21 |
+| 대상 버전 | iOS 1.0.1 — current ASC review build 8 is attached to version `f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c`; live store remains `1.0.0 (7)` |
 | Primary locale | English (U.S.) |
 | 추가 locale | Korean |
 | Bundle ID | `com.solkim.weekkeep` |
 | SKU | `WEEKKEEP-IOS-2026` |
 | 가격 | 앱 무료, Plus 비소모성 평생 이용권 US $19.99 |
-| 상태 | ASC build 7 (`1c51b451-d37f-4704-89c9-e426b1ee5725`) is uploaded, `VALID`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; current submission `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` is `WAITING_FOR_REVIEW` with exactly two `READY_FOR_REVIEW` items; previous submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is historical `COMPLETE` after replacement; build 6 is historical/replaced; build 3 submission `88c157ee-ce87-41c3-8a4a-71e614993a58` remains historical canceled/replaced; build 4 is `VALID` but unattached; IAP `weekkeep_plus_lifetime` remains `WAITING_FOR_REVIEW`; approval and public release remain pending |
+| 상태 | Live store is `1.0.0 (7)` (`1c51b451-d37f-4704-89c9-e426b1ee5725`) `READY_FOR_SALE`, released `2026-08-20T17:48:07Z`; IAP `weekkeep_plus_lifetime` is `APPROVED`. Current review build is `1.0.1 (8)` (`6a962adf-72d1-4bcb-8a3b-d1e8c2ba7174`), uploaded `2026-08-20T20:35:07-07:00`, `VALID`, attached to version `f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c`; submission `b60d3600-6538-4e6e-a6f7-2327e776ff93` is `WAITING_FOR_REVIEW` with one app-version item. Manual release remains configured for 1.0.1. Historical 1.0.0 submission `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` is `COMPLETE`. |
 
 이 문서는 App Store Connect에 입력하는 이름, 설명, 키워드, 카테고리, URL, 심사 메모, IAP metadata의 단일 원본입니다. 제품 범위와 가격은 [Decision Registry](00-INDEX.md#5-decision-registry--결정값과-상태의-ssot), 개인정보 답변은 [App Privacy Label](09-APP-PRIVACY-LABEL.md)이 소유합니다.
 
@@ -17,7 +17,9 @@
 
 | 상태 | 값 | 의미 |
 |---|---|---|
-| Current submitted review build | `1.0.0 (7)` — ASC ID `1c51b451-d37f-4704-89c9-e426b1ee5725`, `VALID`, attached, uploaded `2026-08-07T08:28:29-07:00` | Current App Store Connect build for version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; manual release; current submission is `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` |
+| Current submitted review build | `1.0.1 (8)` — ASC ID `6a962adf-72d1-4bcb-8a3b-d1e8c2ba7174`, `VALID`, attached, uploaded `2026-08-20T20:35:07-07:00` | Current App Store Connect build for version `f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c`; manual release; current submission is `b60d3600-6538-4e6e-a6f7-2327e776ff93` |
+| Live store version | `1.0.0 (7)` — ASC ID `1c51b451-d37f-4704-89c9-e426b1ee5725`, `READY_FOR_SALE`, released `2026-08-20T17:48:07Z` | Public US/KR App Store listing; IAP `weekkeep_plus_lifetime` is `APPROVED` |
+| Historical 1.0.0 review submission | `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` | `COMPLETE` after 1.0.0 approval and release |
 | Historical TestFlight internal QA | `Weekkeep Internal QA` (`576fd29a-7a64-4521-9164-9697ec1c256f`) contains exactly historical build 6, `READY_FOR_BETA_TESTING`, and one invited verified account-holder tester (tester ID `bef018ab-9514-4388-804d-bcd363f601d4`, state `INVITED`) | Historical ready/invited distribution only; not installed, purchase-tested, or restore-tested |
 | Historical/replaced build 6 | `1.0.0 (6)` — ASC ID `0ffa7586-619f-4df9-abc5-ae7ebbd068b1`, `VALID`, previously attached | Replaced by canonical build 7; previous submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is now `COMPLETE` historical |
 | Historical build 3 | `1.0.0 (3)` — `VALID`, historical/non-target | Former submission `88c157ee-ce87-41c3-8a4a-71e614993a58` was canceled/replaced; its local evidence remains historical |
@@ -114,6 +116,12 @@ Your first two weekly albums are included. Weekkeep Plus is a one-time lifetime 
 A week worth keeping.
 ```
 
+### What's New — 1.0.1
+
+```text
+Photos stored in iCloud now appear more reliably in weekly review. Weekkeep shows the first available image right away, then continues loading a clearer one while you stay on the screen.
+```
+
 ## 4. Korean metadata
 
 ### 이름
@@ -172,6 +180,12 @@ Weekkeep은 평범한 일주일을 최대 7장의 작은 가족 앨범으로 남
 첫 두 개의 주간 기록은 무료입니다. Weekkeep Plus는 이후의 기록 생성을 여는 비소모성 평생 이용권이며 구독이 아닙니다. 구매 전에는 App Store가 제공하는 현지 가격을 표시합니다.
 
 남겨둘 만한 일주일.
+```
+
+### 새로운 기능 — 1.0.1
+
+```text
+iCloud에 있는 사진도 주간 검토에서 더 안정적으로 보입니다. 먼저 준비된 사진을 바로 보여 주고, 화면을 보는 동안 더 선명한 사진으로 이어집니다.
 ```
 
 ## 5. Screenshot SSOT
@@ -290,6 +304,12 @@ Photo selection and share rendering are processed on the iPhone. Photos, preview
 No special hardware, login, or reviewer account is required. Please use a device with several recent photos or grant Limited Access to a small test set.
 ```
 
+1.0.1 review notes keep the same core path and add this paragraph after step 6:
+
+```text
+This 1.0.1 update improves on-screen photo loading for iCloud-optimized libraries. Reviewers with Optimize iPhone Storage enabled should see review thumbnails appear from the first available frame rather than remaining gray.
+```
+
 ## 8. Submission toggles and compliance
 
 - Age Rating questionnaire: 답변을 실제 기능에 맞춰 모두 완료하며 social, messaging, web access, UGC, gambling, medical 기능은 없음.
@@ -313,11 +333,12 @@ No special hardware, login, or reviewer account is required. Please use a device
 - [x] Historical build-3 App Store en-US/ko screenshot sets: exactly six each, opaque JPEG, `1320×2868`, `APP_IPHONE_67`, remote state `COMPLETE`; retained as historical evidence after build-6 replacement
 - [x] Historical local build-5 App Store candidate screenshots: exactly six each, opaque JPEG, current raw-source provenance/checksums, and local validator pass; not uploaded or relabeled
 - [x] Historical build-6 Settings notification visual QA: four bilingual opaque `1320×2868` PNGs, direct XCTest manifests, matching checksums, and local validator pass; separate from App Store screenshot evidence
-- [x] Current review build: build 7 upload, canonical IPA inspection, ASC `VALID` processing, version attachment, and submission `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` `WAITING_FOR_REVIEW`
-- [x] Current review submission has exactly two `READY_FOR_REVIEW` items: app version `ac4f183e-1019-4ffc-827f-f5514f0d349b` and IAP version `cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f`
+- [x] Live store: `1.0.0 (7)` is `READY_FOR_SALE`; IAP `weekkeep_plus_lifetime` is `APPROVED`
+- [x] Current review build: `1.0.1 (8)` upload, IPA inspection, ASC `VALID` processing, version attachment, and submission `b60d3600-6538-4e6e-a6f7-2327e776ff93` `WAITING_FOR_REVIEW`
+- [x] Current 1.0.1 review submission has one `READY_FOR_REVIEW` app-version item `f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c`; IAP is already approved and was not re-submitted
 - [x] 모든 screenshot alpha 없음; Shipaton proof는 `1179×2556`와 no-device-frame 확인
 - [x] Support/Privacy URL responds publicly; ASC en-US/ko app-info localizations use `/support` and `/privacy` consistently
-- [ ] US storefront에서 앱과 IAP 다운로드/구매 가능 — public release remains pending
+- [x] US storefront에서 앱과 IAP 다운로드/구매 가능 — live `1.0.0` listing and approved Plus IAP; 1.0.1 remains in review under manual release
 - [ ] Review Notes의 버튼명과 Release localization이 글자 단위로 일치
 - [x] App Review contact and IAP review screenshot re-read in ASC
 - [x] App Privacy data-usage answers published in ASC for the current `1.0.0` app version; build 7 `PrivacyInfo` presence is local binary evidence, not a separate build-7 publication event

@@ -294,27 +294,29 @@ validate_build_identity_boundary() {
   manifest_current_build="$(jq -er '.current_release_build.build' "$shipaton")"
   historical_pre_upload_build="$(jq -er '.historical_local_build_7_pre_upload.build' "$shipaton")"
 
-  if [[ "$project_marketing_version" == "1.0.0" && "$project_build" == "7" && "$manifest_current_build" == "7" && "$historical_pre_upload_build" == "7" ]]; then
-    pass "project.yml and the release manifest identify marketing version 1.0.0, build 7 as the canonical submitted build; the pre-upload validation snapshot is historical."
+  if [[ "$project_marketing_version" == "1.0.1" && "$project_build" == "8" && "$manifest_current_build" == "7" && "$historical_pre_upload_build" == "7" ]]; then
+    pass "project.yml identifies 1.0.1 (8) as the current engineering/review build; the Shipaton launch record remains 1.0.0 (7) with a historical pre-upload snapshot."
   else
-    fail "project.yml and Shipaton release SSOT must agree on 1.0.0 (build 7), with a separate historical pre-upload snapshot (project=${project_marketing_version:-missing} (${project_build:-missing}), current=${manifest_current_build:-missing}, historical=${historical_pre_upload_build:-missing})."
+    fail "project.yml must be 1.0.1 (8) while Shipaton launch SSOT remains 1.0.0 (build 7) (project=${project_marketing_version:-missing} (${project_build:-missing}), current=${manifest_current_build:-missing}, historical=${historical_pre_upload_build:-missing})."
   fi
 
   if [[ -f "$metadata" ]] && jq -e '
     .app.bundle_id == "com.solkim.weekkeep"
-    and .app.version == "1.0.0"
-    and .app.build == "7"
-    and .app.current_build.build == "7"
+    and .app.version == "1.0.1"
+    and .app.build == "8"
+    and .app.current_build.build == "8"
     and .app.current_build.upload_state == "uploaded"
-    and .app.current_build.asc_build_id == "1c51b451-d37f-4704-89c9-e426b1ee5725"
+    and .app.current_build.asc_build_id == "6a962adf-72d1-4bcb-8a3b-d1e8c2ba7174"
     and .app.current_build.asc_processing_state == "VALID"
     and .app.current_build.app_store_version_attachment == "ATTACHED"
-    and .app.current_build.review_submission_id == "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7"
+    and .app.current_build.review_submission_id == "b60d3600-6538-4e6e-a6f7-2327e776ff93"
     and .app.current_build.review_submission_state == "WAITING_FOR_REVIEW"
+    and .app.live_store_build.build == "7"
+    and .app.live_store_build.asc_build_id == "1c51b451-d37f-4704-89c9-e426b1ee5725"
   ' "$metadata" >/dev/null; then
-    pass "App Store metadata records the canonical submitted remote 1.0.0 build-7 record."
+    pass "App Store metadata records live 1.0.0 (7) and current 1.0.1 (8) review attachment."
   else
-    fail "App Store metadata must record the canonical submitted remote 1.0.0 build-7 record."
+    fail "App Store metadata must record live 1.0.0 (7) and current 1.0.1 (8) review attachment."
   fi
 
   if jq -e '
@@ -375,14 +377,18 @@ validate_build_identity_boundary() {
   fi
 
   for boundary_document in "$project_root/release/README.md" "$project_root/docs/07-DELIVERY-PLAN.md" "$core_document"; do
-    if rg -q 'build 7' "$boundary_document" \
+    if rg -q '1.0.1 \(8\)|build 8' "$boundary_document" \
+      && rg -q -i 'WAITING_FOR_REVIEW' "$boundary_document" \
+      && rg -q -i 'READY_FOR_SALE|live store|live App Store' "$boundary_document"; then
+      pass "$(basename "$boundary_document") documents live 1.0.0 (7) and current 1.0.1 (8) review."
+    elif rg -q 'build 7' "$boundary_document" \
       && rg -q -i 'uploaded.*(VALID|attached)|VALID.*attached' "$boundary_document" \
       && rg -q -i 'WAITING_FOR_REVIEW' "$boundary_document" \
       && rg -q -i 'approval.*pending|public release.*pending|not.*public.*release' "$boundary_document" \
       && ! rg -q -i 'build 7[^\n]*(not uploaded|unuploaded|not attached|unattached|not submitted|validation[- ]only)' "$boundary_document"; then
       pass "$(basename "$boundary_document") documents build 7 as the uploaded/attached review build with approval and release still pending."
     else
-      fail "$(basename "$boundary_document") must document build 7 as uploaded/attached/in review while keeping approval and public release pending."
+      fail "$(basename "$boundary_document") must document the current App Store review identity without claiming a missing upload."
     fi
   done
 }
@@ -920,8 +926,8 @@ assert_text_limit() {
   fi
 }
 
-assert_jq '.app.bundle_id == "com.solkim.weekkeep" and .app.sku == "WEEKKEEP-IOS-2026" and .app.version == "1.0.0" and .app.build == $candidate_build and .app.release_method == "manual" and .app.current_build.build == $candidate_build and .app.current_build.status == "ASC_CURRENT_ATTACHED" and .app.current_build.upload_state == "uploaded" and .app.current_build.asc_build_id == "1c51b451-d37f-4704-89c9-e426b1ee5725" and .app.current_build.asc_processing_state == "VALID" and .app.current_build.uploaded_at == "2026-08-07T08:28:29-07:00" and .app.current_build.app_store_version_attachment == "ATTACHED" and .app.current_build.app_store_version_id == "ac4f183e-1019-4ffc-827f-f5514f0d349b" and .app.current_build.review_submission_id == "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7" and .app.current_build.review_submission_state == "WAITING_FOR_REVIEW" and .app.current_build.review_submission_item_count == 2 and (.app.current_build.review_submission_item_details | all(.[]; .state == "READY_FOR_REVIEW")) and .app.current_build.ipa_local_verification.size_bytes == 23420062 and .app.current_build.ipa_local_verification.sha256 == "25c2c1ff17b14bd976392f3d8d6d1c103bd5488de66b866cadb8a5339f627889" and .app.current_build.ipa_local_verification.build == "7" and .app.current_build.apple_server_validation.status == "VERIFY_SUCCEEDED" and .app.current_build.apple_server_validation.validated == true and .app.current_build.apple_server_validation.errors == [] and .app.current_build.apple_server_validation.before_upload == true and .app.current_build.visual_qa_evidence_directory == $candidate_visual_qa_directory and .app.current_build.visual_qa_evidence_scope == "historical_build6_settings_visual_qa_not_app_store_screenshot_evidence"' "App identity and canonical build-7 attachment match the release contract."
-assert_jq '.app.asc_state.app_id == "6798449478" and .app.asc_state.version_id == "ac4f183e-1019-4ffc-827f-f5514f0d349b" and .app.asc_state.build_id == "1c51b451-d37f-4704-89c9-e426b1ee5725" and .app.asc_state.build_processing_state == "VALID" and .app.asc_state.build_uploaded_at == "2026-08-07T08:28:29-07:00" and .app.asc_state.version_state == "WAITING_FOR_REVIEW" and .app.asc_state.app_store_version_attachment == "ATTACHED" and .app.asc_state.remote_build_scope == "current_build_7_attached" and .app.asc_state.review_submission_id == "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7" and .app.asc_state.review_submission_submitted_at == "2026-08-07T15:33:05.463Z" and .app.asc_state.review_submission_item_count == 2 and (.app.asc_state.review_submission_item_details | all(.[]; .state == "READY_FOR_REVIEW")) and .app.asc_state.iap_id == "6798491084" and .app.asc_state.iap_product_id == "weekkeep_plus_lifetime" and .app.asc_state.iap_version_id == "cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f" and .app.asc_state.iap_version_state == "WAITING_FOR_REVIEW" and .app.remote_unattached_valid_build.build == "4" and .app.remote_unattached_valid_build.asc_build_id == "6e92c470-c044-4512-9276-71491fe97685" and .app.remote_unattached_valid_build.status == "VALID_UNATTACHED" and .app.remote_unattached_valid_build.asc_processing_state == "VALID" and .app.remote_unattached_valid_build.app_store_version_attachment == "UNATTACHED" and .app.asc_state.current_build == $candidate_build and .app.asc_state.historical_review_submission_id == "a9b0a18f-6cf6-4af4-8e6f-c77009831e00" and .app.asc_state.historical_review_submission_state == "COMPLETE" and .app.asc_state.historical_review_submission_build == "6" and .app.asc_state.historical_build_3_review_submission_id == "88c157ee-ce87-41c3-8a4a-71e614993a58"' "Current build-7 review, IAP, and historical build-6/build-3 state are distinct and exact."
+assert_jq '.app.bundle_id == "com.solkim.weekkeep" and .app.sku == "WEEKKEEP-IOS-2026" and .app.version == "1.0.1" and .app.build == $candidate_build and .app.release_method == "manual" and .app.current_build.build == $candidate_build and .app.current_build.status == "ASC_CURRENT_ATTACHED" and .app.current_build.upload_state == "uploaded" and .app.current_build.asc_build_id == "6a962adf-72d1-4bcb-8a3b-d1e8c2ba7174" and .app.current_build.asc_processing_state == "VALID" and .app.current_build.uploaded_at == "2026-08-20T20:35:07-07:00" and .app.current_build.app_store_version_attachment == "ATTACHED" and .app.current_build.app_store_version_id == "f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c" and .app.current_build.review_submission_id == "b60d3600-6538-4e6e-a6f7-2327e776ff93" and .app.current_build.review_submission_state == "WAITING_FOR_REVIEW" and .app.current_build.review_submission_item_count == 1 and (.app.current_build.review_submission_item_details | all(.[]; .state == "READY_FOR_REVIEW")) and .app.current_build.ipa_local_verification.size_bytes == 23451271 and .app.current_build.ipa_local_verification.sha256 == "7a509287a65fcaea390620487933cec0b95fb2df703587a7f166c708a45a5d61" and .app.current_build.ipa_local_verification.build == "8" and .app.current_build.apple_server_validation.validated == true and .app.current_build.apple_server_validation.errors == [] and .app.live_store_build.build == "7" and .app.live_store_build.asc_build_id == "1c51b451-d37f-4704-89c9-e426b1ee5725" and .app.current_build.visual_qa_evidence_directory == $candidate_visual_qa_directory and .app.current_build.visual_qa_evidence_scope == "historical_build6_settings_visual_qa_not_app_store_screenshot_evidence"' "App identity and current 1.0.1 (8) attachment match the release contract."
+assert_jq '.app.asc_state.app_id == "6798449478" and .app.asc_state.version_id == "f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c" and .app.asc_state.build_id == "6a962adf-72d1-4bcb-8a3b-d1e8c2ba7174" and .app.asc_state.build_processing_state == "VALID" and .app.asc_state.build_uploaded_at == "2026-08-20T20:35:07-07:00" and .app.asc_state.version_state == "WAITING_FOR_REVIEW" and .app.asc_state.app_store_version_attachment == "ATTACHED" and .app.asc_state.remote_build_scope == "current_build_8_attached_1_0_1_in_review" and .app.asc_state.review_submission_id == "b60d3600-6538-4e6e-a6f7-2327e776ff93" and .app.asc_state.review_submission_submitted_at == "2026-08-21T03:40:29.28Z" and .app.asc_state.review_submission_item_count == 1 and (.app.asc_state.review_submission_item_details | all(.[]; .state == "READY_FOR_REVIEW")) and .app.asc_state.iap_id == "6798491084" and .app.asc_state.iap_product_id == "weekkeep_plus_lifetime" and .app.asc_state.iap_version_id == "cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f" and .app.asc_state.iap_version_state == "APPROVED" and .app.remote_unattached_valid_build.build == "4" and .app.remote_unattached_valid_build.asc_build_id == "6e92c470-c044-4512-9276-71491fe97685" and .app.remote_unattached_valid_build.status == "VALID_UNATTACHED" and .app.remote_unattached_valid_build.asc_processing_state == "VALID" and .app.remote_unattached_valid_build.app_store_version_attachment == "UNATTACHED" and .app.asc_state.current_build == $candidate_build and .app.asc_state.historical_review_submission_id == "a9b0a18f-6cf6-4af4-8e6f-c77009831e00" and .app.asc_state.historical_review_submission_state == "COMPLETE" and .app.asc_state.historical_review_submission_build == "6" and .app.asc_state.historical_build_3_review_submission_id == "88c157ee-ce87-41c3-8a4a-71e614993a58"' "Current 1.0.1 review, approved IAP, and historical build-6/build-3 state are distinct and exact."
 assert_jq '.app.primary_category_identifier == "public.app-category.photo-video"' "App category matches Info.plist."
 assert_jq '
   .app.current_build.historical_build_6_testflight_internal_qa.group_name == "Weekkeep Internal QA"

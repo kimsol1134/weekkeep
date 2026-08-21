@@ -325,7 +325,13 @@ struct PhotoViewerView: View {
 
       TabView(selection: $currentIndex) {
         ForEach(photos.indices, id: \.self) { index in
-          PhotoThumbnailView(photo: photos[index], photoLibrary: photoLibrary, contentMode: .fit)
+          PhotoThumbnailView(
+            photo: photos[index],
+            photoLibrary: photoLibrary,
+            contentMode: .fit,
+            targetSize: index == currentIndex ? PhotoDisplayTarget.viewer : PhotoDisplayTarget.reviewTile,
+            priority: index == currentIndex ? .hero : .prefetch
+          )
             .tag(index)
             .padding(.horizontal, WeekkeepSpacing.two)
         }
@@ -338,7 +344,12 @@ struct PhotoViewerView: View {
       ScrollView(.horizontal, showsIndicators: false) {
         HStack(spacing: WeekkeepSpacing.two) {
           ForEach(photos.indices, id: \.self) { index in
-            PhotoThumbnailView(photo: photos[index], photoLibrary: photoLibrary)
+            PhotoThumbnailView(
+              photo: photos[index],
+              photoLibrary: photoLibrary,
+              targetSize: PhotoDisplayTarget.strip,
+              priority: .prefetch
+            )
               .frame(width: 50, height: 64)
               .clipShape(RoundedRectangle(cornerRadius: WeekkeepRadii.small))
               .overlay {
@@ -384,7 +395,11 @@ struct ReplacePhotoSheet: View {
         VStack(alignment: .leading, spacing: WeekkeepSpacing.four) {
           Text("replace.current")
             .font(.weekkeepHeadline)
-          PhotoThumbnailView(photo: current, photoLibrary: photoLibrary)
+          PhotoThumbnailView(
+            photo: current,
+            photoLibrary: photoLibrary,
+            targetSize: PhotoDisplayTarget.cover
+          )
             .frame(height: 150)
             .clipShape(RoundedRectangle(cornerRadius: WeekkeepRadii.medium))
           Text("replace.sameDay")
@@ -490,7 +505,11 @@ private struct ReplacementCandidateGrid: View {
           onSelect(candidate)
         } label: {
           VStack(alignment: .leading, spacing: WeekkeepSpacing.one) {
-            PhotoThumbnailView(photo: candidate, photoLibrary: photoLibrary)
+            PhotoThumbnailView(
+              photo: candidate,
+              photoLibrary: photoLibrary,
+              targetSize: PhotoDisplayTarget.reviewTile
+            )
               .aspectRatio(1, contentMode: .fit)
               .clipShape(RoundedRectangle(cornerRadius: WeekkeepRadii.small))
             Text(

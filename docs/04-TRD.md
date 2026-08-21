@@ -392,6 +392,7 @@ protocol PhotoLibraryClient: Sendable {
     func fetchDescriptors(in range: DateInterval, limit: Int) async throws -> [PhotoDescriptor]
     func analysisImage(for id: PhotoID, targetSize: CGSize) async throws -> AnalysisImage
     func displayImage(for id: PhotoID, targetSize: CGSize) async throws -> DisplayImageResult
+    func displayFrames(for id: PhotoID, targetSize: CGSize) async -> AsyncThrowingStream<DisplayFrame, Error>
     func assetAvailability(for ids: [PhotoID]) async -> Set<PhotoID>
 }
 ```
@@ -422,6 +423,9 @@ protocol PhotoLibraryClient: Sendable {
 
 - analysis용 이미지는 384–448px 범위의 fast PhotoKit representation(현재 target 416px)으로 `networkAccessAllowed`를 켜 요청합니다.
 - display/share 요청은 별도의 opportunistic high-quality path를 유지하며 analysis thumbnail 최적화가 사용자-facing image quality를 바꾸지 않습니다.
+- Review/replace/archive tiles는 분석 때 받은 로컬 frame을 메모리 캐시에서 즉시 보여 준다. 그 크기가 타일에 충분하면 iCloud 원본을 다시 받지 않는다.
+- 원본이 더 필요할 때만 opportunistic 요청을 보내며, 동시에 받는 장수는 2장으로 제한하고 hero를 먼저 선명하게 만든다. 해당 사진이 화면에 있는 동안 다운로드를 유지하고, 화면을 떠날 때만 취소한다.
+- share `displayImage`는 더 선명한 frame을 기다리되, 준비 화면이 멈추지 않도록 최선 representation으로 settle합니다. 짧은 timeout으로 다운로드를 끊지 않습니다.
 - 요청 ID를 추적해 task cancel 시 Photos request도 취소하고, analysis의 첫 fast representation을 채택한 뒤 남은 PhotoKit delivery도 즉시 취소해 불필요한 후속 작업을 남기지 않습니다.
 - `PhotoLibraryClient`는 PhotoKit callback을 노출하지 않는 좁은 adapter로 유지합니다. 분석 orchestration의 `PhotoRequestProgressAggregator`가 각 candidate의 `analysisImage` 요청이 성공·실패·timeout·utility skip 중 하나로 해소될 때 1개 request를 완료로 집계해 UI에 전달합니다. 따라서 이 값은 iCloud byte/download progress가 아니라 `resolved photo requests / total sampled requests`인 truthful aggregate progress이며, asset ID와 vendor payload는 포함하지 않습니다.
 - aggregator는 `[0, 1]` 안에서 단조 증가하고, 새 분석 시작 시 reset되며, 취소 시 0/0으로 정리됩니다. 남은 작업의 명시적 skip/timeout도 orchestration에서 완료로 해소한 뒤 partial draft를 만들므로 가짜 소수점 정밀도를 주장하지 않습니다.

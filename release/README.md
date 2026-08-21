@@ -99,7 +99,7 @@ Run the focused gate from the project root:
 
 Release checklist:
 
-- submitted remote ASC build 7 (`1c51b451-d37f-4704-89c9-e426b1ee5725`) and its canonical IPA verification remain current; build 7 is `VALID`, attached, and `WAITING_FOR_REVIEW` under manual release. Previous submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` is historical `COMPLETE`, and build 6 is historical/replaced;
+- submitted remote ASC build 8 (`6a962adf-72d1-4bcb-8a3b-d1e8c2ba7174`) is the current 1.0.1 review binary; it is `VALID`, attached, and `WAITING_FOR_REVIEW` under manual release. Live store remains `1.0.0 (7)`. Historical 1.0.0 submission `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` is `COMPLETE`;
 - local physical screenshot evidence now has separate, ignored build-6 and build-7 directories. Build 7 remains screenshot-scope/fixture evidence only: the waiting surface makes no CTA claim, while the DEBUG ready surface resolves the historical build-6 below-fold CTA finding. Native share/delivery and external lifecycle gates remain pending;
 - canonical release IPA evidence is 23,420,062 bytes with SHA-256 `25c2c1ff17b14bd976392f3d8d6d1c103bd5488de66b866cadb8a5339f627889`; Apple server-side validation succeeded with no errors before upload, and the remote build is now attached/submitted;
 - build 7 contains the cumulative family week ordinal, conversational prompt/invitation, and privacy-safe `share_completed` improvements; its local share/fixture evidence is kept separate from production PhotoKit and native share delivery;

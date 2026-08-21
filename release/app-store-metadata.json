@@ -8,10 +8,12 @@
   "app": {
     "bundle_id": "com.solkim.weekkeep",
     "sku": "WEEKKEEP-IOS-2026",
-    "version": "1.0.0",
-    "build": "7",
+    "version": "1.0.1",
+    "build": "8",
     "primary_locale": "en-US",
-    "additional_locales": ["ko"],
+    "additional_locales": [
+      "ko"
+    ],
     "primary_category": "Photo & Video",
     "primary_category_identifier": "public.app-category.photo-video",
     "secondary_category": "Lifestyle",
@@ -22,43 +24,55 @@
     "privacy_policy_url": "https://weekkeep-app.kimsol1134.chatgpt.site/privacy",
     "privacy_choices_url": "https://weekkeep-app.kimsol1134.chatgpt.site/privacy",
     "terms_url": null,
-    "availability": ["US", "KR"],
+    "availability": [
+      "US",
+      "KR"
+    ],
     "release_method": "manual",
     "asc_state": {
       "app_id": "6798449478",
-      "version_id": "ac4f183e-1019-4ffc-827f-f5514f0d349b",
-      "build_id": "1c51b451-d37f-4704-89c9-e426b1ee5725",
+      "version_id": "f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c",
+      "build_id": "6a962adf-72d1-4bcb-8a3b-d1e8c2ba7174",
       "build_processing_state": "VALID",
-      "build_uploaded_at": "2026-08-07T08:28:29-07:00",
+      "build_uploaded_at": "2026-08-20T20:35:07-07:00",
       "app_store_version_attachment": "ATTACHED",
       "version_state": "WAITING_FOR_REVIEW",
-      "app_availability": ["USA", "KOR"],
-      "iap_availability": ["USA", "KOR"],
-      "iap_state": "WAITING_FOR_REVIEW",
+      "app_availability": [
+        "USA",
+        "KOR"
+      ],
+      "iap_availability": [
+        "USA",
+        "KOR"
+      ],
+      "iap_state": "APPROVED",
       "review_detail": "configured",
-      "remote_build_scope": "current_build_7_attached",
+      "remote_build_scope": "current_build_8_attached_1_0_1_in_review",
       "remote_unattached_valid_build": "4",
       "remote_unattached_valid_build_id": "6e92c470-c044-4512-9276-71491fe97685",
-      "current_build": "7",
-      "historical_builds": ["1", "2", "3", "4", "5", "6"],
-      "review_submission_id": "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7",
+      "current_build": "8",
+      "historical_builds": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "review_submission_id": "b60d3600-6538-4e6e-a6f7-2327e776ff93",
       "review_submission_state": "WAITING_FOR_REVIEW",
-      "review_submission_submitted_at": "2026-08-07T15:33:05.463Z",
-      "review_submission_item_count": 2,
-      "review_submission_items": "exactly_2_READY_FOR_REVIEW_items",
+      "review_submission_submitted_at": "2026-08-21T03:40:29.28Z",
+      "review_submission_item_count": 1,
+      "review_submission_items": "exactly_1_READY_FOR_REVIEW_app_version_item",
       "review_submission_item_details": [
         {
           "type": "appStoreVersion",
-          "id": "ac4f183e-1019-4ffc-827f-f5514f0d349b",
-          "state": "READY_FOR_REVIEW"
-        },
-        {
-          "type": "inAppPurchaseVersion",
-          "id": "cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f",
+          "id": "f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c",
           "state": "READY_FOR_REVIEW"
         }
       ],
-      "review_submission_app_store_version_id": "ac4f183e-1019-4ffc-827f-f5514f0d349b",
+      "review_submission_app_store_version_id": "f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c",
       "review_submission_iap_version_id": "cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f",
       "historical_review_submission_id": "a9b0a18f-6cf6-4af4-8e6f-c77009831e00",
       "historical_review_submission_state": "COMPLETE",
@@ -70,7 +84,12 @@
       "iap_id": "6798491084",
       "iap_product_id": "weekkeep_plus_lifetime",
       "iap_version_id": "cedd0fe9-5b2a-478e-a58f-9ae2269ecd7f",
-      "iap_version_state": "WAITING_FOR_REVIEW"
+      "iap_version_state": "APPROVED",
+      "live_store_version_id": "ac4f183e-1019-4ffc-827f-f5514f0d349b",
+      "live_store_build": "7",
+      "live_store_build_id": "1c51b451-d37f-4704-89c9-e426b1ee5725",
+      "historical_1_0_0_review_submission_id": "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7",
+      "historical_1_0_0_review_submission_state": "COMPLETE"
     },
     "remote_unattached_valid_build": {
       "version": "1.0.0",
@@ -82,9 +101,117 @@
       "evidence_status": "known_external_truth; historical_non_target"
     },
     "current_build": {
+      "version": "1.0.1",
+      "build": "8",
+      "status": "ASC_CURRENT_ATTACHED",
+      "upload_state": "uploaded",
+      "asc_build_id": "6a962adf-72d1-4bcb-8a3b-d1e8c2ba7174",
+      "asc_processing_state": "VALID",
+      "uploaded_at": "2026-08-20T20:35:07-07:00",
+      "app_store_version_attachment": "ATTACHED",
+      "app_store_version_id": "f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c",
+      "review_submission_id": "b60d3600-6538-4e6e-a6f7-2327e776ff93",
+      "review_submission_state": "WAITING_FOR_REVIEW",
+      "review_submission_submitted_at": "2026-08-21T03:40:29.28Z",
+      "review_submission_item_count": 1,
+      "review_submission_item_details": [
+        {
+          "type": "appStoreVersion",
+          "id": "f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c",
+          "state": "READY_FOR_REVIEW"
+        }
+      ],
+      "replaces_historical_review_submission": "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7",
+      "ipa_local_verification": {
+        "evidence_status": "verified_without_tracked_evidence_file",
+        "size_bytes": 23451271,
+        "sha256": "7a509287a65fcaea390620487933cec0b95fb2df703587a7f166c708a45a5d61",
+        "bundle_id": "com.solkim.weekkeep",
+        "version": "1.0.1",
+        "build": "8",
+        "purchases": true,
+        "analytics": false,
+        "privacy_info_present": true,
+        "signing_identity": "Apple Distribution",
+        "team_id": "D48DDX5D5W"
+      },
+      "apple_server_validation": {
+        "status": "ASC_PROCESSING_VALID",
+        "validated": true,
+        "errors": [],
+        "scope": "uploaded_ipa_processing",
+        "before_upload": false,
+        "altool_pre_upload_validation": "not_run_this_upload_asc_processing_valid"
+      },
+      "app_review_approval_state": "WAITING_FOR_REVIEW",
+      "public_release_state": "NOT_RELEASED",
+      "release_method": "manual",
+      "next_action": "WAIT_FOR_APP_REVIEW_THEN_MANUALLY_RELEASE_AFTER_APPROVAL",
+      "historical_build_6_testflight_internal_qa": {
+        "group_name": "Weekkeep Internal QA",
+        "group_id": "576fd29a-7a64-4521-9164-9697ec1c256f",
+        "group_builds": [
+          "6"
+        ],
+        "group_build_count": 1,
+        "build_status": "READY_FOR_BETA_TESTING",
+        "tester_count": 1,
+        "public_ssot_contains_tester_email": false,
+        "testers": [
+          {
+            "role": "account_holder",
+            "tester_id": "bef018ab-9514-4388-804d-bcd363f601d4",
+            "state": "INVITED",
+            "account_holder_verified": true
+          }
+        ],
+        "distribution_status": "ready_invited",
+        "installed": false,
+        "purchase_tested": false,
+        "restore_tested": false
+      },
+      "visual_qa_evidence_directory": "release/local/visual-qa/20260807-build6-notification-settings-rerun1/final",
+      "visual_qa_evidence_scope": "historical_build6_settings_visual_qa_not_app_store_screenshot_evidence",
+      "asc_evidence_path": null,
+      "archive_directory": null,
+      "ipa_path": null
+    },
+    "historical_replaced_build_6": {
+      "version": "1.0.0",
+      "build": "6",
+      "status": "HISTORICAL_REPLACED_BY_BUILD_7",
+      "upload_state": "uploaded",
+      "asc_build_id": "0ffa7586-619f-4df9-abc5-ae7ebbd068b1",
+      "asc_processing_state": "VALID",
+      "uploaded_at": "2026-08-06T15:31:16-07:00",
+      "app_store_version_attachment": "HISTORICAL_REPLACED",
+      "review_submission_id": "a9b0a18f-6cf6-4af4-8e6f-c77009831e00",
+      "review_submission_state": "COMPLETE",
+      "replaced_after_build_7_processing_state": "VALID",
+      "ipa_local_verification": {
+        "size_bytes": 23338085,
+        "sha256": "feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a",
+        "bundle_id": "com.solkim.weekkeep",
+        "version": "1.0.0",
+        "build": "6",
+        "purchases": true,
+        "analytics": false,
+        "privacy_info_present": true
+      }
+    },
+    "historical_local_candidate_build_5": {
+      "version": "1.0.0",
+      "build": "5",
+      "status": "HISTORICAL_LOCAL_NOT_UPLOADED",
+      "upload_state": "not_uploaded",
+      "asc_build_id": null,
+      "screenshot_evidence_directory": "release/local/visual-qa/20260807-build5-app-store-candidate-rerun8/final",
+      "evidence_scope": "local_build5_candidate_not_uploaded"
+    },
+    "live_store_build": {
       "version": "1.0.0",
       "build": "7",
-      "status": "ASC_CURRENT_ATTACHED",
+      "status": "ASC_LIVE_STORE_1_0_0",
       "upload_state": "uploaded",
       "asc_build_id": "1c51b451-d37f-4704-89c9-e426b1ee5725",
       "asc_processing_state": "VALID",
@@ -92,7 +219,7 @@
       "app_store_version_attachment": "ATTACHED",
       "app_store_version_id": "ac4f183e-1019-4ffc-827f-f5514f0d349b",
       "review_submission_id": "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7",
-      "review_submission_state": "WAITING_FOR_REVIEW",
+      "review_submission_state": "COMPLETE",
       "review_submission_submitted_at": "2026-08-07T15:33:05.463Z",
       "review_submission_item_count": 2,
       "review_submission_item_details": [
@@ -111,7 +238,9 @@
       "historical_build_6_testflight_internal_qa": {
         "group_name": "Weekkeep Internal QA",
         "group_id": "576fd29a-7a64-4521-9164-9697ec1c256f",
-        "group_builds": ["6"],
+        "group_builds": [
+          "6"
+        ],
         "group_build_count": 1,
         "build_status": "READY_FOR_BETA_TESTING",
         "tester_count": 1,
@@ -154,41 +283,13 @@
         "scope": "exported_ipa_only",
         "before_upload": true
       },
-      "app_review_approval_state": "NOT_APPROVED",
-      "public_release_state": "NOT_RELEASED",
-      "next_action": "WAIT_FOR_APP_REVIEW_THEN_MANUALLY_RELEASE_AFTER_APPROVAL"
-    },
-    "historical_replaced_build_6": {
-      "version": "1.0.0",
-      "build": "6",
-      "status": "HISTORICAL_REPLACED_BY_BUILD_7",
-      "upload_state": "uploaded",
-      "asc_build_id": "0ffa7586-619f-4df9-abc5-ae7ebbd068b1",
-      "asc_processing_state": "VALID",
-      "uploaded_at": "2026-08-06T15:31:16-07:00",
-      "app_store_version_attachment": "HISTORICAL_REPLACED",
-      "review_submission_id": "a9b0a18f-6cf6-4af4-8e6f-c77009831e00",
-      "review_submission_state": "COMPLETE",
-      "replaced_after_build_7_processing_state": "VALID",
-      "ipa_local_verification": {
-        "size_bytes": 23338085,
-        "sha256": "feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a",
-        "bundle_id": "com.solkim.weekkeep",
-        "version": "1.0.0",
-        "build": "6",
-        "purchases": true,
-        "analytics": false,
-        "privacy_info_present": true
-      }
-    },
-    "historical_local_candidate_build_5": {
-      "version": "1.0.0",
-      "build": "5",
-      "status": "HISTORICAL_LOCAL_NOT_UPLOADED",
-      "upload_state": "not_uploaded",
-      "asc_build_id": null,
-      "screenshot_evidence_directory": "release/local/visual-qa/20260807-build5-app-store-candidate-rerun8/final",
-      "evidence_scope": "local_build5_candidate_not_uploaded"
+      "app_review_approval_state": "APPROVED",
+      "public_release_state": "READY_FOR_SALE",
+      "next_action": "KEEP_LIVE_WHILE_1_0_1_IS_IN_REVIEW",
+      "live_storefronts": [
+        "US"
+      ],
+      "current_version_release_date": "2026-08-20T17:48:07Z"
     }
   },
   "locales": {
@@ -231,21 +332,24 @@
   },
   "screenshots": {
     "app_store": {
-      "locales": ["en-US", "ko"],
+      "locales": [
+        "en-US",
+        "ko"
+      ],
       "screenshots_per_locale": 6,
       "portrait": true,
       "alpha": false,
       "device_frame": false,
       "dimensions": "1320x2868",
-        "evidence_build": "5",
-        "evidence_directory": "release/local/visual-qa/20260807-build5-app-store-candidate-rerun8/final",
-        "evidence_scope": "historical_local_build5_candidate_not_target",
-        "current_build_visual_qa_directory": "release/local/visual-qa/20260807-build6-notification-settings-rerun1/final",
-        "current_build_visual_qa_scope": "historical_build6_settings_visual_qa_not_app_store_screenshot_evidence",
-        "remote_review_evidence_directory": "release/local/visual-qa/20260806-app-store-build3-onboarding-rerun1/final",
-        "remote_review_evidence_scope": "historical_build3_evidence_replaced_by_build7_review_submission",
-        "asc_screenshot_replacement_verified": false,
-        "historical_asc_replaced_and_verified": true
+      "evidence_build": "5",
+      "evidence_directory": "release/local/visual-qa/20260807-build5-app-store-candidate-rerun8/final",
+      "evidence_scope": "historical_local_build5_candidate_not_target",
+      "current_build_visual_qa_directory": "release/local/visual-qa/20260807-build6-notification-settings-rerun1/final",
+      "current_build_visual_qa_scope": "historical_build6_settings_visual_qa_not_app_store_screenshot_evidence",
+      "remote_review_evidence_directory": "release/local/visual-qa/20260806-app-store-build3-onboarding-rerun1/final",
+      "remote_review_evidence_scope": "historical_build3_evidence_replaced_by_build7_review_submission",
+      "asc_screenshot_replacement_verified": false,
+      "historical_asc_replaced_and_verified": true
     },
     "shipaton_proof": {
       "width": 1179,

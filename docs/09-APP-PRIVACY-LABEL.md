@@ -3,7 +3,7 @@
 | 항목 | 값 |
 |---|---|
 | 기준일 | 2026-08-07 |
-| 대상 | iOS 1.0.0 — canonical ASC build 7 (`1c51b451-d37f-4704-89c9-e426b1ee5725`) is `VALID` and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`; current review is `WAITING_FOR_REVIEW`; build 6 and its prior submission are historical/replaced; build 4 is `VALID` but unattached |
+| 대상 | iOS 1.0.1 review build 8 (`6a962adf-72d1-4bcb-8a3b-d1e8c2ba7174`) is `VALID` and attached to version `f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c`; live store remains `1.0.0 (7)`; current 1.0.1 review is `WAITING_FOR_REVIEW`; IAP is `APPROVED` |
 | 공개 정책 URL | `https://weekkeep-app.kimsol1134.chatgpt.site/privacy` |
 | Privacy Choices URL | `https://weekkeep-app.kimsol1134.chatgpt.site/privacy` |
 | Tracking | No |
@@ -78,7 +78,7 @@ Build 2 (`release/local/asc-release-build2-20260806-rerun7/exported/Weekkeep.ipa
 ## 5.1 Current build 7와 historical build 경계 — 2026-08-08
 
 - Remote build 4 (`6e92c470-c044-4512-9276-71491fe97685`) is `VALID` and unattached; it remains historical/non-target.
-- ASC build 7 (`1c51b451-d37f-4704-89c9-e426b1ee5725`) is `1.0.0 (7)`, processed `VALID`, uploaded at `2026-08-07T08:28:29-07:00`, and attached to version `ac4f183e-1019-4ffc-827f-f5514f0d349b`. Current submission `6d2feeff-0f90-4b34-b0c8-b22a3b1928b7` is `WAITING_FOR_REVIEW` with the app-version and IAP-version items both `READY_FOR_REVIEW`.
+- ASC build 7 (`1c51b451-d37f-4704-89c9-e426b1ee5725`) is `1.0.0 (7)`, processed `VALID`, uploaded at `2026-08-07T08:28:29-07:00`, and is the live store binary on version `ac4f183e-1019-4ffc-827f-f5514f0d349b` (`READY_FOR_SALE`). Current review is `1.0.1 (8)` (`6a962adf-72d1-4bcb-8a3b-d1e8c2ba7174`) on version `f7d21816-5e24-4cf5-9cbb-ee141dc4ce6c`; submission `b60d3600-6538-4e6e-a6f7-2327e776ff93` is `WAITING_FOR_REVIEW`. IAP is `APPROVED`.
 - Canonical release IPA local verification is recorded without a tracked evidence file: 23,420,062 bytes, SHA256 `25c2c1ff17b14bd976392f3d8d6d1c103bd5488de66b866cadb8a5339f627889`, bundle `com.solkim.weekkeep`, version `1.0.0`, build `7`; Apple server-side validation succeeded with no errors before upload.
 - Build 6 (`0ffa7586-619f-4df9-abc5-ae7ebbd068b1`) and previous submission `a9b0a18f-6cf6-4af4-8e6f-c77009831e00` are historical/replaced; the previous submission is now `COMPLETE` after build 7 became `VALID`. `release/privacy-manifest.json` scopes the published App Privacy facts to the current `1.0.0` app version. No App Review approval or public App Store release is made.
 - The build-6 Settings visual-QA evidence remains separately recorded at `release/local/visual-qa/20260807-build6-notification-settings-rerun1/final/`; it is historical and not an App Store screenshot replacement. Builds 1–6 remain historical/non-target except the current build 7. The physical iPhone fixture-only UI runner and native share/delivery checks remain local QA evidence only; purchase/restore verification, target-device footage, actual-library performance, and icon QA remain pending.

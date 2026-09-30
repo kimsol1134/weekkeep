@@ -2,7 +2,7 @@
 
 | 항목 | 값 |
 |---|---|
-| 버전 | 0.5-approved |
+| 버전 | 0.6-approved |
 | 기준 PRD | [01-PRD.md](01-PRD.md) |
 | 상태 | Approved |
 | 주 행위자 | 부모 사용자 |
@@ -44,7 +44,7 @@
 | `UC-10` | Weekkeep Plus를 구매한다 | P0 | FR-016, FR-017 |
 | `UC-11` | 이전 구매를 복원한다 | P0 | FR-017, FR-022 |
 | `UC-12` | 분석·사진·저장 오류에서 회복한다 | P0 | FR-006, FR-011, FR-014, FR-021 |
-| `UC-13` | 권한·구매·개인정보 설정을 확인한다 | P1 | FR-018–FR-020, FR-022 |
+| `UC-13` | 권한·구매·지원 설정을 확인한다 | P1 | FR-018–FR-020 |
 
 ---
 
@@ -65,9 +65,9 @@
 ### 기본 흐름
 
 1. Parent가 앱을 실행합니다.
-2. Weekkeep은 ‘지난 7일의 사진을 최대 7장으로 남긴다’는 결과 예시를 보여줍니다.
-3. 같은 화면에서 ‘사진은 기기에서 분석되고 외부로 전송되지 않는다’는 짧은 설명을 보여줍니다.
-4. Parent가 `지난 7일 남기기`를 탭합니다.
+2. Weekkeep은 ‘가장 최근 완료된 한 주에서 최대 7장으로 남긴다’는 결과 예시를 보여줍니다. 그 주의 적격 사진이 0장일 때만 최근 7일 fallback을 안내합니다.
+3. 같은 화면에서 ‘사진 고르기는 이 iPhone 안에서 이뤄진다’는 짧은 설명을 보여줍니다.
+4. Parent가 `첫 주 추억 고르기 / Choose your first week`를 탭합니다.
 5. Weekkeep이 Photos 시스템 권한 요청을 호출합니다.
 6. `EVT-onboarding_started`를 1회 기록합니다.
 
@@ -86,7 +86,7 @@
 
 ```gherkin
 Given Weekkeep을 처음 실행했고 사진 권한이 결정되지 않았을 때
-When 사용자가 "지난 7일 남기기"를 누르면
+When 사용자가 "첫 주 추억 고르기"를 누르면
 Then 시스템 권한 팝업 전에 앱의 결과와 기기 내 처리 설명을 볼 수 있어야 한다
 And 알림이나 결제 요청은 나타나지 않아야 한다
 ```
@@ -160,7 +160,7 @@ And 전체 접근 없이는 사용할 수 없다고 막아서는 안 된다
 ### 기본 흐름
 
 1. Weekkeep은 일반 empty state가 아닌 권한 전용 상태를 표시합니다.
-2. ‘Weekkeep이 주간 기록 초안을 만들려면 Photos 접근이 필요하다’고 설명합니다.
+2. ‘이 iPhone에 작은 앨범을 남기려면 사진 접근이 필요하다’고 설명합니다.
 3. Parent가 `설정 열기`를 탭합니다.
 4. iOS Settings의 Weekkeep 페이지로 이동합니다.
 5. Parent가 접근을 허용하고 앱으로 돌아옵니다.
@@ -187,32 +187,33 @@ Then 앱 재시작 없이 현재 권한을 다시 읽고 만들기 흐름을 사
 
 ### 목표
 
-설치 직후 과거 전체 보관함 설정 없이 최근 7일의 작은 결과를 경험합니다.
+설치 직후 과거 전체 보관함 설정 없이 가장 최근 완료 주의 작은 결과를 경험하고, 그 주가 비면 최근 7일 fallback을 정직하게 경험합니다.
 
 ### 조건
 
 - 우선순위: P0
 - 트리거: 최초 Photos 접근 허용
 - 사전 조건: Welcome Week 미저장, 접근 가능한 권한
-- 날짜 범위: `analysisStartedAt - 7 days ... analysisStartedAt`
+- 날짜 범위: 우선 `latestCompletedLocalMonday...Sunday`; 그 범위의 적격 사진이 0장일 때만 고정된 `analysisStartedAt - 7 days ... analysisStartedAt` fallback
 - 시작 화면: `SCR-WK-02 Curation Progress`
 - 종료 화면: `SCR-WK-03 Weekly Review` 또는 적절한 empty/error state
 
 ### 기본 흐름
 
-1. Weekkeep이 분석 시작 시각과 rolling 7일 범위를 고정합니다.
-2. 범위 안의 접근 가능한 이미지 자산을 가져옵니다.
-3. 스크린샷과 숨김 자산을 제외합니다.
-4. 최대 500개 descriptor를 metadata scan하고, deterministic local-day/time-bucket prefilter로 최대 21개(7일×3개)만 Vision 분석합니다.
-5. 근접 중복을 묶고 품질과 날짜 분포를 반영해 최대 14장을 순위화합니다.
-6. 최대 7장을 초기 선택하고 나머지 최대 7장을 교체 후보로 둡니다.
-7. `EVT-curation_completed`를 사진 식별자 없이 기록합니다.
-8. `SCR-WK-03 Weekly Review`에 결과를 촬영 시간순으로 보여줍니다.
+1. Weekkeep이 로컬 ISO calendar에서 가장 최근 완료된 월–일 범위를 계산하고 먼저 조회합니다.
+2. 완료 주의 적격 사진이 0장일 때만 분석 시작 시각의 최근 rolling 7일을 조회합니다. 선택된 정확한 `WeekRange`를 root resolution에서 curation 시작·권한 재개까지 pin합니다.
+3. 범위 안의 접근 가능한 이미지 자산을 가져옵니다.
+4. 스크린샷과 숨김 자산을 제외합니다.
+5. 최대 500개 descriptor를 metadata scan하고, deterministic local-day/time-bucket prefilter로 최대 21개(7일×3개)만 Vision 분석합니다.
+6. 근접 중복을 묶고 품질과 날짜 분포를 반영해 최대 14장을 순위화합니다.
+7. 최대 7장을 초기 선택하고 나머지 최대 7장을 교체 후보로 둡니다.
+8. `EVT-curation_completed`를 사진 식별자 없이 기록합니다.
+9. `SCR-WK-03 Weekly Review`에 결과를 촬영 시간순으로 보여줍니다. 사진 고르기와 공유 이미지 만들기는 iPhone에서 처리하며, 공유는 사용자가 직접 선택할 때만 시작합니다.
 
 ### 대안/예외
 
 - A1. 유효 사진 1–6장: 실제 장수만 보여주고 다음 단계로 진행합니다.
-- A2. 유효 사진 0장: 날짜 범위와 권한 상태에 맞는 empty state를 표시합니다.
+- A2. 완료 주와 rolling fallback 모두 유효 사진 0장: 요청 범위 밖 사진을 섞지 않고 날짜 범위와 권한 상태에 맞는 empty state를 표시합니다.
 - A3. 접근 자산이 500개 초과: descriptor scan을 500개에서 끝냅니다. 100개 eligible fixture에서도 Vision 호출은 21개를 넘지 않습니다.
 - A4. 사용자가 취소: task를 취소하고 저장/무료 횟수를 변경하지 않은 채 `SCR-WK-01`로 돌아갑니다.
 - E1. 일부 iCloud 사진 다운로드 실패: 성공한 자산이 있으면 부분 결과와 생략 수를 보여줍니다.
@@ -221,15 +222,20 @@ Then 앱 재시작 없이 현재 권한을 다시 읽고 만들기 흐름을 사
 ### 사후 조건
 
 - 저장 전 큐레이션 초안이 메모리 또는 임시 저장소에 존재합니다.
-- 과거 7일 밖의 자산은 결과에 없습니다.
+- 선택된 정확한 `WeekRange` 밖의 자산은 결과에 없습니다.
 
 ### 수용 시나리오
 
 ```gherkin
-Given 지난 7일에 유효 사진이 5장뿐일 때
+Given 최근 완료된 월–일 주에 유효 사진이 5장뿐일 때
 When Welcome Week 분석이 끝나면
 Then 검토 화면에는 5장만 보여야 한다
-And 7장을 채우기 위해 더 오래된 사진을 포함하면 안 된다
+And rolling fallback이나 더 오래된 사진을 포함하면 안 된다
+
+Given 최근 완료된 월–일 주에 유효 사진이 0장이고 최근 7일에 유효 사진이 3장일 때
+When Welcome Week 분석이 끝나면
+Then 최근 7일 fallback의 3장만 보여야 한다
+And 완료 주의 범위 밖 사진을 조용히 섞지 않아야 한다
 ```
 
 ---
@@ -249,19 +255,20 @@ Welcome Week 이후 매주 하나의 기록을 반복 생성합니다.
 
 ### 기본 흐름
 
-1. Weekkeep이 `weekStart >= regularCycleStartsAt`을 만족하면서 가장 최근에 끝난 월요일 00:00–일요일 23:59 범위와 `weekKey`를 계산합니다.
+1. Weekkeep이 `weekStart >= regularCycleStartsAt`을 만족하면서 가장 최근에 끝난 월요일 00:00–일요일 23:59 범위와 `weekKey`를 계산합니다. Welcome completed-week 저장의 `regularCycleStartsAt`은 album `weekEnd`, rolling/legacy Welcome은 저장 시점 다음 월요일이며 persisted 값은 보존합니다.
 2. 해당 범위가 끝난 다음 월요일 00:00부터 일요일 23:59까지의 완료 창인지 확인합니다.
 3. 이미 저장된 `weekKey`면 `저장됨` 상태를 보여주고 중복 분석을 자동 시작하지 않습니다.
 4. 해당 범위에서 접근 가능한 적격 사진 수를 확인합니다. 0장이면 권한 범위에 맞는 `noEligiblePhotos`를 보여주고 결제를 요구하지 않습니다.
 5. 사진이 1장 이상일 때만 무료 저장 수가 2 미만이거나 Plus가 활성 상태인지 확인합니다.
 6. 생성 가능하면 완료된 캘린더 주 범위로 `UC-04`와 같은 foreground 분석 pipeline을 실행합니다.
-7. 최대 7장의 초안을 `SCR-WK-03`에 보여줍니다.
+7. 최대 7장의 선택 결과를 `SCR-WK-03`에 보여줍니다.
+8. `SCR-WK-01`을 처음 그릴 때 `welcomePending`/`ready`의 상태별 추억 고르기 CTA는 제목·본문 다음, explanatory photo story 전에 normal document flow로 배치되어 스크롤 없이 보이고 눌려야 합니다. photo story·photo count·limited 안내·privacy context도 normal scroll content로 남아 native tab bar 위에서 각각 끝까지 보일 수 있어야 합니다.
 
 ### 대안/예외
 
 - A1. 적격 사진 0장: limited면 사진 선택 관리, full이면 다시 확인을 보여주며 paywall은 열지 않습니다.
 - A2. 적격 사진 1장 이상 + 무료 한도 도달 + Plus 비활성 확인: `UC-10` paywall로 이동합니다.
-- A3. `regularCycleStartsAt`부터 시작하는 첫 전체 캘린더 주가 아직 끝나지 않음: 남은 날짜를 세지 않고 `다음 기록을 기다리고 있어요` 상태를 보여줍니다. Welcome Week와 겹치는 이전 완료 주는 제안하지 않습니다.
+- A3. `regularCycleStartsAt`부터 시작하는 첫 전체 캘린더 주가 아직 끝나지 않음: 남은 날짜를 세거나 streak를 만들지 않고 `다음 기록을 기다리고 있어요` 상태를 보여줍니다. 최신 저장 앨범 snapshot과 정확한 다음 가능일, 보기/공유 action을 함께 보여주며 Welcome Week와 겹치는 이전 완료 주는 제안하지 않습니다.
 - A4. 사용자가 완료 창을 놓침: 새 주가 끝난 다음 월요일부터 가장 최근 완료 주 하나만 제안합니다. 밀린 주 수, streak 손실, 연속 백필을 표시하지 않습니다.
 - A5. 월요일 20:30 이전 또는 알림을 놓친 뒤: 완료 창 안이라면 같은 대상을 언제든 시작할 수 있습니다. 알림 시각은 gate가 아닙니다.
 - E1. 시간대가 바뀜: 저장된 `weekKey`와 날짜 범위를 기준으로 중복 여부를 재검증합니다.
@@ -286,7 +293,7 @@ And 같은 weekKey가 이미 저장됐다면 새 기록을 만들지 않고 저�
 
 ### 목표
 
-준비된 초안을 그대로 승인하거나 필요한 사진만 바꾸어, 처음부터 고르는 부담 없이 부모가 최종 통제권을 갖습니다.
+기기가 준비한 사진을 그대로 남기거나 필요한 사진만 바꾸어, 처음부터 고르는 부담 없이 부모가 최종 통제권을 갖습니다.
 
 ### 조건
 
@@ -298,7 +305,7 @@ And 같은 weekKey가 이미 저장됐다면 새 기록을 만들지 않고 저�
 ### 기본 흐름
 
 1. Parent가 기기가 준비한 최대 7장 grid와 날짜 범위를 확인합니다.
-2. 결과가 마음에 들면 별도 선택 없이 `지난주 남기기`를 탭해 `UC-07`로 이동합니다.
+2. 결과가 마음에 들면 별도 선택 없이 `사진 n장 남기기`를 탭해 `UC-07`로 이동합니다.
 3. 사진을 처음 탭하면 Weekkeep은 그 사진을 교체 대상으로 선택하고 `이 사진 바꾸기`를 표시합니다. viewer는 아직 열지 않습니다.
 4. 선택된 같은 사진을 다시 탭하면 `SCR-WK-04` 전체 화면 viewer를 엽니다.
 5. Parent가 viewer를 닫으면 마지막으로 보고 있던 사진이 grid의 선택 대상이 됩니다. swipe하지 않았다면 원래 사진 선택과 위치를 유지합니다.
@@ -309,7 +316,7 @@ And 같은 weekKey가 이미 저장됐다면 새 기록을 만들지 않고 저�
 - A2. replacement sheet 첫 상태에서는 선택 사진과 같은 display-timezone calendar day의 후보만 표시합니다.
 - A3. same-day 후보 없음: 따뜻한 설명과 명시적 `다른 날 사진 보기` action을 표시합니다. 사용자가 opt-in하기 전에는 다른 날짜 후보를 보여주지 않습니다.
 - A4. other-day opt-in: 후보를 날짜별 heading으로 group하고, 선택 즉시 같은 한 slot만 교체합니다.
-- A5. 후보 없음: `교체할 다른 후보가 없어요`를 표시하고 현재 결과를 유지합니다.
+- A5. 후보 없음: `이 자리에 바꿔 넣을 다른 사진이 없어요`를 표시하고 현재 결과를 유지합니다.
 - A6. 분석 결과에 selected day별 unused candidate가 있으면 bounded alternative shortlist에 day coverage를 먼저 보존합니다.
 - A7. sheet 취소: 현재 결과를 그대로 유지합니다.
 - A8. 제한 접근 관리 후 후보 변경: 초안을 무효화하고 재분석할지 사용자에게 알립니다.
@@ -352,7 +359,7 @@ And 최종 선택에 같은 사진이 두 번 존재하면 안 된다
 ### 조건
 
 - 우선순위: P0
-- 트리거: `SCR-WK-03`의 `지난주 남기기` 또는 Welcome Week의 동등 CTA
+- 트리거: `SCR-WK-03`의 `사진 n장 남기기` 또는 Welcome Week의 동등 CTA
 - 사전 조건: 1장 이상 선택, 저장 권한/gate 통과
 - 종료 화면: `SCR-WK-05 Save Confirmation`
 
@@ -369,15 +376,19 @@ And 최종 선택에 같은 사진이 두 번 존재하면 안 된다
 9. 작고 절제된 완료 haptic과 저장된 최대 7장 사진의 짧은 순차 reveal을 보여줍니다.
 10. Save Confirmation의 primary action으로 local share preparation을 제공하고 Story 9:16 또는 Post 4:5 format을 고르게 합니다.
 11. renderer가 저장된 실제 PhotoKit image로 temporary local artifact를 준비한 뒤, Parent가 명시적으로 share action을 누르면 native share sheet를 엽니다.
-12. 첫 저장이면 `SHEET-NOT-01`로 알림 가치를 제안합니다.
+12. 저장 목록에서 `createdAt` 오름차순 → `weekStart` 오름차순 → UUID 문자열 순으로 현재 앨범의 누적 1-based ordinal을 계산합니다. Welcome과 regular를 함께 세며 lookup 실패·앨범 부재면 serial label을 생략합니다. 기존 `weekKey`를 편집해도 기존 `id`와 `createdAt`을 사용하므로 ordinal은 바뀌지 않습니다.
+13. `UIActivityViewController`에는 local image artifact를 첫 항목으로 두고, localized parent invitation과 canonical Apple install URL을 별도의 native item source로 함께 제공합니다. iOS가 destination별 지원 항목을 협상하므로 image-only destination은 이미지를 받을 수 있고, link-capable destination은 text와 URL로 install path를 만들 수 있습니다.
+14. native completion handler에서 `completed == true`일 때만 `EVT-share_completed`를 presentation당 한 번 기록합니다. activity type, returned items, error, destination, recipient, message contents는 읽거나 기록하지 않습니다. 취소는 completion event를 만들지 않습니다.
+15. 첫 저장이면 `SHEET-NOT-01`로 알림 가치를 제안하고 정확한 다음 가능일을 함께 보여줍니다. completed-week Welcome은 album `weekEnd`에서 다음 eligible date를 계산하고, rolling/legacy Welcome은 기존 cycle 규칙을 사용합니다.
 
 ### 대안/예외
 
 - A1. 동일 `weekKey` 저장: 새 기록이 아니라 update로 처리합니다.
 - A2. 저장 도중 앱 background: transaction 결과를 재조회해 성공/실패를 결정합니다.
-- E1. 저장 실패: 초안을 유지하고 재시도 CTA를 제공합니다. 무료 수와 이벤트를 증가시키지 않습니다.
+- E1. 저장 실패: 준비한 사진을 유지하고 재시도 CTA를 제공합니다. 무료 수와 이벤트를 증가시키지 않습니다.
 - E2. 사진이 저장 직전 사라짐: 존재하는 사진만으로 저장할지 안내하고 자동 대체하지 않습니다.
-- E3. share preparation failure: 저장된 album은 그대로 유지하고 retry/error UI를 제공합니다. external destination이나 recipient는 기록하지 않습니다.
+- E3. share preparation failure: 저장된 album은 그대로 유지하고 retry/error UI를 제공합니다. ordinal lookup이 실패해도 generic artifact를 준비하며 external destination이나 recipient는 기록하지 않습니다.
+- E4. destination support varies: image-only destination에는 local image artifact를 계속 제공하고, link-capable destination으로 전달되는 invitation/URL은 native share negotiation에 맡깁니다. private activity identifier나 destination별 수신을 추정하지 않습니다.
 
 ### 사후 조건
 
@@ -415,7 +426,7 @@ And 무료 저장 수는 한 번만 증가해야 한다
 3. Parent가 한 주를 탭합니다.
 4. 상세에서 사진을 촬영 시간순으로 봅니다.
 5. 한 장을 탭하면 전체 화면으로 보고 swipe로 이동합니다.
-6. 상세의 share action은 저장 당시와 같은 local renderer를 사용해 나중에도 Story/Post artifact를 만들 수 있습니다.
+6. 상세의 share action은 저장 당시와 같은 local renderer를 사용해 나중에도 Story/Post artifact를 만들 수 있습니다. 유효한 누적 ordinal이 있으면 header에 localized serial label을, footer에는 `How was your family's week?` / `너희 가족의 이번 주는 어땠어?` prompt를 넣습니다. 명시적 share 뒤에는 local image를 첫 native item으로 하고 localized invitation과 canonical Apple install URL을 separate native items로 전달합니다. native `completed == true` callback은 `EVT-share_completed`로 한 번만 측정합니다.
 
 ### 대안/예외
 
@@ -425,6 +436,7 @@ And 무료 저장 수는 한 번만 증가해야 한다
 - A4. 모든 원본 누락: 주차 메타데이터와 설명을 남기고 설정/Photos 확인 경로를 제공합니다.
 - A5. 앱 삭제·재설치 또는 새 기기: Weekkeep 자체 기록 복원이나 Photos 원본 기반 자동 재구성을 제공하지 않습니다. OS 수준 복원 여부와 무관하게 제품 기능으로 복원을 약속하지 않습니다.
 - A6. share 원본 일부 누락: 실제로 사용 가능한 사진만 adaptive layout에 넣고 fake photo로 채우지 않으며, 전부 누락이면 share action을 비활성화합니다.
+- A7. destination support varies: 이미지 자체는 local temporary artifact로 유지하며, link-capable destination만 native text/URL 항목을 사용할 수 있습니다. recipient와 destination은 기록하지 않고, `completed == true`라는 native activity completion 여부만 별도 allowlist event로 측정합니다.
 
 ### 사후 조건
 
@@ -448,13 +460,15 @@ And 무료 저장 수는 한 번만 증가해야 한다
 
 ### 기본 흐름
 
-1. 첫 저장 후 Weekkeep이 `매주 월요일 저녁에 알려드릴까요?`라고 묻습니다.
+1. 첫 저장 후 Weekkeep이 다음 기록의 정확한 가능일과 함께 알림 가치를 묻습니다.
 2. Parent가 `알림 받기`를 탭합니다.
 3. iOS 알림 권한을 요청합니다.
-4. 허용되면 eligible Regular target이 있는 매주 월요일 20:30 로컬 알림을 예약합니다. Welcome Week와 겹치는 target뿐인 첫 전환 구간은 건너뜁니다.
-5. 알림 본문은 `지난주를 1분 만에 남겨볼까요?`이며, foreground 분석이 이미 끝났다고 주장하지 않습니다.
+4. 허용되면 eligible Regular target이 있는 매주 월요일 20:30 로컬 알림을 예약합니다. Welcome Week와 겹치는 target뿐인 첫 전환 구간은 건너뛰며 동일 target을 중복 예약하지 않습니다.
+5. 알림 본문은 `월요일 저녁, 여유가 될 때 다시 볼 수 있도록 알려드릴게요.`이며, 앱을 열기 전 사진을 살펴봤다고 주장하지 않습니다.
 6. 알림을 탭하면 `weekkeep://weekly/current`로 이동합니다.
-7. 직전 완료 주를 열고, 이미 저장됐다면 저장된 상태를 보여줍니다.
+7. 알림 탭은 최신 eligible weekly state로 이동합니다. 이미 저장됐다면 저장된 상태를, 아직 저장 전이면 해당 주의 review-first 흐름을 보여줍니다.
+
+8. 알림을 처리한 뒤 같은 권한 primer를 반복 표시하지 않습니다.
 
 ### 대안/예외
 
@@ -469,7 +483,7 @@ And 무료 저장 수는 한 번만 증가해야 한다
 ```gherkin
 Given 첫 기록 저장 뒤 알림을 허용했고 직전 완료 주가 Regular target으로 eligible한 사용자에게
 When 해당 월요일이 되면
-Then 20:30 로컬 시간에 "지난주를 1분 만에 남겨볼까요?" 알림이 예약되어야 한다
+Then 20:30 로컬 시간에 "월요일 저녁, 여유가 될 때 다시 볼 수 있도록 알려드릴게요." 알림이 예약되어야 한다
 And 알림을 탭하면 직전 완료 주로 이동해야 한다
 And 첫 기록 저장 전에는 알림 시스템 권한 팝업이 나타나면 안 된다
 ```
@@ -583,7 +597,7 @@ And 앱을 재실행해도 Plus가 활성이어야 한다
 | 자산 삭제 | 이 사진은 Photos에서 찾을 수 없어요 | 닫기 | album slot/주차 |
 | 분석 취소 | 분석을 멈췄어요 | 다시 시작 | 날짜 범위 |
 | Vision 단일 자산 실패 | 사용자에게 개별 기술 오류 미노출 | 해당 자산 제외 | 나머지 점수 |
-| 저장 실패 | 아직 저장되지 않았어요 | 다시 시도 | 전체 초안 |
+| 저장 실패 | 아직 이번 주 기록이 저장되지 않았어요 | 다시 시도 | 선택한 사진 |
 | 데이터 store 손상 | 기록을 열지 못했어요 | 진단/지원 | 원본 store 백업 가능성 |
 | 메모리 pressure | 분석을 완료하지 못했어요 | 더 작은 batch로 재시도 | 날짜 범위 |
 
@@ -606,11 +620,11 @@ And 전체 작업을 처음부터 강제하면 안 된다
 
 ---
 
-## `UC-13` 권한·구매·개인정보 설정을 확인한다
+## `UC-13` 권한·구매·지원 설정을 확인한다
 
 ### 목표
 
-사용자가 현재 앱의 접근과 구매 상태를 스스로 확인하고 바꿀 수 있습니다.
+사용자가 현재 앱의 접근과 구매 상태를 스스로 확인하고, 필요한 지원 행동으로 이동할 수 있습니다.
 
 ### 조건
 
@@ -620,25 +634,24 @@ And 전체 작업을 처음부터 강제하면 안 된다
 
 ### 기본 흐름
 
-1. Parent가 Photos 접근 상태(full/limited/denied)를 확인합니다.
-2. 필요하면 iOS Settings 또는 limited picker로 이동합니다.
-3. 알림 허용 상태와 기본 시각을 확인합니다.
+1. Parent가 Photos 접근 상태(full/limited/denied)를 확인하고, actionable 상태이면 status row 자체를 탭합니다.
+2. 필요하면 iOS Settings 또는 limited picker로 이동합니다. `.restricted`에서는 정책 설명만 확인합니다.
+3. 알림 허용 상태와 기본 시각을 확인하고, actionable 상태이면 status row 자체를 탭합니다.
    - 저장 기록이 0개이면 알림 권한을 요청하지 않고, 첫 기록 저장 후 켤 수 있다는 비활성 안내만 보여줍니다.
-   - 저장 기록이 1개 이상이면 `notDetermined`에서만 contextual request를 시작하고, 이미 결정된 상태에서는 시스템 설정으로 이동합니다.
-4. Plus 상태와 `구매 복원`을 확인합니다.
-5. 데이터 저장 설명에서 현재 iPhone 로컬 저장, 앱 관리형 백업 없음, 앱 삭제·기기 변경 시 유실 가능성을 확인합니다.
-6. 프라이버시 설명에서 기기 내 분석과 외부 전송 금지 범위를 읽습니다.
-7. 지원, 약관, 버전 정보를 확인합니다.
+   - 저장 기록이 1개 이상이면 `notDetermined`에서만 contextual request를 시작하고, 이미 결정된 상태에서는 status row가 시스템 설정으로 이동합니다.
+4. Plus 상태를 확인합니다. inactive일 때만 status row가 paywall을 열고, active/unknown에서는 redundant paywall을 열지 않습니다. `구매 복원`은 active가 아닐 때만 표시합니다.
+5. `Help & Support` navigation row를 탭해 Help, Contact us, Terms of Use, Privacy Policy action과 작은 app version footer를 확인합니다.
 
 ### 대안/예외
 
 - A1. 앱이 background에 있는 동안 권한이 바뀌면 foreground에서 즉시 반영합니다.
 - A2. Plus 상태를 불러오지 못하면 마지막 확인 상태와 `확인 중`을 구분합니다.
-- A3. 개인정보 URL이 오프라인이면 앱 내 핵심 요약은 계속 읽을 수 있습니다.
+- A3. 지원 화면은 외부 정책·지원 링크를 native action으로 제공하며, Settings에 별도의 개인정보·저장 설명 화면을 중복 렌더링하지 않습니다.
 
 ### 사후 조건
 
 - 설정 열람만으로 권한 팝업이나 구매 sheet를 자동 실행하지 않습니다. 저장 기록이 0개일 때 알림 permission action을 탭할 수 있는 것처럼 보이게 하지 않습니다.
+- Photos와 Notifications는 별도 action row 없이 actionable status row 자체가 다음 행동을 제공합니다.
 - 알림 상태를 다시 불러온 뒤 같은 화면의 state × saved-album-count 정책을 적용하며, 저장 직후 primer가 이미 허용되었거나 결정된 상태에서 system prompt를 두 번 열지 않습니다.
 
 ## 3. 공통 완료 기준

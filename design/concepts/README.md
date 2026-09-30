@@ -151,7 +151,7 @@ Retro의 주간 recap 정서와 사진가의 contact sheet를 합쳐 7장을 하
 - accessibility: 3안의 **큰 CTA와 분명한 privacy 상태**
 - dark mode/marketing: 5안의 **contact-sheet rhythm을 제한적으로 활용**
 
-이 조합은 Weekkeep을 baby-album처럼 보이지 않게 하면서도 Apple Journal의 모방으로 끝나지 않고, ‘일주일을 7장으로 남긴다’는 고유 약속을 가장 정확하게 보여줍니다.
+이 조합은 Weekkeep을 baby-album처럼 보이지 않게 하면서도 Apple Journal의 모방으로 끝나지 않고, ‘일주일을 최대 7장으로 남긴다’는 고유 약속을 가장 정확하게 보여줍니다.
 
 ## 당시 제안했던 다음 검증
 

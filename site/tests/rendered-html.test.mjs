@@ -78,7 +78,7 @@ test("renders the flat seven-photo story without the legacy album mockup", async
   assert.doesNotMatch(html, /keepsake-cover|keepsake-visual|7 moments/);
 });
 
-test("privacy and terms disclose local-only storage boundaries", async () => {
+test("privacy and terms disclose local storage boundaries", async () => {
   const [privacyResponse, termsResponse] = await Promise.all([
     render("/privacy"),
     render("/terms"),
@@ -91,4 +91,24 @@ test("privacy and terms disclose local-only storage boundaries", async () => {
   assert.match(privacy, /사진 픽셀/);
   assert.match(terms, /구매 복원은 기능 접근만 복원/);
   assert.match(terms, /Standard Licensed Application End User License Agreement/);
+});
+
+test("public copy distinguishes on-device processing from explicit sharing", async () => {
+  const responses = await Promise.all([
+    render("/"),
+    render("/privacy"),
+    render("/support"),
+    render("/terms"),
+  ]);
+  const html = await Promise.all(responses.map((response) => response.text()));
+  const combined = html.join("\n");
+
+  assert.match(combined, /사진 고르기는 이 iPhone 안에서 이뤄져요/);
+  assert.match(combined, /Photo selection and share rendering/);
+  assert.match(combined, /analytics services or other services for analysis/);
+  assert.match(combined, /Sharing starts only when you choose it/);
+  assert.doesNotMatch(combined, /사진은 이 iPhone을 떠나지 않아요|사진이 iPhone 밖으로 나가나요/);
+  assert.doesNotMatch(combined, /Your photos stay on your iPhone|leave the device/);
+  assert.doesNotMatch(combined, /[>\u201c]초안[<\u201d]|\bdraft\b/i);
+  assert.doesNotMatch(combined, /Seven photos\. One quiet week\.|일주일을 7장의 추억으로|사진 7장으로 남겨요\./);
 });

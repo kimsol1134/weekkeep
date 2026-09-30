@@ -37,7 +37,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
             />
             <SevenStitches compact />
           </Link>
-          <p>아이와 보낸 일주일, 사진 7장으로 남겨요.</p>
+          <p>아이와 보낸 일주일, 최대 7장으로 남겨요.</p>
         </div>
         <nav aria-label="Footer navigation">
           <Link href="/privacy">개인정보 처리방침</Link>

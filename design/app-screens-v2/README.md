@@ -19,8 +19,8 @@
 V2는 V1의 따뜻한 앨범 정서는 유지하면서, 부모의 실제 문제와 Weekkeep만의 상호작용을 더 선명하게 만들었습니다.
 
 - 첫 문장은 `사진은 많은데, 정리할 시간은 없으니까.`로 시작합니다.
-- 분석 전 화면은 초안이 이미 준비됐다고 주장하지 않습니다.
-- 사용자는 빈 화면에서 고르지 않고 최대 7장의 초안을 검토합니다.
+- Ready 화면은 사진을 살펴보기 전이며, 결과가 이미 마련됐다고 주장하지 않습니다.
+- 사용자는 빈 화면에서 고르지 않고 기기가 준비한 최대 7장의 순간을 검토합니다.
 - 마음에 들지 않는 사진만 선택해 교체합니다.
 - 사진은 광고 사진보다 실제 iPhone 카메라롤에 가까운 생활감을 가집니다.
 - 저장 순간 grid가 한 장의 Week album으로 정리되는 방향을 사용합니다.
@@ -50,9 +50,9 @@ V2는 V1의 따뜻한 앨범 정서는 유지하면서, 부모의 실제 문제�
 |---:|---|---|---|
 | 00 | QA | `00-v2-contact-sheet.png` | 전체 화면 통일성 검토 |
 | 01 | `SCR-ONB-01` | `01-onboarding-welcome.png` | 첫 가치·최대 7장·기기 내 처리 |
-| 02 | `SCR-WK-01` | `02-this-week-ready.png` | 분석 전 ready; foreground 분석 시작 |
+| 02 | `SCR-WK-01` | `02-this-week-ready.png` | 사진을 살펴보기 전 ready; 앱을 열어 시작 |
 | 03 | `SCR-WK-02` | `03-curation-progress.png` | 4/7 진행 예시·취소·기기 내 처리 |
-| 04 | `SCR-WK-03` | `04-weekly-review.png` | 7장 초안 검토·선택 사진 교체 |
+| 04 | `SCR-WK-03` | `04-weekly-review.png` | 최대 7장 검토·원하지 않는 사진 교체 |
 | 05 | `SCR-WK-04` | `05-photo-viewer.png` | 1/7 확대·swipe·현재 사진 교체 |
 | 06 | `SCR-WK-05` | `06-save-confirmation.png` | 한 주가 앨범이 된 완료 보상 |
 | 06a | `SHEET-SHARE-01` | production share preparation sheet | Story/Post local share preview와 native share |
@@ -62,7 +62,7 @@ V2는 V1의 따뜻한 앨범 정서는 유지하면서, 부모의 실제 문제�
 | 10 | `SCR-ARC-01` | `10-weeks-archive.png` | 세 주의 읽기 전용 보관함 |
 | 11 | `SCR-ARC-02` | `11-week-detail.png` | 정확히 7장의 읽기 전용 상세 |
 | 12 | `SCR-SET-01` | `12-settings.png` | 사진·알림·Plus·로컬 저장·신뢰 상태 |
-| 13 | `SCR-SET-02` | `13-privacy.png` | 기기 내 분석·서버 전송 없음·별도 백업 없음 |
+| 13 | `SCR-SET-02` | `13-privacy.png` | 기기 내 처리·사진 정보 분석 전송 없음·별도 백업 없음 |
 | 14 | `SCR-SET-03` | `14-about-support.png` | 도움말·법적 링크·폰트 표기 |
 
 `00-v1-style-reference.png`는 V1과의 시각적 비교를 위한 보존 파일이며 V2의 source of truth가 아닙니다.

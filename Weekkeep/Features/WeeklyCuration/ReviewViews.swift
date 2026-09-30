@@ -41,15 +41,10 @@ struct WeeklyReviewView: View {
   static let partialSuccessAccessibilityIdentifier = "SCR-WK-03-PartialSuccess"
 
   let model: WeeklyFlowModel
-  @Environment(\.weekkeepWindowSafeAreaTop) private var windowSafeAreaTop
 
   var body: some View {
     GeometryReader { proxy in
       let screenEdge = WeeklyReviewSpacing.screenEdge(for: proxy.size.width)
-      // RootView resolves the runtime-first system boundary once. Keep the
-      // local proxy inset as an additional runtime measurement, but do not
-      // reintroduce a device-independent global fallback here.
-      let occlusionHeight = max(windowSafeAreaTop, proxy.safeAreaInsets.top)
 
       ScrollView {
           VStack(alignment: .leading, spacing: 0) {
@@ -124,18 +119,7 @@ struct WeeklyReviewView: View {
           .padding(.bottom, WeeklyReviewSpacing.screenBottom + WeeklyReviewSpacing.scrollRunway)
       }
       .scrollIndicators(.hidden)
-      // The review route is hosted by the tab shell, whose scroll surface can
-      // extend behind the system status region. Keep the header free to
-      // scroll, but invisibly mask unsafe-area content with the same Cream
-      // surface so text never remains legible beneath system indicators.
-      .overlay(alignment: .top) {
-        WeekkeepColors.primaryBackground
-          .frame(maxWidth: .infinity)
-          .frame(height: occlusionHeight)
-          .offset(y: -occlusionHeight)
-          .allowsHitTesting(false)
-          .accessibilityHidden(true)
-      }
+      .weekkeepTopSystemOcclusion(localSafeAreaTop: proxy.safeAreaInsets.top)
     }
     .fullScreenCover(item: viewerBinding) { destination in
       if case .viewer(let index) = destination, let draft = model.draft {
@@ -341,7 +325,13 @@ struct PhotoViewerView: View {
 
       TabView(selection: $currentIndex) {
         ForEach(photos.indices, id: \.self) { index in
-          PhotoThumbnailView(photo: photos[index], photoLibrary: photoLibrary, contentMode: .fit)
+          PhotoThumbnailView(
+            photo: photos[index],
+            photoLibrary: photoLibrary,
+            contentMode: .fit,
+            targetSize: index == currentIndex ? PhotoDisplayTarget.viewer : PhotoDisplayTarget.reviewTile,
+            priority: index == currentIndex ? .hero : .prefetch
+          )
             .tag(index)
             .padding(.horizontal, WeekkeepSpacing.two)
         }
@@ -354,7 +344,12 @@ struct PhotoViewerView: View {
       ScrollView(.horizontal, showsIndicators: false) {
         HStack(spacing: WeekkeepSpacing.two) {
           ForEach(photos.indices, id: \.self) { index in
-            PhotoThumbnailView(photo: photos[index], photoLibrary: photoLibrary)
+            PhotoThumbnailView(
+              photo: photos[index],
+              photoLibrary: photoLibrary,
+              targetSize: PhotoDisplayTarget.strip,
+              priority: .prefetch
+            )
               .frame(width: 50, height: 64)
               .clipShape(RoundedRectangle(cornerRadius: WeekkeepRadii.small))
               .overlay {
@@ -400,7 +395,11 @@ struct ReplacePhotoSheet: View {
         VStack(alignment: .leading, spacing: WeekkeepSpacing.four) {
           Text("replace.current")
             .font(.weekkeepHeadline)
-          PhotoThumbnailView(photo: current, photoLibrary: photoLibrary)
+          PhotoThumbnailView(
+            photo: current,
+            photoLibrary: photoLibrary,
+            targetSize: PhotoDisplayTarget.cover
+          )
             .frame(height: 150)
             .clipShape(RoundedRectangle(cornerRadius: WeekkeepRadii.medium))
           Text("replace.sameDay")
@@ -506,7 +505,11 @@ private struct ReplacementCandidateGrid: View {
           onSelect(candidate)
         } label: {
           VStack(alignment: .leading, spacing: WeekkeepSpacing.one) {
-            PhotoThumbnailView(photo: candidate, photoLibrary: photoLibrary)
+            PhotoThumbnailView(
+              photo: candidate,
+              photoLibrary: photoLibrary,
+              targetSize: PhotoDisplayTarget.reviewTile
+            )
               .aspectRatio(1, contentMode: .fit)
               .clipShape(RoundedRectangle(cornerRadius: WeekkeepRadii.small))
             Text(

@@ -72,8 +72,11 @@ final class WeeklyFlowModel {
     var progress: CurationProgress?
     var reviewState: CurationReviewState = .idle
     private(set) var eligiblePhotoCountForCuration: Int?
+    private(set) var resolvedCurationRange: WeekRange?
+    private(set) var firstAlbumRangeStrategy: WelcomeAlbumRangeStrategy?
     var reviewPresentation = ReviewPresentationState.initial
     var savedAlbum: WeeklyAlbumSnapshot?
+    var waitingAlbum: WeeklyAlbumSnapshot?
     private(set) var savedAlbumCount: Int? = nil
     var sheet: WeeklySheet?
     var errorMessage: String?
@@ -81,21 +84,30 @@ final class WeeklyFlowModel {
     var replacementShowsOtherDays = false
 
     @ObservationIgnored private var analysisTask: Task<Void, Never>?
+    @ObservationIgnored private var activeAnalysisRunID: UUID?
+    @ObservationIgnored private var analysisTaskRunID: UUID?
     @ObservationIgnored private var reviewActivity = ReviewActivityTracker()
     @ObservationIgnored private var hasAppeared = false
     @ObservationIgnored private var isRefreshing = false
     @ObservationIgnored private var shouldOfferNotificationPrimerAfterSave = false
     @ObservationIgnored private var postSaveDestination: AppTab?
     @ObservationIgnored private let curationClock: any CurationMonotonicClock
+    @ObservationIgnored private let nowProvider: @Sendable () -> Date
     @ObservationIgnored private var analysisStartNanoseconds: UInt64?
+    @ObservationIgnored private var lastCapturedEligibleWeekKey: String?
 
     private var rootStateReducer: WeekRootStateReducer {
         WeekRootStateReducer(freeAlbumLimit: environment.entitlementPolicy.freeAlbumLimit)
     }
 
-    init(environment: AppEnvironment, curationClock: any CurationMonotonicClock = SystemCurationMonotonicClock()) {
+    init(
+        environment: AppEnvironment,
+        curationClock: any CurationMonotonicClock = SystemCurationMonotonicClock(),
+        nowProvider: @escaping @Sendable () -> Date = { Date() }
+    ) {
         self.environment = environment
         self.curationClock = curationClock
+        self.nowProvider = nowProvider
     }
 
     deinit {
@@ -146,6 +158,8 @@ final class WeeklyFlowModel {
         guard route == nil, !isRefreshing else { return }
         isRefreshing = true
         eligiblePhotoCountForCuration = nil
+        resolvedCurationRange = nil
+        firstAlbumRangeStrategy = nil
         defer { isRefreshing = false }
 
         let permission = await environment.photoLibrary.authorizationStatus()
@@ -170,29 +184,52 @@ final class WeeklyFlowModel {
         }
         savedAlbumCount = albums.count
 
-        let now = Date()
+        let now = nowProvider()
         let welcomeSaved = albums.contains { $0.kind == .welcome }
         if environment.regularCycleStartsAt == nil,
            let welcome = albums.first(where: { $0.kind == .welcome }) {
-            environment.regularCycleStartsAt = environment.weekCalculator.regularCycleStart(forWelcomeSavedAt: welcome.createdAt)
+            environment.regularCycleStartsAt = environment.weekCalculator.regularCycleStart(
+                forWelcomeRange: weekRange(from: welcome),
+                savedAt: welcome.createdAt
+            )
         }
 
         if !welcomeSaved {
             savedAlbum = nil
+            waitingAlbum = nil
+            environment.pendingWeeklyEntryPoint = nil
             let local = LocalWeekState(
                 welcomeSaved: false,
                 target: nil,
                 savedAlbumID: nil,
                 savedAlbumCount: albums.count
             )
-            let welcomeRange = environment.weekCalculator.welcomeRange(analysisStartedAt: now)
+            let candidates = environment.weekCalculator.firstAlbumRangeCandidates(now: now)
             rootState = .loading(.photos)
             do {
-                let descriptors = try await environment.photoLibrary.fetchDescriptors(
-                    in: DateInterval(start: welcomeRange.start, end: welcomeRange.end),
+                let preferredDescriptors = try await environment.photoLibrary.fetchDescriptors(
+                    in: DateInterval(start: candidates.preferred.start, end: candidates.preferred.end),
                     limit: 500
                 )
-                let eligibleCount = descriptors.filter(\.isEligible).count
+                let preferredCount = preferredDescriptors.filter(\.isEligible).count
+                let fallbackCount: Int
+                if preferredCount == 0 {
+                    let fallbackDescriptors = try await environment.photoLibrary.fetchDescriptors(
+                        in: DateInterval(start: candidates.fallback.start, end: candidates.fallback.end),
+                        limit: 500
+                    )
+                    fallbackCount = fallbackDescriptors.filter(\.isEligible).count
+                } else {
+                    fallbackCount = 0
+                }
+                let selection = environment.weekCalculator.selectFirstAlbumRange(
+                    now: now,
+                    preferredEligiblePhotoCount: preferredCount,
+                    fallbackEligiblePhotoCount: fallbackCount
+                )
+                resolvedCurationRange = selection?.range
+                firstAlbumRangeStrategy = selection?.strategy
+                let eligibleCount = selection?.eligiblePhotoCount ?? 0
                 eligiblePhotoCountForCuration = eligibleCount
                 rootState = rootStateReducer.reduce(snapshot: WeekRootSnapshot(
                     permission: permissionState,
@@ -220,6 +257,9 @@ final class WeeklyFlowModel {
 
         guard let target else {
             savedAlbum = nil
+            resolvedCurationRange = nil
+            waitingAlbum = await latestSavedAlbum(from: albums)
+            environment.pendingWeeklyEntryPoint = nil
             rootState = rootStateReducer.reduce(snapshot: WeekRootSnapshot(
                 permission: permissionState,
                 localState: .loaded(local),
@@ -229,7 +269,11 @@ final class WeeklyFlowModel {
             return
         }
 
+        resolvedCurationRange = target
+        firstAlbumRangeStrategy = nil
         if let saved {
+            waitingAlbum = nil
+            environment.pendingWeeklyEntryPoint = nil
             do {
                 guard let album = try await environment.albumStore.album(for: saved.weekKey) else {
                     rootState = .recoverableError(.localState)
@@ -249,6 +293,7 @@ final class WeeklyFlowModel {
         }
 
         savedAlbum = nil
+        waitingAlbum = nil
         rootState = .loading(.photos)
         let eligibleCount: Int
         do {
@@ -272,11 +317,58 @@ final class WeeklyFlowModel {
             eligiblePhotoCount: .loaded(eligibleCount),
             creationAccess: access
         ))
+        captureEligibleWeekOpenedIfNeeded(for: target)
+    }
+
+    var nextEligibleDate: Date? {
+        guard let cycle = environment.regularCycleStartsAt else { return nil }
+        return environment.weekCalculator.regularRange(startingAt: cycle).eligibleFrom
+    }
+
+    private func captureEligibleWeekOpenedIfNeeded(for target: WeekRange) {
+        let pendingEntryPoint = environment.pendingWeeklyEntryPoint
+        guard pendingEntryPoint != nil || lastCapturedEligibleWeekKey != target.key else { return }
+        let entryPoint = pendingEntryPoint ?? .direct
+        lastCapturedEligibleWeekKey = target.key
+        environment.pendingWeeklyEntryPoint = nil
+        Task {
+            await environment.analyticsClient.capture(.eligibleWeekOpened(entryPoint: entryPoint))
+        }
+    }
+
+    private func latestSavedAlbum(from summaries: [WeeklyAlbumSummary]) async -> WeeklyAlbumSnapshot? {
+        let latest = summaries.max { lhs, rhs in
+            if lhs.createdAt != rhs.createdAt { return lhs.createdAt < rhs.createdAt }
+            if lhs.weekStart != rhs.weekStart { return lhs.weekStart < rhs.weekStart }
+            return lhs.id.uuidString < rhs.id.uuidString
+        }
+        guard let latest else { return nil }
+        guard let album = try? await environment.albumStore.album(for: latest.weekKey) else {
+            return nil
+        }
+        let availableIDs = await environment.photoLibrary.assetAvailability(
+            for: album.photos.map(\.assetLocalIdentifier)
+        )
+        return album.withAvailability(availableIDs)
+    }
+
+    private func weekRange(from summary: WeeklyAlbumSummary) -> WeekRange {
+        WeekRange(
+            key: summary.weekKey,
+            start: summary.weekStart,
+            end: summary.weekEnd,
+            cutoff: summary.weekEnd,
+            eligibleFrom: summary.kind == .regular ? summary.weekEnd : nil,
+            eligibleUntil: summary.kind == .regular
+                ? environment.weekCalculator.regularRange(startingAt: summary.weekStart).eligibleUntil
+                : nil,
+            kind: summary.kind
+        )
     }
 
     func requestPhotosAndStart() async {
         let status = await environment.photoLibrary.requestAuthorization()
-        await environment.analyticsClient.capture(.photoPermissionResolved(status: permissionBucket(status)))
+        await environment.analyticsClient.capture(.photoPermissionResolved(status: status.analyticsValue))
         if status.accessScope != nil {
             environment.onboardingCompleted = true
             await refresh()
@@ -288,18 +380,24 @@ final class WeeklyFlowModel {
 
     func startCuration() {
         guard analysisTask == nil else { return }
-        let now = Date()
         switch rootState {
         case .welcomePending:
-            beginCuration(kind: .welcome, target: environment.weekCalculator.welcomeRange(analysisStartedAt: now))
+            guard let target = resolvedCurationRange,
+                  target.kind == .welcome else {
+                Task { await refresh() }
+                return
+            }
+            beginCuration(kind: .welcome, target: target)
         case .ready:
-            guard let regular = environment.weekCalculator.latestEligibleRegular(now: now, regularCycleStartsAt: environment.regularCycleStartsAt) else {
+            guard let regular = resolvedCurationRange,
+                  regular.kind == .regular else {
                 Task { await refresh() }
                 return
             }
             beginCuration(kind: .regular, target: regular)
         case .entitlementLocked:
-            guard let regular = environment.weekCalculator.latestEligibleRegular(now: now, regularCycleStartsAt: environment.regularCycleStartsAt) else {
+            guard let regular = resolvedCurationRange,
+                  regular.kind == .regular else {
                 Task { await refresh() }
                 return
             }
@@ -313,8 +411,10 @@ final class WeeklyFlowModel {
     }
 
     func cancelCuration() {
+        activeAnalysisRunID = nil
         analysisTask?.cancel()
         analysisTask = nil
+        analysisTaskRunID = nil
         analysisStartNanoseconds = nil
         progress = nil
         reviewState = .idle
@@ -388,8 +488,11 @@ final class WeeklyFlowModel {
                 if let count = try? await environment.albumStore.savedAlbumCount() {
                     savedAlbumCount = count
                 }
-                if draft.kind == .welcome {
-                    environment.regularCycleStartsAt = environment.weekCalculator.regularCycleStart(forWelcomeSavedAt: album.createdAt)
+                if draft.kind == .welcome, environment.regularCycleStartsAt == nil {
+                    environment.regularCycleStartsAt = environment.weekCalculator.regularCycleStart(
+                        forWelcomeRange: draft.week,
+                        savedAt: album.createdAt
+                    )
                 }
                 let sequence = draft.kind == .welcome ? "not_applicable" : sequenceBucket(for: draft.week.start)
                 await environment.analyticsClient.capture(.albumSaved(
@@ -457,7 +560,7 @@ final class WeeklyFlowModel {
         if status == .authorized || status == .provisional {
             if let cycle = environment.regularCycleStartsAt {
                 try? await environment.notificationClient.scheduleWeeklyReminders(
-                    now: Date(),
+                    now: nowProvider(),
                     regularCycleStartsAt: cycle,
                     calendar: reminderCalendar()
                 )
@@ -593,6 +696,9 @@ final class WeeklyFlowModel {
             return
         }
         let candidateCountBucket = AnalyticsBucketContract.candidateCount(for: eligiblePhotoCount)
+        let runID = UUID()
+        activeAnalysisRunID = runID
+        analysisTaskRunID = runID
         pinnedTarget = target
         route = .curation
         draft = nil
@@ -601,30 +707,38 @@ final class WeeklyFlowModel {
         progress = CurationProgress(stage: .fetchingAssets, completed: 0, total: 0, skippedCount: 0)
         analysisStartNanoseconds = curationClock.nowNanoseconds()
         Task { await environment.analyticsClient.capture(.curationStarted(albumKind: kind, candidateCountBucket: candidateCountBucket)) }
-        analysisTask = Task { [weak self] in
+        analysisTask = Task { @MainActor [weak self] in
             guard let self else { return }
+            defer { cleanupAnalysis(for: runID) }
             do {
                 let draft = try await environment.analysisService.makeDraft(
                     kind: kind,
                     week: target,
                     analysisCutoff: target.cutoff,
                     progress: { [weak self] progress in
-                        Task { @MainActor [weak self] in self?.progress = progress }
+                        Task { @MainActor [weak self] in
+                            guard let self, self.activeAnalysisRunID == runID else { return }
+                            self.progress = progress
+                        }
                     }
                 )
                 try Task.checkCancellation()
-                draftDidFinish(draft)
+                guard activeAnalysisRunID == runID else { return }
+                draftDidFinish(draft, runID: runID)
             } catch is CancellationError {
-                analysisDidCancel()
+                guard activeAnalysisRunID == runID else { return }
+                analysisDidCancel(runID: runID)
             } catch {
-                analysisDidFail()
+                guard activeAnalysisRunID == runID else { return }
+                analysisDidFail(runID: runID)
             }
-            analysisTask = nil
         }
     }
 
-    private func draftDidFinish(_ draft: CurationDraft) {
+    private func draftDidFinish(_ draft: CurationDraft, runID: UUID) {
+        guard activeAnalysisRunID == runID else { return }
         let durationBucket = completedAnalysisDurationBucket()
+        activeAnalysisRunID = nil
         self.draft = draft
         self.progress = nil
         self.route = .review
@@ -636,7 +750,9 @@ final class WeeklyFlowModel {
         }
     }
 
-    private func analysisDidCancel() {
+    private func analysisDidCancel(runID: UUID) {
+        guard activeAnalysisRunID == runID else { return }
+        activeAnalysisRunID = nil
         analysisStartNanoseconds = nil
         progress = nil
         reviewState = .idle
@@ -645,7 +761,9 @@ final class WeeklyFlowModel {
         Task { await refresh() }
     }
 
-    private func analysisDidFail() {
+    private func analysisDidFail(runID: UUID) {
+        guard activeAnalysisRunID == runID else { return }
+        activeAnalysisRunID = nil
         analysisStartNanoseconds = nil
         progress = nil
         reviewState = .idle
@@ -655,14 +773,10 @@ final class WeeklyFlowModel {
         Task { await refresh() }
     }
 
-    private func permissionBucket(_ status: PhotoAuthorization) -> String {
-        switch status {
-        case .authorized: "full"
-        case .limited: "limited"
-        case .denied: "denied"
-        case .restricted: "restricted"
-        case .notDetermined: "not_determined"
-        }
+    private func cleanupAnalysis(for runID: UUID) {
+        guard analysisTaskRunID == runID else { return }
+        analysisTask = nil
+        analysisTaskRunID = nil
     }
 
     private func sequenceBucket(for weekStart: Date) -> String {

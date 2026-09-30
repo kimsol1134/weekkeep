@@ -4,7 +4,7 @@
 |---|---|
 | 상태 | Approved |
 | 역할 | Current design baseline |
-| 승인일 | 2026-08-05 |
+| 승인일 | 2026-08-07 |
 | 승인 근거 | `codex://threads/019fcf07-80f5-7b13-877b-771bee4e572c` 및 현재 사용자 지시 |
 | 대상 | Weekkeep V1 |
 | 화면 기준 | [App Screens V2](app-screens-v2/README.md) |
@@ -35,10 +35,12 @@
 - Weekly Review는 compact header cluster(뒤로가기·주차/날짜·정확히 7개의 독립 stitch) 뒤에 사진 collage를 우선 배치하고, 7장은 full-width 16:10 hero+2+4, 1–6장은 실제 장수에 맞는 adaptive layout (`D-024`)
 - Weekly Review의 간격은 `WeeklyReviewSpacing` semantic hierarchy(screen edge → header → editorial → media → helper/replace → privacy → primary action)를 따르며, root edge는 `WeekkeepScreenLayout`의 20pt(폭 376pt 이상) / 16pt(폭 375pt 이하) responsive contract를 사용하고 header→editorial 32pt, title/body 12pt, editorial/body→media 32pt, photo gutter 8pt, lower actions 16pt·16pt·24pt를 유지함. Platform safe area는 root에서 한 번만 측정하고, hosted ScrollView의 unsafe top underlap은 같은 Cream surface로 invisibly occlude하며 72pt real runway로 lower frame을 안정시킴. App Store top/lower captures는 scroll position만 다르게 하며 production layout을 압축하지 않음
 - Review 저장 CTA는 grid 전체와 helper/replacement action, quiet inline lock/privacy note 뒤의 normal scroll content에 놓이며 safe-area dock으로 collage를 덮지 않음
-- `PrivacyBadge`는 full-width tinted container가 아닌 작은 lock + factual local-only inline note로 표시
+- `PrivacyBadge`는 full-width tinted container가 아닌 작은 lock + factual on-device-processing inline note로 표시
 - SevenStitchRail은 모든 상태에서 code-rendered exact 7 (`D-028`)
 - top-level tabs는 calendar/week·stacked album/pages·adjustment sliders의 고유 semantic Plum glyph만 사용하고 decorative exact-seven signature는 제외하며 localized labels와 accessibility identifiers를 유지한다 (`D-030`)
 - Review에서 첫 tap은 사진 선택과 `이 사진 바꾸기` 노출, 선택된 사진의 두 번째 tap은 viewer (`D-029`)
+- 카피의 SSOT는 `Weekkeep/Resources/Localizable.xcstrings`이며, Welcome CTA는 `첫 주 추억 고르기 / Choose your first week`, Ready CTA는 `지난주 추억 고르기 / Choose moments from last week`입니다. Welcome은 가장 최근 완료된 월–일 주에서 시작하고, 그 주가 비었을 때만 최근 7일 fallback을 명시합니다. 앱·IA·Design Guide·공개 메타데이터는 `초안`/`draft` 같은 내부 용어를 사용자 문구에 노출하지 않고, 최대 7장·사용자 교체·기기 내 처리·로컬 보존 한계를 함께 설명합니다.
+- `preRegularWaiting`은 compact header의 기존 SevenStitchRail을 재사용하며 두 번째 rail을 추가하지 않습니다. 최신 저장 앨범의 실제 cover/placeholder, 날짜 범위, 정확한 다음 가능일, Archive 보기와 기존 local share action을 semantic card 안에서 normal flow로 제공합니다.
 - 앱 아이콘과 인앱 rail은 왼쪽부터 `#E97A68`–`#E39455`–`#E5A84B`–`#66836E`–`#5F879B`–`#686286`–`#8A6386`의 index별 muted seven-stitch palette를 공유하며, rail state는 opacity와 geometry로 표현 (`D-030`)
 - onboarding upper-left와 작은 인앱 header는 `brand/weekkeep-wordmark.*`에서 파생한 canonical Plum wordmark-only image resource를 사용하고, 외부 브랜드 surface만 exact-seven lockup을 사용할 수 있음 (`D-031`)
 - onboarding·Ready·Plus explanatory preview는 `fixtures/app-store-family-moments/`의 승인된 seven fictional PNG만 공유하는 flat `FixturePhotoStory`를 사용한다. onboarding은 vertical binding, Ready/Plus는 compact exact-seven rail과 hero+2+4 mosaic를 사용하며 faux-content bars, gradient/SF fake-photo art, overlapping card stack, device chrome 없이 하나의 calm paper surface에 배치한다 (`D-031`, `D-035`)

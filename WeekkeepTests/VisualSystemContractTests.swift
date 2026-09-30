@@ -410,7 +410,6 @@ final class VisualSystemContractTests: XCTestCase {
       "Weekkeep/Features/Archive/ArchiveViews.swift",
       "Weekkeep/Features/Paywall/PlusPaywallView.swift",
       "Weekkeep/Features/Sharing/WeeklyAlbumShare.swift",
-      "Weekkeep/Features/Settings/SettingsViews.swift",
     ] {
       let source = try String(
         contentsOf: repositoryRoot.appendingPathComponent(path),
@@ -421,6 +420,14 @@ final class VisualSystemContractTests: XCTestCase {
         "Missing responsive root-edge contract in \(path)"
       )
     }
+
+    let settingsSource = try String(
+      contentsOf: repositoryRoot.appendingPathComponent(
+        "Weekkeep/Features/Settings/SettingsViews.swift"),
+      encoding: .utf8
+    )
+    XCTAssertTrue(settingsSource.contains("List {"))
+    XCTAssertTrue(settingsSource.contains(".listStyle(.insetGrouped)"))
 
     XCTAssertEqual(WeeklyAlbumShareSpacing.rootSection, WeekkeepSpacing.six)
     let shareSource = try String(
@@ -465,13 +472,9 @@ final class VisualSystemContractTests: XCTestCase {
     XCTAssertGreaterThan(WeeklyReviewSpacing.primaryAction, WeeklyReviewSpacing.privacy)
     XCTAssertGreaterThanOrEqual(WeeklyReviewSpacing.mediaGrid, WeekkeepSpacing.two)
     XCTAssertTrue(reviewSource.contains("proxy.safeAreaInsets.top"))
-    XCTAssertTrue(reviewSource.contains("weekkeepWindowSafeAreaTop"))
+    XCTAssertTrue(reviewSource.contains("weekkeepTopSystemOcclusion"))
     XCTAssertTrue(reviewSource.contains("WeeklyReviewSpacing.scrollRunway"))
-    XCTAssertTrue(reviewSource.contains("let occlusionHeight = max(windowSafeAreaTop, proxy.safeAreaInsets.top)"))
     XCTAssertFalse(reviewSource.contains("WeekkeepSystemSafeArea.top"))
-    XCTAssertTrue(reviewSource.contains("WeekkeepColors.primaryBackground"))
-    XCTAssertTrue(reviewSource.contains(".allowsHitTesting(false)"))
-    XCTAssertTrue(reviewSource.contains(".accessibilityHidden(true)"))
 
     let rootSource = try String(
       contentsOf: repositoryRoot.appendingPathComponent("Weekkeep/App/RootView.swift"),
@@ -498,6 +501,107 @@ final class VisualSystemContractTests: XCTestCase {
       XCTAssertTrue(
         reviewSource.contains(marker), "Missing Weekly Review spacing marker: \(marker)")
     }
+  }
+
+  func testTopOcclusionIsSharedByOnboardingAndWeeklyReviewWithoutTouchOrAccessibilityCapture() throws {
+    let onboardingSource = try String(
+      contentsOf: repositoryRoot.appendingPathComponent(
+        "Weekkeep/Features/Onboarding/OnboardingView.swift"),
+      encoding: .utf8
+    )
+    let reviewSource = try String(
+      contentsOf: repositoryRoot.appendingPathComponent(
+        "Weekkeep/Features/WeeklyCuration/ReviewViews.swift"),
+      encoding: .utf8
+    )
+    let themeSource = try String(
+      contentsOf: repositoryRoot.appendingPathComponent(
+        "Weekkeep/DesignSystem/Theme/WeekkeepTheme.swift"),
+      encoding: .utf8
+    )
+
+    XCTAssertTrue(
+      onboardingSource.contains(
+        ".weekkeepTopSystemOcclusion(localSafeAreaTop: proxy.safeAreaInsets.top)"
+      )
+    )
+    XCTAssertTrue(
+      reviewSource.contains(
+        ".weekkeepTopSystemOcclusion(localSafeAreaTop: proxy.safeAreaInsets.top)"
+      )
+    )
+    XCTAssertTrue(themeSource.contains("WeekkeepTopSystemOcclusion.height"))
+    XCTAssertTrue(themeSource.contains(".allowsHitTesting(false)"))
+    XCTAssertTrue(themeSource.contains(".accessibilityHidden(true)"))
+    XCTAssertTrue(themeSource.contains("WeekkeepColors.primaryBackground"))
+  }
+
+  func testThisWeekUsesSemanticTabHostScrollClearance() throws {
+    XCTAssertEqual(
+      WeekkeepTabHostSpacing.bottomScrollClearance,
+      WeekkeepSpacing.sixteen + WeekkeepSpacing.two
+    )
+    XCTAssertGreaterThan(WeekkeepTabHostSpacing.bottomScrollClearance, WeekkeepSpacing.six)
+
+    let weeklySource = try String(
+      contentsOf: repositoryRoot.appendingPathComponent(
+        "Weekkeep/Features/WeeklyCuration/WeeklyViews.swift"),
+      encoding: .utf8
+    )
+    let normalizedWeeklySource = weeklySource.replacingOccurrences(
+      of: "\\s+",
+      with: " ",
+      options: .regularExpression
+    )
+    let internalClearance =
+      ".padding(.bottom, WeekkeepSpacing.six + WeekkeepTabHostSpacing.bottomScrollClearance)"
+    XCTAssertEqual(
+      normalizedWeeklySource.components(separatedBy: internalClearance).count - 1,
+      1,
+      "This Week must keep tab-bar clearance inside the ScrollView content"
+    )
+    let internalClearanceRange = try XCTUnwrap(normalizedWeeklySource.range(of: internalClearance))
+    let scrollIndicatorsRange = try XCTUnwrap(
+      normalizedWeeklySource.range(of: ".scrollIndicators(.hidden)")
+    )
+    XCTAssertLessThan(
+      internalClearanceRange.lowerBound,
+      scrollIndicatorsRange.lowerBound,
+      "Content runway must be applied before the ScrollView modifier boundary"
+    )
+    XCTAssertFalse(
+      normalizedWeeklySource.contains(
+        ".scrollIndicators(.hidden) .padding(.bottom, WeekkeepTabHostSpacing.bottomScrollClearance)"
+      ),
+      "This Week must not shrink the ScrollView viewport with outer bottom clearance"
+    )
+    XCTAssertFalse(weeklySource.contains(".safeAreaInset(edge: .bottom"))
+    XCTAssertFalse(weeklySource.contains("ThisWeekBottomInset"))
+    XCTAssertFalse(weeklySource.contains("ThisWeekPinnedStartFooter"))
+    XCTAssertFalse(weeklySource.contains("showsPinnedStartAction"))
+    XCTAssertFalse(weeklySource.contains("bottomTabBarBreathingRoom"))
+    XCTAssertTrue(weeklySource.contains("SCR-WK-01-Start"))
+    XCTAssertTrue(weeklySource.contains("action: model.startCuration"))
+    XCTAssertTrue(weeklySource.contains("WeekkeepPrimaryButton("))
+    let readyBodyRange = try XCTUnwrap(
+      weeklySource.range(of: "isWelcome ? \"week.welcomeBody\""),
+      "ReadyStateView must keep the completed-week body in the welcome branch"
+    )
+    let readyCTARange = try XCTUnwrap(weeklySource.range(of: "WeekkeepPrimaryButton("))
+    let readyPhotoStoryRange = try XCTUnwrap(weeklySource.range(of: "ReadyPhotoStack()"))
+    XCTAssertLessThan(readyBodyRange.lowerBound, readyCTARange.lowerBound)
+    XCTAssertLessThan(readyCTARange.lowerBound, readyPhotoStoryRange.lowerBound)
+    XCTAssertFalse(weeklySource.contains("bottomTabBarOcclusion"))
+    XCTAssertFalse(weeklySource.contains("ZStack(alignment: .bottom)"))
+    XCTAssertFalse(weeklySource.contains(".ignoresSafeArea(edges: .bottom)"))
+
+    let settingsSource = try String(
+      contentsOf: repositoryRoot.appendingPathComponent(
+        "Weekkeep/Features/Settings/SettingsViews.swift"),
+      encoding: .utf8
+    )
+    XCTAssertFalse(settingsSource.contains("bottomTabBarOcclusion"))
+    XCTAssertFalse(settingsSource.contains(".ignoresSafeArea(edges: .bottom)"))
   }
 
   private var repositoryRoot: URL {

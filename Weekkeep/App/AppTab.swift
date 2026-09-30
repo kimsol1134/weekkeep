@@ -16,7 +16,6 @@ enum AppTab: String, CaseIterable, Hashable, Sendable {
 
 enum AppRoute: Hashable, Sendable {
     case album(weekKey: String)
-    case privacy
     case about
 }
 
@@ -89,8 +88,13 @@ struct AppRouter: Sendable {
     }
 
     @MainActor
-    func route(_ link: AppDeepLink, in environment: AppEnvironment) {
+    func route(
+        _ link: AppDeepLink,
+        in environment: AppEnvironment,
+        entryPoint: WeeklyEntryPointAnalyticsValue = .direct
+    ) {
         environment.pendingDeepLink = link
+        environment.pendingWeeklyEntryPoint = link == .weeklyCurrent ? entryPoint : nil
         environment.selectedTab = tab(for: link)
     }
 }

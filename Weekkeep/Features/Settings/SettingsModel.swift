@@ -124,7 +124,7 @@ final class SettingsModel {
 
     func requestPhotoAccess() async {
         let status = await environment.photoLibrary.requestAuthorization()
-        await environment.analyticsClient.capture(.photoPermissionResolved(status: permissionBucket(status)))
+        await environment.analyticsClient.capture(.photoPermissionResolved(status: status.analyticsValue))
         await refreshPhotoPermission()
     }
 
@@ -183,15 +183,6 @@ final class SettingsModel {
         )
     }
 
-    private func permissionBucket(_ status: PhotoAuthorization) -> String {
-        switch status {
-        case .authorized: "full"
-        case .limited: "limited"
-        case .denied: "denied"
-        case .restricted: "restricted"
-        case .notDetermined: "not_determined"
-        }
-    }
 }
 
 private extension RestoreOutcome {

@@ -2,8 +2,8 @@
 
 | 항목 | 값 |
 |---|---|
-| 문서 버전 | 0.5-approved |
-| 기준일 | 2026-08-05 |
+| 문서 버전 | 0.6-approved |
+| 기준일 | 2026-08-07 |
 | 상태 | Approved |
 | 단계 | Implementation |
 | 제품 책임 | Kim Sol + Codex |
@@ -13,14 +13,14 @@
 
 ### 제품 문장
 
-**Weekkeep은 바쁜 부모가 기기가 먼저 제안한 지난 일주일의 가족 사진 최대 7장을 1분 안에 확인하고 주간 기록으로 남기게 해주는, 프라이버시 중심 iPhone 앱이다.**
+**Weekkeep은 바쁜 부모가 가장 최근에 완료된 한 주에서 기기가 먼저 제안한 가족 사진 최대 7장을 1분 안에 확인하고 주간 기록으로 남기게 해주는, 프라이버시 중심 iPhone 앱이다.**
 
 ### 핵심 약속
 
 - 사진을 더 정리하라고 요구하지 않는다.
 - AI가 결정을 빼앗지 않고 첫 선택을 대신 준비한다.
 - 사용자는 7장을 확인하고 마음에 들지 않는 사진만 교체한다.
-- 사진은 가능한 한 기기 안에서만 처리한다.
+- 사진 고르기와 공유 이미지 만들기는 기기에서 처리하고, 사진 정보는 분석을 위해 외부 서비스로 보내지 않는다. 공유는 사용자가 직접 선택할 때만 시작한다.
 - 저장 후 실제 사진으로 만든 로컬 공유 이미지를 명시적 사용자 행동으로 내보내 한 주의 결과를 보상한다.
 - 매주 작은 기록 하나가 쌓이는 경험에만 집중한다.
 
@@ -83,7 +83,7 @@
 | `Rejected` | 검토 결과 채택하지 않음; 이력은 보존 |
 | `Deprecated` | 더 이상 적용하지 않지만 이력 보존 |
 
-문서, 요구사항, 결정, 가설은 위 영문 상태만 사용합니다. `확정`, `제안`, `가설`, `Accepted`, `Pending` 같은 별도 상태어를 만들지 않습니다. Gate의 `Ready/Open`은 아래 결정 상태에서 계산되는 결과이지 새로운 승인 상태가 아닙니다. 현재 0.5 기준 문서 세트는 2026-08-05 사용자 지시로 `Approved`되었고 구현 변경은 이 기준선을 따릅니다.
+문서, 요구사항, 결정, 가설은 위 영문 상태만 사용합니다. `확정`, `제안`, `가설`, `Accepted`, `Pending` 같은 별도 상태어를 만들지 않습니다. Gate의 `Ready/Open`은 아래 결정 상태에서 계산되는 결과이지 새로운 승인 상태가 아닙니다. 0.5 기준선은 2026-08-05에 승인되었고, 이번 0.6 제품 범위 보정은 2026-08-07 사용자 승인으로 `D-036`에 추가되었습니다.
 
 ## 5. Decision Registry — 결정값과 상태의 SSOT
 
@@ -94,7 +94,7 @@
 | `D-003` | V1은 iPhone·iOS 18+ | `Approved` | Product+Engineering | 2026-08-05 | `ADR-002`, `GATE-01` |
 | `D-004` | 한 기록의 결과는 1–7장 | `Approved` | Product | 2026-08-05 | `FR-007`, `FR-008` |
 | `D-005` | 초기 shortlist는 선택 7장과 교체 후보 7장을 합쳐 최대 14장 | `Approved` | Product+Engineering | 2026-08-05 | `ADR-006`, `GATE-02` |
-| `D-006` | 사진 데이터와 사진 식별자는 외부 분석으로 전송하지 않음 | `Approved` | Product+Engineering | 2026-08-05 | `NFR-001` |
+| `D-006` | 사진 선택과 공유 이미지 렌더링은 iPhone에서 처리하고, 사진·사진 정보는 분석을 위해 analytics/other services로 전송하지 않으며, 공유는 명시적 사용자 선택으로만 시작 | `Approved` | Product+Engineering | 2026-08-05 | `NFR-001`, `FR-023` |
 | `D-007` | V1 persistence는 SwiftData 기기 로컬 전용이며 계정·백엔드·CloudKit을 제외 | `Approved` | Product+Engineering | 2026-08-05 | `ADR-004`, `GATE-07` |
 | `D-008` | Welcome을 포함해 저장 기록 2개까지 무료이며, 사진 1장 이상인 세 번째 미저장 target의 `만들기`부터 Plus gate 적용; 기존 저장 기록 열람은 무료 | `Approved` | Product | 2026-08-05 | `H-003`, `FR-016`, `GATE-05` |
 | `D-009` | V1 재방문 수단은 원격 푸시가 아닌 로컬 알림 | `Approved` | Product+Engineering | 2026-08-05 | `ADR-008` |
@@ -122,8 +122,9 @@
 | `D-031` | primary wordmark는 사용자가 제공한 canonical lowercase `weekkeep` wordmark asset의 Plum flat fill을 사용한다. `design/brand/weekkeep-wordmark.png`를 iOS image resource로 byte-preserving bundle하며 onboarding upper-left와 compact in-app header에서 wordmark-only로 사용한다. Onboarding keepsake preview는 wordmark 아래 하나의 warm paper/cream album card, vertical exact-seven binding, 일곱 fixture 사진을 사용하고 faux-content capsule bar나 overlapping card stack을 포함하지 않는다. exact-seven muted rainbow lockup은 외부 브랜드 surface에만 허용하고 AppIcon은 별도 asset contract를 따른다 | `Approved` | Product+Design | 2026-08-06 | Design Guide, Brand Assets, `TST-038`, `TST-043`, `GATE-10` |
 | `D-032` | metadata scan은 적격 descriptor를 최대 500개까지 읽되, Vision에 보내는 후보는 deterministic local-day/time-bucket prefilter로 최대 21개(7일×3개)로 제한한다. favorite·resolution은 coverage 이후의 tie-breaker이며 analysis thumbnail target은 384–448px 범위(현재 416px), per-asset/전체 foreground budget은 약 1.5초/12초다 | `Approved` | Product+Engineering | 2026-08-06 | `FR-005`, `NFR-002`, `ADR-013`, `GATE-12` |
 | `D-033` | Weekly Review replacement의 initial candidate set은 사용자의 display timezone에서 선택 사진과 같은 calendar day만 보여준다. same-day 후보가 없거나 사용자가 명시적으로 선택한 경우에만 다른 날짜를 명확히 그룹화해 보여주며, 분석 결과가 허용하면 selected day마다 미사용 강한 후보를 shortlist에 우선 보존한다 | `Approved` | Product+Design+Engineering | 2026-08-05 | `FR-010`, `ADR-014`, `GATE-13` |
-| `D-034` | 저장된 앨범은 실제 PhotoKit 이미지로 기기에서만 렌더링하는 두 local share format을 제공한다: Story `1080×1920` (9:16), Post `1080×1350` (4:5). native share sheet는 명시적 사용자 행동으로만 열며, V1에는 social feed·comments·likes·account·cloud upload·server rendering이 없다 | `Approved` | Product+Design+Engineering | 2026-08-05 | `FR-023`, `ADR-015`, `GATE-14` |
+| `D-034` | 저장된 앨범은 실제 PhotoKit 이미지로 기기에서만 렌더링한 local Story `1080×1920` (9:16)/Post `1080×1350` (4:5) image를 제공하며, image-first 순서와 기존 이미지 표현을 유지한다. 명시적 native share action 뒤에는 짧은 localized invitation과 canonical HTTPS App Store URL `https://apps.apple.com/app/id6798449478`을 별도 native share item으로 제공할 수 있다. 이미지에는 URL·QR·광고 overlay를 렌더링하지 않으며 destination-specific private identifier·Kakao SDK·upload·backend·public album·social feed·comments·likes·account·server rendering·recipient tracking·photo metadata collection을 사용하지 않는다 | `Approved` | Product+Design+Engineering | 2026-08-05 | `FR-023`, `ADR-015`, `GATE-14` |
 | `D-035` | 설명용 photo-story surface는 승인된 일곱 개의 fictional fixture PNG만 공유하는 하나의 flat hero+2+4 mosaic vocabulary를 사용한다. onboarding은 vertical exact-seven binding, Ready와 Plus는 compact exact-seven rail을 사용하며, gradient/SF Symbol fake-photo art·겹친 카드·faux device chrome·abstract keepsake-cover는 production surface에서 금지한다. Plus는 item-driven full-screen surface로 표시해 sheet chrome을 만들지 않는다. website hero와 `og.png`도 같은 flat photo-story 방향을 따르며 canonical lowercase wordmark를 사용한다 | `Approved` | Product+Design+Engineering | 2026-08-06 | Design SSOT, `ADR-016`, `TST-045`, `GATE-10` |
+| `D-036` | 첫 Welcome은 사용자의 로컬 시간대에서 가장 최근에 완전히 끝난 월–일 캘린더 주를 우선 조회하고, 그 주의 적격 사진이 0장일 때만 최근 rolling 7일을 정직한 fallback으로 조회한다. 양쪽 범위가 비면 empty state를 유지하며 선택된 `WeekRange`를 권한 재개·CTA·foreground curation 전체에 고정한다. 완료 주 Welcome 저장은 `regularCycleStartsAt = album.weekEnd`, rolling fallback과 기존 legacy rolling Welcome은 저장 시점 다음 월요일 규칙을 사용하고 이미 저장된 cycle 값은 보존한다. `preRegularWaiting`은 최신 저장 앨범 snapshot·실제 cover/placeholder·정확한 다음 가능일·보기/로컬 공유 action을 제공하고 별도 SevenStitchRail을 추가하지 않는다. eligible weekly return은 날짜·사진·식별자 없이 typed `eligible_week_opened` event로 측정하며 AppRouter가 전달한 direct/notification entry point만 사용한다 | `Approved` | Product+Design+Engineering | 2026-08-07 | `FR-001`, `FR-002`, `FR-004`, `FR-005`, `FR-015`, `FR-019`, `FR-023`, `UC-04`, `UC-05`, `UC-07`, `UC-09`, `SCR-WK-01`, `ADR-017`, `TST-052`–`TST-059`, `GATE-15` |
 
 Registry 운영 규칙:
 
@@ -153,7 +154,7 @@ Registry 운영 규칙:
 | 주간 기록 / Weekly Memory | 한 주에 속한 최대 7장의 사진과 주차 메타데이터 |
 | 캘린더 주 | 사용자의 현재 시간대에서 월요일 00:00–일요일 23:59 |
 | 완료 창 / Completion Window | 완료된 캘린더 주를 저장할 수 있는 다음 월요일 00:00–일요일 23:59의 7일 |
-| Welcome Week | 최초 실행 시 오늘을 끝으로 하는 최근 7일 범위의 즉시 체험 기록 |
+| Welcome Week | 최초 실행 시 가장 최근에 완료된 로컬 월–일 주를 우선 사용하고, 적격 사진이 0장일 때만 최근 rolling 7일로 fallback하는 즉시 체험 기록; 기존 rolling Welcome은 legacy로 호환 |
 | 초기 선택 / Initial Selection | 알고리즘이 우선 제안한 최대 7장 |
 | 교체 후보 / Alternatives | 초기 선택에 포함되지 않은 최대 7장 |
 | 큐레이션 초안 / Draft | 저장 전이며 앱 재실행 시 재생성 가능한 임시 선택 |

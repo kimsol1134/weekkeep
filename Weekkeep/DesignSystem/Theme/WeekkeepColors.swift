@@ -69,6 +69,15 @@ enum WeekkeepScreenLayout {
     }
 }
 
+/// Content runway for custom scroll roots hosted directly by the native
+/// floating TabView bar. This is real scroll content space, not a visible
+/// replacement for the system tab bar.
+enum WeekkeepTabHostSpacing {
+    /// Real scroll content runway so the final This Week content can settle
+    /// above the native floating tab bar.
+    static let bottomScrollClearance = WeekkeepSpacing.sixteen + WeekkeepSpacing.two
+}
+
 enum WeekkeepRadii {
     static let small: CGFloat = 12
     static let medium: CGFloat = 16

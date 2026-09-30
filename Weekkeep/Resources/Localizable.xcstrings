@@ -50,7 +50,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난 주들"
+            "value": "지난 기록"
           }
         }
       }
@@ -224,13 +224,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "We choose up to seven from your last week.\nChange only the ones you don't want, then save."
+            "value": "We’ll start with your most recently completed Monday–Sunday week and choose up to seven moments. If that week has no eligible photos, we’ll honestly check your most recent 7 days instead."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난 7일에서 최대 7장을 골라드려요.\n마음에 안 드는 사진만 바꾸고 저장하면 끝이에요."
+            "value": "최근 완료된 월요일부터 일요일까지의 한 주로 시작해 최대 7장의 순간을 골라드려요. 그 주에 적격 사진이 없으면 최근 7일을 대신 확인해요."
           }
         }
       }
@@ -242,13 +242,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your photos stay on this iPhone"
+            "value": "Photos are processed on your iPhone"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진은 이 iPhone에서만 살펴봐요"
+            "value": "사진 고르기는 이 iPhone 안에서 이뤄져요"
           }
         }
       }
@@ -260,13 +260,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keep the last 7 days"
+            "value": "Choose your first week"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난 7일 남기기"
+            "value": "첫 주 추억 고르기"
           }
         }
       }
@@ -296,13 +296,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photos stay on this iPhone"
+            "value": "Photos are processed on your iPhone"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진은 이 iPhone 안에만 있어요"
+            "value": "사진 고르기는 이 iPhone 안에서 이뤄져요"
           }
         }
       }
@@ -314,13 +314,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weekkeep looks at photos on this iPhone to prepare a small weekly draft. Photo pixels and identifiers are not sent to analytics or vendors."
+            "value": "Photo selection and share rendering are processed on your iPhone. Weekkeep does not send photos or photo details to analytics services or other services for analysis. Sharing starts only when you explicitly choose it."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weekkeep은 이 iPhone 안의 사진을 살펴보고 작은 주간 초안을 준비해요. 사진 픽셀과 식별자는 분석이나 외부 서비스로 보내지 않아요."
+            "value": "사진 고르기와 공유 이미지 만들기는 이 iPhone에서 처리해요. 사진·미리보기·파일 이름·위치·촬영 시각 같은 사진 정보는 사용 통계나 다른 서비스의 분석을 위해 보내지 않아요. 공유는 직접 선택할 때만 시작돼요."
           }
         }
       }
@@ -332,13 +332,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keepsake preview with seven moments"
+            "value": "A preview of an album with seven moments"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "일곱 장면으로 만든 주간 기록 미리보기"
+            "value": "일곱 순간을 담은 앨범 미리보기"
           }
         }
       }
@@ -350,13 +350,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seven approved sample photos in one Weekkeep story"
+            "value": "Seven sample photos in one Weekkeep album"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "승인된 샘플 사진 일곱 장으로 만든 Weekkeep 주간 기록"
+            "value": "Weekkeep 앨범에 담은 샘플 사진 일곱 장"
           }
         }
       }
@@ -368,13 +368,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Want to save last week?"
+            "value": "Want to keep a few moments from last week?"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난주를 남겨볼까요?"
+            "value": "지난주의 순간을 남겨볼까요?"
           }
         }
       }
@@ -386,13 +386,49 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "We will look at last week's photos on this iPhone and make a draft of up to seven."
+            "value": "We’ll choose up to seven moments from last week that you may want to revisit."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난주 사진을 이 iPhone에서 살펴보고 최대 7장의 초안을 만들어요."
+            "value": "지난주 사진에서 다시 보고 싶은 순간을 최대 7장 골라드려요."
+          }
+        }
+      }
+    },
+    "week.welcomeBody": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We’ll start with your most recently completed Monday–Sunday week and choose up to seven moments. Change only the photos you don’t want."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최근 완료된 월요일부터 일요일까지의 한 주로 시작해 최대 7장의 순간을 골라드려요. 마음에 들지 않는 사진만 바꿔보세요."
+          }
+        }
+      }
+    },
+    "week.welcomeFallbackBody": {
+      "comment": "Truthful fallback copy when the completed calendar week has no eligible photos",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That week had no eligible photos, so we’re checking your most recent 7 days for up to seven moments."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "그 주에 적격 사진이 없어 최근 7일에서 최대 7장의 순간을 확인해요."
           }
         }
       }
@@ -404,13 +440,31 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Make a 7-photo draft"
+            "value": "Choose moments from last week"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "7장 초안 만들기"
+            "value": "지난주 추억 고르기"
+          }
+        }
+      }
+    },
+    "week.makeWelcomeSelection": {
+      "comment": "Weekkeep localized copy",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose your first week"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "첫 주 추억 고르기"
           }
         }
       }
@@ -464,13 +518,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photos are reviewed only on this iPhone"
+            "value": "Photos are processed on your iPhone"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진은 이 iPhone 안에서만 살펴봐요"
+            "value": "사진 고르기는 이 iPhone 안에서 이뤄져요"
           }
         }
       }
@@ -482,13 +536,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Want to keep the last 7 days?"
+            "value": "Want to choose your first week?"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난 7일을 남겨볼까요?"
+            "value": "첫 주 추억을 골라볼까요?"
           }
         }
       }
@@ -500,13 +554,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "There are no photos to keep from last week."
+            "value": "There are no eligible photos in this range."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난주에는 남길 사진이 없어요."
+            "value": "요청한 기간에 적격 사진이 없어요."
           }
         }
       }
@@ -518,13 +572,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Only photos inside the requested date range are used. Check your Photos access or try again."
+            "value": "We won’t add photos from outside the requested dates. Check Photos access or try again."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "요청한 날짜 안의 사진만 사용해요. 사진 접근을 확인하거나 다시 시도해 보세요."
+            "value": "요청한 기간 밖의 사진을 섞지 않아요. 사진 접근을 확인하거나 다시 시도해 보세요."
           }
         }
       }
@@ -536,13 +590,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Waiting for the next week to finish."
+            "value": "Your next week is coming."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "다음 기록을 기다리고 있어요."
+            "value": "다음 기록이 곧 열려요."
           }
         }
       }
@@ -554,13 +608,103 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your next regular memory will be ready after a full Monday–Sunday week."
+            "value": "Your saved first week is here to revisit while you wait."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "월요일부터 일요일까지 한 주가 지나면 다음 기록을 만들 수 있어요."
+            "value": "기다리는 동안 첫 기록을 다시 볼 수 있어요."
+          }
+        }
+      }
+    },
+    "week.waitingNextDate": {
+      "comment": "Exact next eligible date shown as a calm schedule cue, never a countdown",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next available date: %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 기록 가능일: %@"
+          }
+        }
+      }
+    },
+    "week.waitingViewAlbum": {
+      "comment": "Waiting state action to open the saved album",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View your saved week"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장한 주 보기"
+          }
+        }
+      }
+    },
+    "week.waitingShareAlbum": {
+      "comment": "Waiting state action to share the saved album",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share this album"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 앨범 공유하기"
+          }
+        }
+      }
+    },
+    "week.waitingNoAlbum": {
+      "comment": "Truthful waiting placeholder when the latest saved album cannot be loaded",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We couldn’t load the saved photos right now. Saved weeks are still available."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지금 저장한 사진을 불러오지 못했어요. 지난 기록에서 다시 볼 수 있어요."
+          }
+        }
+      }
+    },
+    "week.waitingMissingPhotos": {
+      "comment": "Truthful waiting placeholder when the saved album has no available photos",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your saved week is here, but its photos aren’t available right now."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장한 기록은 남아 있지만 지금 사진을 불러올 수 없어요."
           }
         }
       }
@@ -590,13 +734,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You can revisit this memory in Weeks."
+            "value": "You can revisit this week in your saved weeks."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난 주들에서 이 기록을 다시 볼 수 있어요."
+            "value": "지난 기록에서 이 주를 다시 볼 수 있어요."
           }
         }
       }
@@ -626,13 +770,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "See Weeks"
+            "value": "See saved weeks"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난 주들 보기"
+            "value": "지난 기록 보기"
           }
         }
       }
@@ -644,13 +788,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photos access is needed."
+            "value": "Let Weekkeep look through your photos."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진 접근이 필요해요."
+            "value": "사진을 살펴볼 수 있게 해주세요."
           }
         }
       }
@@ -662,13 +806,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allow Photos access so Weekkeep can prepare a weekly draft on this iPhone."
+            "value": "Allow photo access so Weekkeep can help you keep a small album on this iPhone."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이 iPhone에서 주간 초안을 만들려면 사진 접근을 허용해 주세요."
+            "value": "이 iPhone에 작은 앨범을 남길 수 있도록 사진 접근을 허용해 주세요."
           }
         }
       }
@@ -716,13 +860,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selected photos only"
+            "value": "Only the photos you selected"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "선택한 사진만 사용 중"
+            "value": "선택한 사진만 볼 수 있어요"
           }
         }
       }
@@ -734,13 +878,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Manage photo access"
+            "value": "Choose which photos Weekkeep can use"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진 접근 관리"
+            "value": "Weekkeep이 볼 사진 선택"
           }
         }
       }
@@ -752,13 +896,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You have kept two weeks."
+            "value": "You’ve kept two weeks."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "두 주를 잘 남겼어요."
+            "value": "두 주를 남겼어요."
           }
         }
       }
@@ -770,13 +914,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keep future weeks with Weekkeep Plus. Your saved records stay readable on this iPhone without Plus."
+            "value": "Keep making a small album for each week with Weekkeep Plus. Your saved weeks stay available on this iPhone without Plus."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weekkeep Plus로 앞으로의 주도 남겨보세요. 기존 기록은 Plus 없이도 이 iPhone에서 계속 볼 수 있어요."
+            "value": "Weekkeep Plus로 매주 작은 앨범을 계속 만들 수 있어요. 이미 저장한 기록은 Plus 없이도 이 iPhone에서 다시 볼 수 있어요."
           }
         }
       }
@@ -842,13 +986,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Making a draft of up to seven"
+            "value": "Choosing moments to keep"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "7장의 초안을 만들고 있어요"
+            "value": "소중한 순간을 고르고 있어요"
           }
         }
       }
@@ -860,13 +1004,49 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Looking at the last week on this iPhone."
+            "value": "Looking through last week’s photos for moments you may want to revisit."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난주의 사진을 이 iPhone 안에서 살펴보는 중이에요."
+            "value": "지난주의 사진에서 다시 보고 싶은 순간을 찾고 있어요."
+          }
+        }
+      }
+    },
+    "curation.welcomeBody": {
+      "comment": "First-use curation copy for the preferred completed calendar week",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Looking through your most recently completed Monday–Sunday week for moments to keep."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가장 최근에 완료된 월요일부터 일요일까지의 한 주에서 남길 순간을 찾고 있어요."
+          }
+        }
+      }
+    },
+    "curation.welcomeFallbackBody": {
+      "comment": "First-use curation copy for the truthful rolling seven-day fallback",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That week had no eligible photos, so we’re checking your most recent 7 days instead."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "그 주에 적격 사진이 없어 최근 7일을 대신 확인하고 있어요."
           }
         }
       }
@@ -878,13 +1058,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gathering photos"
+            "value": "Looking through your photos"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진을 모으는 중"
+            "value": "사진을 살펴보는 중"
           }
         }
       }
@@ -896,13 +1076,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choosing a small, balanced set"
+            "value": "Finding a few moments to keep"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "날짜와 시간대가 고른 후보를 고르는 중"
+            "value": "남길 순간을 몇 가지 고르는 중"
           }
         }
       }
@@ -914,13 +1094,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Waiting for iCloud photos"
+            "value": "Loading photos from iCloud"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "iCloud 사진을 기다리는 중"
+            "value": "iCloud에서 사진을 불러오는 중"
           }
         }
       }
@@ -932,13 +1112,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Looking at photo quality"
+            "value": "Taking a closer look at your photos"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진 상태를 살펴보는 중"
+            "value": "사진을 자세히 살펴보는 중"
           }
         }
       }
@@ -950,7 +1130,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sorting similar photos"
+            "value": "Tidying up similar photos"
           }
         },
         "ko": {
@@ -968,13 +1148,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preparing a small draft"
+            "value": "Putting your week together"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "작은 초안을 준비하는 중"
+            "value": "한 주의 기록을 정리하는 중"
           }
         }
       }
@@ -986,13 +1166,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photos never leave this iPhone"
+            "value": "Photos are processed on your iPhone"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진은 이 iPhone을 떠나지 않아요"
+            "value": "사진 고르기는 이 iPhone 안에서 이뤄져요"
           }
         }
       }
@@ -1022,13 +1202,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Some photos could not be loaded. We can continue with the ones available."
+            "value": "Some photos couldn’t be loaded. We’ll continue with the photos available."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "일부 사진을 불러오지 못했어요. 가능한 사진으로 계속할 수 있어요."
+            "value": "일부 사진을 불러오지 못했어요. 지금 볼 수 있는 사진으로 계속할게요."
           }
         }
       }
@@ -1040,7 +1220,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "We couldn't finish looking at these photos."
+            "value": "We couldn’t finish looking through these photos."
           }
         },
         "ko": {
@@ -1076,7 +1256,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Want to keep these moments from last week?"
+            "value": "Want to keep a few moments from last week?"
           }
         },
         "ko": {
@@ -1097,13 +1277,13 @@
               "one": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "We chose %lld moment for this week. Change it only if it doesn't feel right."
+                  "value": "We found %lld moment to keep this week. Change it only if you want to."
                 }
               },
               "other": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "We chose %lld moments for this week. Change only what doesn't feel right."
+                  "value": "We found %lld moments to keep this week. Change only what you want to."
                 }
               }
             }
@@ -1115,13 +1295,13 @@
               "one": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "이번 주의 순간 %lld장을 골랐어요. 마음에 들지 않는 사진만 바꿔보세요."
+                  "value": "이번 주에 남길 순간 %lld장을 골라봤어요. 마음에 들지 않는 사진만 바꿔보세요."
                 }
               },
               "other": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "이번 주의 순간 %lld장을 골랐어요. 마음에 들지 않는 사진만 바꿔보세요."
+                  "value": "이번 주에 남길 순간 %lld장을 골라봤어요. 마음에 들지 않는 사진만 바꿔보세요."
                 }
               }
             }
@@ -1198,13 +1378,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tap a photo to choose it for replacement."
+            "value": "Tap a photo you want to change."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진을 눌러 바꿀 대상을 선택하세요."
+            "value": "바꾸고 싶은 사진을 눌러주세요."
           }
         }
       }
@@ -1216,7 +1396,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Replace this photo"
+            "value": "Change this photo"
           }
         },
         "ko": {
@@ -1237,13 +1417,13 @@
               "one": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "Keep %lld photo"
+                  "value": "Save %lld photo"
                 }
               },
               "other": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "Keep %lld photos"
+                  "value": "Save %lld photos"
                 }
               }
             }
@@ -1255,13 +1435,13 @@
               "one": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "이 %lld장 남기기"
+                  "value": "사진 %lld장 남기기"
                 }
               },
               "other": {
                 "stringUnit": {
                   "state": "translated",
-                  "value": "이 %lld장 남기기"
+                  "value": "사진 %lld장 남기기"
                 }
               }
             }
@@ -1294,13 +1474,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Selected for replacement"
+            "value": "Ready to change"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "바꿀 사진으로 선택됨"
+            "value": "바꿀 사진으로 골랐어요"
           }
         }
       }
@@ -1330,13 +1510,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Replace photo"
+            "value": "Change photo"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진 교체"
+            "value": "사진 바꾸기"
           }
         }
       }
@@ -1366,13 +1546,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This draft is not saved yet."
+            "value": "This week isn’t saved yet."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "아직 저장되지 않았어요."
+            "value": "아직 이번 주 기록이 저장되지 않았어요."
           }
         }
       }
@@ -1438,7 +1618,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Which photo should replace it?"
+            "value": "What would you like to see instead?"
           }
         },
         "ko": {
@@ -1456,7 +1636,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Current photo"
+            "value": "Photo you’re changing"
           }
         },
         "ko": {
@@ -1492,13 +1672,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "There are no unused photos from this day."
+            "value": "There aren’t any other photos from this day."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이 날에는 아직 쓰지 않은 사진이 없어요."
+            "value": "이 날에는 바꿔볼 다른 사진이 없어요."
           }
         }
       }
@@ -1528,7 +1708,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "From other days"
+            "value": "From another day"
           }
         },
         "ko": {
@@ -1546,13 +1726,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Other candidates"
+            "value": "Other photos"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "다른 후보"
+            "value": "다른 사진"
           }
         }
       }
@@ -1564,13 +1744,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "There are no other candidates for this spot."
+            "value": "There aren’t any other photos to choose for this spot."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이 자리를 바꿀 다른 후보가 없어요."
+            "value": "이 자리에 바꿔 넣을 다른 사진이 없어요."
           }
         }
       }
@@ -1582,13 +1762,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Last week became\none small album."
+            "value": "Last week is now\none small album."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난주가\n한 장의 앨범이 됐어요"
+            "value": "지난주가\n작은 앨범이 됐어요"
           }
         }
       }
@@ -1642,13 +1822,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "An ordinary week you couldn't organize\nis now a memory you can revisit."
+            "value": "A small record of an ordinary week,\nready whenever you want to revisit it."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "정리하지 못했던 평범한 한 주가,\n이제 다시 볼 수 있는 기억이 됐어요."
+            "value": "평범한 한 주도,\n나중에 다시 꺼내 볼 수 있는 기록이 됐어요."
           }
         }
       }
@@ -1678,13 +1858,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share this week"
+            "value": "Share this album"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이번 주 공유하기"
+            "value": "이 앨범 공유하기"
           }
         }
       }
@@ -1714,13 +1894,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Make this week yours to share"
+            "value": "A small album to share"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이번 주를 공유할 앨범으로 만들어요"
+            "value": "공유할 작은 앨범을 만들어요"
           }
         }
       }
@@ -1732,13 +1912,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A local keepsake made from the photos you saved."
+            "value": "A shareable image made from the photos you saved."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "저장한 사진으로 이 iPhone 안에서 작은 기록을 만들어요."
+            "value": "저장한 사진으로 공유할 이미지를 만들어요."
           }
         }
       }
@@ -1822,13 +2002,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preparing your local album"
+            "value": "Making your share image on this iPhone"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이 iPhone 안에서 앨범을 준비하는 중"
+            "value": "이 iPhone에서 공유 이미지를 만드는 중"
           }
         }
       }
@@ -1840,13 +2020,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "We couldn't make the share image. Your saved album is unchanged."
+            "value": "We couldn’t make the share image. Your saved album is unchanged."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "공유 이미지를 만들지 못했어요. 저장된 앨범은 그대로예요."
+            "value": "공유 이미지를 만들지 못했어요. 저장한 앨범은 바뀌지 않아요."
           }
         }
       }
@@ -1858,13 +2038,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Try preparing again"
+            "value": "Try again"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "다시 준비하기"
+            "value": "다시 만들기"
           }
         }
       }
@@ -1887,6 +2067,42 @@
         }
       }
     },
+    "share.serialLabel": {
+      "comment": "Cumulative saved-week ordinal embedded in the local share artifact header; omit when the local album lookup is unavailable.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Our family · week %d"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "우리 가족의 %d번째 주"
+          }
+        }
+      }
+    },
+    "share.footerPrompt": {
+      "comment": "Quiet conversational prompt embedded above the seven stitches in the local share artifact.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How was your family's week?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "너희 가족의 이번 주는 어땠어?"
+          }
+        }
+      }
+    },
     "share.privacy": {
       "comment": "Weekkeep localized copy",
       "extractionState": "manual",
@@ -1894,13 +2110,31 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The image is rendered on this iPhone and shared only after you choose a destination."
+            "value": "This share image is made on your iPhone. Sharing starts only when you choose it."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이미지는 이 iPhone에서 만들고, 공유 대상을 직접 선택한 뒤에만 시스템 공유 화면으로 넘겨요."
+            "value": "공유 이미지는 이 iPhone에서 만들어요. 직접 선택할 때만 공유를 시작해요."
+          }
+        }
+      }
+    },
+    "share.invitation": {
+      "comment": "Short parent-natural invitation sent as a separate native share item; the install URL is a separate URL item.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A week with our family 🌈\nMade with Weekkeep.\nHow was your family's week?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "우리 가족의 일주일 🌈\nWeekkeep으로 남겼어요.\n너희 가족의 이번 주는 어땠어?"
           }
         }
       }
@@ -1912,13 +2146,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share image"
+            "value": "Share this image"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이미지 공유하기"
+            "value": "이 이미지 공유하기"
           }
         }
       }
@@ -1930,13 +2164,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Want a reminder every Monday evening?"
+            "value": "Want a gentle reminder when your next week is available?"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "매주 월요일 저녁에 알려드릴까요?"
+            "value": "다음 기록을 남길 때 알려드릴까요?"
           }
         }
       }
@@ -1948,13 +2182,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "We'll gently remind you when it's time to keep last week."
+            "value": "We’ll remind you on Monday evening, so you can come back when you have a moment."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난주를 남길 때가 되면 가볍게 알려드릴게요."
+            "value": "월요일 저녁, 여유가 될 때 다시 볼 수 있도록 알려드릴게요."
           }
         }
       }
@@ -1977,6 +2211,24 @@
         }
       }
     },
+    "notification.nextDate": {
+      "comment": "Exact next eligible date shown before notification permission is requested",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next week available: %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 기록 가능일: %@"
+          }
+        }
+      }
+    },
     "notification.primary": {
       "comment": "Weekkeep localized copy",
       "extractionState": "manual",
@@ -1984,13 +2236,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get reminders"
+            "value": "Remind me"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "알림 받기"
+            "value": "알림 받을게요"
           }
         }
       }
@@ -2020,13 +2272,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weeks"
+            "value": "Saved weeks"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난 주들"
+            "value": "지난 기록"
           }
         }
       }
@@ -2038,13 +2290,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your saved weeks gather here, one at a time."
+            "value": "Your saved weeks, all in one place."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "남긴 주는 여기 차곡차곡 쌓여요."
+            "value": "남긴 주간 기록을 한곳에서 다시 볼 수 있어요."
           }
         }
       }
@@ -2062,7 +2314,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "첫 번째 주를 남겨보세요."
+            "value": "첫 주를 남겨보세요."
           }
         }
       }
@@ -2074,13 +2326,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A few photos are enough to start."
+            "value": "A few photos are all it takes to start."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진 몇 장이면 충분해요."
+            "value": "사진 몇 장이면 첫 기록을 남길 수 있어요."
           }
         }
       }
@@ -2092,13 +2344,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weeks couldn't be loaded."
+            "value": "Saved weeks couldn’t be loaded."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "지난 주들을 불러오지 못했어요."
+            "value": "지난 기록을 불러오지 못했어요."
           }
         }
       }
@@ -2398,13 +2650,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keep future weeks\nfrom slipping away."
+            "value": "Keep a small album\nevery week."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "앞으로의 주도\n놓치지 않게"
+            "value": "매주 작은 앨범을\n계속 남겨요"
           }
         }
       }
@@ -2416,13 +2668,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your saved records stay readable on this iPhone\nwithout Plus."
+            "value": "Your saved weeks stay available on this iPhone\nwithout Plus."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이미 만든 기록은 결제하지 않아도\n이 iPhone에서 계속 볼 수 있어요."
+            "value": "이미 저장한 기록은 Plus 없이도\n이 iPhone에서 계속 볼 수 있어요."
           }
         }
       }
@@ -2434,13 +2686,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A draft of up to seven every week"
+            "value": "Up to seven moments to keep each week"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "매주 최대 7장의 초안"
+            "value": "매주 추억을 최대 7장 골라드려요"
           }
         }
       }
@@ -2452,13 +2704,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photos stay on this iPhone"
+            "value": "Photos are processed on your iPhone"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진은 계속 기기 안에서만"
+            "value": "사진 고르기는 이 iPhone 안에서 이뤄져요"
           }
         }
       }
@@ -2650,13 +2902,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The App Store is still processing this purchase. Plus will appear when it is approved."
+            "value": "The App Store is still processing your purchase. Plus will unlock once it’s approved."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "App Store에서 구매를 처리하고 있어요. 승인되면 Plus가 열려요."
+            "value": "App Store에서 구매를 처리하고 있어요. 승인되면 Plus를 이용할 수 있어요."
           }
         }
       }
@@ -2704,13 +2956,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus access was restored. Your local weekly records are not restored by a purchase restore."
+            "value": "Plus is restored. Your saved weeks are not restored by a purchase restore."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Plus 이용 권한을 복원했어요. 구매 복원은 주간 기록을 복원하지 않아요."
+            "value": "Plus 이용 권한을 복원했어요. 구매 복원만으로는 저장한 기록이 돌아오지 않아요."
           }
         }
       }
@@ -2758,13 +3010,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keep only what you need."
+            "value": "Make room for the weeks you want to remember."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "필요한 만큼만, 내 방식대로."
+            "value": "기억하고 싶은 한 주를 가볍게 남겨요."
           }
         }
       }
@@ -3028,13 +3280,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Save a week before turning on reminders."
+            "value": "Save your first week before turning on reminders."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "첫 주간 기록을 저장한 뒤 알림을 켤 수 있어요."
+            "value": "첫 기록을 남긴 뒤 알림을 켤 수 있어요."
           }
         }
       }
@@ -3226,13 +3478,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Data & support"
+            "value": "Storage & support"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "데이터와 도움"
+            "value": "저장과 도움"
           }
         }
       }
@@ -3298,13 +3550,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "On-device processing"
+            "value": "Photos are processed on your iPhone"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "기기 내 처리"
+            "value": "사진 고르기는 이 iPhone 안에서 이뤄져요"
           }
         }
       }
@@ -3370,13 +3622,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photos stay on this iPhone."
+            "value": "Photos are processed on your iPhone"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진은 밖으로 나가지 않아요"
+            "value": "사진 고르기는 이 iPhone 안에서 이뤄져요"
           }
         }
       }
@@ -3388,13 +3640,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weekkeep looks at photos on this iPhone and does not send photo pixels or identifiers to analytics or vendors."
+            "value": "Photo selection and share rendering are processed on your iPhone. Weekkeep does not send photos or photo details to analytics services or other services for analysis. Sharing starts only when you explicitly choose it."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weekkeep은 이 iPhone 안에서 사진을 살펴보고 사진 픽셀이나 식별자를 분석·외부 서비스로 보내지 않아요."
+            "value": "사진 고르기와 공유 이미지 만들기는 이 iPhone에서 처리해요. 사진·미리보기·파일 이름·위치·촬영 시각 같은 사진 정보는 사용 통계나 다른 서비스의 분석을 위해 보내지 않아요. 공유는 직접 선택할 때만 시작돼요."
           }
         }
       }
@@ -3406,13 +3658,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Analyzed on this iPhone"
+            "value": "Photos are processed on your iPhone"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "기기 안에서 분석"
+            "value": "사진 고르기는 이 iPhone 안에서 이뤄져요"
           }
         }
       }
@@ -3424,13 +3676,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photo analysis runs in the foreground on your device."
+            "value": "Photo selection and share rendering are processed on your iPhone while you use Weekkeep."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진 분석은 이 iPhone의 foreground에서 실행돼요."
+            "value": "Weekkeep을 사용하는 동안 사진 고르기와 공유 이미지 만들기는 이 iPhone에서 처리해요."
           }
         }
       }
@@ -3442,13 +3694,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No photo tracking"
+            "value": "Photo details aren’t sent for analysis"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진을 추적하지 않음"
+            "value": "사진 정보는 분석에 보내지 않아요"
           }
         }
       }
@@ -3460,13 +3712,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photo names, locations, capture times, thumbnails, and identifiers stay out of analytics."
+            "value": "Weekkeep does not send photos, previews, filenames, locations, capture times, or other photo details to analytics services or other services for analysis."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진 이름·위치·촬영 시각·썸네일·식별자는 분석에 보내지 않아요."
+            "value": "사진·미리보기·파일 이름·위치·촬영 시각 같은 정보는 사용 통계나 다른 서비스의 분석을 위해 보내지 않아요."
           }
         }
       }
@@ -3478,13 +3730,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You decide"
+            "value": "You’re in control"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "내가 결정"
+            "value": "결정은 내가 해요"
           }
         }
       }
@@ -3496,13 +3748,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Photo access can be changed any time in Settings."
+            "value": "Sharing starts only when you explicitly choose it. You can change photo access any time in Settings."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진 접근은 언제든 설정에서 바꿀 수 있어요."
+            "value": "공유는 직접 선택할 때만 시작돼요. 사진 접근은 언제든 설정에서 바꿀 수 있어요."
           }
         }
       }
@@ -3604,13 +3856,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Many photos, little time.\nKeep seven from each week."
+            "value": "Many photos, little time.\nKeep the moments you want from each week."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진은 많고 시간은 없으니까,\n한 주에 7장만."
+            "value": "사진은 많고 시간은 없으니까,\n한 주의 순간만 가볍게 남겨요."
           }
         }
       }
@@ -3622,13 +3874,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Even ordinary weeks deserve to be easy to revisit."
+            "value": "Even ordinary weeks deserve an album you can revisit."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "평범한 한 주도 다시 볼 수 있게 남겨요."
+            "value": "평범한 한 주도 다시 꺼내 볼 앨범이 될 수 있어요."
           }
         }
       }
@@ -3892,13 +4144,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Replace photo"
+            "value": "Change photo"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "사진 교체"
+            "value": "사진 바꾸기"
           }
         }
       }

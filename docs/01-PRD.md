@@ -2,8 +2,8 @@
 
 | 항목 | 값 |
 |---|---|
-| 버전 | 0.5-approved |
-| 기준일 | 2026-08-05 |
+| 버전 | 0.6-approved |
+| 기준일 | 2026-08-07 |
 | 상태 | Approved |
 | 제품 책임 | Kim Sol + Codex |
 | 대상 릴리스 | V1 / Shipaton 2026 public release |
@@ -17,13 +17,13 @@
 
 ### 제품 문장
 
-> 아이와 보낸 일주일, 사진 7장으로 남겨요.
+> 가장 최근에 완료된 한 주, 최대 7장으로 남겨요.
 
 ### 핵심 차별점
 
 1. **주간 제약:** 무한한 사진 정리가 아니라 ‘완료된 한 주의 최대 7장’만 다룹니다.
 2. **검토 중심:** 빈 화면에서 고르게 하지 않고, 첫 선택을 준비해 둡니다.
-3. **프라이버시:** 사진 분석은 기기에서 수행하고 원본·썸네일·사진 ID를 서버로 보내지 않습니다.
+3. **프라이버시:** 사진 고르기와 공유 이미지 만들기는 기기에서 처리하고, 원본·썸네일·사진 정보는 분석을 위해 외부 서비스로 보내지 않습니다. 공유는 사용자가 직접 선택할 때만 시작합니다.
 4. **반복 가능한 의식:** 월요일 리마인더와 쌓여 가는 주간 보관함이 기록 습관을 만듭니다.
 
 ## 2. 문제 정의
@@ -56,7 +56,7 @@
 | `GOAL-03` | 자동 선택에 대한 신뢰와 통제감을 만든다 | 초기 7장 중 평균 5장 이상 유지 |
 | `GOAL-04` | 가족 사진 제품에 필요한 프라이버시 신뢰를 만든다 | 사진 데이터 외부 전송 0건, 관련 P0/P1 결함 0건 |
 | `GOAL-05` | 실제 결제가 가능한 공개 앱을 출시한다 | RevenueCat 구매/복원 포함 미국 App Store 공개 |
-| `GOAL-06` | 저장 결과를 공유하고 싶은 제품 보상으로 만든다 | Weekkeep attribution이 포함된 Story/Post 제공, 측정 가능한 첫 두 cohort에서 Save Confirmation의 저장→공유창 열기 25%를 초기 가설로 검증; 출시 전 gate나 실제 공유 완료율로 오해하지 않음 |
+| `GOAL-06` | 저장 결과를 공유하고 싶은 제품 보상으로 만든다 | Weekkeep attribution이 포함된 Story/Post 제공, 측정 가능한 첫 두 cohort에서 Save Confirmation의 `share_completed / album_saved`를 Story/Post별 초기 가설로 검증; iOS share activity의 completed callback만 뜻하며 외부 게시·수신은 주장하지 않음 |
 
 ### V1 비목표
 
@@ -111,7 +111,7 @@
 
 ### 핵심 루프
 
-1. 월–일이 끝난 다음 월요일부터 Weekkeep이 가장 최근 완료 주를 대상으로 엽니다.
+1. 첫 실행에서는 가장 최근에 완전히 끝난 로컬 월–일 주를 우선 대상으로 엽니다. 그 주의 적격 사진이 0장일 때만 최근 rolling 7일을 fallback으로 확인하고, 두 범위가 모두 비면 empty state를 유지합니다. 이후에는 월–일이 끝난 다음 월요일부터 가장 최근 완료 주를 대상으로 엽니다.
 2. 사용자가 허용한 Photos 자산을 가져옵니다.
 3. 기기 내에서 품질, 중복, 시간 분포를 분석합니다.
 4. 최대 14장 중 최대 7장을 초안으로 먼저 보여줍니다.
@@ -124,10 +124,12 @@
 
 | 경험 | 날짜 범위 | 목적 |
 |---|---|---|
-| Welcome Week | 최초 분석 시점 직전의 rolling 7일 | 설치 직후 즉시 가치 제공 |
+| Welcome Week | 가장 최근 완료된 로컬 월–일 주; 적격 사진이 0장일 때만 rolling 7일 fallback | 설치 직후 즉시 가치 제공 |
 | Regular Week | 로컬 시간대 월 00:00–일 23:59, 다음 월–일 7일간 완료 가능 | 반복 가능한 주간 기록 |
 
-Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으로 둡니다. 첫 Regular Week는 그 시각부터 시작하는 **새로운 전체 캘린더 주**이며, 그 주가 끝난 다음 월요일에 열립니다. Welcome Week와 거의 같은 사진으로 즉시 두 번째 기록을 만들지 않고 과거 주를 대량 백필하지 않습니다.
+완료 주 Welcome을 저장하면 그 앨범의 `weekEnd`(현재 월요일)를 `regularCycleStartsAt`으로 둡니다. rolling fallback Welcome과 기존에 저장된 legacy rolling Welcome은 저장 시점 다음 월요일 규칙을 유지합니다. 이미 저장된 `regularCycleStartsAt`은 다시 계산하거나 덮어쓰지 않습니다. 모든 경우 선택된 정확한 `WeekRange`를 권한 재개·CTA·foreground curation까지 고정하고, 첫 Regular Week는 그 cycle에서 시작하는 **새로운 전체 캘린더 주**가 끝난 다음 월요일에 열립니다. Welcome Week와 거의 같은 사진으로 즉시 두 번째 기록을 만들지 않고 과거 주를 대량 백필하지 않습니다.
+
+0.5 문서의 ‘Welcome은 기본 rolling 7일’ 문구와 그에 따른 일반 CTA는 `D-036`에 의해 `Deprecated`입니다. rolling 7일은 completed week에 적격 사진이 0장일 때의 truthful fallback 및 기존 저장 데이터 호환 경로로만 남습니다.
 
 ### 기능 범위
 
@@ -149,8 +151,8 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 #### `FR-001` 가치 중심 첫 화면
 
 - 최초 실행 시 3페이지 튜토리얼 대신 한 화면에서 핵심 결과를 보여줍니다.
-- 필수 문구: ‘지난 7일’, ‘최대 7장’, ‘사진은 기기에서 분석’.
-- CTA는 `지난 7일 남기기`입니다.
+- 필수 문구: ‘첫 주 추억 고르기/Choose your first week’, 가장 최근 완료된 월–일 주에서 시작한다는 설명, ‘최대 7장’, ‘사진 고르기는 이 iPhone 안에서 이뤄짐’.
+- completed week에 사진이 없을 때만 보이는 fallback copy는 최근 7일을 확인한다는 사실을 명시합니다. Regular CTA는 `지난주 추억 고르기` / `Choose moments from last week`입니다.
 
 수용 기준:
 
@@ -159,8 +161,8 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 
 #### `FR-002` 맥락형 사진 권한 요청
 
-- 사용자가 `지난 7일 남기기`를 탭한 직후 Photos 읽기 권한을 요청합니다.
-- 목적 문자열은 사진을 주간 기록 초안으로 제안하기 위해 사용하며 기기에서 처리한다는 사실을 구체적으로 설명합니다.
+- 사용자가 `첫 주 추억 고르기`를 탭한 직후 Photos 읽기 권한을 요청합니다.
+- 목적 문자열은 가장 최근 완료된 월–일 주에서 시작하고 사진이 없을 때만 최근 7일을 확인한다는 이유와 사진 고르기가 iPhone에서 처리된다는 사실을 구체적으로 설명합니다.
 
 #### `FR-003` 모든 Photos 권한 상태 처리
 
@@ -181,7 +183,7 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 
 - 캘린더는 ISO-style Monday start를 사용하되 사용자 현재 시간대를 적용합니다.
 - `weekKey`는 `YYYY-Www` 형태의 로컬 주차 식별자로 저장합니다.
-- Welcome Week 이후에는 `weekStart >= regularCycleStartsAt`인 완료 주만 Regular target이 될 수 있습니다.
+- Welcome Week 이후에는 `weekStart >= regularCycleStartsAt`인 완료 주만 Regular target이 될 수 있습니다. completed week Welcome의 cycle은 `album.weekEnd`, rolling/legacy Welcome은 저장 시점 다음 월요일이며 기존 persisted cycle은 보존합니다.
 - Regular Week의 사진 범위는 월요일 00:00부터 일요일 23:59까지이며, 그 다음 월요일 00:00에 eligible이 됩니다.
 - 해당 기록은 다음 일요일 23:59까지 현재 대상으로 유지됩니다. 이 기간 안에서는 알림 시각과 무관하게 언제든 시작할 수 있습니다.
 - 완료 창 안에서 분석을 시작했다면 자정을 지나도 그 foreground 흐름이 저장·취소될 때까지 같은 `weekKey`를 유지합니다.
@@ -191,7 +193,7 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 #### `FR-005` 해당 범위 사진만 수집
 
 - 이미지 자산만 포함합니다. 동영상, 스크린샷, 숨김 항목은 V1 후보에서 제외합니다.
-- Welcome Week는 과거 7일보다 오래된 사진으로 부족분을 채우지 않습니다.
+- Welcome은 우선 최근 완료된 한 주만 조회합니다. 그 범위의 적격 사진이 0장일 때만 최근 rolling 7일을 조회하며, 두 범위 모두 요청 범위 밖 사진으로 부족분을 채우지 않습니다.
 - Regular Week도 다른 주의 사진으로 부족분을 채우지 않습니다.
 - 접근 가능한 descriptor는 최대 500개까지 metadata scan할 수 있습니다.
 - deterministic metadata prefilter가 local calendar day와 4시간 time bucket coverage를 먼저 확보한 뒤 최대 21개(7일×3개)만 Vision에 전달합니다. favorite와 resolution은 coverage 이후 tie-breaker입니다.
@@ -201,7 +203,7 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 #### `FR-006` 기기 내 분석
 
 - 분석은 Apple Photos/Vision 기반으로 기기에서 수행합니다.
-- 원본, 썸네일, 임베딩, Photos local identifier를 서버나 분석 SDK에 전송하지 않습니다.
+- 원본, 썸네일, 임베딩, Photos local identifier와 같은 사진 정보는 분석을 위해 서버나 분석 SDK에 전송하지 않습니다.
 - iCloud 원본 다운로드가 필요한 경우 진행 상태와 네트워크 대기를 표시합니다.
 - analysis image는 약 416px의 fast PhotoKit representation을 사용하며 display/share image 품질 경로와 분리합니다.
 - per-asset 약 1.5초 timeout과 약 12초 global foreground budget을 적용합니다. 일부 사진을 처리하지 못해도 실제 성공 사진만으로 partial result를 만들고, fake photo나 백그라운드 완료 주장은 하지 않습니다.
@@ -260,7 +262,7 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 - 저장 성공 뒤 Save Confirmation의 primary action은 local share preparation입니다. 기존 archive detail에서도 같은 action을 다시 시작할 수 있습니다.
 - Story format은 정확히 1080×1920 (9:16), Post format은 정확히 1080×1350 (4:5)입니다.
 - renderer는 saved album의 실제 PhotoKit display images를 사용하고 warm paper background, canonical wordmark, exact seven muted stitch palette, date range, seven-photo hero+2+4 또는 실제 장수 adaptive layout, 'Made with Weekkeep' signature를 포함합니다.
-- child/family name, filename, location, photo identifier, score, analytics data, fake content와 hard-coded public install URL은 넣지 않습니다. V1 이미지에는 공개 설치 URL도 그리지 않으며, 실제 App Store URL을 share payload에 추가하는 일은 URL이 공개된 뒤 별도 승인·검증합니다.
+- child/family name, filename, location, photo identifier, score, analytics data, fake content와 hard-coded public install URL은 넣지 않습니다. 저장 목록에서 `createdAt` 오름차순, `weekStart` 오름차순, UUID 문자열 순으로 계산한 누적 1-based ordinal이 있으면 generic `Our family · week N` / `우리 가족의 N번째 주`를 header의 날짜 행에 함께 표시하고, lookup 실패·앨범 부재 시 생략합니다. footer에는 `How was your family's week?` / `너희 가족의 이번 주는 어땠어?`를 7-stitch 위에 절제해 표시합니다. V1 이미지에는 공개 설치 URL도 그리지 않습니다. 현재 제출된 ASC build 7은 `https://apps.apple.com/app/id6798449478`와 `A week with our family 🌈\nMade with Weekkeep.\nHow was your family's week?` / `우리 가족의 일주일 🌈\nWeekkeep으로 남겼어요.\n너희 가족의 이번 주는 어땠어?` invitation을 이미지와 분리된 native share items로만 전달합니다. image-only destination에는 local artifact가 남고, link-capable destination은 iOS 지원 범위에 따라 text와 URL을 받을 수 있습니다. 이 share contract는 historical build 6에는 포함되지 않았고, 공개 릴리스 전 URL이 live라고 주장하지 않습니다.
 - renderer는 temporary local file을 만든 뒤 사용자가 명시적으로 누른 native share sheet에 전달합니다. 업로드, 계정, backend, CloudKit, server rendering, in-app social feed/comments/likes는 없습니다.
 - 준비 UI는 loading, retry/error, Story/Post format selection, preview, VoiceOver label, local-only privacy copy를 제공합니다. external destination/recipient는 analytics에 기록하지 않습니다.
 
@@ -283,7 +285,7 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 - 주차, 선택 순서, Photos 자산 참조는 현재 iPhone의 현재 Weekkeep 앱 설치에만 저장합니다.
 - 앱 삭제·재설치 또는 새 기기 변경 뒤의 저장 기록 복원을 제공하거나 보장하지 않습니다. 원본 사진이 Photos/iCloud Photos에 남아 있어도 Weekkeep의 선택 1–7장과 순서는 자동 재구성하지 않습니다.
 - `구매 복원`은 RevenueCat Plus entitlement만 복원하며 Weekkeep 기록을 복원하지 않습니다.
-- Settings의 개인정보 화면과 구매/복원 맥락에서 다음 의미를 한국어·영어로 명확히 전달합니다: `주간 기록은 이 iPhone에 저장돼요. Weekkeep은 별도 백업을 제공하지 않아 앱을 삭제하거나 기기를 바꾸면 기록이 사라질 수 있어요. 원본 사진은 사진 앱에 남아 있어요.`
+- Archive와 구매/복원 맥락에서 다음 의미를 한국어·영어로 명확히 전달합니다: `사진 고르기와 공유 이미지 만들기는 이 iPhone에서 처리해요. 사진 정보는 분석을 위해 외부 서비스로 보내지 않아요. 공유는 직접 선택할 때만 시작돼요. 주간 기록은 이 iPhone에 저장돼요. Weekkeep은 별도 백업을 제공하지 않아 앱을 삭제하거나 기기를 바꾸면 기록이 사라질 수 있어요.`
 - `영구 보관`, `평생 보존`, `어느 기기에서나 복원`처럼 V1이 보장하지 않는 표현을 사용하지 않습니다.
 
 ### 알림
@@ -293,10 +295,10 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 - 첫 기록 저장 성공 후에만 알림 사전 설명을 보여줍니다.
 - 기본 제안 시각은 매주 월요일 20:30 로컬 시간입니다.
 - Welcome Week와 겹치지 않는 Regular target이 아직 없다면 그 월요일 알림은 예약하지 않습니다.
-- primer 문구는 `매주 월요일 저녁에 알려드릴까요?`, 알림 본문은 `지난주를 1분 만에 남겨볼까요?`를 기본안으로 사용합니다.
+- primer는 `월요일 20:30` 규칙을 유지하면서 정확한 다음 가능일을 함께 보여줍니다. 알림은 `월요일 저녁, 여유가 될 때 다시 볼 수 있도록 알려드릴게요.`처럼 foreground 분석을 완료했다고 주장하지 않습니다.
 - 분석은 foreground에서 시작하므로 `7장이 준비됐어요`처럼 백그라운드 작업 완료를 주장하지 않습니다.
 - 허용 시 로컬 알림을 예약하고, 거부해도 핵심 기능은 유지합니다.
-- 해당 주 기록이 이미 저장되었으면 가능한 범위에서 중복 리마인더를 취소합니다.
+- 해당 주 기록이 이미 저장되었으면 가능한 범위에서 중복 리마인더를 취소하고, 동일 target에 중복 예약하지 않습니다. primer를 한 번 거절하거나 처리한 뒤 반복 권한 prompt/notification spam을 만들지 않습니다.
 - 알림 탭은 가장 최근 완료된 월–일 주간 기록으로 이동하며, 이 대상은 다음 일요일까지 완료할 수 있습니다.
 
 ### 결제
@@ -327,8 +329,8 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 - Photos 접근 상태 및 시스템 설정 진입
 - 알림 상태 및 시스템 설정 진입
 - Plus 상태, 구매, 구매 복원
-- 데이터 저장 위치, 앱 관리형 백업 없음, 기기 변경 시 유실 가능성
-- 프라이버시 설명, 지원, 약관, 버전 정보
+- Help & Support 진입과 지원, 약관, 개인정보 처리방침, 버전 정보
+- root Settings에는 데이터 저장·프라이버시 요약을 중복 표시하지 않으며, 보존 한계 고지는 Archive와 Paywall의 해당 맥락에 둠
 - 계정/로그아웃 메뉴는 V1에 표시하지 않음
 
 #### `FR-019` 프라이버시 보존 분석 이벤트
@@ -336,6 +338,7 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 - 허용된 이벤트와 속성만 allowlist 방식으로 전송합니다.
 - 사진 원본/썸네일/파일명/local identifier/촬영 위치/정확한 촬영 시각을 전송하지 않습니다.
 - 화면 녹화와 session replay는 비활성화합니다.
+- eligible weekly return과 이후 저장을 구분하기 위해 `EVT-eligible_week_opened`를 추가합니다. typed `entry_point=direct|notification`만 허용하고, direct/notification을 안정적으로 알 수 없는 경로는 추정하지 않습니다. weekKey, 날짜, 사진·식별자, recipient/destination, free-form value는 보내지 않습니다.
 
 #### `FR-020` 한국어와 영어
 
@@ -399,10 +402,12 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 | 온보딩 시작 | `EVT-onboarding_started` | locale, app_version |
 | Photos 결과 | `EVT-photo_permission_resolved` | status(full/limited/denied) |
 | 분석 시작 | `EVT-curation_started` | album_kind, candidate_count_bucket |
+| eligible 주간 진입 | `EVT-eligible_week_opened` | entry_point(direct/notification) |
 | 분석 완료 | `EVT-curation_completed` | duration_bucket, selected_count |
 | 사진 교체 | `EVT-photo_replaced` | replacement_index, no photo ID |
 | 기록 저장 | `EVT-album_saved` | album_kind, regular_sequence_bucket(`w1`/`w2`/`w3_plus`), selected_count, replacement_count, active_review_duration_bucket |
-| 공유창 열기 | `EVT-share_sheet_opened` | format(story/post), entry_point(save_confirmation/archive_detail); destination/recipient/completion 없음 |
+| 공유창 열기 | `EVT-share_sheet_opened` | format(story/post), entry_point(save_confirmation/archive_detail); destination/recipient 없음 |
+| 공유 완료 | `EVT-share_completed` | `completed == true`인 native activity completion callback을 presentation당 최대 1회 기록; format(story/post), entry_point(save_confirmation/archive_detail)만 허용하고 activity type/returned items/error/destination/recipient/message는 제외 |
 | 알림 선택 | `EVT-notification_permission_resolved` | status |
 | paywall 표시 | `EVT-paywall_viewed` | free_album_count |
 | 구매 결과 | `EVT-purchase_resolved` | result, product_type, localized_price_bucket optional |
@@ -417,7 +422,7 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 | 첫 저장 time-to-value 중앙값 | ≤2분 |
 | 반복 주 활성 검토 시간 중앙값 | ≤60초 |
 | 초기 선택 유지 | selected_count=7인 기록의 평균 ≥5/7; 전체는 `kept/selected` 비율 별도 보고 |
-| 저장 → 공유 의도 | Save Confirmation의 `share_sheet_opened / album_saved` ≥25% 초기 가설; Story/Post format mix 함께 확인 |
+| 저장 → 공유 완료 | Save Confirmation의 `share_completed / album_saved` ≥25% 초기 가설; Story/Post format mix 함께 확인 |
 | W2 eligible-week completion | ≥30% 방향 확인; Retention Pilot·출시 cohort 지표이며 출시 전 Usability Beta gate 아님 |
 | W4 eligible-week completion | 방향성과 이탈 이유 측정 |
 | 월요일 알림 → 해당 주 저장 | cohort별 측정, 베타 후 목표 설정 |
@@ -425,7 +430,7 @@ Welcome Week 저장 시점 다음 월요일 00:00을 `regularCycleStartsAt`으�
 
 작은 베타 표본에서는 숫자를 성공 선언보다 문제 탐지에 사용합니다.
 
-공유 지표는 native share sheet가 열린 **의도**만 뜻합니다. iOS 외부 앱에서 실제 게시됐는지, 누구에게 보냈는지, 어느 채널을 선택했는지는 수집하거나 성공으로 추정하지 않습니다. `entry_point=save_confirmation`만 저장 직후 전환 가설에 사용하고 Archive 재공유는 별도로 봅니다. V1 Release의 analytics가 no-op인 동안에는 이 수치를 주장하지 않으며, consent와 privacy audit를 통과해 측정을 켠 첫 cohort부터 baseline을 만듭니다.
+공유 지표는 `share_sheet_opened`라는 **의도**와, iOS가 `completed == true`로 알려 준 native activity **완료**를 구분합니다. 후자는 외부 앱에서 실제 게시됐는지, 누구에게 보냈는지, 어느 채널을 선택했는지를 뜻하지 않으며 그 정보는 수집하거나 추정하지 않습니다. `entry_point=save_confirmation`만 저장 직후 전환 가설에 사용하고 Archive 재공유는 별도로 봅니다. V1 Release의 analytics가 no-op인 동안에는 이 수치를 주장하지 않으며, privacy audit를 통과해 측정을 켠 첫 cohort부터 baseline을 만듭니다.
 
 W1/W2는 설치 후 단순 1·2주차가 아니라 Welcome 이후 첫 번째/두 번째 Regular Week입니다. Retention Pilot에서는 Welcome을 정해진 기한까지 저장한 참여자 roster를 denominator로 고정하고, 해당 완료 창이 닫힐 때까지 저장하지 않은 참여자도 미완료에 포함합니다. 앱을 다시 연 사람만 denominator로 잡지 않습니다.
 
@@ -458,7 +463,7 @@ Shipaton 카테고리 우선순위, demo/submission evidence, Build in Public �
 | 사진이 7장 미만 | 중간/낮음 | 실제 개수 유지, 다른 주 사진으로 채우지 않음 |
 | RevenueCat/App Store 설정 지연 | 중간/높음 | 개발 초기에 test product와 entitlement 검증 |
 | 1인 개발 범위 팽창 | 높음/높음 | 비목표 고정, 신규 요구는 문서 승인 후 추가 |
-| 앱 삭제·새 기기에서 Weekkeep 기록 유실 | 중간/높음 | `D-022`와 `FR-022`의 Settings·구매 맥락 안내, 영구 보존 표현 금지, 원본은 Photos에 유지; 백업/sync는 별도 V2 결정 |
+| 앱 삭제·새 기기에서 Weekkeep 기록 유실 | 중간/높음 | `D-022`와 `FR-022`의 Archive·Paywall/구매 맥락 안내, 영구 보존 표현 금지, 원본은 Photos에 유지; 백업/sync는 별도 V2 결정 |
 | 기존 코드 재사용이 부채를 유입 | 중간/높음 | 알고리즘 단위 재작성/테스트, 프로젝트 복사 금지 |
 
 ## 13. 출시 승인 조건
@@ -470,7 +475,7 @@ Shipaton 카테고리 우선순위, demo/submission evidence, Build in Public �
 - [ ] RevenueCat 구매, 취소, 실패, 대기, 복원 실기기 검증
 - [ ] VoiceOver, 가장 큰 접근성 텍스트, Reduce Motion 점검
 - [ ] 한국어/영어 UI 및 App Store metadata 검수
-- [ ] Settings와 구매/복원 맥락에서 로컬 보존 한계를 한국어·영어로 확인하고 영구 보존 오인 문구가 없음
+- [ ] Archive와 구매/복원 맥락에서 로컬 보존 한계를 한국어·영어로 확인하고 영구 보존 오인 문구가 없음
 - [ ] 크래시/데이터 손상 P0·P1 미해결 0건
 - [ ] Shipaton 제출 자산과 공개 URL 검증
 

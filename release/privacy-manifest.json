@@ -5,12 +5,12 @@
   "target": {
     "app_id": "6798449478",
     "version": "1.0.0",
-    "build": "6",
-    "asc_build_id": "0ffa7586-619f-4df9-abc5-ae7ebbd068b1",
+    "build": "7",
+    "asc_build_id": "1c51b451-d37f-4704-89c9-e426b1ee5725",
     "app_store_version_id": "ac4f183e-1019-4ffc-827f-f5514f0d349b",
-    "review_submission_id": "a9b0a18f-6cf6-4af4-8e6f-c77009831e00",
+    "review_submission_id": "6d2feeff-0f90-4b34-b0c8-b22a3b1928b7",
     "review_submission_state": "WAITING_FOR_REVIEW",
-    "review_submission_submitted_at": "2026-08-06T22:44:38.573Z",
+    "review_submission_submitted_at": "2026-08-07T15:33:05.463Z",
     "review_submission_item_count": 2,
     "review_submission_item_state": "READY_FOR_REVIEW",
     "iap_id": "6798491084",
@@ -20,11 +20,11 @@
     "ipa_evidence": null,
     "ipa_evidence_status": "verified_local_without_tracked_evidence_file",
     "ipa_local_verification": {
-      "size_bytes": 23338085,
-      "sha256": "feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a",
+      "size_bytes": 23420062,
+      "sha256": "25c2c1ff17b14bd976392f3d8d6d1c103bd5488de66b866cadb8a5339f627889",
       "bundle_id": "com.solkim.weekkeep",
       "version": "1.0.0",
-      "build": "6",
+      "build": "7",
       "purchases": true,
       "analytics": false,
       "privacy_info_present": true,
@@ -34,6 +34,25 @@
     "app_privacy_publish_state": "PUBLISHED_CURRENT_APP_VERSION",
     "app_privacy_scope": "current_app_version_1.0.0",
     "app_privacy_published_on": "2026-08-06"
+  },
+  "historical_replaced_build_6": {
+    "version": "1.0.0",
+    "build": "6",
+    "asc_build_id": "0ffa7586-619f-4df9-abc5-ae7ebbd068b1",
+    "ipa_evidence": null,
+    "ipa_local_verification": {
+      "size_bytes": 23338085,
+      "sha256": "feccbf6e94b4b848d119eb242994f9626106595b79d6e8acc0d8d8e2dc55f06a",
+      "bundle_id": "com.solkim.weekkeep",
+      "version": "1.0.0",
+      "build": "6",
+      "purchases": true,
+      "analytics": false,
+      "privacy_info_present": true
+    },
+    "review_submission_id": "a9b0a18f-6cf6-4af4-8e6f-c77009831e00",
+    "review_submission_state": "COMPLETE",
+    "status": "HISTORICAL_REPLACED_BY_BUILD_7"
   },
   "historical_build_3": {
     "version": "1.0.0",

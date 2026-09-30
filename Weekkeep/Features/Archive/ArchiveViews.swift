@@ -96,7 +96,11 @@ private struct WeekRow: View {
     var body: some View {
         HStack(spacing: WeekkeepSpacing.four) {
             if let coverPhoto {
-                PhotoThumbnailView(photo: model.photoReference(from: coverPhoto), photoLibrary: model.environment.photoLibrary)
+                PhotoThumbnailView(
+                    photo: model.photoReference(from: coverPhoto),
+                    photoLibrary: model.environment.photoLibrary,
+                    targetSize: PhotoDisplayTarget.strip
+                )
                     .frame(width: 76, height: 76)
                     .clipShape(RoundedRectangle(cornerRadius: WeekkeepRadii.small))
                     .accessibilityIdentifier("SCR-ARC-01-Cover")

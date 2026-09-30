@@ -43,6 +43,35 @@ if (( failures > 0 )); then
   exit 1
 fi
 
+catalog_user_values="$(jq -r '
+  def strings:
+    if type == "object" then [to_entries[] | .value | strings] | add
+    elif type == "array" then map(strings) | add
+    elif type == "string" then [.] else [] end;
+  [.strings[] | .localizations | strings] | add[]
+' "$catalog")"
+
+if printf '%s\n' "$catalog_user_values" | rg -n -i 'draft|초안' >/dev/null; then
+  fail "user-visible String Catalog values contain draft/초안 jargon"
+else
+  pass "recursive String Catalog values contain no user-visible draft/초안 jargon."
+fi
+
+if printf '%s\n' "$catalog_user_values" | rg -n -i \
+  -e 'photos? (stay|remain) on (this|your) (iphone|device)' \
+  -e 'photos? (never )?leave (the )?(device|iphone)' \
+  -e '사진은 .*iPhone을 떠나' \
+  -e '사진.*기기를 떠나' \
+  -e '사진.*기기 밖' \
+  -e '사진.*밖으로 (나가|보내)' \
+  -e '사진은 .*iPhone 안에서만' \
+  -e '이 iPhone에서만 분석' \
+  -e '사진 정보.*밖으로' >/dev/null; then
+  fail "user-visible String Catalog values contain a disallowed absolute photo-privacy phrase"
+else
+  pass "recursive String Catalog values contain no disallowed absolute photo-privacy phrase."
+fi
+
 if jq -e '
   .sourceLanguage == "en" and
   .version == "1.0" and

@@ -163,6 +163,38 @@ final class AlbumStorePersistenceContractTests: XCTestCase {
         XCTAssertEqual(reference(for: second), "second")
     }
 
+    func testSwiftDataListKeepsAllSavedAlbumsBeyondTheFormerDisplayLimit() async throws {
+        let container = try WeekkeepSchema.previewContainer()
+        let context = ModelContext(container)
+        let baseDate = Date(timeIntervalSince1970: 1_700_000_000)
+        let savedAlbumCount = 201
+
+        for index in 0..<savedAlbumCount {
+            let start = baseDate.addingTimeInterval(Double(index) * 604_800)
+            context.insert(
+                WeeklyAlbumEntity(
+                    id: UUID(),
+                    weekKey: "history-" + String(index),
+                    kind: .regular,
+                    weekStart: start,
+                    weekEnd: start.addingTimeInterval(604_800),
+                    analysisCutoff: start.addingTimeInterval(604_800),
+                    createdAt: start,
+                    updatedAt: start,
+                    coverPhotoID: nil
+                )
+            )
+        }
+        try context.save()
+
+        let store = SwiftDataAlbumStore(modelContainer: container)
+        let summaries = try await store.listAlbums()
+
+        XCTAssertEqual(summaries.count, savedAlbumCount)
+        XCTAssertEqual(summaries.first?.weekKey, "history-200")
+        XCTAssertEqual(summaries.last?.weekKey, "history-0")
+    }
+
     func testV1SchemaAndMigrationPlanRoundTripAlbumPhotoRelationship() throws {
         XCTAssertEqual(WeekkeepSchemaV1.versionIdentifier, Schema.Version(1, 0, 0))
         XCTAssertEqual(WeekkeepMigrationPlan.schemas.count, 1)

@@ -15,7 +15,7 @@ export default function PrivacyPage() {
           <p className="eyebrow">PRIVACY POLICY</p>
           <h1>사진은 추억이고,<br />추적 데이터가 아닙니다.</h1>
           <p className="lede">
-            Weekkeep은 사진 선택과 분석을 iPhone 안에서 처리하도록 설계했습니다.
+            Weekkeep은 사진 고르기와 공유 이미지 만들기를 iPhone 안에서 처리하도록 설계했습니다.
             이 문서는 사진, 기기 내 기록, 구매 상태, 선택적 제품 분석 데이터를
             각각 어떻게 다루는지 설명합니다.
           </p>
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
             <section className="document-section" id="summary">
               <h2>1. 핵심 요약</h2>
               <ul>
-                <li>사진 픽셀과 사진 라이브러리 식별자는 기기 내 분석에만 사용하며 외부 서버로 보내지 않습니다.</li>
+                <li>사진 고르기와 공유 이미지 만들기는 사용자의 iPhone에서 처리합니다. 사진 픽셀, 썸네일, 파일명, 위치, 촬영 시각, Photos 식별자 같은 사진 정보는 분석을 위해 분석 서비스나 다른 서비스로 보내지 않습니다. 공유는 사용자가 직접 선택할 때만 시작합니다.</li>
                 <li>선택한 주간 기록은 계정이나 Weekkeep 클라우드가 아니라 앱의 로컬 저장소에 보관됩니다.</li>
                 <li>앱 삭제, 기기 변경, 원본 사진 삭제 또는 사진 접근 권한 변경 시 기록이 보이지 않거나 사라질 수 있습니다.</li>
                 <li>구매·복원 기능을 사용할 때 RevenueCat이 익명 앱 사용자 식별자와 구매 상태를 처리할 수 있습니다.</li>
@@ -50,7 +50,7 @@ export default function PrivacyPage() {
                 <li>광고, 타사 앱·웹사이트 간 추적, 생체 신원 식별, 개인정보 판매를 하지 않습니다.</li>
               </ul>
               <div className="notice">
-                <p><strong>중요:</strong> “사진은 iPhone을 떠나지 않는다”는 약속은 사진 픽셀, 썸네일, 파일명, 위치, 촬영 시각, Photos 식별자를 뜻합니다. 구매 처리와 선택적 제품 분석은 아래와 같이 별도로 공개합니다.</p>
+                <p><strong>중요:</strong> 사진 고르기와 공유 이미지 만들기는 iPhone에서 처리합니다. 사진 정보는 분석을 위해 외부 서비스로 보내지 않으며, 공유는 사용자가 직접 선택할 때만 시작합니다. 구매 처리와 선택적 제품 분석은 아래와 같이 별도로 공개합니다.</p>
               </div>
             </section>
 
@@ -108,7 +108,7 @@ export default function PrivacyPage() {
               <h3>권한을 요청하는 시점</h3>
               <p>앱을 설치하거나 첫 화면을 보는 것만으로 사진 권한을 요청하지 않습니다. 사용자가 사진 고르기를 직접 시작한 뒤 iOS 권한 화면을 표시합니다. 제한된 접근을 선택한 경우 허용된 사진만 다룹니다.</p>
               <h3>기기 내 분석</h3>
-              <p>이미지 축소, 미학 품질 추정, 흐림·노출·중복 신호 계산과 후보 정렬은 앱이 foreground에 있는 동안 Apple Photos/Vision 프레임워크를 이용해 기기에서 실행됩니다. 얼굴을 특정 사람으로 식별하거나 아이의 신원을 학습하지 않습니다.</p>
+              <p>이미지 축소, 미학 품질 추정, 흐림·노출·중복 신호 계산과 후보 정렬은 앱이 foreground에 있는 동안 Apple Photos/Vision 프레임워크를 이용해 기기에서 실행됩니다. 사용자가 공유를 선택하면 공유 이미지 렌더링도 iPhone에서 처리한 뒤 Apple 시스템 공유 시트를 엽니다. 얼굴을 특정 사람으로 식별하거나 아이의 신원을 학습하지 않습니다.</p>
               <h3>저장 방식과 한계</h3>
               <p>원본 사진 바이너리를 앱 샌드박스에 복제하지 않고 Photos 자산을 참조합니다. 따라서 원본을 사진 앱에서 삭제하거나 접근을 해제하면 해당 사진을 다시 표시하지 못할 수 있습니다. Weekkeep은 계정, 자체 서버 백업, CloudKit 동기화, 기기 간 앨범 복원을 제공하지 않습니다.</p>
             </section>
@@ -154,9 +154,9 @@ export default function PrivacyPage() {
 
             <section className="document-section" lang="en">
               <h2>Privacy Policy — English summary</h2>
-              <p>Weekkeep is designed for parents and guardians to create a small weekly photo record on their iPhone. Photo pixels, thumbnails, file names, locations, capture timestamps, and Photos identifiers are not uploaded to Weekkeep, analytics, or purchase services.</p>
+              <p>Weekkeep is designed for parents and guardians to create a small weekly photo record on their iPhone. Photo selection and share rendering are processed on your iPhone. Weekkeep does not send photo pixels, thumbnails, filenames, locations, capture timestamps, Photos identifiers, or other photo details to analytics services or other services for analysis. Sharing starts only when you choose it.</p>
               <h3>Information processed on your device</h3>
-              <p>After you choose to start and grant Photos access, Weekkeep uses Apple Photos and Vision frameworks in the foreground to review permitted photos, estimate quality and similarity, and prepare up to seven choices. It stores the week range, selection order, local Photos references, replacement state, and reminder preferences in the app’s local container. It does not copy full photo files into its own backup.</p>
+              <p>After you choose to start and grant Photos access, Weekkeep uses Apple Photos and Vision frameworks in the foreground to review permitted photos, estimate quality and similarity, and prepare up to seven choices. When you choose Share, Weekkeep renders the share image on your iPhone and opens Apple’s system share sheet. It stores the week range, selection order, local Photos references, replacement state, and reminder preferences in the app’s local container. It does not copy full photo files into its own backup.</p>
               <h3>Purchases and analytics</h3>
               <p>Apple processes App Store payments. RevenueCat may process an anonymous app user ID, product, transaction, and entitlement status when you purchase or restore Weekkeep Plus. If product analytics is enabled in a distributed build, Weekkeep sends only allowlisted, coarse product events to PostHog EU Cloud. Autocapture, person profiles, identification, session replay, surveys, feature flags, tracing, and automatic crash capture are disabled. Neither vendor receives photo data from Weekkeep.</p>
               <h3>Storage, deletion, and your choices</h3>

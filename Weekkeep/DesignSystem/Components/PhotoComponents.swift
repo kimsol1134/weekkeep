@@ -5,13 +5,23 @@ struct PhotoThumbnailView: View {
     let photo: PhotoReference
     let photoLibrary: any PhotoLibraryClient
     var contentMode: ContentMode = .fill
+    var targetSize: CGSize = PhotoDisplayTarget.reviewTile
+    var priority: PhotoDisplayPriority = .visible
     @State private var image: UIImage?
     @State private var failed = false
 
-    init(photo: PhotoReference, photoLibrary: any PhotoLibraryClient, contentMode: ContentMode = .fill) {
+    init(
+        photo: PhotoReference,
+        photoLibrary: any PhotoLibraryClient,
+        contentMode: ContentMode = .fill,
+        targetSize: CGSize = PhotoDisplayTarget.reviewTile,
+        priority: PhotoDisplayPriority = .visible
+    ) {
         self.photo = photo
         self.photoLibrary = photoLibrary
         self.contentMode = contentMode
+        self.targetSize = targetSize
+        self.priority = priority
     }
 
     var body: some View {
@@ -27,17 +37,42 @@ struct PhotoThumbnailView: View {
             }
         }
         .clipped()
-        .task(id: photo.id.rawValue) {
+        .task(id: "\(photo.id.rawValue)-\(Int(targetSize.width))x\(Int(targetSize.height))") {
+            await loadImage()
+        }
+    }
+
+    private func loadImage() async {
+        if let cached = await photoLibrary.cachedDisplayFrame(for: photo.id) {
+            image = cached.image
+            failed = false
+        } else {
             image = nil
             failed = false
-            do {
-                let result = try await photoLibrary.displayImage(for: photo.id, targetSize: CGSize(width: 720, height: 720))
+        }
+
+        var shownPixels = image.map { Int($0.size.width * $0.scale) * Int($0.size.height * $0.scale) } ?? 0
+        do {
+            let frames = await photoLibrary.displayFrames(
+                for: photo.id,
+                targetSize: targetSize,
+                priority: priority
+            )
+            for try await frame in frames {
                 guard !Task.isCancelled else { return }
-                image = UIImage(data: result.data)
+                if frame.pixelCount >= shownPixels {
+                    shownPixels = frame.pixelCount
+                    image = frame.image
+                }
+            }
+            if !Task.isCancelled {
                 failed = image == nil
-            } catch {
-                guard !Task.isCancelled else { return }
-                failed = true
+            }
+        } catch is CancellationError {
+            return
+        } catch {
+            if !Task.isCancelled {
+                failed = image == nil
             }
         }
     }
@@ -144,7 +179,12 @@ struct PhotoTile: View {
                 Button(action: onTap) {
                     ZStack {
                         Color.clear
-                        PhotoThumbnailView(photo: photo, photoLibrary: photoLibrary)
+                        PhotoThumbnailView(
+                            photo: photo,
+                            photoLibrary: photoLibrary,
+                            targetSize: aspectRatio > 1.2 ? PhotoDisplayTarget.hero : PhotoDisplayTarget.reviewTile,
+                            priority: aspectRatio > 1.2 ? .hero : .visible
+                        )
                             .frame(width: proxy.size.width, height: proxy.size.height)
                             .clipShape(RoundedRectangle(cornerRadius: WeekkeepRadii.small))
                             .overlay {

@@ -41,6 +41,95 @@ final class WeekRangeCalculatorTests: XCTestCase {
         XCTAssertEqual(calculator.weekKey(for: start), "2027-W01")
     }
 
+    func testPreferredFirstAlbumRangeUsesMostRecentlyCompletedLocalISOWeek() {
+        let calculator = WeekRangeCalculator(timeZone: seoul)
+        let now = date("2026-08-05T12:00:00+09:00")
+
+        let range = calculator.preferredFirstAlbumRange(now: now)
+
+        XCTAssertEqual(range.key, "welcome-completed-2026-W31")
+        XCTAssertEqual(range.start, date("2026-07-27T00:00:00+09:00"))
+        XCTAssertEqual(range.end, date("2026-08-03T00:00:00+09:00"))
+        XCTAssertEqual(range.welcomeAlbumRangeStrategy, .completedCalendarWeek)
+    }
+
+    func testRollingFallbackIsSelectedOnlyWhenCompletedWeekHasNoEligiblePhotos() {
+        let calculator = WeekRangeCalculator(timeZone: seoul)
+        let now = date("2026-08-05T12:00:00+09:00")
+
+        let fallback = calculator.selectFirstAlbumRange(
+            now: now,
+            preferredEligiblePhotoCount: 0,
+            fallbackEligiblePhotoCount: 3
+        )
+        XCTAssertEqual(fallback?.strategy, .rollingSevenDayFallback)
+        XCTAssertEqual(fallback?.range.key, "welcome-rolling-2026-08-05")
+
+        let preferred = calculator.selectFirstAlbumRange(
+            now: now,
+            preferredEligiblePhotoCount: 2,
+            fallbackEligiblePhotoCount: 3
+        )
+        XCTAssertEqual(preferred?.strategy, .completedCalendarWeek)
+        XCTAssertNil(calculator.selectFirstAlbumRange(
+            now: now,
+            preferredEligiblePhotoCount: 0,
+            fallbackEligiblePhotoCount: 0
+        ))
+    }
+
+    func testRollingFirstAlbumRangeUsesCalendarDaysAcrossDST() {
+        let pacific = TimeZone(identifier: "America/Los_Angeles")!
+        let calculator = WeekRangeCalculator(timeZone: pacific)
+        let analysisStartedAt = date("2026-03-09T12:00:00-07:00")
+
+        let range = calculator.rollingFirstAlbumRange(analysisStartedAt: analysisStartedAt)
+
+        XCTAssertEqual(range.start, date("2026-03-02T12:00:00-08:00"))
+        XCTAssertEqual(range.end, analysisStartedAt)
+        XCTAssertEqual(range.key, "welcome-rolling-2026-03-09")
+    }
+
+    func testPreferredFirstAlbumNextEligibilityIsOneToSevenLocalDaysAfterActivation() {
+        let calculator = WeekRangeCalculator(timeZone: seoul)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = seoul
+        let monday = date("2026-08-03T12:00:00+09:00")
+        let preferred = calculator.preferredFirstAlbumRange(now: monday)
+        let nextEligible = try! XCTUnwrap(
+            calculator.regularRange(startingAt: preferred.end).eligibleFrom
+        )
+
+        for offset in 0..<7 {
+            let activation = calendar.date(byAdding: .day, value: offset, to: monday)!
+            let activationDay = calendar.startOfDay(for: activation)
+            let eligibilityDay = calendar.startOfDay(for: nextEligible)
+            let dayDifference = calendar.dateComponents([.day], from: activationDay, to: eligibilityDay).day!
+            XCTAssertTrue(
+                (1...7).contains(dayDifference),
+                "Unexpected day difference \(dayDifference) for \(activation)"
+            )
+        }
+        XCTAssertEqual(nextEligible, date("2026-08-10T00:00:00+09:00"))
+    }
+
+    func testLegacyRollingWelcomeKeepsNextMondayCycleCompatibility() {
+        let calculator = WeekRangeCalculator(timeZone: seoul)
+        let savedAt = date("2026-08-05T18:00:00+09:00")
+        let legacy = calculator.welcomeRange(analysisStartedAt: savedAt)
+
+        XCTAssertEqual(legacy.welcomeAlbumRangeStrategy, .legacyRollingWelcome)
+        XCTAssertEqual(
+            calculator.regularCycleStart(forWelcomeRange: legacy, savedAt: savedAt),
+            date("2026-08-10T00:00:00+09:00")
+        )
+        let preferred = calculator.preferredFirstAlbumRange(now: savedAt)
+        XCTAssertEqual(
+            calculator.regularCycleStart(forWelcomeRange: preferred, savedAt: savedAt),
+            preferred.end
+        )
+    }
+
     private func date(_ string: String) -> Date {
         ISO8601DateFormatter().date(from: string)!
     }
@@ -516,6 +605,14 @@ final class PersistenceAndPolicyTests: XCTestCase {
 }
 
 final class AnalyticsAndDeepLinkTests: XCTestCase {
+    func testPhotoPermissionAnalyticsUsesStablePrivacySafeBuckets() {
+        XCTAssertEqual(PhotoAuthorization.authorized.analyticsValue, "full")
+        XCTAssertEqual(PhotoAuthorization.limited.analyticsValue, "limited")
+        XCTAssertEqual(PhotoAuthorization.denied.analyticsValue, "denied")
+        XCTAssertEqual(PhotoAuthorization.restricted.analyticsValue, "restricted")
+        XCTAssertEqual(PhotoAuthorization.notDetermined.analyticsValue, "not_determined")
+    }
+
     func testAnalyticsSchemaRejectsPhotoLikeKeysAndAllowsTypedEvent() {
         let event = AnalyticsEvent.albumSaved(
             albumKind: .regular,
@@ -553,6 +650,17 @@ final class AnalyticsAndDeepLinkTests: XCTestCase {
                 properties: ["format": "story", "entry_point": "message_recipient"]
             )
         )
+
+        let weeklyReturn = AnalyticsEvent.eligibleWeekOpened(entryPoint: .notification)
+        XCTAssertTrue(AnalyticsSchema.validate(weeklyReturn))
+        XCTAssertEqual(weeklyReturn.name, "eligible_week_opened")
+        XCTAssertEqual(weeklyReturn.properties, ["entry_point": "notification"])
+        XCTAssertNil(
+            AnalyticsSchema.sanitizedProperties(
+                eventName: "eligible_week_opened",
+                properties: ["entry_point": "unknown"]
+            )
+        )
     }
 
     func testDeepLinksNeverAcceptPhotoIdentifiers() {
@@ -588,10 +696,15 @@ final class AnalyticsAndDeepLinkTests: XCTestCase {
         let environment = AppEnvironment.fixtures()
         environment.selectedTab = .archive
 
-        environment.appRouter.route(.weeklyCurrent, in: environment)
+        environment.appRouter.route(
+            .weeklyCurrent,
+            in: environment,
+            entryPoint: .notification
+        )
 
         XCTAssertEqual(environment.selectedTab, .week)
         XCTAssertEqual(environment.pendingDeepLink, .weeklyCurrent)
+        XCTAssertEqual(environment.pendingWeeklyEntryPoint, .notification)
     }
 }
 
@@ -618,6 +731,354 @@ final class WeeklyDeepLinkConsumptionTests: XCTestCase {
         XCTAssertEqual(action, .presentPlus)
         XCTAssertNil(environment.pendingDeepLink)
         XCTAssertEqual(model.sheet, .paywall)
+    }
+}
+
+@MainActor
+final class WeeklyCurationCancellationTests: XCTestCase {
+    func testCancelThenImmediateRestartIgnoresStaleCallbacksAndKeepsNewRunCancelable() async throws {
+        let analysisService = ControlledPhotoAnalysisService()
+        let photoLibrary = FixturePhotoLibraryClient(
+            descriptors: FixturePhotoLibraryClient.makeDescriptors(count: 3)
+        )
+        let suiteName = "weekkeep.curation.cancel.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        let environment = AppEnvironment(
+            photoLibrary: photoLibrary,
+            analysisService: analysisService,
+            albumStore: InMemoryAlbumStore(),
+            purchaseClient: FixturePurchaseClient(),
+            notificationClient: FixtureNotificationClient(),
+            analyticsClient: NoopAnalyticsClient(),
+            defaults: defaults,
+            isFixture: true
+        )
+        let model = WeeklyFlowModel(environment: environment)
+
+        await model.refresh()
+        model.startCuration()
+        let firstRunStarted = await waitForRun(0, service: analysisService)
+        XCTAssertTrue(firstRunStarted)
+        guard firstRunStarted else { return }
+
+        model.cancelCuration()
+        model.startCuration()
+        let secondRunStarted = await waitForRun(1, service: analysisService)
+        XCTAssertTrue(secondRunStarted)
+        guard secondRunStarted else { return }
+        XCTAssertEqual(model.route, .curation)
+
+        let initialProgress = CurationProgress(
+            stage: .fetchingAssets,
+            completed: 0,
+            total: 0,
+            skippedCount: 0
+        )
+        let staleProgress = CurationProgress(
+            stage: .ranking,
+            completed: 99,
+            total: 99,
+            skippedCount: 0
+        )
+        let currentProgress = CurationProgress(
+            stage: .analyzing,
+            completed: 1,
+            total: 3,
+            skippedCount: 0
+        )
+
+        await analysisService.sendProgress(run: 0, progress: staleProgress)
+        await settleMainActorCallbacks()
+        XCTAssertEqual(model.progress, initialProgress)
+
+        await analysisService.complete(run: 0)
+        let firstRunWasCancelledAtResume = await analysisService.waitForCancellationAtResume(0)
+        XCTAssertTrue(firstRunWasCancelledAtResume)
+        await settleMainActorCallbacks()
+        XCTAssertEqual(model.route, .curation)
+        XCTAssertNil(model.draft)
+        XCTAssertEqual(model.progress, initialProgress)
+        XCTAssertNil(model.errorMessage)
+
+        model.startCuration()
+        let runOneTaskHandleWasPreserved = await waitForRunToRemainUnstarted(2, service: analysisService)
+        XCTAssertTrue(runOneTaskHandleWasPreserved)
+
+        await analysisService.sendProgress(run: 1, progress: currentProgress)
+        await settleMainActorCallbacks()
+        XCTAssertEqual(model.progress, currentProgress)
+
+        model.cancelCuration()
+        model.startCuration()
+        let thirdRunStarted = await waitForRun(2, service: analysisService)
+        XCTAssertTrue(thirdRunStarted)
+        guard thirdRunStarted else { return }
+
+        let nextRunProgress = CurationProgress(
+            stage: .analyzing,
+            completed: 2,
+            total: 3,
+            skippedCount: 1
+        )
+
+        await analysisService.sendProgress(run: 2, progress: nextRunProgress)
+        await settleMainActorCallbacks()
+        XCTAssertEqual(model.progress, nextRunProgress)
+
+        await analysisService.cancel(run: 1)
+        let secondRunWasCancelledAtResume = await analysisService.waitForCancellationAtResume(1)
+        await settleMainActorCallbacks()
+        XCTAssertTrue(secondRunWasCancelledAtResume)
+        XCTAssertEqual(model.route, .curation)
+        XCTAssertNil(model.draft)
+        XCTAssertEqual(model.progress, nextRunProgress)
+        XCTAssertNil(model.errorMessage)
+
+        await analysisService.sendProgress(run: 1, progress: staleProgress)
+        await settleMainActorCallbacks()
+        XCTAssertEqual(model.progress, nextRunProgress)
+
+        model.startCuration()
+        let runTwoTaskHandleWasPreserved = await waitForRunToRemainUnstarted(3, service: analysisService)
+        XCTAssertTrue(runTwoTaskHandleWasPreserved)
+
+        model.cancelCuration()
+        await analysisService.complete(run: 2)
+        let thirdRunWasCancelledAtResume = await analysisService.waitForCancellationAtResume(2)
+        await settleMainActorCallbacks()
+
+        XCTAssertTrue(thirdRunWasCancelledAtResume)
+        XCTAssertNil(model.route)
+        XCTAssertNil(model.draft)
+        XCTAssertNil(model.progress)
+    }
+
+    private func waitForRun(
+        _ run: Int,
+        service: ControlledPhotoAnalysisService
+    ) async -> Bool {
+        for _ in 0..<100 {
+            if await service.hasStarted(run) { return true }
+            await Task.yield()
+        }
+        return false
+    }
+
+    private func waitForRunToRemainUnstarted(
+        _ run: Int,
+        service: ControlledPhotoAnalysisService
+    ) async -> Bool {
+        for _ in 0..<100 {
+            if await service.hasStarted(run) { return false }
+            await Task.yield()
+        }
+        return true
+    }
+
+    private func settleMainActorCallbacks() async {
+        for _ in 0..<8 {
+            await Task.yield()
+        }
+    }
+}
+
+@MainActor
+final class FirstAlbumCurationPinningTests: XCTestCase {
+    func testStartCurationUsesTheRangeResolvedByTheRootFallback() async throws {
+        let now = ISO8601DateFormatter().date(from: "2026-08-05T12:00:00+09:00")!
+        let descriptors = (0..<3).map { index in
+            PhotoDescriptor(
+                id: PhotoID("first-album-fallback-\(index)"),
+                capturedAt: now.addingTimeInterval(Double(index - 48) * 60 * 60),
+                pixelWidth: 1_200,
+                pixelHeight: 1_600,
+                isFavorite: false,
+                isHidden: false,
+                isScreenshot: false
+            )
+        }
+        let photoLibrary = FixturePhotoLibraryClient(descriptors: descriptors)
+        let analysisService = ControlledPhotoAnalysisService()
+        let suiteName = "weekkeep.first-album.pin.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        let environment = AppEnvironment(
+            photoLibrary: photoLibrary,
+            analysisService: analysisService,
+            albumStore: InMemoryAlbumStore(),
+            purchaseClient: FixturePurchaseClient(),
+            notificationClient: FixtureNotificationClient(),
+            analyticsClient: NoopAnalyticsClient(),
+            defaults: defaults,
+            isFixture: true,
+            timeZone: TimeZone(identifier: "Asia/Seoul")!
+        )
+        let model = WeeklyFlowModel(environment: environment, nowProvider: { now })
+
+        await model.refresh()
+        XCTAssertEqual(model.firstAlbumRangeStrategy, .rollingSevenDayFallback)
+        let resolved = try XCTUnwrap(model.resolvedCurationRange)
+
+        model.startCuration()
+        var started = false
+        for _ in 0..<100 {
+            if await analysisService.hasStarted(0) {
+                started = true
+                break
+            }
+            await Task.yield()
+        }
+
+        XCTAssertTrue(started)
+        let requestedWeekOptional = await analysisService.week(for: 0)
+        let requestedWeek = try XCTUnwrap(requestedWeekOptional)
+        XCTAssertEqual(requestedWeek, resolved)
+        XCTAssertEqual(resolved.welcomeAlbumRangeStrategy, .rollingSevenDayFallback)
+        model.cancelCuration()
+        await analysisService.cancel(run: 0)
+    }
+
+    @MainActor
+    func testPersistedCycleIsPreservedForLegacyRollingWelcome() async throws {
+        let timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let savedAt = ISO8601DateFormatter().date(from: "2026-08-05T18:00:00+09:00")!
+        let calculator = WeekRangeCalculator(timeZone: timeZone)
+        let legacyRange = calculator.welcomeRange(analysisStartedAt: savedAt)
+        let album = WeeklyAlbumSnapshot(
+            id: UUID(),
+            weekKey: legacyRange.key,
+            kind: .welcome,
+            weekStart: legacyRange.start,
+            weekEnd: legacyRange.end,
+            analysisCutoff: legacyRange.cutoff,
+            createdAt: savedAt,
+            updatedAt: savedAt,
+            coverPhotoID: nil,
+            photos: []
+        )
+        let suiteName = "weekkeep.legacy-cycle.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suiteName))
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let persistedCycle = ISO8601DateFormatter().date(from: "2026-08-24T00:00:00+09:00")!
+        let environment = AppEnvironment(
+            photoLibrary: FixturePhotoLibraryClient(descriptors: []),
+            analysisService: ControlledPhotoAnalysisService(),
+            albumStore: InMemoryAlbumStore(initialAlbums: [album]),
+            purchaseClient: FixturePurchaseClient(),
+            notificationClient: FixtureNotificationClient(),
+            analyticsClient: NoopAnalyticsClient(),
+            defaults: defaults,
+            isFixture: true,
+            timeZone: timeZone
+        )
+        environment.regularCycleStartsAt = persistedCycle
+
+        let model = WeeklyFlowModel(
+            environment: environment,
+            nowProvider: { savedAt }
+        )
+        await model.refresh()
+
+        XCTAssertEqual(environment.regularCycleStartsAt, persistedCycle)
+    }
+}
+
+private actor ControlledPhotoAnalysisService: PhotoAnalysisService {
+    private struct RunRequest {
+        let kind: AlbumKind
+        let week: WeekRange
+        let analysisCutoff: Date
+    }
+
+    private var nextRun = 0
+    private var startedRuns = Set<Int>()
+    private var requests: [Int: RunRequest] = [:]
+    private var progressCallbacks: [Int: @Sendable (CurationProgress) -> Void] = [:]
+    private var continuations: [Int: CheckedContinuation<CurationDraft, Error>] = [:]
+    private var cancellationAtResume: [Int: Bool] = [:]
+    private var cancellationEvidenceWaiters: [Int: [CheckedContinuation<Bool, Never>]] = [:]
+
+    func makeDraft(
+        kind: AlbumKind,
+        week: WeekRange,
+        analysisCutoff: Date,
+        progress: @escaping @Sendable (CurationProgress) -> Void
+    ) async throws -> CurationDraft {
+        let run = nextRun
+        nextRun += 1
+        startedRuns.insert(run)
+        requests[run] = RunRequest(kind: kind, week: week, analysisCutoff: analysisCutoff)
+        progressCallbacks[run] = progress
+
+        do {
+            let draft = try await withCheckedThrowingContinuation { continuation in
+                continuations[run] = continuation
+            }
+            recordCancellationAtResume(for: run)
+            return draft
+        } catch {
+            recordCancellationAtResume(for: run)
+            throw error
+        }
+    }
+
+    func hasStarted(_ run: Int) -> Bool {
+        startedRuns.contains(run)
+    }
+
+    func week(for run: Int) -> WeekRange? {
+        requests[run]?.week
+    }
+
+    func waitForCancellationAtResume(_ run: Int) async -> Bool {
+        if let value = cancellationAtResume[run] { return value }
+        return await withCheckedContinuation { continuation in
+            cancellationEvidenceWaiters[run, default: []].append(continuation)
+        }
+    }
+
+    func sendProgress(run: Int, progress: CurationProgress) {
+        progressCallbacks[run]?(progress)
+    }
+
+    func cancel(run: Int) {
+        continuations.removeValue(forKey: run)?.resume(throwing: CancellationError())
+    }
+
+    func complete(run: Int) {
+        guard let request = requests[run] else { return }
+        continuations.removeValue(forKey: run)?.resume(returning: makeDraft(for: request, run: run))
+    }
+
+    private func recordCancellationAtResume(for run: Int) {
+        let value = Task.isCancelled
+        cancellationAtResume[run] = value
+        let waiters = cancellationEvidenceWaiters.removeValue(forKey: run) ?? []
+        waiters.forEach { $0.resume(returning: value) }
+    }
+
+    private func makeDraft(for request: RunRequest, run: Int) -> CurationDraft {
+        let photo = PhotoReference(
+            id: PhotoID("controlled-\(run)"),
+            capturedAt: request.week.start.addingTimeInterval(3_600),
+            pixelWidth: 1_200,
+            pixelHeight: 1_600,
+            score: 0.8,
+            source: .initial
+        )
+        return try! CurationDraft(
+            id: UUID(),
+            kind: request.kind,
+            week: request.week,
+            analysisCutoff: request.analysisCutoff,
+            selected: [photo],
+            alternatives: [],
+            replacementCount: 0,
+            skippedAssetCount: 0
+        ).validated()
     }
 }
 
@@ -730,7 +1191,7 @@ final class ResourceContractTests: XCTestCase {
         XCTAssertEqual(catalog["version"] as? String, "1.0")
 
         let strings = try XCTUnwrap(catalog["strings"] as? [String: Any])
-        XCTAssertEqual(strings.count, 206)
+        XCTAssertEqual(strings.count, 220)
         XCTAssertFalse(FileManager.default.fileExists(atPath: resourceURL("Weekkeep/Resources/en.lproj/Localizable.strings").path))
         XCTAssertFalse(FileManager.default.fileExists(atPath: resourceURL("Weekkeep/Resources/ko.lproj/Localizable.strings").path))
 
@@ -788,6 +1249,118 @@ final class ResourceContractTests: XCTestCase {
         let englishInfo = try localizedKeys(at: resourceURL("Weekkeep/Resources/en.lproj/InfoPlist.strings"))
         let koreanInfo = try localizedKeys(at: resourceURL("Weekkeep/Resources/ko.lproj/InfoPlist.strings"))
         XCTAssertEqual(englishInfo, koreanInfo)
+
+        let englishInfoCopy = try String(contentsOf: resourceURL("Weekkeep/Resources/en.lproj/InfoPlist.strings"), encoding: .utf8)
+        let koreanInfoCopy = try String(contentsOf: resourceURL("Weekkeep/Resources/ko.lproj/InfoPlist.strings"), encoding: .utf8)
+        XCTAssertTrue(englishInfoCopy.contains("most recently completed Monday–Sunday week"))
+        XCTAssertTrue(englishInfoCopy.contains("most recent 7 days"))
+        XCTAssertTrue(englishInfoCopy.contains("Photos are processed on your iPhone"))
+        XCTAssertTrue(koreanInfoCopy.contains("최근 완료된 월요일부터 일요일까지의 한 주에서 첫 추억을 고를 수 있도록"))
+        XCTAssertTrue(koreanInfoCopy.contains("최근 7일을 확인할 수 있어요"))
+        XCTAssertTrue(koreanInfoCopy.contains("사진 고르기는 이 iPhone 안에서 이뤄져요"))
+    }
+
+    func testUserVisibleStringCatalogValuesDoNotContainCurationJargon() throws {
+        let catalogURL = resourceURL("Weekkeep/Resources/Localizable.xcstrings")
+        let catalogData = try Data(contentsOf: catalogURL)
+        let catalog = try XCTUnwrap(JSONSerialization.jsonObject(with: catalogData) as? [String: Any])
+        let strings = try XCTUnwrap(catalog["strings"] as? [String: Any])
+        let forbiddenTerms = ["초안", "draft"]
+
+        for key in strings.keys.sorted() {
+            let entry = try XCTUnwrap(strings[key] as? [String: Any], "Malformed catalog entry: \(key)")
+            let localizations = try XCTUnwrap(entry["localizations"] as? [String: Any], "Missing locales: \(key)")
+            for locale in ["en", "ko"] {
+                let localization = try XCTUnwrap(localizations[locale] as? [String: Any], "Missing \(locale) for \(key)")
+                for value in stringUnitValues(in: localization) {
+                    for forbiddenTerm in forbiddenTerms {
+                        XCTAssertFalse(
+                            value.localizedCaseInsensitiveContains(forbiddenTerm),
+                            "User-visible \(locale) copy for \(key) contains forbidden term \(forbiddenTerm): \(value)"
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    func testUserVisiblePrivacyCopyUsesPreciseProcessingAndSharingLanguage() throws {
+        let catalogURL = resourceURL("Weekkeep/Resources/Localizable.xcstrings")
+        let catalogData = try Data(contentsOf: catalogURL)
+        let catalog = try XCTUnwrap(JSONSerialization.jsonObject(with: catalogData) as? [String: Any])
+        let strings = try XCTUnwrap(catalog["strings"] as? [String: Any])
+
+        XCTAssertEqual(
+            try catalogStringValue(strings, key: "onboarding.privacy", locale: "en"),
+            "Photos are processed on your iPhone"
+        )
+        XCTAssertEqual(
+            try catalogStringValue(strings, key: "onboarding.privacy", locale: "ko"),
+            "사진 고르기는 이 iPhone 안에서 이뤄져요"
+        )
+        XCTAssertEqual(
+            try catalogStringValue(strings, key: "privacy.body", locale: "en"),
+            "Photo selection and share rendering are processed on your iPhone. Weekkeep does not send photos or photo details to analytics services or other services for analysis. Sharing starts only when you explicitly choose it."
+        )
+        XCTAssertEqual(
+            try catalogStringValue(strings, key: "privacy.body", locale: "ko"),
+            "사진 고르기와 공유 이미지 만들기는 이 iPhone에서 처리해요. 사진·미리보기·파일 이름·위치·촬영 시각 같은 사진 정보는 사용 통계나 다른 서비스의 분석을 위해 보내지 않아요. 공유는 직접 선택할 때만 시작돼요."
+        )
+        XCTAssertEqual(
+            try catalogStringValue(strings, key: "privacy.youDecideBody", locale: "en"),
+            "Sharing starts only when you explicitly choose it. You can change photo access any time in Settings."
+        )
+        XCTAssertEqual(
+            try catalogStringValue(strings, key: "privacy.youDecideBody", locale: "ko"),
+            "공유는 직접 선택할 때만 시작돼요. 사진 접근은 언제든 설정에서 바꿀 수 있어요."
+        )
+
+        let forbiddenPrivacyPhrases = [
+            "photos stay on this iphone",
+            "photos stay on this device",
+            "photos never leave this iphone",
+            "photos never leave the device",
+            "사진은 이 iphone을 떠나",
+            "사진은 기기를 떠나",
+            "사진이 기기를 떠나",
+            "사진은 이 iphone 안에서만",
+            "사진 정보도 밖으로"
+        ]
+        for key in strings.keys.sorted() {
+            let entry = try XCTUnwrap(strings[key] as? [String: Any], "Malformed catalog entry: \(key)")
+            let localizations = try XCTUnwrap(entry["localizations"] as? [String: Any], "Missing locales: \(key)")
+            for locale in ["en", "ko"] {
+                let localization = try XCTUnwrap(localizations[locale] as? [String: Any], "Missing \(locale) for \(key)")
+                for value in stringUnitValues(in: localization) {
+                    for forbiddenPhrase in forbiddenPrivacyPhrases {
+                        XCTAssertFalse(
+                            value.localizedCaseInsensitiveContains(forbiddenPhrase),
+                            "User-visible \(locale) copy for \(key) contains disallowed privacy phrase \(forbiddenPhrase): \(value)"
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    func testWeeklyStartCopyKeepsWelcomeAndRegularActionsDistinct() throws {
+        let catalogURL = resourceURL("Weekkeep/Resources/Localizable.xcstrings")
+        let catalogData = try Data(contentsOf: catalogURL)
+        let catalog = try XCTUnwrap(JSONSerialization.jsonObject(with: catalogData) as? [String: Any])
+        let strings = try XCTUnwrap(catalog["strings"] as? [String: Any])
+
+        XCTAssertEqual(try catalogStringValue(strings, key: "week.makeWelcomeSelection", locale: "en"), "Choose your first week")
+        XCTAssertEqual(try catalogStringValue(strings, key: "week.makeWelcomeSelection", locale: "ko"), "첫 주 추억 고르기")
+        XCTAssertEqual(try catalogStringValue(strings, key: "week.makeDraft", locale: "en"), "Choose moments from last week")
+        XCTAssertEqual(try catalogStringValue(strings, key: "week.makeDraft", locale: "ko"), "지난주 추억 고르기")
+        XCTAssertNotEqual(
+            try catalogStringValue(strings, key: "week.welcomeBody", locale: "en"),
+            try catalogStringValue(strings, key: "week.readyBody", locale: "en")
+        )
+        XCTAssertNotEqual(
+            try catalogStringValue(strings, key: "week.welcomeBody", locale: "ko"),
+            try catalogStringValue(strings, key: "week.readyBody", locale: "ko")
+        )
     }
 
     func testRuntimeCountAndViewerStringsForEnglishAndKorean() {
@@ -799,15 +1372,15 @@ final class ResourceContractTests: XCTestCase {
         XCTAssertEqual(WeekkeepLocalization.string("week.photoCount", locale: korean, 1), "지난주 사진 1장")
         XCTAssertEqual(WeekkeepLocalization.string("week.photoCount", locale: korean, 2), "지난주 사진 2장")
 
-        XCTAssertEqual(WeekkeepLocalization.string("review.body", locale: english, 1), "We chose 1 moment for this week. Change it only if it doesn't feel right.")
-        XCTAssertEqual(WeekkeepLocalization.string("review.body", locale: english, 2), "We chose 2 moments for this week. Change only what doesn't feel right.")
-        XCTAssertEqual(WeekkeepLocalization.string("review.body", locale: korean, 1), "이번 주의 순간 1장을 골랐어요. 마음에 들지 않는 사진만 바꿔보세요.")
-        XCTAssertEqual(WeekkeepLocalization.string("review.body", locale: korean, 2), "이번 주의 순간 2장을 골랐어요. 마음에 들지 않는 사진만 바꿔보세요.")
+        XCTAssertEqual(WeekkeepLocalization.string("review.body", locale: english, 1), "We found 1 moment to keep this week. Change it only if you want to.")
+        XCTAssertEqual(WeekkeepLocalization.string("review.body", locale: english, 2), "We found 2 moments to keep this week. Change only what you want to.")
+        XCTAssertEqual(WeekkeepLocalization.string("review.body", locale: korean, 1), "이번 주에 남길 순간 1장을 골라봤어요. 마음에 들지 않는 사진만 바꿔보세요.")
+        XCTAssertEqual(WeekkeepLocalization.string("review.body", locale: korean, 2), "이번 주에 남길 순간 2장을 골라봤어요. 마음에 들지 않는 사진만 바꿔보세요.")
 
-        XCTAssertEqual(WeekkeepLocalization.string("review.keep", locale: english, 1), "Keep 1 photo")
-        XCTAssertEqual(WeekkeepLocalization.string("review.keep", locale: english, 2), "Keep 2 photos")
-        XCTAssertEqual(WeekkeepLocalization.string("review.keep", locale: korean, 1), "이 1장 남기기")
-        XCTAssertEqual(WeekkeepLocalization.string("review.keep", locale: korean, 2), "이 2장 남기기")
+        XCTAssertEqual(WeekkeepLocalization.string("review.keep", locale: english, 1), "Save 1 photo")
+        XCTAssertEqual(WeekkeepLocalization.string("review.keep", locale: english, 2), "Save 2 photos")
+        XCTAssertEqual(WeekkeepLocalization.string("review.keep", locale: korean, 1), "사진 1장 남기기")
+        XCTAssertEqual(WeekkeepLocalization.string("review.keep", locale: korean, 2), "사진 2장 남기기")
 
         for key in ["save.metadata", "detail.savedOnDevice"] {
             XCTAssertEqual(WeekkeepLocalization.string(key, locale: english, 1), "1 photo · Saved on this iPhone")
@@ -890,6 +1463,35 @@ final class ResourceContractTests: XCTestCase {
 
     private func stringUnitValue(in localization: [String: Any]) -> String? {
         (localization["stringUnit"] as? [String: Any])?["value"] as? String
+    }
+
+    private func catalogStringValue(
+        _ strings: [String: Any],
+        key: String,
+        locale: String
+    ) throws -> String {
+        let entry = try XCTUnwrap(strings[key] as? [String: Any])
+        let localizations = try XCTUnwrap(entry["localizations"] as? [String: Any])
+        let localization = try XCTUnwrap(localizations[locale] as? [String: Any])
+        return try XCTUnwrap(stringUnitValue(in: localization))
+    }
+
+    private func stringUnitValues(in value: Any) -> [String] {
+        if let dictionary = value as? [String: Any] {
+            var values: [String] = []
+            if let stringUnit = dictionary["stringUnit"] as? [String: Any],
+               let stringValue = stringUnit["value"] as? String {
+                values.append(stringValue)
+            }
+            for (key, nestedValue) in dictionary where key != "stringUnit" {
+                values.append(contentsOf: stringUnitValues(in: nestedValue))
+            }
+            return values
+        }
+        if let array = value as? [Any] {
+            return array.flatMap(stringUnitValues(in:))
+        }
+        return []
     }
 
     private func pluralVariants(in localization: [String: Any]) -> [String: Any] {

@@ -33,7 +33,7 @@ final class WeekkeepAppDelegate: NSObject, UIApplicationDelegate, UNUserNotifica
 #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("-ui-export-share-artifacts") {
             do {
-                let directory = try ShareArtifactFixtureExporter.exportEnglishArtifacts()
+                let directory = try ShareArtifactFixtureExporter.exportShareArtifacts()
                 print("WK_SHARE_EXPORT_DIR=\(directory.path)")
             } catch {
                 assertionFailure("Share artifact fixture export failed: \(error)")
@@ -55,7 +55,11 @@ final class WeekkeepAppDelegate: NSObject, UIApplicationDelegate, UNUserNotifica
         guard let link else { return }
         Task { @MainActor [weak self] in
             if let self {
-                self.environment.appRouter.route(link, in: self.environment)
+                self.environment.appRouter.route(
+                    link,
+                    in: self.environment,
+                    entryPoint: .notification
+                )
             }
         }
     }
@@ -74,7 +78,11 @@ struct WeekkeepApp: App {
                 .onOpenURL { url in
                     let environment = appDelegate.environment
                     if let link = environment.appRouter.parse(url) {
-                        environment.appRouter.route(link, in: environment)
+                        environment.appRouter.route(
+                            link,
+                            in: environment,
+                            entryPoint: .direct
+                        )
                     }
                 }
         }
@@ -84,12 +92,14 @@ struct WeekkeepApp: App {
 #if DEBUG
 @MainActor
 private enum ShareArtifactFixtureExporter {
-    static func exportEnglishArtifacts() throws -> URL {
+    /// Debug-only evidence export. The output lives in the simulator's
+    /// temporary directory and is never reachable from a production path.
+    static func exportShareArtifacts() throws -> URL {
         let start = ISO8601DateFormatter().date(from: "2026-07-30T00:00:00Z")!
         let photoIDs = SamplePhotoFixtures.assetNames.indices.map { PhotoID("share-fixture-\($0)") }
         let photos = photoIDs.enumerated().map { index, id in
             AlbumPhotoSnapshot(
-                id: UUID(),
+                id: UUID(uuidString: String(format: "00000000-0000-0000-0000-%012d", index + 1))!,
                 assetLocalIdentifier: id,
                 capturedAt: start.addingTimeInterval(Double(index) * 86_400),
                 position: index,
@@ -99,7 +109,7 @@ private enum ShareArtifactFixtureExporter {
             )
         }
         let album = WeeklyAlbumSnapshot(
-            id: UUID(),
+            id: UUID(uuidString: "00000000-0000-0000-0000-000000000012")!,
             weekKey: "2026-W31",
             kind: .regular,
             weekStart: start,
@@ -124,22 +134,28 @@ private enum ShareArtifactFixtureExporter {
             )
         }
 
-        let renderer = WeeklyAlbumShareRenderer(
-            locale: Locale(identifier: "en_US"),
-            timeZone: TimeZone(secondsFromGMT: 0)!,
-            wordmarkImage: UIImage(named: "WeekkeepWordmark")
-        )
-        let directory = try FileManager.default.url(
-            for: .documentDirectory,
-            in: .userDomainMask,
-            appropriateFor: nil,
-            create: true
-        ).appendingPathComponent("ShareArtifactFixtures", isDirectory: true)
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("WeekkeepShareArtifactEvidence", isDirectory: true)
+        try? FileManager.default.removeItem(at: directory)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        try renderer.render(album: album, images: images, format: .story)
-            .write(to: directory.appendingPathComponent("weekkeep-story-en.jpg"), options: .atomic)
-        try renderer.render(album: album, images: images, format: .post)
-            .write(to: directory.appendingPathComponent("weekkeep-post-en.jpg"), options: .atomic)
+
+        let locales: [(name: String, locale: Locale)] = [
+            ("en", Locale(identifier: "en_US")),
+            ("ko", Locale(identifier: "ko_KR"))
+        ]
+        for (name, locale) in locales {
+            let renderer = WeeklyAlbumShareRenderer(
+                locale: locale,
+                timeZone: TimeZone(secondsFromGMT: 0)!,
+                wordmarkImage: UIImage(named: "WeekkeepWordmark"),
+                shareIdentity: WeeklyAlbumShareIdentity(ordinal: 12)
+            )
+            for format in WeeklyAlbumShareFormat.allCases {
+                let fileName = "weekkeep-share-\(format.rawValue)-\(name)-ordinal-12.jpg"
+                try renderer.render(album: album, images: images, format: format)
+                    .write(to: directory.appendingPathComponent(fileName), options: .atomic)
+            }
+        }
         return directory
     }
 }

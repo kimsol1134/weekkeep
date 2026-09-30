@@ -10,7 +10,47 @@ protocol PhotoLibraryClient: Sendable {
     func fetchDescriptors(in range: DateInterval, limit: Int) async throws -> [PhotoDescriptor]
     func analysisImage(for id: PhotoID, targetSize: CGSize) async throws -> PhotoImageData
     func displayImage(for id: PhotoID, targetSize: CGSize) async throws -> PhotoImageData
+    func displayFrames(for id: PhotoID, targetSize: CGSize) async -> AsyncThrowingStream<PhotoDisplayFrame, Error>
+    func displayFrames(for id: PhotoID, targetSize: CGSize, priority: PhotoDisplayPriority) async -> AsyncThrowingStream<PhotoDisplayFrame, Error>
+    func cachedDisplayFrame(for id: PhotoID) async -> PhotoDisplayFrame?
     func assetAvailability(for ids: [PhotoID]) async -> Set<PhotoID>
+}
+
+extension PhotoLibraryClient {
+    func cachedDisplayFrame(for id: PhotoID) async -> PhotoDisplayFrame? { nil }
+
+    func displayFrames(
+        for id: PhotoID,
+        targetSize: CGSize
+    ) async -> AsyncThrowingStream<PhotoDisplayFrame, Error> {
+        await displayFrames(for: id, targetSize: targetSize, priority: .visible)
+    }
+
+    func displayFrames(
+        for id: PhotoID,
+        targetSize: CGSize,
+        priority: PhotoDisplayPriority
+    ) async -> AsyncThrowingStream<PhotoDisplayFrame, Error> {
+        AsyncThrowingStream { continuation in
+            let task = Task {
+                do {
+                    if let cached = await cachedDisplayFrame(for: id) {
+                        continuation.yield(cached)
+                    }
+                    let data = try await displayImage(for: id, targetSize: targetSize)
+                    if let image = UIImage(data: data.data) {
+                        continuation.yield(PhotoDisplayFrame(image: image))
+                    }
+                    continuation.finish()
+                } catch is CancellationError {
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+            continuation.onTermination = { _ in task.cancel() }
+        }
+    }
 }
 
 struct PhotoImageData: Sendable, Equatable {
@@ -37,7 +77,9 @@ struct BoundedPhotoFetchIndexSampler: Sendable, Equatable {
 }
 
 actor PhotoKitClient: PhotoLibraryClient {
-    private let imageManager = PHImageManager.default()
+    private let imageManager = PHCachingImageManager()
+    private let displayGate = PhotoDisplayRequestGate()
+    private var displayCache: [PhotoID: PhotoDisplayFrame] = [:]
 
     func authorizationStatus() async -> PhotoAuthorization {
         #if canImport(Photos)
@@ -99,11 +141,90 @@ actor PhotoKitClient: PhotoLibraryClient {
         // Ranking only needs a small, quickly delivered representation. The
         // display path below remains independent and can request a larger
         // opportunistic image for review/export.
-        try await requestImage(for: id, targetSize: targetSize, deliveryMode: .fastFormat)
+        let image = try await requestUIImage(
+            for: id,
+            targetSize: targetSize,
+            deliveryMode: .fastFormat,
+            onPartial: nil,
+            fallbackTimeoutNanoseconds: nil
+        )
+        rememberDisplayFrame(PhotoDisplayFrame(image: image), for: id)
+        return try encodedImageData(from: image)
     }
 
     func displayImage(for id: PhotoID, targetSize: CGSize) async throws -> PhotoImageData {
-        try await requestImage(for: id, targetSize: targetSize, deliveryMode: .opportunistic)
+        let image = try await requestUIImage(
+            for: id,
+            targetSize: targetSize,
+            deliveryMode: .opportunistic,
+            onPartial: nil,
+            fallbackTimeoutNanoseconds: PhotoKitImageRequestPolicy.shareFallbackTimeoutNanoseconds
+        )
+        rememberDisplayFrame(PhotoDisplayFrame(image: image), for: id)
+        return try encodedImageData(from: image)
+    }
+
+    func cachedDisplayFrame(for id: PhotoID) async -> PhotoDisplayFrame? {
+        displayCache[id]
+    }
+
+    private func rememberDisplayFrame(_ frame: PhotoDisplayFrame, for id: PhotoID) {
+        if let existing = displayCache[id], existing.pixelCount >= frame.pixelCount {
+            return
+        }
+        displayCache[id] = frame
+        while displayCache.count > 32 {
+            guard let smallest = displayCache.min(by: { $0.value.pixelCount < $1.value.pixelCount })?.key else {
+                return
+            }
+            displayCache.removeValue(forKey: smallest)
+        }
+    }
+
+    func displayFrames(
+        for id: PhotoID,
+        targetSize: CGSize,
+        priority: PhotoDisplayPriority
+    ) async -> AsyncThrowingStream<PhotoDisplayFrame, Error> {
+        AsyncThrowingStream { continuation in
+            let task = Task {
+                do {
+                    if let cached = await self.cachedDisplayFrame(for: id) {
+                        continuation.yield(cached)
+                        if cached.meets(targetSize) {
+                            continuation.finish()
+                            return
+                        }
+                    }
+
+                    try await self.displayGate.withPermit(priority: priority) {
+                        if let cached = await self.cachedDisplayFrame(for: id) {
+                            continuation.yield(cached)
+                            if cached.meets(targetSize) {
+                                return
+                            }
+                        }
+
+                        _ = try await self.requestUIImage(
+                            for: id,
+                            targetSize: targetSize,
+                            deliveryMode: .opportunistic,
+                            onPartial: { frame in
+                                Task { await self.rememberDisplayFrame(frame, for: id) }
+                                continuation.yield(frame)
+                            },
+                            fallbackTimeoutNanoseconds: nil
+                        )
+                    }
+                    continuation.finish()
+                } catch is CancellationError {
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+            continuation.onTermination = { _ in task.cancel() }
+        }
     }
 
     func assetAvailability(for ids: [PhotoID]) async -> Set<PhotoID> {
@@ -121,25 +242,33 @@ actor PhotoKitClient: PhotoLibraryClient {
     }
 
     #if canImport(Photos)
-    private func requestImage(
+    private func requestUIImage(
         for id: PhotoID,
         targetSize: CGSize,
-        deliveryMode: PHImageRequestOptionsDeliveryMode
-    ) async throws -> PhotoImageData {
+        deliveryMode: PHImageRequestOptionsDeliveryMode,
+        onPartial: (@Sendable (PhotoDisplayFrame) -> Void)?,
+        fallbackTimeoutNanoseconds: UInt64?
+    ) async throws -> UIImage {
         let options = PHImageRequestOptions()
         options.deliveryMode = deliveryMode
         options.resizeMode = .fast
         options.isNetworkAccessAllowed = true
         options.version = .current
+        let policyMode: PhotoKitImageRequestPolicy.DeliveryMode =
+            deliveryMode == .fastFormat ? .fastFormat : .opportunisticHighQuality
 
         let requestBox = PhotoImageRequestBox()
         return try await withTaskCancellationHandler {
-            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<PhotoImageData, Error>) in
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<UIImage, Error>) in
                 // PhotoKit may invoke its result handler on the main queue even
                 // though this client is an actor. Keep the callback independent
                 // of actor-isolated state; the request box owns cancellation
                 // bookkeeping for the callback's lifetime.
-                requestBox.install(continuation, manager: imageManager)
+                requestBox.install(
+                    continuation,
+                    manager: imageManager,
+                    fallbackTimeoutNanoseconds: fallbackTimeoutNanoseconds
+                )
                 let assets = PHAsset.fetchAssets(withLocalIdentifiers: [id.rawValue], options: nil)
                 guard let asset = assets.firstObject else {
                     requestBox.resolve(.failure(PhotoAccessChangedError()))
@@ -159,27 +288,46 @@ actor PhotoKitClient: PhotoLibraryClient {
                         requestBox.resolve(.failure(error))
                         return
                     }
+
                     let degraded = info?[PHImageResultIsDegradedKey] as? Bool ?? false
-                    // Ranking accepts the first fast representation. Display
-                    // and share requests still wait for the non-degraded
-                    // representation so user-facing image quality is not
-                    // changed by the analysis optimization.
-                    guard !degraded || deliveryMode == .fastFormat else { return }
-                    guard let image, let data = image.jpegData(compressionQuality: 0.85) else {
-                        requestBox.resolve(.failure(PhotoAccessChangedError()))
+                    switch PhotoKitImageRequestPolicy.decision(
+                        hasImage: image != nil,
+                        degraded: degraded,
+                        deliveryMode: policyMode
+                    ) {
+                    case .ignore:
                         return
+                    case .usePartial:
+                        guard let image else { return }
+                        onPartial?(PhotoDisplayFrame(image: image))
+                        requestBox.storePartial(image)
+                    case .complete(let cancelOutstanding):
+                        guard let image else {
+                            requestBox.resolve(.failure(PhotoAccessChangedError()))
+                            return
+                        }
+                        onPartial?(PhotoDisplayFrame(image: image))
+                        requestBox.resolve(.success(image), cancelOutstandingRequest: cancelOutstanding)
+                    case .fail:
+                        requestBox.resolve(.failure(PhotoAccessChangedError()))
                     }
-                    requestBox.resolve(.success(PhotoImageData(
-                        data: data,
-                        pixelWidth: Int(image.size.width * image.scale),
-                        pixelHeight: Int(image.size.height * image.scale)
-                    )), cancelOutstandingRequest: deliveryMode == .fastFormat)
                 }
                 requestBox.setRequestID(requestID)
             }
         } onCancel: {
-            requestBox.cancel(manager: PHImageManager.default())
+            requestBox.cancel()
         }
+    }
+
+    private func encodedImageData(from image: UIImage) throws -> PhotoImageData {
+        guard let data = PhotoKitJPEGEncoder.data(from: image) else {
+            throw PhotoAccessChangedError()
+        }
+        return PhotoImageData(
+            data: data,
+            pixelWidth: Int(image.size.width * image.scale),
+            pixelHeight: Int(image.size.height * image.scale)
+        )
     }
 
     private func map(_ status: PHAuthorizationStatus) -> PhotoAuthorization {
@@ -197,12 +345,18 @@ actor PhotoKitClient: PhotoLibraryClient {
 
 private final class PhotoImageRequestBox: @unchecked Sendable {
     private let lock = NSLock()
-    private var continuation: CheckedContinuation<PhotoImageData, Error>?
+    private var continuation: CheckedContinuation<UIImage, Error>?
     private var requestID: PHImageRequestID?
     private var manager: PHImageManager?
     private var resolved = false
+    private var fallback: UIImage?
+    private var timeoutTask: Task<Void, Never>?
 
-    func install(_ continuation: CheckedContinuation<PhotoImageData, Error>, manager: PHImageManager) {
+    func install(
+        _ continuation: CheckedContinuation<UIImage, Error>,
+        manager: PHImageManager,
+        fallbackTimeoutNanoseconds: UInt64?
+    ) {
         lock.lock()
         if resolved {
             lock.unlock()
@@ -212,6 +366,10 @@ private final class PhotoImageRequestBox: @unchecked Sendable {
         self.continuation = continuation
         self.manager = manager
         lock.unlock()
+
+        if let fallbackTimeoutNanoseconds {
+            startTimeout(fallbackTimeoutNanoseconds)
+        }
     }
 
     func setRequestID(_ requestID: PHImageRequestID) {
@@ -226,8 +384,18 @@ private final class PhotoImageRequestBox: @unchecked Sendable {
         lock.unlock()
     }
 
+    func storePartial(_ image: UIImage) {
+        lock.lock()
+        guard !resolved else {
+            lock.unlock()
+            return
+        }
+        fallback = image
+        lock.unlock()
+    }
+
     func resolve(
-        _ result: Result<PhotoImageData, Error>,
+        _ result: Result<UIImage, Error>,
         cancelOutstandingRequest: Bool = false
     ) {
         lock.lock()
@@ -235,39 +403,113 @@ private final class PhotoImageRequestBox: @unchecked Sendable {
             lock.unlock()
             return
         }
+
+        let settledResult: Result<UIImage, Error>
+        switch result {
+        case .success:
+            settledResult = result
+        case .failure(let error) where error is CancellationError:
+            settledResult = result
+        case .failure(let error):
+            if let fallback {
+                settledResult = .success(fallback)
+            } else {
+                settledResult = .failure(error)
+            }
+        }
+
+        let shouldCancelOutstanding: Bool
+        if case .failure = settledResult {
+            shouldCancelOutstanding = true
+        } else {
+            shouldCancelOutstanding = cancelOutstandingRequest
+        }
+
         resolved = true
+        timeoutTask?.cancel()
         let continuation = continuation
         let requestID = requestID
-        let manager = cancelOutstandingRequest ? manager : nil
+        let managerToCancel = shouldCancelOutstanding ? manager : nil
         self.continuation = nil
         self.requestID = nil
         self.manager = nil
+        self.fallback = nil
+        self.timeoutTask = nil
         lock.unlock()
 
-        if let manager, let requestID {
-            manager.cancelImageRequest(requestID)
+        if let managerToCancel, let requestID {
+            managerToCancel.cancelImageRequest(requestID)
         }
-        continuation?.resume(with: result)
+        continuation?.resume(with: settledResult)
     }
 
-    func cancel(manager: PHImageManager) {
+    func cancel() {
         lock.lock()
         guard !resolved else {
             lock.unlock()
             return
         }
         resolved = true
+        timeoutTask?.cancel()
         let continuation = continuation
         let requestID = requestID
         let requestManager = self.manager
         self.continuation = nil
         self.requestID = nil
         self.manager = nil
+        self.fallback = nil
+        self.timeoutTask = nil
         lock.unlock()
 
         if let requestID {
-            (requestManager ?? manager).cancelImageRequest(requestID)
+            requestManager?.cancelImageRequest(requestID)
         }
         continuation?.resume(throwing: CancellationError())
     }
+
+    private func startTimeout(_ nanoseconds: UInt64) {
+        let task = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: nanoseconds)
+            guard !Task.isCancelled else { return }
+            self?.settleFromTimeout()
+        }
+        lock.lock()
+        if resolved {
+            lock.unlock()
+            task.cancel()
+            return
+        }
+        timeoutTask = task
+        lock.unlock()
+    }
+
+    private func settleFromTimeout() {
+        lock.lock()
+        guard !resolved else {
+            lock.unlock()
+            return
+        }
+        resolved = true
+        timeoutTask?.cancel()
+        let continuation = continuation
+        let requestID = requestID
+        let manager = manager
+        let fallback = fallback
+        self.continuation = nil
+        self.requestID = nil
+        self.manager = nil
+        self.fallback = nil
+        self.timeoutTask = nil
+        lock.unlock()
+
+        if let requestID {
+            manager?.cancelImageRequest(requestID)
+        }
+        if let fallback {
+            continuation?.resume(returning: fallback)
+        } else {
+            continuation?.resume(throwing: PhotoAccessChangedError())
+        }
+    }
 }
+

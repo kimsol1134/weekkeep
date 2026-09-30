@@ -31,6 +31,37 @@ protocol NotificationClient: Sendable {
     func cancelReminder(for weekKey: String) async
 }
 
+struct WeeklyReminderRequest: Equatable, Sendable {
+    let targetWeekKey: String
+    let reminderDate: Date
+}
+
+enum WeeklyReminderSchedule {
+    static func requests(
+        now: Date,
+        regularCycleStartsAt: Date,
+        calendar inputCalendar: Calendar,
+        calculator: WeekRangeCalculator
+    ) -> [WeeklyReminderRequest] {
+        var calendar = inputCalendar
+        calendar.timeZone = TimeZone(identifier: calculator.timeZoneIdentifier) ?? calendar.timeZone
+        let weekStart = calculator.startOfWeek(containing: now)
+        var seenWeekKeys = Set<String>()
+        return (0..<12).compactMap { offset in
+            guard let rawReminderDate = calendar.date(byAdding: .day, value: (offset + 1) * 7, to: weekStart),
+                  let targetStart = calendar.date(byAdding: .day, value: -7, to: rawReminderDate),
+                  targetStart >= regularCycleStartsAt else { return nil }
+            let target = calculator.regularRange(startingAt: targetStart)
+            guard seenWeekKeys.insert(target.key).inserted else { return nil }
+            var components = calendar.dateComponents([.year, .month, .day], from: rawReminderDate)
+            components.hour = 20
+            components.minute = 30
+            let reminderDate = calendar.date(from: components) ?? rawReminderDate
+            return WeeklyReminderRequest(targetWeekKey: target.key, reminderDate: reminderDate)
+        }
+    }
+}
+
 actor LocalNotificationClient: NotificationClient {
     private let center = UNUserNotificationCenter.current()
     private let calculator: WeekRangeCalculator
@@ -58,13 +89,17 @@ actor LocalNotificationClient: NotificationClient {
         guard status == .authorized || status == .provisional else { return }
         var calendar = calendar
         calendar.timeZone = TimeZone(identifier: calculator.timeZoneIdentifier) ?? calendar.timeZone
-        let weekStart = calculator.startOfWeek(containing: now)
-        for offset in 0..<12 {
-            guard let reminderDate = calendar.date(byAdding: .day, value: (offset + 1) * 7, to: weekStart),
-                  let targetStart = calendar.date(byAdding: .day, value: -7, to: reminderDate),
-                  targetStart >= regularCycleStartsAt else { continue }
-            let target = calculator.regularRange(startingAt: targetStart)
-            var components = calendar.dateComponents([.year, .month, .day], from: reminderDate)
+        let requests = WeeklyReminderSchedule.requests(
+            now: now,
+            regularCycleStartsAt: regularCycleStartsAt,
+            calendar: calendar,
+            calculator: calculator
+        )
+        center.removePendingNotificationRequests(
+            withIdentifiers: requests.map { "weeklyReminder.\($0.targetWeekKey)" }
+        )
+        for request in requests {
+            var components = calendar.dateComponents([.year, .month, .day], from: request.reminderDate)
             components.hour = 20
             components.minute = 30
             let content = UNMutableNotificationContent()
@@ -75,8 +110,12 @@ actor LocalNotificationClient: NotificationClient {
                 WeekkeepNotificationPayload.deepLinkKey: WeekkeepNotificationPayload.weeklyCurrentDeepLink
             ]
             let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-            let request = UNNotificationRequest(identifier: "weeklyReminder.\(target.key)", content: content, trigger: trigger)
-            try await center.add(request)
+            let notificationRequest = UNNotificationRequest(
+                identifier: "weeklyReminder.\(request.targetWeekKey)",
+                content: content,
+                trigger: trigger
+            )
+            try await center.add(notificationRequest)
         }
     }
 
@@ -110,8 +149,14 @@ actor FixtureNotificationClient: NotificationClient {
 
     func scheduleWeeklyReminders(now: Date, regularCycleStartsAt: Date, calendar: Calendar) async throws {
         let calculator = WeekRangeCalculator(timeZone: calendar.timeZone)
-        if let target = calculator.latestCompletedRegular(now: now, regularCycleStartsAt: regularCycleStartsAt) {
-            scheduledWeekKeys.append(target.key)
+        let requests = WeeklyReminderSchedule.requests(
+            now: now,
+            regularCycleStartsAt: regularCycleStartsAt,
+            calendar: calendar,
+            calculator: calculator
+        )
+        for request in requests where !scheduledWeekKeys.contains(request.targetWeekKey) {
+            scheduledWeekKeys.append(request.targetWeekKey)
         }
     }
 

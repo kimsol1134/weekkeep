@@ -47,6 +47,63 @@ struct WeekRangeCalculator: Sendable {
         )
     }
 
+    func preferredFirstAlbumRange(now: Date) -> WeekRange {
+        let currentMonday = startOfWeek(containing: now)
+        let start = calendar.date(byAdding: .day, value: -7, to: currentMonday) ?? now.addingTimeInterval(-7 * 24 * 60 * 60)
+        let end = calendar.date(byAdding: .day, value: 7, to: start) ?? start.addingTimeInterval(7 * 24 * 60 * 60)
+        return WeekRange(
+            key: "welcome-completed-" + weekKey(for: start),
+            start: start,
+            end: end,
+            cutoff: end,
+            eligibleFrom: nil,
+            eligibleUntil: nil,
+            kind: .welcome
+        )
+    }
+
+    func rollingFirstAlbumRange(analysisStartedAt: Date) -> WeekRange {
+        let start = calendar.date(byAdding: .day, value: -7, to: analysisStartedAt)
+            ?? analysisStartedAt
+        return WeekRange(
+            key: "welcome-rolling-" + dayStamp(for: analysisStartedAt),
+            start: start,
+            end: analysisStartedAt,
+            cutoff: analysisStartedAt,
+            eligibleFrom: nil,
+            eligibleUntil: nil,
+            kind: .welcome
+        )
+    }
+
+    func firstAlbumRangeCandidates(now: Date) -> (preferred: WeekRange, fallback: WeekRange) {
+        (
+            preferred: preferredFirstAlbumRange(now: now),
+            fallback: rollingFirstAlbumRange(analysisStartedAt: now)
+        )
+    }
+
+    func selectFirstAlbumRange(
+        now: Date,
+        preferredEligiblePhotoCount: Int,
+        fallbackEligiblePhotoCount: Int
+    ) -> FirstAlbumRangeSelection? {
+        let candidates = firstAlbumRangeCandidates(now: now)
+        if preferredEligiblePhotoCount > 0 {
+            return FirstAlbumRangeSelection(
+                range: candidates.preferred,
+                strategy: .completedCalendarWeek,
+                eligiblePhotoCount: preferredEligiblePhotoCount
+            )
+        }
+        guard fallbackEligiblePhotoCount > 0 else { return nil }
+        return FirstAlbumRangeSelection(
+            range: candidates.fallback,
+            strategy: .rollingSevenDayFallback,
+            eligiblePhotoCount: fallbackEligiblePhotoCount
+        )
+    }
+
     func regularRange(startingAt start: Date) -> WeekRange {
         let end = calendar.date(byAdding: .day, value: 7, to: start) ?? start.addingTimeInterval(7 * 24 * 60 * 60)
         let eligibleUntil = calendar.date(byAdding: .day, value: 7, to: end)
@@ -91,6 +148,16 @@ struct WeekRangeCalculator: Sendable {
 
     func regularCycleStart(forWelcomeSavedAt date: Date) -> Date {
         nextMonday(after: date)
+    }
+
+    func regularCycleStart(forWelcomeRange range: WeekRange, savedAt date: Date) -> Date {
+        guard range.kind == .welcome else { return regularCycleStart(forWelcomeSavedAt: date) }
+        switch range.welcomeAlbumRangeStrategy {
+        case .completedCalendarWeek:
+            return range.end
+        case .rollingSevenDayFallback, .legacyRollingWelcome, .none:
+            return regularCycleStart(forWelcomeSavedAt: date)
+        }
     }
 
     func regularSequenceBucket(weekStart: Date, regularCycleStartsAt: Date) -> String {

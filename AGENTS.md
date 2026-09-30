@@ -6,20 +6,9 @@ These instructions apply to every agent working inside this repository.
 
 The project is in **Implementation**. The human product owner approved the 0.5 documentation baseline on 2026-08-05; all derived implementation gates are Ready. Build production code and tests against `docs/00-INDEX.md` and keep traceability evidence current. Product-scope changes still require a Decision Registry/PRD update before code diverges.
 
-## Required reading order
+## Task references
 
-Before changing product behavior, read:
-
-1. `docs/00-INDEX.md`, including the canonical Decision Registry
-2. `docs/01-PRD.md`
-3. the relevant use cases in `docs/02-USE-CASES.md`
-4. the relevant screens in `docs/03-IA.md`
-5. `docs/04-TRD.md`
-6. the relevant rules in `docs/05-DESIGN-GUIDE.md`
-7. `design/README.md` for the current visual baseline and archive boundaries
-8. `docs/06-TRACEABILITY.md`
-
-Use `docs/07-DELIVERY-PLAN.md` for sequence and release gates. Follow the responsibility boundaries in `docs/00-INDEX.md`; no document may silently expand PRD scope or redefine a decision value.
+Use `docs/00-INDEX.md` for decision values and document ownership. Read only the contracts affected by the task: PRD for scope, Use Cases and IA for behavior/navigation, TRD for architecture, Design Guide and `design/README.md` for visual changes, Traceability for linked acceptance tests, and Delivery Plan for milestones or release gates. Documents may not silently expand PRD scope or redefine decision values.
 
 ## Non-negotiable product contracts
 
@@ -70,7 +59,7 @@ Use `docs/07-DELIVERY-PLAN.md` for sequence and release gates. Follow the respon
 
 ## Verification
 
-A feature is not done until its linked test in `docs/06-TRACEABILITY.md` passes and evidence is recorded. At minimum verify:
+For feature completion, run the linked acceptance tests in `docs/06-TRACEABILITY.md` and record evidence. Select relevant checks below based on changed behavior; run the full applicable matrix for release readiness:
 
 - normal, empty, limited, denied, partial, error, and cancellation states
 - Korean and English
